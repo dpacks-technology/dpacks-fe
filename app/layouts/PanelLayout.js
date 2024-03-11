@@ -45,7 +45,7 @@ export default function PanelLayout({children}) {
                                             aria-expanded="false" data-dropdown-toggle="dropdown-user">
                                         <span className="sr-only">Open user menu</span>
                                         <img className="w-8 h-8 rounded-full"
-                                             src="https://flowbite.com/docs/images/people/profile-picture-5.jpg"
+                                             src="/images/profile-picture/profile.svg"
                                              alt="user photo"/>
                                     </button>
                                 </div>
@@ -103,7 +103,7 @@ export default function PanelLayout({children}) {
                 </div>
             </div>
             <aside id="logo-sidebar"
-                   className="fixed top-0 right-0 z-40 w-64 h-screen pt-20 transition-transform -translate-x-full bg-transparent border-r border-transparent sm:translate-x-0 dark:bg-transparent dark:border-transparent"
+                   className="fixed top-0 right-0 z-40 h-screen pt-20 transition-transform -translate-x-full bg-transparent border-r border-transparent sm:translate-x-0 dark:bg-transparent dark:border-transparent"
                    aria-label="Sidebar">
                 <RightNavigation1/>
             </aside>

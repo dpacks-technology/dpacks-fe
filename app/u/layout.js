@@ -1,4 +1,4 @@
-import PanelLayout from "@/app/Layouts/PanelLayout";
+import PanelLayout from "@/app/layouts/PanelLayout";
 
 export default function ULayout({ children }) {
     return (
