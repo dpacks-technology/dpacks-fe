@@ -11,6 +11,7 @@ export default function BasicDatePicker(props) {
       <DemoContainer
       components={['DatePicker']}>
         <DatePicker 
+        name={props.label}
         className='w-64'
         label= {props.name}
         />
