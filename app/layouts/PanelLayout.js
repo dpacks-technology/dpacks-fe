@@ -5,6 +5,8 @@ import useDarkMode from "@/app/hooks/useDarkMode";
 import LeftNavigation1 from "@/app/components/LeftNavigation1";
 import LeftNavigation2 from "@/app/components/LeftNavigation2";
 import RightNavigation1 from "@/app/components/RightNavigation1";
+import DatePick from "../components/DatePicker";
+import BasicDatePicker from "../components/DatePicker";
 
 export default function PanelLayout({children}) {
     const [isDarkMode, toggleDarkMode] = useDarkMode();
@@ -100,6 +102,7 @@ export default function PanelLayout({children}) {
                     className="p-4 mt-2 rounded-2xl bg-secondaryLight dark:bg-secondaryDark fixed overflow-scroll"
                     style={{width: "calc(100% - 367px)", height: "calc(100% - 100px)"}}>
                     {children}
+                    <BasicDatePicker name="enter date you want" />
                 </div>
             </div>
             <aside id="logo-sidebar"
