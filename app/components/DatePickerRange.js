@@ -8,8 +8,10 @@ const DatePickerRange = () => (
     < ConfigProvider
       theme={{
         token: {
-          // Seed Token
-          colorPrimary: '#1890ff',
+          
+
+          //change the color of the date picker
+          colorPrimary: '#262323',
           borderRadius: 8,
           
         },
