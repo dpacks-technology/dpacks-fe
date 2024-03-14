@@ -29,7 +29,7 @@ export default function DropDown(props) {
       >
         {
             props.dropdownItems.map((item, index) => (
-                <DropdownItem key={item.key}>{item.label}</DropdownItem>
+                <DropdownItem key={item.key} description={item.description} >{item.label}</DropdownItem>
             ))
         }
       </DropdownMenu>
