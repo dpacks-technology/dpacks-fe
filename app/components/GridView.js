@@ -7,11 +7,9 @@ import CardTemp from './Card';
 export default function GridView(props) {
   return (
     <Box sx={{ flexGrow: 1 }}>
-      <Grid container spacing={{ xs: 2, md: 3 }} columns={{ xs: 4, sm: 2, md: 12 }}>
+      <Grid container spacing={{ xs: 1, md: 2 }} columns={{ xs: 1, sm: 2, md: 2 }}>
         {props.data.map((value) => (
-          <Grid item xs={2} sm={4} md={4} key={value}>
-            <CardTemp title={value.title} secondDes={value.secondaryDescription} description={value.tertiaryDescription} buttons={value.buttons} />
-          </Grid>
+            <CardTemp key={value.id} title={value.title} secondDes={value.secondaryDescription} description={value.tertiaryDescription} buttons={value.buttons} />
         ))}
       </Grid>
     </Box>
