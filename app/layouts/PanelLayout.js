@@ -9,23 +9,6 @@ import GridView from "../components/GridView";
 
 export default function PanelLayout({ children }) {
 
-    const cardData = [
-        {
-            title: "NextUI",
-            secondaryDescription: "nextui.org",
-            tertiaryDescription: "Make beautiful websites regardless of your design experience.",
-            
-            buttons: [
-                {
-                    name: "Visit source code on GitHub",
-                    onClick: "enter onclick function here",
-                },
-                {
-                    name: "Visit source code on GitHub",
-                    onClick: "",
-                }]
-        }
-    ]
 
 
 
@@ -126,7 +109,6 @@ export default function PanelLayout({ children }) {
                     style={{ width: "calc(100% - 367px)", height: "calc(100% - 100px)" }}>
 
                     {children}
-                    <GridView data={cardData} />
 
                 </div>
             </div>
