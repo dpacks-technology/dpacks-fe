@@ -3,6 +3,7 @@ import React from 'react';
 import {Button, Card, CardBody, CardFooter, CardHeader} from "@nextui-org/react";
 
 export default function ItemList(props) {
+    const limitedButtons = props.buttons.slice(0, 3);
 
     return (
       <Card className="flex-row bg-white">
@@ -25,7 +26,7 @@ export default function ItemList(props) {
           <div className="w-auto flex items-center justify-center">
               <CardFooter className="flex flex-col gap-2 sm:justify-end sm:flex-row">
                   {
-                      props.buttons.map((button) => {
+                      limitedButtons.map((button) => {
                           return (
                               <Button className="p-1" key={button.name} onClick={button.onClick} size="lg" color={button.color}>
                                   {button.name}
