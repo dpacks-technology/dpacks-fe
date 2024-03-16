@@ -1,18 +1,35 @@
 // Billing.js
 "use client"
-import {useState} from "react";
-import React from 'react';
+import React, {useState} from "react";
 
-
+const plans = [
+    {
+        name: 'Free',
+        monthlyPrice: '$0',
+        annualPrice: '$0',
+        features: ['Basic features', 'Limited storage', 'No support'],
+    },
+    {
+        name: 'Standard',
+        monthlyPrice: '$9.99',
+        annualPrice: '$99.99',
+        features: ['Advanced features', 'Moderate storage', 'Email support'],
+    },
+    {
+        name: 'Premium',
+        monthlyPrice: '$19.99',
+        annualPrice: '$199.99',
+        features: ['All features', 'Unlimited storage', 'Priority support'],
+    },
+];
 
 export default function Billing() {
     const [billingInterval, setBillingInterval] = useState('month');
-    const intervals = ['monthly', 'yearly'];  
+    const intervals = ['monthly', 'yearly'];
 
     return (
         <>
             <div className="sm:flex sm:flex-col sm:align-center">
-
                 <div
                     className="relative self-center mt-6 bg-gray-950 rounded-lg p-0.5 flex sm:mt-8 border border-zinc-800">
                     {intervals.map(interval => (
@@ -30,49 +47,25 @@ export default function Billing() {
                         </button>
                     ))}
                 </div>
-
-
-            < /div>
-
-
-            <div className="flex space-x-4 justify-center">
-                <div className="bg-gray-950 bg-opacity-60 rounded-lg w-1/4 p-6 ml-4 mt-8" style={{height: '300px'}}>
-                    <h2>FREE</h2>
-                    <p className="text-lg mt-10 mb-8" style={{fontSize: '3rem'}}>0$</p>
-                    <ul className="text-white">
-                        <li>Limited Storage</li>
-                        <li>Limited Customization</li>
-
-                    </ul>
-                    <button className="bg-white text-black py-2 px-4 mt-4 rounded-lg">Subscribe</button>
-                </div>
-                <div className="bg-gray-950 bg-opacity-60 rounded-lg w-1/4 p-6 ml-4 mt-8" style={{height: '300px'}}>
-                    <h2>STANDARD</h2>
-                    <p className="text-lg mt-10 mb-8" style={{fontSize: '3rem'}}>$10</p>
-                    <ul className="text-white">
-                        <li>Increased Storage</li>
-                        <li>Priority Support</li>
-
-                    </ul>
-                    <button className="bg-white text-black py-2 px-4 mt-4 rounded-lg">Subscribe</button>
-                </div>
-                <div className="bg-gray-950 bg-opacity-60 rounded-lg w-1/4 p-6 ml-4 mt-8" style={{height: '300px'}}>
-                    <h2>PREMIUM</h2>
-                    <p className="text-lg mt-10 mb-8" style={{fontSize: '3rem'}}>$20</p>
-                    <ul className="text-white">
-                        <li>Maximum Storage</li>
-                        <li>AI Content Generation</li>
-
-                    </ul>
-                    <button className="bg-white text-black py-2 px-4 mt-4 rounded-lg">Subscribe</button>
-                </div>
             </div>
+            <div className="flex space-x-4 justify-center">
+                {plans.length > 0 && plans.map((plan, index) => (
+                    <div key={index} className="bg-gray-950 bg-opacity-60 rounded-lg w-1/4 p-6 ml-4 mt-8"
+                         style={{height: '300px'}}>
+                        <h2 className={"uppercase"}>{plan.name}</h2>
+                        <p className="text-lg mt-10 mb-8" style={{fontSize: '3rem'}}>{billingInterval === "monthly" ? plan.monthlyPrice : plan.annualPrice}</p>
 
-
+                        <ul className="text-white">
+                            {plan.features.length > 0 && plan.features.map((feature, index) => (
+                                <li key={index}>{feature}</li>
+                            ))}
+                        </ul>
+                        <button className="bg-white text-black py-2 px-4 mt-4 rounded-lg">Subscribe</button>
+                    </div>
+                ))}
+            </div>
         </>
     );
-
-
 }
 
 
