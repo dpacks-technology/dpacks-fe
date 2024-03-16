@@ -1,6 +1,8 @@
 import Input from "@/app/components/Input";
 import AnalyticInput from "@/app/components/WebAnalytics/CreateAlert/Input";
 
+import AnalyticRadGrp from "@/app/components/WebAnalytics/CreateAlert/Radiogrp";
+
 
 export default function Create(){
     return (
@@ -9,8 +11,13 @@ export default function Create(){
             <form className="p-7 ">
 
                 <div className="flex justify-around">
-                    <AnalyticInput type={"phone"} label={"ENter yashodha" }/>
-                    <AnalyticInput type={"email"} label={"kaweesha"}/>
+                    <AnalyticInput type={"text"} label={"Name" }/>
+                    <AnalyticInput type={"text"} label={"Trigger Count"}/>
+
+                </div>
+
+                <div className="flex justify-around m-10 mr-28" >
+                <AnalyticRadGrp />
                 </div>
 
             </form>
