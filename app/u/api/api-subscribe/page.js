@@ -9,7 +9,7 @@ import {Button, Card, Input} from "@nextui-org/react";
 
 export default function apiSubscribe() {
     // eslint-disable-next-line react-hooks/rules-of-hooks
-    const [subscription, setSubscription] = useState(null);
+    const [subscription, setSubscription] = useState(true);
 
     const subscribe = async () => {
         setSubscription(true)
@@ -40,49 +40,51 @@ export default function apiSubscribe() {
                     />
                 ) : (
                     <div className="w-full p-10 flex-col items-center">
+                        <h4 className="text-white text-lg pb-1 pl-1">Client ID</h4>
                         <Input
                             key="outside"
                             type="text"
                             name="clientID"
                             id="clientID"
-                            color="primary"
-                            label="Client ID"
+                            color="default"
                             size="lg"
                             defaultValue={"subscription.clientID"}
-                            labelPlacement="outside"
-                            className="mb-10"
+                            className="mb-4"
+                            isReadOnly
                         />
+                        <h4 className="text-white text-lg pb-1 pl-1">API Key</h4>
                         <Input
                             key="outside"
                             type="text"
                             name="apiKey"
                             id="apiKey"
-                            color="primary"
-                            label="API Key"
+                            color="default"
                             size="lg"
                             defaultValue={"subscription.apiKey"}
-                            labelPlacement="outside"
                             className="mb-5"
+                            isReadOnly
                         />
 
-                        <Button
-                            variant="solid"
-                            color="success"
-                            size="lg"
-                            onClick={regenerate}
-                            className="mr-5">
-                            Regenerate
-                        </Button>
+                        <div className="flex flex-row justify-between gap-5">
+                            <Button
+                                variant="solid"
+                                color="success"
+                                size="lg"
+                                onClick={regenerate}
+                                className="w-full">
+                                Regenerate
+                            </Button>
 
-                        <Button
-                            name="Delete"
-                            variant="solid"
-                            color="danger"
-                            size="lg"
-                            onClick={deleteSubscription}
-                            className="mr-5">
-                            Delete
-                        </Button>
+                            <Button
+                                name="Delete"
+                                variant="solid"
+                                color="danger"
+                                size="lg"
+                                onClick={deleteSubscription}
+                                className="w-full">
+                                Delete
+                            </Button>
+                        </div>
                     </div>
                 )}
             </Card>
