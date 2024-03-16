@@ -9,6 +9,7 @@ import DateTimePickers from "../components/DateTimePicker";
 import DatePickerRange from "../components/DatePickerRange";
 
 export default function PanelLayout({ children }) {
+
     const [isDarkMode, toggleDarkMode] = useDarkMode();
 
     const logoSrc = isDarkMode
@@ -98,10 +99,13 @@ export default function PanelLayout({ children }) {
                 <LeftNavigation2 />
             </aside>
             <div className="sm:ml-72">
+
                 <div
                     className="p-4 mt-2 rounded-2xl bg-secondaryLight dark:bg-secondaryDark fixed overflow-scroll"
                     style={{ width: "calc(100% - 367px)", height: "calc(100% - 100px)" }}>
+
                     {children}
+
                 </div>
             </div>
             <aside id="logo-sidebar"
@@ -109,6 +113,8 @@ export default function PanelLayout({ children }) {
                 aria-label="Sidebar">
                 <RightNavigation1 />
             </aside>
+
+
         </div>
     )
 }
