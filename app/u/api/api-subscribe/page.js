@@ -27,7 +27,7 @@ export default function apiSubscribe() {
     };
 
     return(
-        <div className="w-full h-full flex items-center justify-center bg-red-400">
+        <div className="w-full h-full flex items-center justify-center">
 
             <Card className="bg-gray-700 w-3/4 p-10 ml-auto mr-auto m flex-col items-center">
                 {!subscription ? (
