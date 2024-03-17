@@ -18,7 +18,7 @@ function Signup() {
 
   const handleSignup = (e) => {
     e.preventDefault();
-    // Implement your signup logic here
+    
   };
 
   return (
@@ -94,8 +94,8 @@ function Signup() {
                 {(theme) => <SelectItem key={theme.value}>{theme.label}</SelectItem>}
               </Select>
               <Textarea
-                label="Description"
-                placeholder="Enter your description"
+                label="Tell us something about you"
+                placeholder="I am a ..."
                 className="max-w-xs"
               />
             </div>
