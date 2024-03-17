@@ -27,7 +27,7 @@ function Signup() {
         <div>
           <h1 className='text-4xl m-5 text-center font-bold text-primaryLight dark:text-primaryDark'>Sign Up</h1>
           <form className='grid grid-cols-2 items-center' onSubmit={handleSignup}>
-            <div className='flex flex-col mt-5 items-center gap-3'>
+            <div className='flex flex-col mt-5 items-center gap-5'>
               <Input
                 type="text"
                 variant="faded"
