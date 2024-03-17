@@ -1,60 +1,52 @@
 "use client"
 
-import ButtonComponent from "@/app/components/Button";
+import React, {useState} from "react";
+import AddAdminForm from "@/app/admin/users/manage-admins/addAdminForm";
+import {Modal} from 'antd';
 import {Button} from "@nextui-org/react";
-import Input from "@/app/components/Input";
-import React from "react";
+
+
 
 export default function manageAdmins() {
-    
+    // eslint-disable-next-line react-hooks/rules-of-hooks
+    const [isModalOpen, setIsModalOpen] = useState(false);
+
+    const showModal = () => {
+        setIsModalOpen(true);
+    };
+
+    const handleOk = () => {
+        setIsModalOpen(false);
+    };
+
+    const handleCancel = () => {
+        setIsModalOpen(false);
+    };
+
+
     return (
-        <div className="p-10 w-full h-full">
-            <div className="flex flex-col w-[420px] p-10 bg-white" >
-                <Input
-                    name="adminName"
-                    id="adminName"
-                    label="Name"
-                    className="mb-5 rounded-lg"
-                    variant="outlined"
-                />
+        <div className="p-10 w-full h-full flex flex-col">
+            <Button
+                variant="solid"//solid, faded, bordered, light, flat, ghost, shadow
+                color="primary"//default, primary, secondary, success, warning, danger
+                size="md"//sm, md, lg
+                radius="md"
+                className="mb-5 h-10 w-36"
+                onClick={showModal}>
+                Add Admin
+            </Button>
 
-                <Input
-                    type="email"
-                    name="adminEmail"
-                    id="adminEmail"
-                    label="Email"
-                    className="mb-5 rounded-lg"
-                    variant="outlined"
-                />
+            <Modal title="Add New Admin"
+                   open={isModalOpen}
+                   onOk={handleOk}
+                   onCancel={handleCancel}
+                   style={{ top: 20 }}
+                   footer={null}
+            >
+                <AddAdminForm/>
+            </Modal>
+            Table goes here
 
-                <Input
-                    type="number"
-                    name="adminContactNumber"
-                    id="adminContactNumber"
-                    label="Contact Number"
-                    className="mb-5 rounded-lg"
-                    variant="outlined"
-                />
-
-                <Input
-                    type="password"
-                    name="adminpwd"
-                    id="adminpwd"
-                    label="Password"
-                    className="mb-5 rounded-lg"
-                    variant="outlined"
-                />
-
-                <Button
-                    variant="solid"//solid, faded, bordered, light, flat, ghost, shadow
-                    color="primary"//default, primary, secondary, success, warning, danger
-                    size="md"//sm, md, lg
-                    radius="md"
-                    className="mb-5 h-10"
-                >
-                    Add Admin
-                </Button>
-            </div>
         </div>
     );
 }
