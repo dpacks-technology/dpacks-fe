@@ -1,6 +1,8 @@
 import React from "react";
 import CardTbl from "@/app/components/icons/CardTbl";
 import { Divider } from 'antd';
+import LineChart from "@/app/components/Analytics/LineChart";
+
 export default function Analytics() {
     return (
         <div >
@@ -16,17 +18,12 @@ export default function Analytics() {
             </div>
             <div className="grid grid-cols-2 grid-rows-2">
 
-                <div className="w-full h-96 border-1">
-                    <Bar
-                        options={...}
-                        data={...}
-                        {...props}
-                    />
+                <div className="w-full overflow-auto h-96 border-1">
+                    <LineChart />
 
                 </div>
                 <div className="w-full h-96 border-1">
                     test
-
                 </div>
                 <div className="w-full h-96 border-1">
                     test
