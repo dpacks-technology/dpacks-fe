@@ -2,11 +2,10 @@
 
 import TextField from '@mui/material/TextField';
 
-export default function Input() {
+export default function Input({...props}) {
     return (
         <TextField
-            label="Your Name"
-            variant="standard"
+            {...props}
         />
     );
 }
