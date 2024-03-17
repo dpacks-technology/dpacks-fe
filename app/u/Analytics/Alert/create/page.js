@@ -1,42 +1,37 @@
+"use client"
+import {Flex, Input} from 'antd';
+import React, { useState } from 'react';
+import { Radio } from 'antd';
 
-import AnalyticInput from "@/app/components/WebAnalytics/CreateAlert/Input";
-import AnalyticRadioGrp from "@/app/components/WebAnalytics/CreateAlert/Radiogrp";
-import DropDown from "@/app/components/DropDown";
-import ButtonComponent from "@/app/components/Button";
-import {Button} from "@nextui-org/react";
 
 
 
 export default function Create(){
-
-    const data = [
-        {key: "text", label: "Text", description: "Text"},
-        {key: "number", label: "Number", description: "Number"},
-        {key: "date", label: "Date", description: "Date"}];
-
-
+    const [value, setValue] = useState(1);
     return (
         <div>
             <h1 className="text-center text-3xl font-bold m-10">Create Alert</h1>
             <form className="p-7 ">
 
-                <div className="flex justify-around">
-                    <AnalyticInput type={"text"} label={"Name"}/>
-                    <AnalyticInput type={"text"} label={"Trigger Count"}/>
+                <div className="flex justify-around ">
+                    <label className="text-lg font-bold">Name</label>
+                    <Input className={"w-96 h-12"} placeholder="Basic usage"/>
+                    <label className="text-lg font-bold">Name</label>
+                    <Input className={"w-96"} placeholder="Basic usage"/>
+                </div>
+                <div className="flex mt-3 justify-around ">
+
+                    <Flex vertical gap="middle">
+                        <Radio.Group defaultValue="a" buttonStyle="solid">
+                            <Radio.Button value="a">Hangzhou</Radio.Button>
+                            <Radio.Button value="b">Shanghai</Radio.Button>
+                            <Radio.Button value="c">Beijing</Radio.Button>
+                            <Radio.Button value="d">Chengdu</Radio.Button>
+                        </Radio.Group>
+                    </Flex>
+
                 </div>
 
-
-                <div className="flex justify-around align-middle mt-10">
-                    <div className="flex justify-center align-middle mt-2 pt-4">
-                        <DropDown dropdownItems={data}/>
-                    </div>
-                    <div className="mb-8 ps-7">
-                        <AnalyticRadioGrp/>
-                    </div>
-                </div>
-                <div className="flex justify-center mt-1 ">
-                    <Button className="ms-2.5 bg-amber-600 ">Done</Button>
-                </div>
 
             </form>
 

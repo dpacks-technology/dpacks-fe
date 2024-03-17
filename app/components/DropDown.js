@@ -14,7 +14,7 @@ export default function DropDown(props) {
   );
 
   return (
-    <Dropdown >
+    <Dropdown className="w-96">
       <DropdownTrigger>
         <Button
           variant="bordered"
