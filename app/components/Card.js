@@ -1,46 +1,73 @@
-import React from "react";
-import { Card, CardHeader, CardBody, CardFooter, Divider, Link, Image, Button } from "@nextui-org/react";
+'use client';
 
-export default function CardTemp(props) {
+import React from "react";
+import {Button, Card, CardBody, CardFooter, CardHeader, Image} from "@nextui-org/react";
+
+export default function CardBox({...props}) {
 
     let gridColumnClass = "sm:grid-cols-1";
-    if (props.buttons.length === 2) {
-        gridColumnClass = "sm:grid-cols-2";
-    } else if (props.buttons.length === 3) {
-        gridColumnClass = "sm:grid-cols-3";
+
+    if (props.buttons) {
+        switch (props.buttons.length) {
+            case 1:
+                gridColumnClass = "sm:grid-cols-1";
+                break;
+            case 2:
+                gridColumnClass = "sm:grid-cols-2";
+                break;
+            case 3:
+                gridColumnClass = "sm:grid-cols-3";
+                break;
+        }
     }
 
     return (
-        <Card className="max-w-[265px] m-1">
-            <CardHeader className="flex">
-                <Image
-                    alt="nextui logo"
-                    height={40}
-                    radius="sm"
-                    src="https://avatars.githubusercontent.com/u/86160567?s=200&v=4"
-                    width={40}
+        <Card {...props}
+              className={"text-light bg-light dark:text-dark dark:bg-dark shadow-none overflow-hidden " + (props.className || "")}>
+
+            {props.image &&
+                <div className={"grid justify-center items-center w-full"}
+                    style={{backgroundImage: "url(" + props.image + ")", backgroundSize: "cover", backgroundPosition: "center", height: "200px"}}
                 />
-                <div className="flex flex-col m-2">
-                    <p className="text-md">{props.title}</p>
-                    <p className="text-small text-default-500">{props.secondDes}</p>
-                </div>
-            </CardHeader>
-            <Divider />
-            <CardBody>
-                <p className="flex-wrap">{props.description}</p>
-            </CardBody>
-            <Divider />
-            <CardFooter className={`grid gap-2 ${gridColumnClass} grid-cols-1`}>
-                {
-                    props.buttons.map((button) => {
-                        return (
-                            <Button className="p-1" key={button.name} onClick={button.onClick} size="small">
-                                {button.name}
-                            </Button>
-                        )
-                    })
+            }
+
+            <div className={"p-4 pt-0"}>
+                {(props.title || props.secondary) &&
+                    <CardHeader className="flex pb-0">
+                        {(props.title || props.secondary) &&
+                            <div className="flex flex-col m-2">
+                                {props.title &&
+                                    <p className="text-md text-lightSecondary dark:text-darkSecondary font-bold">{props.title}</p>}
+                                {props.secondary &&
+                                    <p className="text-xs text-lightSecondary dark:text-darkSecondary">{props.secondary}</p>}
+                            </div>
+                        }
+                    </CardHeader>
                 }
-            </CardFooter>
+                {props.description &&
+                    <div className={"p-3 pt-4 pb-0"}>
+                        <CardBody className={"p-5 bg-secondaryLight dark:bg-secondaryDark rounded-2xl"}>
+                            <p className="flex-wrap text-sm">{props.description}</p>
+                        </CardBody>
+                    </div>
+                }
+                {(props.buttons && props.buttons.length > 0 && props.buttons.length < 4) &&
+                    <>
+                        <CardFooter className={`grid gap-2 ${gridColumnClass} grid-cols-1 pt-5 pb-3`}>
+                            {
+                                props.buttons.length > 0 && props.buttons.map((button, index) => {
+                                    return (
+                                        <Button className="p-1" key={index} onPress={button.onClick} color={button.color}
+                                                size="small">
+                                            {button.name}
+                                        </Button>
+                                    )
+                                })
+                            }
+                        </CardFooter>
+                    </>
+                }
+            </div>
         </Card>
     );
 }
