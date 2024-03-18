@@ -1,27 +1,39 @@
 'use client';
 
 import Table from "@/app/components/Table";
-import React from "react";
+import React, {useEffect} from "react";
 
 export default function Webpages() {
 
+    // states
+    const [searchFieldValue, setSearchFieldValue] = React.useState("");
+    const [rowsPerPage, setRowsPerPage] = React.useState(5);
+
+    // default columns
+    const dateColumn = "datetime" // default date column
+    const sortColumn = {column: "id", direction: "ascending"} // default sort column
+    const [searchColumn, setSearchColumn] = React.useState(sortColumn.column); // default search column
+
+    // columns
     const columns = [
-        {name: "TEXT", uid: "text", sortable: true, type: "text"},
+        {name: "ID", uid: "id", sortable: true, type: "text"},
+        {name: "TEXT", uid: "text1", sortable: true, type: "text"},
         {name: "TWO TEXT", uid: "twoText", sortable: true, type: "twoText"},
         {name: "DATETIME", uid: "datetime", sortable: true, type: "datetime"},
-        {name: "LABEL", uid: "label", sortable: true, type: "label"},
+        {name: "LABEL", uid: "label", sortable: false, type: "label"},
         {name: "STATUS", uid: "status", sortable: true, type: "status"},
-        {name: "STATUS BUTTONS", uid: "statusButtons", sortable: true, type: "statusButtons"},
-        {name: "BUTTONS", uid: "buttons", sortable: true, type: "buttons"},
-        {name: "MENU", uid: "menu", sortable: true, type: "menu"},
-        {name: "COPY", uid: "copy", sortable: true, type: "copy"},
-        {name: "ICON", uid: "icon", sortable: true, type: "icon"},
+        {name: "STATUS BUTTONS", uid: "statusButtons", sortable: false, type: "statusButtons"},
+        {name: "BUTTONS", uid: "buttons", sortable: false, type: "buttons"},
+        {name: "MENU", uid: "menu", sortable: false, type: "menu"},
+        {name: "COPY", uid: "copy", sortable: false, type: "copy"},
+        {name: "ICON", uid: "icon", sortable: false, type: "icon"},
         {name: "ICON TEXT", uid: "iconText", sortable: true, type: "iconText"},
         {name: "ICON TWO TEXT", uid: "iconTwoText", sortable: true, type: "iconText"},
     ];
 
+    // initially visible columns
     const init_cols = [
-        "text",
+        "text1",
         "twoText",
         "datetime",
         "label",
@@ -35,21 +47,15 @@ export default function Webpages() {
         "iconTwoText",
     ];
 
-    const statusOptions = [
-        {name: "Pending", uid: 0, type: "warning"},
-        {name: "Completed", uid: 1, type: "success"},
-        {name: "Error", uid: 2, type: "danger"}
-    ];
-
+    // data
     const data = [
         {
             id: 1,
-            text: "text 1",
+            text1: "text 1",
             twoText: "two\ntext",
             datetime: "2024-03-06T12:45:30.000Z",
             label: "label",
             status: 1,
-            menu: "menu 1\nmenu 1\nmenu 3",
             copy: "copy text",
             icon: "https://i.pravatar.cc/150?img=1",
             iconText: "https://i.pravatar.cc/150?img=1\nSample Text",
@@ -57,13 +63,12 @@ export default function Webpages() {
         },
         {
             id: 2,
-            text: "text 2",
+            text1: "text 2",
             twoText: "two\ntext",
             datetime: "2024-03-06T12:45:30.000Z",
             label: "label",
             status: 0,
             buttons: "edit\ndelete",
-            menu: "menu 1\nmenu 1\nmenu 3",
             copy: "copy text",
             icon: "https://i.pravatar.cc/150?img=2",
             iconText: "https://i.pravatar.cc/150?img=2\nSample Text",
@@ -71,13 +76,12 @@ export default function Webpages() {
         },
         {
             id: 3,
-            text: "text 3",
+            text1: "text 3",
             twoText: "two\ntext",
             datetime: "2024-03-06T12:45:30.000Z",
             label: "label",
             status: 2,
             buttons: "edit\ndelete",
-            menu: "menu 1\nmenu 1\nmenu 3",
             copy: "copy text",
             icon: "https://i.pravatar.cc/150?img=3",
             iconText: "https://i.pravatar.cc/150?img=3\nSample Text",
@@ -85,13 +89,12 @@ export default function Webpages() {
         },
         {
             id: 4,
-            text: "text 4",
+            text1: "text 4",
             twoText: "two\ntext",
             datetime: "2024-03-06T12:45:30.000Z",
             label: "label",
             status: 3,
             buttons: "edit\ndelete",
-            menu: "menu 1\nmenu 1\nmenu 3",
             copy: "copy text",
             icon: "https://i.pravatar.cc/150?img=4",
             iconText: "https://i.pravatar.cc/150?img=4\nSample Text",
@@ -99,13 +102,12 @@ export default function Webpages() {
         },
         {
             id: 5,
-            text: "text 5",
+            text1: "text 5",
             twoText: "two\ntext",
             datetime: "2024-03-06T12:45:30.000Z",
             label: "label",
             status: 0,
             buttons: "edit\ndelete",
-            menu: "menu 1\nmenu 1\nmenu 3",
             copy: "copy text",
             icon: "https://i.pravatar.cc/150?img=5",
             iconText: "https://i.pravatar.cc/150?img=5\nSample Text",
@@ -113,13 +115,12 @@ export default function Webpages() {
         },
         {
             id: 6,
-            text: "text 6",
+            text1: "text 6",
             twoText: "two\ntext",
             datetime: "2024-03-06T12:45:30.000Z",
             label: "label",
             status: 0,
             buttons: "edit\ndelete",
-            menu: "menu 1\nmenu 1\nmenu 3",
             copy: "copy text",
             icon: "https://i.pravatar.cc/150?img=6",
             iconText: "https://i.pravatar.cc/150?img=6\nSample Text",
@@ -127,13 +128,12 @@ export default function Webpages() {
         },
         {
             id: 7,
-            text: "text 6",
+            text1: "text 6",
             twoText: "two\ntext",
             datetime: "2024-03-06T12:45:30.000Z",
             label: "label",
             status: 0,
             buttons: "edit\ndelete",
-            menu: "menu 1\nmenu 1\nmenu 3",
             copy: "copy text",
             icon: "https://i.pravatar.cc/150?img=7",
             iconText: "https://i.pravatar.cc/150?img=7\nSample Text",
@@ -141,6 +141,8 @@ export default function Webpages() {
         },
     ];
 
+    // action buttons
+    // action button functions
     const viewButton = (id) => {
         console.log("view: " + id);
     }
@@ -153,22 +155,46 @@ export default function Webpages() {
         console.log("delete: " + id);
     }
 
+    // action buttons
     const actionButtons = [
         {name: "View", text: "View", icon: "", type: "default", function: viewButton},
         {name: "Edit", text: "Edit", icon: "", type: "primary", function: editButton},
         {name: "Delete", text: "Delete", icon: "", type: "danger", function: deleteButton},
     ];
 
+    // menu buttons
+    // menu button functions
+    const viewMenuButton = (id) => {
+        console.log("view: " + id);
+    }
+
+    const editMenuButton = (id) => {
+        console.log("edit: " + id);
+    }
+
+    const deleteMenuButton = (id) => {
+        console.log("delete: " + id);
+    }
+
+    // menu buttons
+    const menuButtons = [
+        {name: "View", text: "View", function: viewMenuButton},
+        {name: "Edit", text: "Edit", function: editMenuButton},
+        {name: "Delete", text: "Delete", function: deleteMenuButton},
+    ];
+
+    // status options
     const updateStatusButton = (id, status) => {
         console.log(id, statusOptions.find((item) => item.uid === status).name);
     }
 
-    const statusButtons = [
+    const statusOptions = [
         {
-            currentStatus: [1, 2],
             name: "Pending",
             uid: 0,
             type: "warning",
+            button: true,
+            currentStatus: [1, 2],
             function: updateStatusButton,
             icon: <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
                        strokeWidth={1.5} stroke="currentColor" className="w-5 h-5">
@@ -178,10 +204,11 @@ export default function Webpages() {
 
         },
         {
-            currentStatus: [0, 2],
             name: "Completed",
             uid: 1,
             type: "success",
+            button: true,
+            currentStatus: [0, 2],
             function: updateStatusButton,
             icon: <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
                        strokeWidth={1.5}
@@ -191,10 +218,11 @@ export default function Webpages() {
             </svg>
         },
         {
-            currentStatus: [0, 1],
             name: "Error",
             uid: 2,
             type: "danger",
+            button: true,
+            currentStatus: [0, 1],
             function: updateStatusButton,
             icon: <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
                        strokeWidth={1.5}
@@ -205,19 +233,14 @@ export default function Webpages() {
         },
     ]
 
-    const menuButtons = [
-        {name: "View", text: "View", function: viewButton},
-        {name: "Edit", text: "Edit", function: editButton},
-        {name: "Delete", text: "Delete", function: deleteButton},
-    ];
-
+    // update status bulk
     const updateStatusBulk = (ids, status) => {
         console.log(ids, status);
     };
 
-    const handleUpdateStatusBulk = (selectedKeys, status, currentItems) => {
+    const handleUpdateStatusBulk = (selectedKeys, status) => {
         if (selectedKeys === 'all') {
-            updateStatusBulk(currentItems, status);
+            updateStatusBulk(data.map(item => item.id), status);
         } else {
             updateStatusBulk(
                 Array.from(selectedKeys).map((str) => parseInt(str, 10)),
@@ -226,13 +249,14 @@ export default function Webpages() {
         }
     };
 
+    // delete bulk
     const deleteBulk = (ids) => {
         console.log(ids);
     }
 
-    const handleDeleteBulk = (selectedKeys, currentItems) => {
+    const handleDeleteBulk = (selectedKeys) => {
         if (selectedKeys === 'all') {
-            deleteBulk(currentItems);
+            deleteBulk(data.map(item => item.id));
         } else {
             deleteBulk(
                 Array.from(selectedKeys).map((str) => parseInt(str, 10))
@@ -245,6 +269,55 @@ export default function Webpages() {
         console.log('Fetching table data...');
     }
 
+    // ------------------------------------------------
+    // pagination
+    const setPage = (page) => {
+        console.log('Page: ' + page);
+    }
+
+    const onPreviousPage = (page) => {
+        console.log('Previous page: ' + page);
+    }
+
+    const onNextPage = (page) => {
+        console.log('Next page: ' + page);
+    }
+
+    // time range
+    const onTimeRangeChange = (start, end) => {
+        console.log(start, end);
+    }
+
+    // export
+    const exportData = () => {
+        console.log('Export');
+    }
+
+    // search
+    useEffect(() => {
+        search(searchColumn, searchFieldValue);
+    }, [searchColumn, searchFieldValue]);
+    const search = (searchColumn, text) => {
+        console.log('Column: ' + searchColumn + ', Text: ' + text);
+    }
+
+    // pages count
+    const pagesCount = () => {
+        return 7;
+    }
+
+    // rows per page
+    const changeRowsPerPage = (count) => {
+        setRowsPerPage(count);
+    }
+
+    // sort
+    const changeSorting = (sort) => {
+        setSearchColumn(sort.column);
+        console.log(sort);
+    }
+    // ------------------------------------------------
+
     return (
         <>
             <Table
@@ -253,16 +326,35 @@ export default function Webpages() {
                 init_cols={init_cols}
 
                 actionButtons={actionButtons}
-                statusButtons={statusButtons}
                 fetchTableData={fetchTableData}
                 statusOptions={statusOptions}
                 menuButtons={menuButtons}
 
-                searchColumn={"text"}
-                dateColumn={"datetime"}
+                searchColumn={searchColumn}
+                dateColumn={dateColumn}
+                sortColumn={sortColumn}
 
                 handleUpdateStatusBulk={handleUpdateStatusBulk}
                 handleDeleteBulk={handleDeleteBulk}
+
+                setPage={setPage}
+                onPreviousPage={onPreviousPage}
+                onNextPage={onNextPage}
+
+                onTimeRangeChange={onTimeRangeChange}
+
+                exportData={exportData}
+
+                search={search}
+                searchFieldValue={[searchFieldValue, setSearchFieldValue]}
+
+                pagesCount={pagesCount()}
+
+                rowsPerPage={rowsPerPage}
+                changeRowsPerPage={changeRowsPerPage}
+
+                changeSorting={changeSorting}
+
             />
         </>
     )
