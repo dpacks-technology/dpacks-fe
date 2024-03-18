@@ -1,6 +1,6 @@
 import PanelLayout from "@/app/layouts/PanelLayout";
 
-export default function ProsLayout({ children }) {
+export default function ULayout({ children }) {
     return (
         <div>
             <PanelLayout children={children}/>
