@@ -6,26 +6,29 @@ import React from "react";
 import ButtonComponent from "@/app/components/Button";
 import Input from "@/app/components/Input";
 import {Button, Card} from "@nextui-org/react";
-import { Spin } from 'antd';
 
 
-export default function apiSubscribe() {
+export default function apiSubscribe({params}) {
     // eslint-disable-next-line react-hooks/rules-of-hooks
-    const [subscription, setSubscription] = useState(null);
+    // const [subscription, setSubscription] = useState(null);
     // eslint-disable-next-line react-hooks/rules-of-hooks
     const [clientId, setClientId] = useState("");
     // eslint-disable-next-line react-hooks/rules-of-hooks
     const [apiKey, setApiKey] = useState("");
 
+
     const subscribe = async () => {
-        setSubscription(true);
-        // try {
-        //
-        //     const response = await axios.post('http://localhost:4000/api/subscriber/');
-        //     setSubscription(response.data.keyPairs);
-        // } catch (error) {
-        //     console.error('Failed to subscribe:', error);
-        // }
+        try {
+            const response = await axios.post(`http://localhost:4001/api/keypairs/${params.webId}`);
+            if(response.status === 200){
+                setClientId(response.data.client_id);
+                setApiKey(response.data.key);
+            }else{
+                console.error('Failed to subscribe:', response);
+            }
+        } catch (error) {
+            console.error('Failed to subscribe:', error);
+        }
 
     };
 
@@ -39,27 +42,28 @@ export default function apiSubscribe() {
 
     };
 
+    const fetchData = async () => {
+        try {
+            const response = await axios.get(`http://localhost:4001/api/keypairs/${params.webId}`);
+            setClientId(response.data.client_id);
+            setApiKey(response.data.key);
+        } catch (error) {
+            console.error('Failed to fetch subscription:', error);
+        }
+    };
+
+
     // eslint-disable-next-line react-hooks/rules-of-hooks
-    // useEffect(() => {
-    //     const fetchData = async () => {
-    //         try {
-    //             const response = await axios.get('http://localhost:4000/api/subscriber/');
-    //             setClientId(response.data.keyPairs.clientId);
-    //             setApiKey(response.data.keyPairs.apiKey);
-    //         } catch (error) {
-    //             console.error('Failed to fetch subscription:', error);
-    //         }
-    //     };
-    //
-    //     if (subscription) {
-    //         fetchData();
-    //     }
-    // }, [subscription]);
+    useEffect(() => {
+        fetchData(); // Fetch data on initial page load
+        //but there will be two requests to the server
+    }, []);
 
     return(
         <div className="w-full h-full flex items-center justify-center">
+
             <Card className="bg-gray-700 w-3/4 p-10 ml-auto mr-auto flex-col items-center">
-                {!subscription ? (
+                {!(clientId && apiKey) ? (
                     <ButtonComponent
                         name="Subscribe to API"
                         variant="solid"
