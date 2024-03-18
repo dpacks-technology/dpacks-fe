@@ -10,8 +10,6 @@ export default function Profile() {
     const [lastName, setLastName] = useState('');
     const [email, setEmail] = useState('');
     const [phone, setPhone] = useState('');
-    const [password, setPassword] = useState('');
-    const [confirmPassword, setConfirmPassword] = useState('');
     const [selectedUsers, setSelectedUsers] = useState([]); // Assuming this is the correct initial state
     const [selectedGender, setSelectedGender] = useState(null);
     const [colorTheme, setColorTheme] = useState(null);
@@ -40,10 +38,46 @@ export default function Profile() {
                     </div>
                 </div>
                 <div className='grid items-center grid-cols-2'>
-                    <Input className="mt-2 w-fit" size="md" type='text' value={"Kaweesha"} disabled label='First Name' placeholder='Enter Name' />
-                    <Input className="mt-2 w-fit" size="md" type='text' value={"Marasinghe"} disabled label='Last Name' placeholder='Enter Name' />
-                    <Input className="mt-2 w-fit" size="md" type='email' value={"Kaweesha Marasinghe"} disabled label='Name' placeholder='Enter Name' />
-                    <Input className="mt-2 w-fit" size="md" type='phone' value={"770723273"} disabled label='Name' placeholder='Enter Name' />
+                <Input
+                        className="mt-2 w-fit"
+                        size="md"
+                        type='text'
+                        value={firstName}
+                        onChange={(e) => setFirstName(e.target.value)}
+                        label='First Name'
+                        placeholder='Enter Name'
+                        disabled // Remove this to make the input editable
+                    />
+                    <Input
+                        className="mt-2 w-fit"
+                        size="md"
+                        type='text'
+                        value={lastName}
+                        onChange={(e) => setLastName(e.target.value)}
+                        label='Last Name'
+                        placeholder='Enter Name'
+                        disabled // Remove this to make the input editable
+                    />
+                    <Input
+                        className="mt-2 w-fit"
+                        size="md"
+                        type='email'
+                        value={email}
+                        onChange={(e) => setEmail(e.target.value)}
+                        label='Email'
+                        placeholder='Enter Email'
+                        disabled // Remove this to make the input editable
+                    />
+                    <Input
+                        className="mt-2 w-fit"
+                        size="md"
+                        type='phone'
+                        value={phone}
+                        onChange={(e) => setPhone(e.target.value)}
+                        label='Phone'
+                        placeholder='Enter Phone Number'
+                        disabled // Remove this to make the input editable
+                    />
                     <Select
 
                         size="md"
