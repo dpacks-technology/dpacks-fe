@@ -5,7 +5,7 @@ import { Input } from "@nextui-org/react";
 import { Textarea } from "@nextui-org/react";
 
 export default function Profile() {
-    const initialFruits = ["Agricultural Innovations", "Art Exhibitions", "Art Exhibitions", "Astronomy Discoveries", "Automotive News","Beauty Trends","Food Technology"]
+    const initialFruits = ["Agricultural Innovations", "Art Exhibitions", "Art Exhibitions", "Astronomy Discoveries", "Automotive News", "Beauty Trends", "Food Technology"]
     const [firstName, setFirstName] = useState('');
     const [lastName, setLastName] = useState('');
     const [email, setEmail] = useState('');
@@ -16,7 +16,8 @@ export default function Profile() {
     const [selectedGender, setSelectedGender] = useState(null);
     const [colorTheme, setColorTheme] = useState(null);
     const [fruits, setFruits] = React.useState(initialFruits);
-    
+    const [aboutMe, setAboutMe] = useState('')
+
 
     const handleClose = (fruitToRemove) => {
         setFruits(fruits.filter(fruit => fruit !== fruitToRemove));
@@ -40,11 +41,11 @@ export default function Profile() {
                 </div>
                 <div className='grid items-center grid-cols-2'>
                     <Input className="mt-2 w-fit" size="md" type='text' value={"Kaweesha"} disabled label='First Name' placeholder='Enter Name' />
-                    <Input className="mt-2 w-fit" size="md" type='text' value={"Marasinghe"} disabled  label='Last Name' placeholder='Enter Name' />
-                    <Input className="mt-2 w-fit" size="md" type='email' value={"Kaweesha Marasinghe"} disabled  label='Name' placeholder='Enter Name' />
-                    <Input className="mt-2 w-fit" size="md" type='phone' value={"770723273"} disabled  label='Name' placeholder='Enter Name' />
+                    <Input className="mt-2 w-fit" size="md" type='text' value={"Marasinghe"} disabled label='Last Name' placeholder='Enter Name' />
+                    <Input className="mt-2 w-fit" size="md" type='email' value={"Kaweesha Marasinghe"} disabled label='Name' placeholder='Enter Name' />
+                    <Input className="mt-2 w-fit" size="md" type='phone' value={"770723273"} disabled label='Name' placeholder='Enter Name' />
                     <Select
-                        
+
                         size="md"
                         items={[{ "value": "Dark", "label": "Dark" }, { "value": "Light", "label": "Light" }]}
                         label="Color Theme"
@@ -57,13 +58,14 @@ export default function Profile() {
                     <Select
                         color='default'
                         size="md"
-                        items={[{ "value": "Dark", "label": "Dark" }, { "value": "Light", "label": "Light" }]}
-                        label="Color Theme"
-                        placeholder="Select Color Theme"
+                        items={[{ "value": "Male", "label": "Male" }, { "value": "Female", "label": "Female" }, { "value": "Other", "label": "Other" }]}
+                        label="Gender"
+                        placeholder="Select Gender"
                         className="max-w-xs mt-2 w-44"
                         value={selectedGender}
-                        onChange={(e) => setColorTheme(e.target.value)}
-                    >{(theme) => <SelectItem className='' key={theme.value}>{theme.label}</SelectItem>}
+                        onChange={(e) => setSelectedGender(e.target.value)}
+                    >
+                        {(gender) => <SelectItem key={gender.value}>{gender.label}</SelectItem>}
                     </Select>
                 </div>
                 <div className='flex justify-center'>
@@ -80,21 +82,23 @@ export default function Profile() {
                 <div>
 
                     <div>
-                    <h1 className='m-3 font-bold text-xl mb-6' >Preferences</h1>
+                        <h1 className='m-3 font-bold text-xl mb-6' >Preferences</h1>
                     </div>
 
                     <div className='grid grid-cols-2 gap-2'>
-                    {fruits.map((fruit, index) => (
-                        <Chip key={index} onClose={() => handleClose(fruit)} variant="flat">
-                            {fruit}
-                        </Chip>
-                    ))}
+                        {fruits.map((fruit, index) => (
+                            <Chip key={index} onClose={() => handleClose(fruit)} variant="flat">
+                                {fruit}
+                            </Chip>
+                        ))}
                     </div>
 
                 </div>
                 <div className='row-2'>
                     <h1 className='m-3 font-bold text-xl mb-6'>About Me</h1>
                     <Textarea
+                        value={aboutMe}
+                        onChange={(e) => setAboutMe(e.target.value)}
                         classNames="h-40"
                         minRows={10}
                         isRequired
