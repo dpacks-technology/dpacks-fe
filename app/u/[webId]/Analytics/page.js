@@ -1,6 +1,6 @@
 "use client"
 import React from "react";
-import CardTbl from "@/app/components/icons/CardTbl";
+import CardTbl from "@/app/components/Analytics/CardTbl";
 import { Divider, Table } from 'antd';
 import ReactECharts from 'echarts-for-react';
 
@@ -56,17 +56,20 @@ export default function Analytics() {
                 <h1 className="text text-3xl font-bold">Dashboard</h1>
             </div>
             <div className="grid grid-cols-4 m-3">
-                <CardTbl name="Sessions(Live)" count="100" />
-                <CardTbl name="Sessions(Live)" count="100" />
-                <CardTbl name="Sessions(Live)" count="100" />
-                <CardTbl name="Sessions(Live)" count="100" />
+                <CardTbl name="Real Time User Count" count="1M" />
+                <CardTbl name="Visited Users" count="8.23K" />
+                <CardTbl name="Active Users" count="2.3M" />
+                <CardTbl name="Sessions(Live)" count="8K" />
                 <Divider />
             </div>
-            <div className="grid grid-cols-2 grid-rows-2">
 
+
+
+            {/* desgign h1 for header as website traffic */}
+            <div className="grid grid-cols-2 grid-rows-2">
                 <div className="w-full overflow-auto h-96 ">
-                    {/* desgign h1 for header as website traffic */}
-                    <h1 className="text-3xl mt-5 font-bold text-center">Website Traffic</h1>
+
+                    <h1 className="text-2xl mt-5 font-bold text-center">Website Traffic</h1>
                     <ReactECharts
                         className="w-full mt-6"
                         option={{
@@ -97,9 +100,14 @@ export default function Analytics() {
 
 
                 </div>
+
+
+
+
+                {/* chart about visitors source facebook,whatsapp,instagrame,direct visit in pie chart */}
                 <div className="w-full h-96 border-l-1">
-                    {/* chart about visitors source facebook,whatsapp,instagrame,direct visit in pie chart */}
-                    <h1 className="text-3xl mt-5 font-bold text-center">User Source</h1>
+
+                    <h1 className="text-2xl mt-5 font-bold text-center">Visitor Source</h1>
                     <ReactECharts
                         option={{
                             
@@ -118,14 +126,25 @@ export default function Analytics() {
                     />
 
                 </div>
-                <div className="w-full h-96 border-1">
 
-                <Table dataSource={dataSource} columns={columns} />;
-                    
+
+
+                {/*visitor country table*/}
+                <div className="w-full h-96 border-1 overflow-scroll">
+                    <h1 className="text-2xl mt-5 font-bold text-center pb-6">User by Country</h1>
+
+                    <Table dataSource={dataSource} columns={columns}/>;
+
 
                 </div>
+
+
+
+
+                {/* visitor devices data horizonal grph */}
                 <div className="w-full h-96 border-1">
-                        {/* visitor devices data horizonal grph */}
+                <h1 className="text-2xl mt-5 font-bold text-center">Visitor Devices</h1>
+
                     <ReactECharts
                         className="p-5"
                         option={{
