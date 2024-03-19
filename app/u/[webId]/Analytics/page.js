@@ -41,11 +41,7 @@ const dataSource = [
       dataIndex: 'UserCount',
       key: 'UserCount',
     },
-    {
-        title: 'Percentage',
-        dataIndex: 'Percentage',
-        key: 'Percentage',
-      },
+
   ];
 
 export default function Analytics() {
