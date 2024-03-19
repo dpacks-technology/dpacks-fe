@@ -37,7 +37,7 @@ export default function Table({data, columns, init_cols, ...props}) {
     const [sortDescriptor, setSortDescriptor] = React.useState(props.sortColumn);
     const [messageApi, contextHolder] = message.useMessage();
     const page = props.currentPage;
-    const pages = Math.ceil(props.pagesCount / props.rowsPerPage);
+    const pages = Math.ceil(props.dataCount / props.rowsPerPage);
 
     // header column visibility
     const headerColumns = React.useMemo(() => {
@@ -266,7 +266,7 @@ export default function Table({data, columns, init_cols, ...props}) {
                             </Dropdown>
 
                             {/* refresh */}
-                            <Button variant={"ghost"} onClick={props.fetchTableData}>Refresh</Button>
+                            <Button variant={"ghost"} onClick={() => props.fetchTableData(page, props.searchColumn, props.searchFieldValue[0])}>Refresh</Button>
                         </div>
 
                         {/* bulk actions */}
@@ -319,7 +319,7 @@ export default function Table({data, columns, init_cols, ...props}) {
                         </div>
                     </div>
                     <div className="flex justify-between items-center">
-                        <span className="text-default-400 text-small">Total {props.pagesCount} data</span>
+                        <span className="text-default-400 text-small">Total {props.dataCount} data</span>
                         <label className="flex items-center text-default-400 text-small">
                             Rows per page:
                             <select
@@ -343,8 +343,8 @@ export default function Table({data, columns, init_cols, ...props}) {
             <div className="py-2 px-2 flex justify-between items-center">
         <span className="w-[30%] text-small text-default-400">
           {selectedKeys === "all"
-              ? `${props.rowsPerPage} of ${props.pagesCount} selected`
-              : `${selectedKeys.size} of ${props.pagesCount} selected`}
+              ? `${props.rowsPerPage} of ${props.dataCount} selected`
+              : `${selectedKeys.size} of ${props.dataCount} selected`}
         </span>
                 <Pagination
                     isCompact
@@ -371,7 +371,7 @@ export default function Table({data, columns, init_cols, ...props}) {
                 </div>
             </div>
         );
-    }, [selectedKeys, props.pagesCount, props.setPage, page, pages, onPreviousPage, onNextPage]);
+    }, [selectedKeys, props.dataCount, props.setPage, page, pages, onPreviousPage, onNextPage]);
 
     // return table
     return (

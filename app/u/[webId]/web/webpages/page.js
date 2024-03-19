@@ -24,7 +24,7 @@ export default function Webpages(callback, deps) {
         {name: "NAME", uid: "name", sortable: true, type: "text"},
         {name: "PATH", uid: "path", sortable: true, type: "text"},
         {name: "CREATED ON", uid: "date_created", sortable: false, type: "datetime"},
-        {name: "STATUS", uid: "status", sortable: true, type: "status"},
+        {name: "STATUS", uid: "status", sortable: false, type: "status"},
         {name: "CHANGE STATUS", uid: "statusButtons", sortable: false, type: "statusButtons"},
         {name: "ACTIONS", uid: "menu", sortable: false, type: "menu"},
     ];
@@ -147,18 +147,19 @@ export default function Webpages(callback, deps) {
     }
 
     // Fetch table data
-    const fetchTableData = (useCallback(async (page) => {
+    const fetchTableData = (useCallback((page, key, val) => {
+
         // fetch data from API
-        await getWebPagesCount().then(async (response) => {
-            setPagesCount(response);
-            getWebPages(rowsPerPage, page).then(async (response) => {
-                setData(response);
-            });
-        });
+        getWebPagesCount(key, val).then((response) => setPagesCount(response));
+
+        getWebPages(rowsPerPage, page, key, val)
+            .then(response => setData(response.length === 0 ? [] : response))
+            .catch(error => console.error(error));
+
     }, [rowsPerPage]));
 
     useEffect(() => {
-        fetchTableData(currentPage).then(() => console.log("Data fetched"));
+        fetchTableData(currentPage, "", "");
     }, [currentPage, fetchTableData, rowsPerPage]);
 
     // ------------------------------------------------
@@ -187,11 +188,8 @@ export default function Webpages(callback, deps) {
 
     // search
     useEffect(() => {
-        search(searchColumn, searchFieldValue);
-    }, [searchColumn, searchFieldValue]);
-    const search = (searchColumn, text) => {
-        console.log('Column: ' + searchColumn + ', Text: ' + text);
-    }
+        fetchTableData(currentPage, searchColumn, searchFieldValue);
+    }, [currentPage, fetchTableData, searchColumn, searchFieldValue]);
 
     // rows per page
     const changeRowsPerPage = (count) => {
@@ -245,10 +243,9 @@ export default function Webpages(callback, deps) {
 
                 exportData={exportData}
 
-                search={search}
                 searchFieldValue={[searchFieldValue, setSearchFieldValue]}
 
-                pagesCount={pagesCount}
+                dataCount={pagesCount}
 
                 rowsPerPage={rowsPerPage}
                 changeRowsPerPage={changeRowsPerPage}
