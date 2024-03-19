@@ -1,13 +1,17 @@
 'use client';
 
 import Table from "@/app/components/Table";
-import React, {useEffect} from "react";
+import React, {useCallback, useEffect} from "react";
+import {getWebPages, getWebPagesCount} from "@/services/userService";
 
-export default function Webpages() {
+export default function Webpages(callback, deps) {
 
     // states
     const [searchFieldValue, setSearchFieldValue] = React.useState("");
     const [rowsPerPage, setRowsPerPage] = React.useState(5);
+    const [data, setData] = React.useState([]);
+    const [currentPage, setCurrentPage] = React.useState(1);
+    const [pagesCount, setPagesCount] = React.useState(0);
 
     // default columns
     const dateColumn = "datetime" // default date column
@@ -17,128 +21,22 @@ export default function Webpages() {
     // columns
     const columns = [
         {name: "ID", uid: "id", sortable: true, type: "text"},
-        {name: "TEXT", uid: "text1", sortable: true, type: "text"},
-        {name: "TWO TEXT", uid: "twoText", sortable: true, type: "twoText"},
-        {name: "DATETIME", uid: "datetime", sortable: true, type: "datetime"},
-        {name: "LABEL", uid: "label", sortable: false, type: "label"},
+        {name: "NAME", uid: "name", sortable: true, type: "text"},
+        {name: "PATH", uid: "path", sortable: true, type: "text"},
+        {name: "CREATED ON", uid: "date_created", sortable: false, type: "datetime"},
         {name: "STATUS", uid: "status", sortable: true, type: "status"},
-        {name: "STATUS BUTTONS", uid: "statusButtons", sortable: false, type: "statusButtons"},
-        {name: "BUTTONS", uid: "buttons", sortable: false, type: "buttons"},
-        {name: "MENU", uid: "menu", sortable: false, type: "menu"},
-        {name: "COPY", uid: "copy", sortable: false, type: "copy"},
-        {name: "ICON", uid: "icon", sortable: false, type: "icon"},
-        {name: "ICON TEXT", uid: "iconText", sortable: true, type: "iconText"},
-        {name: "ICON TWO TEXT", uid: "iconTwoText", sortable: true, type: "iconText"},
+        {name: "CHANGE STATUS", uid: "statusButtons", sortable: false, type: "statusButtons"},
+        {name: "ACTIONS", uid: "menu", sortable: false, type: "menu"},
     ];
 
     // initially visible columns
     const init_cols = [
-        "text1",
-        "twoText",
-        "datetime",
-        "label",
+        "name",
+        "path",
+        "date_created",
         "status",
         "statusButtons",
-        "buttons",
-        "menu",
-        "copy",
-        "icon",
-        "iconText",
-        "iconTwoText",
-    ];
-
-    // data
-    const data = [
-        {
-            id: 1,
-            text1: "text 1",
-            twoText: "two\ntext",
-            datetime: "2024-03-06T12:45:30.000Z",
-            label: "label",
-            status: 1,
-            copy: "copy text",
-            icon: "https://i.pravatar.cc/150?img=1",
-            iconText: "https://i.pravatar.cc/150?img=1\nSample Text",
-            iconTwoText: "https://i.pravatar.cc/150?img=1\nSample Text\nSecondary Text",
-        },
-        {
-            id: 2,
-            text1: "text 2",
-            twoText: "two\ntext",
-            datetime: "2024-03-06T12:45:30.000Z",
-            label: "label",
-            status: 0,
-            buttons: "edit\ndelete",
-            copy: "copy text",
-            icon: "https://i.pravatar.cc/150?img=2",
-            iconText: "https://i.pravatar.cc/150?img=2\nSample Text",
-            iconTwoText: "https://i.pravatar.cc/150?img=2\nSample Text\nSecondary Text",
-        },
-        {
-            id: 3,
-            text1: "text 3",
-            twoText: "two\ntext",
-            datetime: "2024-03-06T12:45:30.000Z",
-            label: "label",
-            status: 2,
-            buttons: "edit\ndelete",
-            copy: "copy text",
-            icon: "https://i.pravatar.cc/150?img=3",
-            iconText: "https://i.pravatar.cc/150?img=3\nSample Text",
-            iconTwoText: "https://i.pravatar.cc/150?img=3\nSample Text\nSecondary Text",
-        },
-        {
-            id: 4,
-            text1: "text 4",
-            twoText: "two\ntext",
-            datetime: "2024-03-06T12:45:30.000Z",
-            label: "label",
-            status: 3,
-            buttons: "edit\ndelete",
-            copy: "copy text",
-            icon: "https://i.pravatar.cc/150?img=4",
-            iconText: "https://i.pravatar.cc/150?img=4\nSample Text",
-            iconTwoText: "https://i.pravatar.cc/150?img=4\nSample Text\nSecondary Text",
-        },
-        {
-            id: 5,
-            text1: "text 5",
-            twoText: "two\ntext",
-            datetime: "2024-03-06T12:45:30.000Z",
-            label: "label",
-            status: 0,
-            buttons: "edit\ndelete",
-            copy: "copy text",
-            icon: "https://i.pravatar.cc/150?img=5",
-            iconText: "https://i.pravatar.cc/150?img=5\nSample Text",
-            iconTwoText: "https://i.pravatar.cc/150?img=5\nSample Text\nSecondary Text",
-        },
-        {
-            id: 6,
-            text1: "text 6",
-            twoText: "two\ntext",
-            datetime: "2024-03-06T12:45:30.000Z",
-            label: "label",
-            status: 0,
-            buttons: "edit\ndelete",
-            copy: "copy text",
-            icon: "https://i.pravatar.cc/150?img=6",
-            iconText: "https://i.pravatar.cc/150?img=6\nSample Text",
-            iconTwoText: "https://i.pravatar.cc/150?img=6\nSample Text\nSecondary Text",
-        },
-        {
-            id: 7,
-            text1: "text 6",
-            twoText: "two\ntext",
-            datetime: "2024-03-06T12:45:30.000Z",
-            label: "label",
-            status: 0,
-            buttons: "edit\ndelete",
-            copy: "copy text",
-            icon: "https://i.pravatar.cc/150?img=7",
-            iconText: "https://i.pravatar.cc/150?img=7\nSample Text",
-            iconTwoText: "https://i.pravatar.cc/150?img=7\nSample Text\nSecondary Text",
-        },
+        "menu"
     ];
 
     // action buttons
@@ -190,47 +88,31 @@ export default function Webpages() {
 
     const statusOptions = [
         {
-            name: "Pending",
+            name: "Offline",
             uid: 0,
-            type: "warning",
+            type: "danger",
             button: true,
             currentStatus: [1, 2],
             function: updateStatusButton,
-            icon: <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
-                       strokeWidth={1.5} stroke="currentColor" className="w-5 h-5">
+            icon: <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5}
+                       stroke="currentColor" className="w-5 h-5">
                 <path strokeLinecap="round" strokeLinejoin="round"
-                      d="M19.5 12c0-1.232-.046-2.453-.138-3.662a4.006 4.006 0 0 0-3.7-3.7 48.678 48.678 0 0 0-7.324 0 4.006 4.006 0 0 0-3.7 3.7c-.017.22-.032.441-.046.662M19.5 12l3-3m-3 3-3-3m-12 3c0 1.232.046 2.453.138 3.662a4.006 4.006 0 0 0 3.7 3.7 48.656 48.656 0 0 0 7.324 0 4.006 4.006 0 0 0 3.7-3.7c.017-.22.032-.441.046-.662M4.5 12l3 3m-3-3-3 3"/>
+                      d="m9.75 9.75 4.5 4.5m0-4.5-4.5 4.5M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z"/>
             </svg>
-
         },
         {
-            name: "Completed",
+            name: "Active",
             uid: 1,
             type: "success",
             button: true,
             currentStatus: [0, 2],
             function: updateStatusButton,
-            icon: <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
-                       strokeWidth={1.5}
+            icon: <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5}
                        stroke="currentColor" className="w-5 h-5">
                 <path strokeLinecap="round" strokeLinejoin="round"
                       d="M9 12.75 11.25 15 15 9.75M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z"/>
             </svg>
-        },
-        {
-            name: "Error",
-            uid: 2,
-            type: "danger",
-            button: true,
-            currentStatus: [0, 1],
-            function: updateStatusButton,
-            icon: <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
-                       strokeWidth={1.5}
-                       stroke="currentColor" className="w-5 h-5">
-                <path strokeLinecap="round" strokeLinejoin="round"
-                      d="M12 9v3.75m9-.75a9 9 0 1 1-18 0 9 9 0 0 1 18 0Zm-9 3.75h.008v.008H12v-.008Z"/>
-            </svg>
-        },
+        }
     ]
 
     // update status bulk
@@ -265,14 +147,24 @@ export default function Webpages() {
     }
 
     // Fetch table data
-    const fetchTableData = () => {
-        console.log('Fetching table data...');
-    }
+    const fetchTableData = (useCallback(async (page) => {
+        // fetch data from API
+        await getWebPagesCount().then(async (response) => {
+            setPagesCount(response);
+            getWebPages(rowsPerPage, page).then(async (response) => {
+                setData(response);
+            });
+        });
+    }, [rowsPerPage]));
+
+    useEffect(() => {
+        fetchTableData(currentPage).then(() => console.log("Data fetched"));
+    }, [currentPage, fetchTableData, rowsPerPage]);
 
     // ------------------------------------------------
     // pagination
     const setPage = (page) => {
-        console.log('Page: ' + page);
+        setCurrentPage(page);
     }
 
     const onPreviousPage = (page) => {
@@ -301,13 +193,18 @@ export default function Webpages() {
         console.log('Column: ' + searchColumn + ', Text: ' + text);
     }
 
-    // pages count
-    const pagesCount = () => {
-        return 7;
-    }
-
     // rows per page
     const changeRowsPerPage = (count) => {
+
+        // get current top item
+        let currentTopItem = rowsPerPage * (currentPage - 1) + 1;
+
+        // set current page
+        if (currentTopItem > count) {
+            setCurrentPage(Math.ceil(currentTopItem / count));
+        }
+
+        // set rows per page
         setRowsPerPage(count);
     }
 
@@ -341,6 +238,9 @@ export default function Webpages() {
                 onPreviousPage={onPreviousPage}
                 onNextPage={onNextPage}
 
+
+                currentPage={currentPage}
+
                 onTimeRangeChange={onTimeRangeChange}
 
                 exportData={exportData}
@@ -348,7 +248,7 @@ export default function Webpages() {
                 search={search}
                 searchFieldValue={[searchFieldValue, setSearchFieldValue]}
 
-                pagesCount={pagesCount()}
+                pagesCount={pagesCount}
 
                 rowsPerPage={rowsPerPage}
                 changeRowsPerPage={changeRowsPerPage}

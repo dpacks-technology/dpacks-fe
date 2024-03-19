@@ -35,8 +35,8 @@ export default function Table({data, columns, init_cols, ...props}) {
     const [visibleColumns, setVisibleColumns] = React.useState(new Set(init_cols));
     const [statusFilter, setStatusFilter] = React.useState("all");
     const [sortDescriptor, setSortDescriptor] = React.useState(props.sortColumn);
-    const [page, setPage] = React.useState(1);
     const [messageApi, contextHolder] = message.useMessage();
+    const page = props.currentPage;
     const pages = Math.ceil(props.pagesCount / props.rowsPerPage);
 
     // header column visibility
@@ -85,15 +85,15 @@ export default function Table({data, columns, init_cols, ...props}) {
             case "twoText":
                 return (
                     <>
-                        <p className="text-bold text-small capitalize">{cellValue.split("\n")[0]}</p>
-                        <p className="text-bold text-tiny capitalize text-default-400">{cellValue.split("\n")[1]}</p>
+                        <p className="text-bold text-small capitalize">{cellValue && cellValue.split("\n")[0]}</p>
+                        <p className="text-bold text-tiny capitalize text-default-400">{cellValue && cellValue.split("\n")[1]}</p>
                     </>
                 );
             case "datetime":
                 return (
                     <div>
-                        <p className="text-bold text-small capitalize">{cellValue.split('T')[0].split('-')[2]}/{cellValue.split('T')[0].split('-')[1]}/{cellValue.split('T')[0].split('-')[0]}</p>
-                        <p className="text-bold text-tiny capitalize text-default-400">{cellValue.split('T')[1].slice(0, -1).split('.')[0]}</p>
+                        <p className="text-bold text-small capitalize">{cellValue && cellValue.split('T')[0].split('-')[2]}/{cellValue && cellValue.split('T')[0].split('-')[1]}/{cellValue && cellValue.split('T')[0].split('-')[0]}</p>
+                        <p className="text-bold text-tiny capitalize text-default-400">{cellValue && cellValue.split('T')[1].slice(0, -1).split('.')[0]}</p>
                     </div>
                 );
             case "label":
@@ -111,7 +111,7 @@ export default function Table({data, columns, init_cols, ...props}) {
             case "statusButtons":
                 return (
                     props.statusOptions &&
-                    <div className="relative flex justify-end items-center gap-2">
+                    <div className="relative flex justify-normal items-center gap-2">
                         {props.statusOptions.map((statusButton, index) => (
                             (statusButton.currentStatus.includes(data.status) && statusButton.button) &&
                             <Button key={index} color={statusButton.type} size="sm" title={statusButton.name} isIconOnly
@@ -171,9 +171,9 @@ export default function Table({data, columns, init_cols, ...props}) {
             case "iconText":
                 return (
                     <User
-                        avatarProps={{radius: "lg", src: cellValue.split("\n")[0]}}
-                        name={cellValue.split("\n")[1]}
-                        description={cellValue.split("\n")[2]}
+                        avatarProps={{radius: "lg", src: cellValue && cellValue.split("\n")[0]}}
+                        name={cellValue && cellValue.split("\n")[1]}
+                        description={cellValue && cellValue.split("\n")[2]}
                     />
                 )
             default:
@@ -184,7 +184,7 @@ export default function Table({data, columns, init_cols, ...props}) {
     // next page handler
     const onNextPage = React.useCallback(() => {
         if (page < pages) {
-            setPage(page + 1);
+            props.setPage(page + 1);
             props.onNextPage(page + 1);
         }
     }, [page, pages, props]);
@@ -192,15 +192,15 @@ export default function Table({data, columns, init_cols, ...props}) {
     // previous page handler
     const onPreviousPage = React.useCallback(() => {
         if (page > 1) {
-            setPage(page - 1);
+            props.setPage(page - 1);
             props.onPreviousPage(page - 1);
         }
     }, [page, props]);
 
     // search clear filter value
     const onClear = React.useCallback(() => {
-        setPage(1)
-    }, [])
+        props.setPage(1)
+    }, [props])
 
     // sort data
     useEffect(() => {
@@ -276,14 +276,14 @@ export default function Table({data, columns, init_cols, ...props}) {
                                     {/* update status */}
                                     {(props.statusOptions && props.statusOptions.length > 0) && props.statusOptions.map((statusButton, index) => (
                                         statusButton.button &&
-                                        <Button key={index} color={statusButton.type} size="sm"
+                                        <Button key={index} color={statusButton.type} size="sm" variant={"flat"}
                                                 title={statusButton.name} isIconOnly
                                                 onClick={() => props.handleUpdateStatusBulk(selectedKeys, statusButton.uid)}>{statusButton.icon}
                                         </Button>
                                     ))}
 
                                     {/* remove */}
-                                    <Button color="danger" variant={"faded"} size="sm" title={"Remove"} isIconOnly
+                                    <Button color="danger" variant={"light"} size="sm" title={"Remove"} isIconOnly
                                             onClick={() => props.handleDeleteBulk(selectedKeys, 0)}>
                                         <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
                                              strokeWidth={1.5} stroke="currentColor" className="w-5 h-5">
@@ -343,7 +343,7 @@ export default function Table({data, columns, init_cols, ...props}) {
             <div className="py-2 px-2 flex justify-between items-center">
         <span className="w-[30%] text-small text-default-400">
           {selectedKeys === "all"
-              ? "All items selected"
+              ? `${props.rowsPerPage} of ${props.pagesCount} selected`
               : `${selectedKeys.size} of ${props.pagesCount} selected`}
         </span>
                 <Pagination
@@ -355,6 +355,11 @@ export default function Table({data, columns, init_cols, ...props}) {
                     total={pages}
                     onChange={props.setPage}
                     className={"z-0"}
+                    loop={true}
+                    classNames={{
+                        item: "w-auto pr-4 pl-4",
+                        cursor: "w-auto pr-3 pl-3",
+                    }}
                 />
                 <div className="hidden sm:flex w-[30%] justify-end gap-2">
                     <Button isDisabled={pages === 1} size="sm" variant="flat" onPress={onPreviousPage}>
