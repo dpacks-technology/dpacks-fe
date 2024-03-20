@@ -431,6 +431,7 @@ export default function Table({data, columns, init_cols, ...props}) {
                 bottomContentPlacement="outside"
                 classNames={{
                     wrapper: "max-h-[382px]",
+                    sortIcon: "hidden",
                 }}
                 className={"dark:dark"}
                 selectedKeys={selectedKeys}
