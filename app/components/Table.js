@@ -35,6 +35,8 @@ export default function Table({data, columns, init_cols, ...props}) {
     const [visibleColumns, setVisibleColumns] = React.useState(new Set(init_cols));
     const [statusFilter, setStatusFilter] = React.useState(["all"]);
     const [sortDescriptor, setSortDescriptor] = React.useState(props.sortColumn);
+    const [rangeStart, setRangeStart] = React.useState(null);
+    const [rangeEnd, setRangeEnd] = React.useState(null);
     const [messageApi, contextHolder] = message.useMessage();
     const page = props.currentPage;
     const pages = Math.ceil(props.dataCount / props.rowsPerPage);
@@ -218,14 +220,25 @@ export default function Table({data, columns, init_cols, ...props}) {
 
     // trigger search
     const triggerSearch = () => {
+        setRangeStart(null);
+        setRangeEnd(null);
         props.fetchTableData(page, props.searchColumn, props.searchFieldValue[0]);
+    }
+
+    const handleDateRangeValueChange = (newValue) => {
+
+        setRangeStart(newValue ? newValue[0] : null);
+        setRangeEnd(newValue ? newValue[1] : null);
+
+        newValue ? props.onTimeRangeChange(
+                new Date(newValue[0]).toISOString().replace('T', ' ').replace('Z', ''),
+                new Date(newValue[1]).toISOString().replace('T', ' ').replace('Z', ''))
+            :
+            props.onTimeRangeChange(null, null);
     }
 
     // top content
     const topContent = React.useMemo(() => {
-        const handleDateRangeValueChange = (newValue) => {
-            newValue ? props.onTimeRangeChange(new Date(newValue[0]), new Date(newValue[1])) : props.onTimeRangeChange(null, null);
-        }
 
         return (
             <>
@@ -312,11 +325,11 @@ export default function Table({data, columns, init_cols, ...props}) {
                                     </Button>
                                 </> : null
                             }
-                            <Button onClick={() => props.onTimeRangeChange(null, null)}>All</Button>
+                            <Button onClick={() => {props.onTimeRangeChange(null, null); setRangeStart(null); setRangeEnd(null);}}>All</Button>
                             <Button
-                                onClick={() => props.onTimeRangeChange(new Date(new Date().setHours(0, 0, 0, 0)), new Date(new Date().setHours(23, 59, 59, 999)))}>Today</Button>
+                                onClick={() => {props.onTimeRangeChange(new Date(new Date().setHours(0, 0, 0, 0)).toISOString().replace('T', ' ').replace('Z', ''), new Date(new Date().setHours(23, 59, 59, 999)).toISOString().replace('T', ' ').replace('Z', '')); setRangeStart(null); setRangeEnd(null);}}>Today</Button>
                             <Button
-                                onClick={() => props.onTimeRangeChange(new Date(new Date(new Date().setDate(new Date().getDate() - 1)).setHours(0, 0, 0, 0)), new Date(new Date(new Date().setDate(new Date().getDate() - 1)).setHours(23, 59, 59, 999)))}>Yesterday</Button>
+                                onClick={() => {props.onTimeRangeChange(new Date(new Date(new Date().setDate(new Date().getDate() - 1)).setHours(0, 0, 0, 0)).toISOString().replace('T', ' ').replace('Z', ''), new Date(new Date(new Date().setDate(new Date().getDate() - 1)).setHours(23, 59, 59, 999)).toISOString().replace('T', ' ').replace('Z', '')); setRangeStart(null); setRangeEnd(null);}}>Yesterday</Button>
                         </div>
                     </div>
                 </div>
@@ -333,18 +346,18 @@ export default function Table({data, columns, init_cols, ...props}) {
                                 onValueChange={props.searchFieldValue[1]}
                             />
                             <div className={"inline-block ml-2"}>
-                            <Button color="primary" variant={"flat"} onPress={triggerSearch}>
-                                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
-                                     strokeWidth={1.5} stroke="currentColor" className="w-5 h-5">
-                                    <path strokeLinecap="round" strokeLinejoin="round"
-                                          d="m21 21-5.197-5.197m0 0A7.5 7.5 0 1 0 5.196 5.196a7.5 7.5 0 0 0 10.607 10.607Z"/>
-                                </svg>
-                                Search
-                            </Button>
+                                <Button color="primary" variant={"flat"} onPress={triggerSearch}>
+                                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
+                                         strokeWidth={1.5} stroke="currentColor" className="w-5 h-5">
+                                        <path strokeLinecap="round" strokeLinejoin="round"
+                                              d="m21 21-5.197-5.197m0 0A7.5 7.5 0 1 0 5.196 5.196a7.5 7.5 0 0 0 10.607 10.607Z"/>
+                                    </svg>
+                                    Search
+                                </Button>
                             </div>
                         </div>
                         <div className="flex gap-3 w-4/12">
-                            <RangePicker onChange={handleDateRangeValueChange}/>
+                            <RangePicker onChange={handleDateRangeValueChange} value={[rangeStart, rangeEnd]} />
                             <Button className={"md:block hidden"} onClick={props.exportData}>Export</Button>
                         </div>
                     </div>

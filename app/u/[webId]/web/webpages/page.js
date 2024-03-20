@@ -2,7 +2,14 @@
 
 import Table from "@/app/components/Table";
 import React, {useCallback, useEffect} from "react";
-import {getPagesByStatus, getPagesByStatusCount, getWebPages, getWebPagesCount} from "@/services/userService";
+import {
+    getPagesByDatetime,
+    getPagesByDatetimeCount,
+    getPagesByStatus,
+    getPagesByStatusCount,
+    getWebPages,
+    getWebPagesCount
+} from "@/services/userService";
 
 export default function Webpages() {
 
@@ -178,7 +185,13 @@ export default function Webpages() {
 
     // time range
     const onTimeRangeChange = (start, end) => {
-        console.log(start, end);
+
+        if (start === null || end === null) {
+            fetchTableData(currentPage, searchColumn, searchFieldValue);
+        } else {
+            getPagesByDatetimeCount(start, end, searchColumn, searchFieldValue).then((response) => setPagesCount(response));
+            getPagesByDatetime(rowsPerPage, currentPage, start, end, searchColumn, searchFieldValue).then(response => setData(response === null ? [] : response.length === 0 ? [] : response))
+        }
     }
 
     // export
@@ -189,7 +202,7 @@ export default function Webpages() {
     // status change
     const statusChange = (statusArray) => {
         getPagesByStatusCount(statusArray, searchColumn, searchFieldValue).then((response) => setPagesCount(response));
-        getPagesByStatus(rowsPerPage, currentPage, statusArray, searchColumn, searchFieldValue).then(response => setData(response.length === 0 ? [] : response))
+        getPagesByStatus(rowsPerPage, currentPage, statusArray, searchColumn, searchFieldValue).then(response => setData(response === null ? [] : response.length === 0 ? [] : response))
     }
 
     // rows per page

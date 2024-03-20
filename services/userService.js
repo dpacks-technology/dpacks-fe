@@ -55,3 +55,26 @@ export const getPagesByStatusCount = async (status, key, val) => {
         throw error;
     }
 }
+
+export const getPagesByDatetime = async (count, page, start, end, key, val) => {
+
+    console.log(start);
+
+    try {
+        const response = await userService.get(`/api/web/webpages/datetime/${count}/${page}?start=${start}&end=${end}&key=${key}&val=${val}`);
+        console.log(response.data);
+        return response.data;
+    } catch (error) {
+        throw error;
+    }
+}
+
+export const getPagesByDatetimeCount = async (start, end, key, val) => {
+    try {
+        const response = await userService.get(`/api/web/webpages/datetime/count?start=${start}&end=${end}&key=${key}&val=${val}`);
+        console.log(response.data);
+        return response.data;
+    } catch (error) {
+        throw error;
+    }
+}
