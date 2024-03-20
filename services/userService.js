@@ -18,7 +18,38 @@ export const getWebPages = async (count, page, key, val) => {
 export const getWebPagesCount = async (key, val) => {
     try {
         const response = await userService.get(`/api/web/webpages/count?key=${key}&val=${val}`);
-        console.log(response);
+        return response.data;
+    } catch (error) {
+        throw error;
+    }
+}
+
+export const getPagesByStatus = async (count, page, status, key, val) => {
+
+    // convert status array to string with commas
+    let statusString = status.join(',');
+
+    console.log(statusString);
+
+    try {
+        const response = await userService.get(`/api/web/webpages/status/${count}/${page}?status=${statusString}&key=${key}&val=${val}`);
+        console.log(response.data);
+        return response.data;
+    } catch (error) {
+        throw error;
+    }
+}
+
+export const getPagesByStatusCount = async (status, key, val) => {
+
+    // convert status array to string with commas
+    let statusString = status.join(',');
+
+    console.log(statusString);
+
+    try {
+        const response = await userService.get(`/api/web/webpages/status/count?status=${statusString}&key=${key}&val=${val}`);
+        console.log(response.data);
         return response.data;
     } catch (error) {
         throw error;

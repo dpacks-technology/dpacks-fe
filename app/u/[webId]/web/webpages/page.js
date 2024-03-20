@@ -2,9 +2,9 @@
 
 import Table from "@/app/components/Table";
 import React, {useCallback, useEffect} from "react";
-import {getWebPages, getWebPagesCount} from "@/services/userService";
+import {getPagesByStatus, getPagesByStatusCount, getWebPages, getWebPagesCount} from "@/services/userService";
 
-export default function Webpages(callback, deps) {
+export default function Webpages() {
 
     // states
     const [searchFieldValue, setSearchFieldValue] = React.useState("");
@@ -153,7 +153,7 @@ export default function Webpages(callback, deps) {
         getWebPagesCount(key, val).then((response) => setPagesCount(response));
 
         getWebPages(rowsPerPage, page, key, val)
-            .then(response => setData(response.length === 0 ? [] : response))
+            .then(response => setData(response === null ? [] : response.length === 0 ? [] : response))
             .catch(error => console.error(error));
 
     }, [rowsPerPage]));
@@ -186,10 +186,11 @@ export default function Webpages(callback, deps) {
         console.log('Export');
     }
 
-    // search
-    useEffect(() => {
-        fetchTableData(currentPage, searchColumn, searchFieldValue);
-    }, [currentPage, fetchTableData, searchColumn, searchFieldValue]);
+    // status change
+    const statusChange = (statusArray) => {
+        getPagesByStatusCount(statusArray, searchColumn, searchFieldValue).then((response) => setPagesCount(response));
+        getPagesByStatus(rowsPerPage, currentPage, statusArray, searchColumn, searchFieldValue).then(response => setData(response.length === 0 ? [] : response))
+    }
 
     // rows per page
     const changeRowsPerPage = (count) => {
@@ -209,8 +210,12 @@ export default function Webpages(callback, deps) {
     // sort
     const changeSorting = (sort) => {
         setSearchColumn(sort.column);
-        console.log(sort);
     }
+
+    useEffect(() => {
+        setCurrentPage(1);
+    }, [searchFieldValue]);
+
     // ------------------------------------------------
 
     return (
@@ -235,6 +240,8 @@ export default function Webpages(callback, deps) {
                 setPage={setPage}
                 onPreviousPage={onPreviousPage}
                 onNextPage={onNextPage}
+
+                statusChange={statusChange}
 
 
                 currentPage={currentPage}

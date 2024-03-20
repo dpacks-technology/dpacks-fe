@@ -33,7 +33,7 @@ export default function Table({data, columns, init_cols, ...props}) {
     // states
     const [selectedKeys, setSelectedKeys] = React.useState(new Set([]));
     const [visibleColumns, setVisibleColumns] = React.useState(new Set(init_cols));
-    const [statusFilter, setStatusFilter] = React.useState("all");
+    const [statusFilter, setStatusFilter] = React.useState(["all"]);
     const [sortDescriptor, setSortDescriptor] = React.useState(props.sortColumn);
     const [messageApi, contextHolder] = message.useMessage();
     const page = props.currentPage;
@@ -199,6 +199,7 @@ export default function Table({data, columns, init_cols, ...props}) {
 
     // search clear filter value
     const onClear = React.useCallback(() => {
+        props.fetchTableData(page, "", "")
         props.setPage(1)
     }, [props])
 
@@ -206,6 +207,19 @@ export default function Table({data, columns, init_cols, ...props}) {
     useEffect(() => {
         props.changeSorting(sortDescriptor);
     }, [props, sortDescriptor]);
+
+    useEffect(() => {
+        if (statusFilter[0] !== 'all') {
+            // convert statusFilter to an array
+            const statusFilterArray = Array.from(statusFilter);
+            props.statusChange(statusFilterArray);
+        }
+    }, [statusFilter]);
+
+    // trigger search
+    const triggerSearch = () => {
+        props.fetchTableData(page, props.searchColumn, props.searchFieldValue[0]);
+    }
 
     // top content
     const topContent = React.useMemo(() => {
@@ -231,9 +245,12 @@ export default function Table({data, columns, init_cols, ...props}) {
                                     aria-label="Table Columns"
                                     closeOnSelect={false}
                                     selectedKeys={statusFilter}
-                                    selectionMode="multiple"
+                                    selectionMode="single"
                                     onSelectionChange={setStatusFilter}
                                 >
+                                    <DropdownItem key={"all"} className="capitalize">
+                                        All
+                                    </DropdownItem>
                                     {props.statusOptions && props.statusOptions.map((status) => (
                                         <DropdownItem key={status.uid} className="capitalize">
                                             {capitalize(status.name)}
@@ -266,7 +283,8 @@ export default function Table({data, columns, init_cols, ...props}) {
                             </Dropdown>
 
                             {/* refresh */}
-                            <Button variant={"ghost"} onClick={() => props.fetchTableData(page, props.searchColumn, props.searchFieldValue[0])}>Refresh</Button>
+                            <Button variant={"ghost"}
+                                    onClick={() => props.fetchTableData(page, props.searchColumn, props.searchFieldValue[0])}>Refresh</Button>
                         </div>
 
                         {/* bulk actions */}
@@ -304,15 +322,27 @@ export default function Table({data, columns, init_cols, ...props}) {
                 </div>
                 <div className="flex flex-col gap-4">
                     <div className="flex justify-between gap-3 items-end">
-                        <Input
-                            isClearable
-                            className="w-full sm:max-w-[44%]"
-                            placeholder={`Search by ${props.searchColumn.replace(/([a-z])([A-Z])/g, '$1 $2').replace(/\b\w/g, char => char.toLowerCase())}...`}
-                            startContent={<SearchIcon/>}
-                            onClear={() => onClear()}
-                            value={props.searchFieldValue[0]}
-                            onValueChange={props.searchFieldValue[1]}
-                        />
+                        <div className={"w-full sm:max-w-[44%]"}>
+                            <Input
+                                isClearable
+                                className="w-full sm:max-w-[65%] inline-block"
+                                placeholder={`Search by ${props.searchColumn.replace(/([a-z])([A-Z])/g, '$1 $2').replace(/\b\w/g, char => char.toLowerCase())}...`}
+                                startContent={<SearchIcon/>}
+                                onClear={() => onClear()}
+                                value={props.searchFieldValue[0]}
+                                onValueChange={props.searchFieldValue[1]}
+                            />
+                            <div className={"inline-block ml-2"}>
+                            <Button color="primary" variant={"flat"} onPress={triggerSearch}>
+                                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
+                                     strokeWidth={1.5} stroke="currentColor" className="w-5 h-5">
+                                    <path strokeLinecap="round" strokeLinejoin="round"
+                                          d="m21 21-5.197-5.197m0 0A7.5 7.5 0 1 0 5.196 5.196a7.5 7.5 0 0 0 10.607 10.607Z"/>
+                                </svg>
+                                Search
+                            </Button>
+                            </div>
+                        </div>
                         <div className="flex gap-3 w-4/12">
                             <RangePicker onChange={handleDateRangeValueChange}/>
                             <Button className={"md:block hidden"} onClick={props.exportData}>Export</Button>
