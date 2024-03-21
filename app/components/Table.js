@@ -365,12 +365,16 @@ export default function Table({data, columns, init_cols, ...props}) {
                                 className="w-full sm:max-w-[65%] inline-block"
                                 placeholder={`Search by ${props.searchColumn.replace(/([a-z])([A-Z])/g, '$1 $2').replace(/\b\w/g, char => char.toLowerCase())}...`}
                                 startContent={<SearchIcon/>}
+                                variant={"faded"}
                                 onClear={() => onClear()}
                                 value={props.searchFieldValue[0]}
                                 onValueChange={props.searchFieldValue[1]}
+                                classNames={{
+                                    inputWrapper: "bg-dark border-none h-6 rounded-lg"
+                                }}
                             />
                             <div className={"inline-block ml-2"}>
-                                <Button color="primary" variant={"flat"} onPress={triggerSearch}>
+                                <Button color="primary" variant={"flat"} onPress={triggerSearch} className={"h-10"}>
                                     <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
                                          strokeWidth={1.5} stroke="currentColor" className="w-5 h-5">
                                         <path strokeLinecap="round" strokeLinejoin="round"
@@ -416,7 +420,7 @@ export default function Table({data, columns, init_cols, ...props}) {
                 <Pagination
                     isCompact
                     showControls
-                    showShadow
+                    showShadow={false}
                     color="primary"
                     page={page}
                     total={pages}
@@ -424,8 +428,10 @@ export default function Table({data, columns, init_cols, ...props}) {
                     className={"z-0"}
                     loop={true}
                     classNames={{
-                        item: "w-auto pr-4 pl-4",
+                        item: "w-auto pr-4 pl-4 bg-dark",
                         cursor: "w-auto pr-3 pl-3",
+                        prev: "bg-dark",
+                        next: "bg-dark"
                     }}
                 />
                 <div className="hidden sm:flex w-[30%] justify-end gap-2">

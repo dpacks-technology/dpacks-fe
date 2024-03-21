@@ -19,21 +19,29 @@ module.exports = {
     },
 
     darkAlgorithm: {
+
+        colorBgContainer: '#18181b',
+        colorBgLayout: '#18181b',
+        colorBgElevated: '#27272a',
+
         colorPrimary: '#006fff',
-        colorText: '#ffffff',
-        colorTextQuaternary: '#ffffff',
-        colorTextSecondary: '#ffffff',
-        colorTextTertiary: '#ffffff',
-        colorBorder: '#006fff',
-        borderRadius: 8,
-        colorBgContainer: '#000000',
-        colorBgElevated: '#1f1f1f',
-        colorBgLayout: '#1f1f1f',
         colorPrimaryBg: '#006fff',
-        backgroundColor: '#000000',
+
+        backgroundColor: '#18181b',
+
+        colorBorder: '#27272a',
+
+        colorText: '#ffffff',
+        colorTextQuaternary: '#a1a1aa',
+        colorTextSecondary: '#a1a1aa',
+        colorTextTertiary: '#a1a1aa',
+
         colorError: '#ff4d4f',
         colorInfo: '#1890ff',
         colorLink: '#1890ff',
-        controlHeight: 38,
+
+        controlHeight: 40,
+        borderRadius: 12,
+
     }
 }

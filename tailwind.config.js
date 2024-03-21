@@ -17,8 +17,8 @@ module.exports = {
                 accentLight: '#c2e7ff', // 246, 248, 252 - accent
 
                 // dark
-                dark: '#1f1f1f', // 31, 31, 31 - primary
-                secondaryDark: '#2d2f31', // 45, 47, 49 - secondary
+                dark: '#18181b', // 24, 24, 27 - primary
+                secondaryDark: '#27272a', // 45, 47, 49 - secondary
                 accentDark: '#004a77', // 0, 74, 119 - accent
             },
             textColor: {
