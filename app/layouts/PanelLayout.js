@@ -5,8 +5,9 @@ import useDarkMode from "@/app/hooks/useDarkMode";
 import LeftNavigation1 from "@/app/components/LeftNavigation1";
 import LeftNavigation2 from "@/app/components/LeftNavigation2";
 import RightNavigation1 from "@/app/components/RightNavigation1";
+import {cloneElement, useState} from "react";
 
-export default function PanelLayout({ childrenBody, ...props }) {
+export default function PanelLayout({ childrenBody }) {
 
     const [isDarkMode, toggleDarkMode] = useDarkMode();
 

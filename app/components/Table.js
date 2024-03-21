@@ -25,7 +25,7 @@ import {SearchIcon} from "./icons/SearchIcon";
 import {ChevronDownIcon} from "./icons/ChevronDownIcon";
 import {capitalize} from "./utils/Capitalize";
 import {VerticalDotsIcon} from "@/app/components/icons/VerticalDotsIcon";
-import Model from "@/app/components/Modal";
+import Model from "@/app/components/Model";
 import {mkConfig, download, generateCsv} from "export-to-csv";
 
 const {RangePicker} = DatePicker;
@@ -329,13 +329,17 @@ export default function Table({data, columns, init_cols, ...props}) {
                                         statusButton.button &&
                                         <Button key={index} color={statusButton.type} size="sm" variant={"flat"}
                                                 title={statusButton.name} isIconOnly
-                                                onClick={() => props.handleUpdateStatusBulk(selectedKeys, statusButton.uid)}>{statusButton.icon}
+                                                onClick={() => {
+                                                    props.handleUpdateStatusBulk(selectedKeys, statusButton.uid);
+                                                }}>{statusButton.icon}
                                         </Button>
                                     ))}
 
                                     {/* remove */}
                                     <Button color="danger" variant={"light"} size="sm" title={"Remove"} isIconOnly
-                                            onClick={() => props.handleDeleteBulk(selectedKeys, 0)}>
+                                            onClick={() => {
+                                                props.handleDeleteBulk(selectedKeys, 0);
+                                            }}>
                                         <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
                                              strokeWidth={1.5} stroke="currentColor" className="w-5 h-5">
                                             <path strokeLinecap="round" strokeLinejoin="round"

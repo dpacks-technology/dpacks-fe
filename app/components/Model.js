@@ -1,6 +1,5 @@
 import React, {cloneElement} from 'react';
 import {Button, Modal, ModalBody, ModalContent, ModalFooter, ModalHeader} from "@nextui-org/react";
-import EditWebpageForm from "@/app/components/forms/webpages/EditWebpageForm";
 
 const Model = ({button, isOpen, onOpenChange, modelForm, ...props}) => {
 
@@ -18,14 +17,6 @@ const Model = ({button, isOpen, onOpenChange, modelForm, ...props}) => {
                             <ModalBody>
                                 {cloneElement(modelForm,{ onClose: onClose, id: props.editItemId })}
                             </ModalBody>
-                            {/*<ModalFooter>*/}
-                            {/*    <Button color="danger" variant="flat" onPress={onClose}>*/}
-                            {/*        Close*/}
-                            {/*    </Button>*/}
-                            {/*    <Button color="primary" onPress={() => {props.buttonFunction(props.editItemId); onClose();}}>*/}
-                            {/*        {button}*/}
-                            {/*    </Button>*/}
-                            {/*</ModalFooter>*/}
                         </>
                     )}
                 </ModalContent>

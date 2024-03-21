@@ -3,14 +3,16 @@
 import Table from "@/app/components/Table";
 import React, {useCallback, useEffect} from "react";
 import {
-    deleteBulk,
-    deletePage, deleteWebpagesBulk,
+    deletePage,
+    deleteWebpagesBulk,
     getPagesByDatetime,
     getPagesByDatetimeCount,
     getPagesByStatus,
     getPagesByStatusCount,
     getWebPages,
-    getWebPagesCount, updateWebpagesStatus, updateWebpagesStatusBulk
+    getWebPagesCount,
+    updateWebpagesStatus,
+    updateWebpagesStatusBulk
 } from "@/services/userService";
 import {useDisclosure} from "@nextui-org/react";
 import EditWebpageForm from "@/app/components/forms/webpages/EditWebpageForm";
@@ -312,7 +314,7 @@ export default function Webpages() {
                 editItemIsOpen={isOpen}
                 editItemOnOpenChange={onOpenChange}
 
-                editForm={<EditWebpageForm refreshData={refreshData} />}
+                editForm={<EditWebpageForm refreshData={refreshData}/>}
 
                 onTimeRangeChange={onTimeRangeChange}
 

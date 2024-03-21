@@ -136,3 +136,12 @@ export const updateWebpagesStatus = async (id, status) => {
         throw error;
     }
 }
+
+export const AddWebpage = async (data) => {
+    try {
+        const response = await userService.post(`/api/web/webpage`, data);
+        return response.data;
+    } catch (error) {
+        throw error;
+    }
+}
