@@ -3,15 +3,29 @@
 import Table from "@/app/components/Table";
 import React, {useCallback, useEffect} from "react";
 import {
+    deleteBulk,
+    deletePage, deleteWebpagesBulk,
     getPagesByDatetime,
     getPagesByDatetimeCount,
     getPagesByStatus,
     getPagesByStatusCount,
     getWebPages,
-    getWebPagesCount
+    getWebPagesCount, updateWebpagesStatus, updateWebpagesStatusBulk
 } from "@/services/userService";
+import {useDisclosure} from "@nextui-org/react";
+import EditWebpageForm from "@/app/components/forms/webpages/EditWebpageForm";
+import {message} from "antd";
 
 export default function Webpages() {
+
+    // message
+    const [messageApi, contextHolder] = message.useMessage();
+    const headerMessage = (type, message) => {
+        messageApi.open({
+            type: type,
+            content: message,
+        });
+    }
 
     // states
     const [searchFieldValue, setSearchFieldValue] = React.useState("");
@@ -19,11 +33,13 @@ export default function Webpages() {
     const [data, setData] = React.useState([]);
     const [currentPage, setCurrentPage] = React.useState(1);
     const [pagesCount, setPagesCount] = React.useState(0);
+    const {isOpen, onOpen, onOpenChange} = useDisclosure();
 
     // default columns
     const dateColumn = "datetime" // default date column
     const sortColumn = {column: "id", direction: "ascending"} // default sort column
     const [searchColumn, setSearchColumn] = React.useState(sortColumn.column); // default search column
+
 
     // columns
     const columns = [
@@ -57,7 +73,11 @@ export default function Webpages() {
     }
 
     const deleteButton = (id) => {
-        console.log("delete: " + id);
+        deletePage(id).then(() => {
+            refreshData("success", "Deleted");
+        }).catch((error) => {
+            headerMessage("error", error.response.data.error);
+        });
     }
 
     // action buttons
@@ -78,19 +98,27 @@ export default function Webpages() {
     }
 
     const deleteMenuButton = (id) => {
-        console.log("delete: " + id);
+        deletePage(id).then(() => {
+            refreshData("success", "Deleted");
+        }).catch((error) => {
+            headerMessage("error", error.response.data.error);
+        });
     }
 
     // menu buttons
     const menuButtons = [
         {name: "View", text: "View", function: viewMenuButton},
-        {name: "Edit", text: "Edit", function: editMenuButton},
+        {name: "Edit", text: "Edit", function: onOpen},
         {name: "Delete", text: "Delete", function: deleteMenuButton},
     ];
 
     // status options
     const updateStatusButton = (id, status) => {
-        console.log(id, statusOptions.find((item) => item.uid === status).name);
+        updateWebpagesStatus(id, status).then(() => {
+            refreshData("success", "Updated");
+        }).catch((error) => {
+            headerMessage("error", error.response.data.error);
+        });
     }
 
     const statusOptions = [
@@ -124,7 +152,11 @@ export default function Webpages() {
 
     // update status bulk
     const updateStatusBulk = (ids, status) => {
-        console.log(ids, status);
+        updateWebpagesStatusBulk(ids, status).then(() => {
+            refreshData("success", "Updated");
+        }).catch((error) => {
+            headerMessage("error", error.response.data.error);
+        });
     };
 
     const handleUpdateStatusBulk = (selectedKeys, status) => {
@@ -140,7 +172,11 @@ export default function Webpages() {
 
     // delete bulk
     const deleteBulk = (ids) => {
-        console.log(ids);
+        deleteWebpagesBulk(ids).then(() => {
+            refreshData("success", "Deleted");
+        }).catch((error) => {
+            headerMessage("error", error.response.data.error);
+        });
     }
 
     const handleDeleteBulk = (selectedKeys) => {
@@ -151,6 +187,22 @@ export default function Webpages() {
                 Array.from(selectedKeys).map((str) => parseInt(str, 10))
             );
         }
+    }
+
+    const refreshData = (type, message) => {
+
+        console.log(type, message);
+
+        // success message
+        if (type === "success")
+            headerMessage(type, message);
+
+        // fetch data from API
+        getWebPagesCount(searchColumn, searchFieldValue).then((response) => setPagesCount(response));
+
+        getWebPages(rowsPerPage, currentPage, searchColumn, searchFieldValue)
+            .then(response => setData(response === null ? [] : response.length === 0 ? [] : response))
+            .catch(error => console.error(error));
     }
 
     // Fetch table data
@@ -166,7 +218,7 @@ export default function Webpages() {
     }, [rowsPerPage]));
 
     useEffect(() => {
-        fetchTableData(currentPage, "", "");
+        fetchTableData(currentPage, searchColumn, searchFieldValue);
     }, [currentPage, fetchTableData, rowsPerPage]);
 
     // ------------------------------------------------
@@ -192,11 +244,6 @@ export default function Webpages() {
             getPagesByDatetimeCount(start, end, searchColumn, searchFieldValue).then((response) => setPagesCount(response));
             getPagesByDatetime(rowsPerPage, currentPage, start, end, searchColumn, searchFieldValue).then(response => setData(response === null ? [] : response.length === 0 ? [] : response))
         }
-    }
-
-    // export
-    const exportData = () => {
-        console.log('Export');
     }
 
     // status change
@@ -233,6 +280,7 @@ export default function Webpages() {
 
     return (
         <>
+            {contextHolder}
             <Table
                 data={data}
                 columns={columns}
@@ -259,9 +307,14 @@ export default function Webpages() {
 
                 currentPage={currentPage}
 
-                onTimeRangeChange={onTimeRangeChange}
+                editMenuButton={editMenuButton}
 
-                exportData={exportData}
+                editItemIsOpen={isOpen}
+                editItemOnOpenChange={onOpenChange}
+
+                editForm={<EditWebpageForm refreshData={refreshData} />}
+
+                onTimeRangeChange={onTimeRangeChange}
 
                 searchFieldValue={[searchFieldValue, setSearchFieldValue]}
 

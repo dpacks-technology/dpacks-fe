@@ -16,7 +16,7 @@ import {
     TableCell,
     TableColumn,
     TableHeader,
-    TableRow,
+    TableRow, useDisclosure,
     User
 } from "@nextui-org/react";
 import {DatePicker, message} from 'antd';
@@ -25,8 +25,11 @@ import {SearchIcon} from "./icons/SearchIcon";
 import {ChevronDownIcon} from "./icons/ChevronDownIcon";
 import {capitalize} from "./utils/Capitalize";
 import {VerticalDotsIcon} from "@/app/components/icons/VerticalDotsIcon";
+import Model from "@/app/components/Modal";
+import {mkConfig, download, generateCsv} from "export-to-csv";
 
 const {RangePicker} = DatePicker;
+
 
 export default function Table({data, columns, init_cols, ...props}) {
 
@@ -37,9 +40,21 @@ export default function Table({data, columns, init_cols, ...props}) {
     const [sortDescriptor, setSortDescriptor] = React.useState(props.sortColumn);
     const [rangeStart, setRangeStart] = React.useState(null);
     const [rangeEnd, setRangeEnd] = React.useState(null);
+    const [editItemId, setEditItemId] = React.useState(null);
+    const [deleteItemId, setDeleteItemId] = React.useState(null);
     const [messageApi, contextHolder] = message.useMessage();
     const page = props.currentPage;
     const pages = Math.ceil(props.dataCount / props.rowsPerPage);
+
+
+    // csv config
+    const csvConfig = mkConfig({ useKeysAsHeaders: true });
+
+    // export data
+    const exportData = () => {
+        const csv = generateCsv(csvConfig)(data);
+        download(csvConfig)(csv);
+    }
 
     // header column visibility
     const headerColumns = React.useMemo(() => {
@@ -146,8 +161,10 @@ export default function Table({data, columns, init_cols, ...props}) {
                             </DropdownTrigger>
                             <DropdownMenu>
                                 {props.menuButtons && props.menuButtons.map((menuButton, index) => (
-                                    <DropdownItem key={index}
-                                                  onClick={() => menuButton.function(data.id)}>{menuButton.name}</DropdownItem>
+                                    <DropdownItem key={index} onClick={() => {
+                                        menuButton.function(data.id);
+                                        setEditItemId(data.id);
+                                    }}>{menuButton.name}</DropdownItem>
                                 ))}
                             </DropdownMenu>
                         </Dropdown>
@@ -237,11 +254,14 @@ export default function Table({data, columns, init_cols, ...props}) {
             props.onTimeRangeChange(null, null);
     }
 
+
+
     // top content
     const topContent = React.useMemo(() => {
 
         return (
             <>
+                <Model editItemId={editItemId} modelForm={props.editForm} title={"Edit Details"} button={"Edit"} buttonFunction={props.editMenuButton} isOpen={props.editItemIsOpen} onOpenChange={props.editItemOnOpenChange}/>
                 <div className="flex flex-col gap-4">
                     <div className="flex justify-between gap-3 items-end">
                         <div className="flex gap-3">
@@ -358,7 +378,7 @@ export default function Table({data, columns, init_cols, ...props}) {
                         </div>
                         <div className="flex gap-3 w-4/12">
                             <RangePicker onChange={handleDateRangeValueChange} value={[rangeStart, rangeEnd]} />
-                            <Button className={"md:block hidden"} onClick={props.exportData}>Export</Button>
+                            <Button className={"md:block hidden"} onClick={exportData}>Export</Button>
                         </div>
                     </div>
                     <div className="flex justify-between items-center">
