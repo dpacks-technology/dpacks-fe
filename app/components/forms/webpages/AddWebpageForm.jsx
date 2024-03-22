@@ -8,8 +8,8 @@ import {AddWebpage} from "@/services/userService";
 
 const AddWebpageForm = ({...props}) => {
 
+    // state
     const [saving, setSaving] = React.useState(false);
-    const [loading, setLoading] = React.useState(false);
     const [error, setError] = React.useState({});
     const [name, setName] = React.useState("");
     const [path, setPath] = React.useState("");
@@ -24,19 +24,21 @@ const AddWebpageForm = ({...props}) => {
         });
     };
 
+
+    // add webpage function
     const addWebpage = async () => {
 
         // set saving
         setSaving(true);
 
         try {
-            // data
+            // data // TODO: add/change fields
             const data = {name, path, webId};
 
             // validate
             await schema.validate(data, {abortEarly: false});
 
-            // add webpage
+            // add webpage // TODO: change the function
             await AddWebpage(data).then((response) => {
                 props.notificationMessage("success", "Record added"); // refresh data with success message
                 props.onClose(); // close modal
@@ -45,12 +47,10 @@ const AddWebpageForm = ({...props}) => {
             });
 
         } catch (validationError) {
-
             // set error
             let errorsObject = {}
             validationError.errors && validationError.errors.map(obj => errorsObject[Object.keys(obj)[0]] = Object.values(obj)[0]);
             setError(errorsObject);
-
         }
 
     }
@@ -60,6 +60,7 @@ const AddWebpageForm = ({...props}) => {
             {contextHolder}
             <Form>
                 <div>
+                    {/* TODO: Change the form */}
                     <FormItem>
                         <Input
                             label={"Name"}
@@ -93,9 +94,13 @@ const AddWebpageForm = ({...props}) => {
                 </div>
 
                 <div className={"mt-6 mb-3 flex gap-3 justify-end"}>
+
+                    {/* close button */}
                     <Button color="danger" variant="flat" onPress={props.onClose}>
                         Close
                     </Button>
+
+                    {/* save button */}
                     <Button
                         disabled={saving}
                         color="primary" variant="flat" onPress={() => {
@@ -105,6 +110,7 @@ const AddWebpageForm = ({...props}) => {
                     }}>
                         {saving ? "Saving..." : "Save"}
                     </Button>
+
                 </div>
             </Form>
         </>

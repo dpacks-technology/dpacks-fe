@@ -8,8 +8,8 @@ import FormItem from "antd/es/form/FormItem";
 
 const EditWebpageForm = ({...props}) => {
 
+    // state
     const [saving, setSaving] = React.useState(false);
-    const [loading, setLoading] = React.useState(false);
     const [error, setError] = React.useState({});
     const [name, setName] = React.useState("");
 
@@ -22,19 +22,20 @@ const EditWebpageForm = ({...props}) => {
         });
     };
 
+    // edit webpage function
     const editWebpage = async () => {
 
         // set saving
         setSaving(true);
 
         try {
-            // data
+            // data // TODO: add/change fields
             const data = {name: name};
 
             // validate
             await schema.validate(data, {abortEarly: false});
 
-            // edit webpage
+            // edit webpage // TODO: change the function
             await editPages(props.id, data).then(() => {
                 props.refreshData("success", "Saved"); // refresh data with success message
                 props.onClose(); // close modal
@@ -43,29 +44,21 @@ const EditWebpageForm = ({...props}) => {
             });
 
         } catch (validationError) {
-
             // set error
             let errorsObject = {}
             validationError.errors && validationError.errors.map(obj => errorsObject[Object.keys(obj)[0]] = Object.values(obj)[0]);
             setError(errorsObject);
-
         }
 
     }
 
+    // get webpage by id
     useEffect(() => {
-
-        // set loading
-        setLoading(true);
-
-        // get webpage by id
+        // get webpage by id from backend function
         getPageById(props.id).then((response) => {
             setName(response.name); // set name
-            setLoading(false);
         }).then(() => {
-            setLoading(false);
         });
-
     }, []);
 
     return (
@@ -73,6 +66,7 @@ const EditWebpageForm = ({...props}) => {
             {contextHolder}
             <Form>
                 <div>
+                    {/* TODO: Change the form */}
                     <FormItem>
                     <Input
                         status={error.name ? "error" : ""}
@@ -86,9 +80,13 @@ const EditWebpageForm = ({...props}) => {
                 </div>
 
                 <div className={"mt-6 mb-3 flex gap-3 justify-end"}>
+
+                    {/* close button */}
                     <Button color="danger" variant="flat" onPress={props.onClose}>
                         Close
                     </Button>
+
+                    {/* save button */}
                     <Button
                         disabled={saving}
                         color="primary" variant="flat" onPress={() => {
@@ -98,6 +96,7 @@ const EditWebpageForm = ({...props}) => {
                     }}>
                         {saving ? "Saving..." : "Save"}
                     </Button>
+
                 </div>
             </Form>
         </>
