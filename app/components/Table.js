@@ -16,11 +16,10 @@ import {
     TableCell,
     TableColumn,
     TableHeader,
-    TableRow, useDisclosure,
+    TableRow,
     User
 } from "@nextui-org/react";
 import {DatePicker, message} from 'antd';
-// import * as XLSX from 'xlsx';
 import {SearchIcon} from "./icons/SearchIcon";
 import {ChevronDownIcon} from "./icons/ChevronDownIcon";
 import {capitalize} from "./utils/Capitalize";
@@ -41,7 +40,6 @@ export default function Table({data, columns, init_cols, ...props}) {
     const [rangeStart, setRangeStart] = React.useState(null);
     const [rangeEnd, setRangeEnd] = React.useState(null);
     const [editItemId, setEditItemId] = React.useState(null);
-    const [deleteItemId, setDeleteItemId] = React.useState(null);
     const [messageApi, contextHolder] = message.useMessage();
     const page = props.currentPage;
     const pages = Math.ceil(props.dataCount / props.rowsPerPage);
@@ -204,7 +202,6 @@ export default function Table({data, columns, init_cols, ...props}) {
     const onNextPage = React.useCallback(() => {
         if (page < pages) {
             props.setPage(page + 1);
-            props.onNextPage(page + 1);
         }
     }, [page, pages, props]);
 
@@ -212,7 +209,6 @@ export default function Table({data, columns, init_cols, ...props}) {
     const onPreviousPage = React.useCallback(() => {
         if (page > 1) {
             props.setPage(page - 1);
-            props.onPreviousPage(page - 1);
         }
     }, [page, props]);
 
