@@ -1,7 +1,7 @@
 import {Button} from "@nextui-org/react";
 import Input from "@/app/components/Input";
 import React, {useEffect} from "react";
-import {editPages, getPageById} from "@/services/userService";
+import {editPages, getPageById} from "@/services/WebpagesService";
 import {Form, message} from "antd";
 import schema from "@/app/validaitions/WebPageEditValidation";
 import FormItem from "antd/es/form/FormItem";

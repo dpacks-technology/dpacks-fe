@@ -14,7 +14,7 @@ import {
     getWebPagesCount,
     updateWebpagesStatus,
     updateWebpagesStatusBulk
-} from "@/services/userService";
+} from "@/services/WebpagesService";
 import {useDisclosure} from "@nextui-org/react";
 import EditWebpageForm from "@/app/components/forms/webpages/EditWebpageForm";
 import {message} from "antd";

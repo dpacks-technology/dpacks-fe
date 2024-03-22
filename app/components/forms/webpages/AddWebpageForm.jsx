@@ -4,7 +4,7 @@ import React from "react";
 import {Form, message} from "antd";
 import schema from "@/app/validaitions/WebPageAddValidation";
 import FormItem from "antd/es/form/FormItem";
-import {AddWebpage} from "@/services/userService";
+import {AddWebpage} from "@/services/WebpagesService";
 
 const AddWebpageForm = ({...props}) => {
 
