@@ -1,9 +1,10 @@
 // LeftNavigation2.js
-import React from 'react';
+import React, {useEffect} from 'react';
 import {Button, useDisclosure} from "@nextui-org/react";
 import {message} from "antd";
 import Model from "@/app/components/Model";
 import AddWebpageForm from "@/app/components/forms/webpages/AddWebpageForm";
+import {usePathname} from "next/navigation";
 
 const LeftNavigation2 = () => {
 
@@ -18,6 +19,9 @@ const LeftNavigation2 = () => {
         });
     };
 
+    // get url pathname
+    const pathname = usePathname();
+
     const handleAddButton = () => {
         onOpen();
     }
@@ -25,7 +29,13 @@ const LeftNavigation2 = () => {
     return (
         <>
             {contextHolder}
-            <Model modelForm={<AddWebpageForm notificationMessage={notificationMessage} />} title={"Add webpage"} button={"Add"} isOpen={isOpen} onOpenChange={onOpenChange}/>
+            <Model modelForm={
+
+                pathname === "/u/1/web/webpages" && <AddWebpageForm notificationMessage={notificationMessage} />
+
+                // TODO: add other forms
+
+            } title={"Add webpage"} button={"Add"} isOpen={isOpen} onOpenChange={onOpenChange}/>
             <nav className="w-48 h-full fixed top-0 left-16">
                 <div className="h-full px-3 pb-4 overflow-y-auto bg-transparent dark:bg-transparent mt-24">
                     <ul className="space-y-2 font-medium">
