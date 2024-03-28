@@ -20,7 +20,7 @@ import EditWebpageForm from "@/app/components/forms/webpages/EditWebpageForm";
 import {message} from "antd";
 
 // Webpages component
-export default function dashboard() {
+export default function Dashboard() {
 
     // ----------------------- DEFAULT COLUMNS -------------------------
     // default columns // TODO: Change the following functions
