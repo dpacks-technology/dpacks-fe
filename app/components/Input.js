@@ -1,12 +1,21 @@
 'use client';
 
-import TextField from '@mui/material/TextField';
+import React from "react";
+import {Input as AntInput} from "antd";
 
-export default function Input() {
+export default function Input({...props}) {
     return (
-        <TextField
-            label="Your Name"
-            variant="standard"
-        />
+        <>
+            {props.label &&
+                <label className={"text-xs text-light dark:text-dark"}>{props.label}</label>
+            }
+            <AntInput
+                className={"mt-2" + (props.className ? " " + props.className : "")}
+                {...props}
+            />
+            {props.error &&
+                <span className={"mt-2 text-danger text-xs"}>{props.error}</span>
+            }
+        </>
     );
 }
