@@ -40,3 +40,4 @@ next-env.d.ts
 
 # package manager - lock file
 package-lock.json
+.eslintrc.json
