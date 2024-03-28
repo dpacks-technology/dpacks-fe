@@ -39,7 +39,7 @@ export default function Profile() {
                 </div>
                 <div className='grid items-center grid-cols-2'>
                 <Input
-                        className="mt-2 w-fit"
+                        className="mt-2 w-max"
                         size="md"
                         type='text'
                         value={firstName}
@@ -49,7 +49,7 @@ export default function Profile() {
                         disabled // Remove this to make the input editable
                     />
                     <Input
-                        className="mt-2 w-fit"
+                        className="mt-2 w-max"
                         size="md"
                         type='text'
                         value={lastName}
@@ -59,7 +59,7 @@ export default function Profile() {
                         disabled // Remove this to make the input editable
                     />
                     <Input
-                        className="mt-2 w-fit"
+                        className="mt-2 w-max"
                         size="md"
                         type='email'
                         value={email}
@@ -69,7 +69,7 @@ export default function Profile() {
                         disabled // Remove this to make the input editable
                     />
                     <Input
-                        className="mt-2 w-fit"
+                        className="mt-2 w-max"
                         size="md"
                         type='phone'
                         value={phone}
@@ -84,7 +84,7 @@ export default function Profile() {
                         items={[{ "value": "Dark", "label": "Dark" }, { "value": "Light", "label": "Light" }]}
                         label="Color Theme"
                         placeholder="Select Color Theme"
-                        className="max-w-xs mt-2 w-44"
+                        className="max-w-xs mt-2 w-40"
                         value={colorTheme}
                         onChange={(e) => setColorTheme(e.target.value)}
                     >{(theme) => <SelectItem key={theme.value}>{theme.label}</SelectItem>}
@@ -95,7 +95,7 @@ export default function Profile() {
                         items={[{ "value": "Male", "label": "Male" }, { "value": "Female", "label": "Female" }, { "value": "Other", "label": "Other" }]}
                         label="Gender"
                         placeholder="Select Gender"
-                        className="max-w-xs mt-2 w-44"
+                        className="max-w-xs mt-2 w-40"
                         value={selectedGender}
                         onChange={(e) => setSelectedGender(e.target.value)}
                     >
@@ -133,13 +133,13 @@ export default function Profile() {
                     <Textarea
                         value={aboutMe}
                         onChange={(e) => setAboutMe(e.target.value)}
-                        classNames="h-40"
+                        classNames="h-40 w-96"
                         minRows={10}
                         isRequired
                         variant='bordered'
                         labelPlacement="outside"
                         placeholder="Enter your description"
-                        className="max-w-xs"
+                        className="max-w-xl"
                     />
                 </div>
 
