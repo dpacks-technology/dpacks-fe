@@ -20,24 +20,39 @@ import {
     User
 } from "@nextui-org/react";
 import {DatePicker, message} from 'antd';
-// import * as XLSX from 'xlsx';
 import {SearchIcon} from "./icons/SearchIcon";
 import {ChevronDownIcon} from "./icons/ChevronDownIcon";
 import {capitalize} from "./utils/Capitalize";
 import {VerticalDotsIcon} from "@/app/components/icons/VerticalDotsIcon";
+import Model from "@/app/components/Model";
+import {mkConfig, download, generateCsv} from "export-to-csv";
 
 const {RangePicker} = DatePicker;
+
 
 export default function Table({data, columns, init_cols, ...props}) {
 
     // states
     const [selectedKeys, setSelectedKeys] = React.useState(new Set([]));
     const [visibleColumns, setVisibleColumns] = React.useState(new Set(init_cols));
-    const [statusFilter, setStatusFilter] = React.useState("all");
+    const [statusFilter, setStatusFilter] = React.useState(["all"]);
     const [sortDescriptor, setSortDescriptor] = React.useState(props.sortColumn);
+    const [rangeStart, setRangeStart] = React.useState(null);
+    const [rangeEnd, setRangeEnd] = React.useState(null);
+    const [editItemId, setEditItemId] = React.useState(null);
     const [messageApi, contextHolder] = message.useMessage();
     const page = props.currentPage;
     const pages = Math.ceil(props.dataCount / props.rowsPerPage);
+
+
+    // csv config
+    const csvConfig = mkConfig({ useKeysAsHeaders: true });
+
+    // export data
+    const exportData = () => {
+        const csv = generateCsv(csvConfig)(data);
+        download(csvConfig)(csv);
+    }
 
     // header column visibility
     const headerColumns = React.useMemo(() => {
@@ -144,8 +159,10 @@ export default function Table({data, columns, init_cols, ...props}) {
                             </DropdownTrigger>
                             <DropdownMenu>
                                 {props.menuButtons && props.menuButtons.map((menuButton, index) => (
-                                    <DropdownItem key={index}
-                                                  onClick={() => menuButton.function(data.id)}>{menuButton.name}</DropdownItem>
+                                    <DropdownItem key={index} onClick={() => {
+                                        menuButton.function(data.id);
+                                        setEditItemId(data.id);
+                                    }}>{menuButton.name}</DropdownItem>
                                 ))}
                             </DropdownMenu>
                         </Dropdown>
@@ -185,7 +202,6 @@ export default function Table({data, columns, init_cols, ...props}) {
     const onNextPage = React.useCallback(() => {
         if (page < pages) {
             props.setPage(page + 1);
-            props.onNextPage(page + 1);
         }
     }, [page, pages, props]);
 
@@ -193,12 +209,12 @@ export default function Table({data, columns, init_cols, ...props}) {
     const onPreviousPage = React.useCallback(() => {
         if (page > 1) {
             props.setPage(page - 1);
-            props.onPreviousPage(page - 1);
         }
     }, [page, props]);
 
     // search clear filter value
     const onClear = React.useCallback(() => {
+        props.fetchTableData(page, "", "")
         props.setPage(1)
     }, [props])
 
@@ -207,14 +223,41 @@ export default function Table({data, columns, init_cols, ...props}) {
         props.changeSorting(sortDescriptor);
     }, [props, sortDescriptor]);
 
+    useEffect(() => {
+        if (statusFilter[0] !== 'all') {
+            // convert statusFilter to an array
+            const statusFilterArray = Array.from(statusFilter);
+            props.statusChange(statusFilterArray);
+        }
+    }, [statusFilter]);
+
+    // trigger search
+    const triggerSearch = () => {
+        setRangeStart(null);
+        setRangeEnd(null);
+        props.fetchTableData(page, props.searchColumn, props.searchFieldValue[0]);
+    }
+
+    const handleDateRangeValueChange = (newValue) => {
+
+        setRangeStart(newValue ? newValue[0] : null);
+        setRangeEnd(newValue ? newValue[1] : null);
+
+        newValue ? props.onTimeRangeChange(
+                new Date(newValue[0]).toISOString().replace('T', ' ').replace('Z', ''),
+                new Date(newValue[1]).toISOString().replace('T', ' ').replace('Z', ''))
+            :
+            props.onTimeRangeChange(null, null);
+    }
+
+
+
     // top content
     const topContent = React.useMemo(() => {
-        const handleDateRangeValueChange = (newValue) => {
-            newValue ? props.onTimeRangeChange(new Date(newValue[0]), new Date(newValue[1])) : props.onTimeRangeChange(null, null);
-        }
 
         return (
             <>
+                <Model editItemId={editItemId} modelForm={props.editForm} title={"Edit Details"} button={"Edit"} buttonFunction={props.editMenuButton} isOpen={props.editItemIsOpen} onOpenChange={props.editItemOnOpenChange}/>
                 <div className="flex flex-col gap-4">
                     <div className="flex justify-between gap-3 items-end">
                         <div className="flex gap-3">
@@ -231,9 +274,12 @@ export default function Table({data, columns, init_cols, ...props}) {
                                     aria-label="Table Columns"
                                     closeOnSelect={false}
                                     selectedKeys={statusFilter}
-                                    selectionMode="multiple"
+                                    selectionMode="single"
                                     onSelectionChange={setStatusFilter}
                                 >
+                                    <DropdownItem key={"all"} className="capitalize">
+                                        All
+                                    </DropdownItem>
                                     {props.statusOptions && props.statusOptions.map((status) => (
                                         <DropdownItem key={status.uid} className="capitalize">
                                             {capitalize(status.name)}
@@ -266,7 +312,8 @@ export default function Table({data, columns, init_cols, ...props}) {
                             </Dropdown>
 
                             {/* refresh */}
-                            <Button variant={"ghost"} onClick={() => props.fetchTableData(page, props.searchColumn, props.searchFieldValue[0])}>Refresh</Button>
+                            <Button variant={"ghost"}
+                                    onClick={() => props.fetchTableData(page, props.searchColumn, props.searchFieldValue[0])}>Refresh</Button>
                         </div>
 
                         {/* bulk actions */}
@@ -278,13 +325,17 @@ export default function Table({data, columns, init_cols, ...props}) {
                                         statusButton.button &&
                                         <Button key={index} color={statusButton.type} size="sm" variant={"flat"}
                                                 title={statusButton.name} isIconOnly
-                                                onClick={() => props.handleUpdateStatusBulk(selectedKeys, statusButton.uid)}>{statusButton.icon}
+                                                onClick={() => {
+                                                    props.handleUpdateStatusBulk(selectedKeys, statusButton.uid);
+                                                }}>{statusButton.icon}
                                         </Button>
                                     ))}
 
                                     {/* remove */}
                                     <Button color="danger" variant={"light"} size="sm" title={"Remove"} isIconOnly
-                                            onClick={() => props.handleDeleteBulk(selectedKeys, 0)}>
+                                            onClick={() => {
+                                                props.handleDeleteBulk(selectedKeys, 0);
+                                            }}>
                                         <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
                                              strokeWidth={1.5} stroke="currentColor" className="w-5 h-5">
                                             <path strokeLinecap="round" strokeLinejoin="round"
@@ -294,28 +345,44 @@ export default function Table({data, columns, init_cols, ...props}) {
                                     </Button>
                                 </> : null
                             }
-                            <Button onClick={() => props.onTimeRangeChange(null, null)}>All</Button>
+                            <Button onClick={() => {props.onTimeRangeChange(null, null); setRangeStart(null); setRangeEnd(null);}}>All</Button>
                             <Button
-                                onClick={() => props.onTimeRangeChange(new Date(new Date().setHours(0, 0, 0, 0)), new Date(new Date().setHours(23, 59, 59, 999)))}>Today</Button>
+                                onClick={() => {props.onTimeRangeChange(new Date(new Date().setHours(0, 0, 0, 0)).toISOString().replace('T', ' ').replace('Z', ''), new Date(new Date().setHours(23, 59, 59, 999)).toISOString().replace('T', ' ').replace('Z', '')); setRangeStart(null); setRangeEnd(null);}}>Today</Button>
                             <Button
-                                onClick={() => props.onTimeRangeChange(new Date(new Date(new Date().setDate(new Date().getDate() - 1)).setHours(0, 0, 0, 0)), new Date(new Date(new Date().setDate(new Date().getDate() - 1)).setHours(23, 59, 59, 999)))}>Yesterday</Button>
+                                onClick={() => {props.onTimeRangeChange(new Date(new Date(new Date().setDate(new Date().getDate() - 1)).setHours(0, 0, 0, 0)).toISOString().replace('T', ' ').replace('Z', ''), new Date(new Date(new Date().setDate(new Date().getDate() - 1)).setHours(23, 59, 59, 999)).toISOString().replace('T', ' ').replace('Z', '')); setRangeStart(null); setRangeEnd(null);}}>Yesterday</Button>
                         </div>
                     </div>
                 </div>
                 <div className="flex flex-col gap-4">
                     <div className="flex justify-between gap-3 items-end">
-                        <Input
-                            isClearable
-                            className="w-full sm:max-w-[44%]"
-                            placeholder={`Search by ${props.searchColumn.replace(/([a-z])([A-Z])/g, '$1 $2').replace(/\b\w/g, char => char.toLowerCase())}...`}
-                            startContent={<SearchIcon/>}
-                            onClear={() => onClear()}
-                            value={props.searchFieldValue[0]}
-                            onValueChange={props.searchFieldValue[1]}
-                        />
+                        <div className={"w-full sm:max-w-[44%]"}>
+                            <Input
+                                isClearable
+                                className="w-full sm:max-w-[65%] inline-block"
+                                placeholder={`Search by ${props.searchColumn.replace(/([a-z])([A-Z])/g, '$1 $2').replace(/\b\w/g, char => char.toLowerCase())}...`}
+                                startContent={<SearchIcon/>}
+                                variant={"faded"}
+                                onClear={() => onClear()}
+                                value={props.searchFieldValue[0]}
+                                onValueChange={props.searchFieldValue[1]}
+                                classNames={{
+                                    inputWrapper: "bg-dark border-none h-6 rounded-lg"
+                                }}
+                            />
+                            <div className={"inline-block ml-2"}>
+                                <Button color="primary" variant={"flat"} onPress={triggerSearch} className={"h-10"}>
+                                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
+                                         strokeWidth={1.5} stroke="currentColor" className="w-5 h-5">
+                                        <path strokeLinecap="round" strokeLinejoin="round"
+                                              d="m21 21-5.197-5.197m0 0A7.5 7.5 0 1 0 5.196 5.196a7.5 7.5 0 0 0 10.607 10.607Z"/>
+                                    </svg>
+                                    Search
+                                </Button>
+                            </div>
+                        </div>
                         <div className="flex gap-3 w-4/12">
-                            <RangePicker onChange={handleDateRangeValueChange}/>
-                            <Button className={"md:block hidden"} onClick={props.exportData}>Export</Button>
+                            <RangePicker onChange={handleDateRangeValueChange} value={[rangeStart, rangeEnd]} />
+                            <Button className={"md:block hidden"} onClick={exportData}>Export</Button>
                         </div>
                     </div>
                     <div className="flex justify-between items-center">
@@ -349,7 +416,7 @@ export default function Table({data, columns, init_cols, ...props}) {
                 <Pagination
                     isCompact
                     showControls
-                    showShadow
+                    showShadow={false}
                     color="primary"
                     page={page}
                     total={pages}
@@ -357,8 +424,10 @@ export default function Table({data, columns, init_cols, ...props}) {
                     className={"z-0"}
                     loop={true}
                     classNames={{
-                        item: "w-auto pr-4 pl-4",
+                        item: "w-auto pr-4 pl-4 bg-dark",
                         cursor: "w-auto pr-3 pl-3",
+                        prev: "bg-dark",
+                        next: "bg-dark"
                     }}
                 />
                 <div className="hidden sm:flex w-[30%] justify-end gap-2">
@@ -388,6 +457,7 @@ export default function Table({data, columns, init_cols, ...props}) {
                 bottomContentPlacement="outside"
                 classNames={{
                     wrapper: "max-h-[382px]",
+                    sortIcon: "hidden",
                 }}
                 className={"dark:dark"}
                 selectedKeys={selectedKeys}
