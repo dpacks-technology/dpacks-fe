@@ -1,9 +1,9 @@
 import PanelLayout from "@/app/layouts/PanelLayout";
 
-export default function ULayout({ children }) {
+export default function ALayout({ children }) {
     return (
         <div>
-            <PanelLayout childrenBody={children}/>
+            <PanelLayout children={children}/>
         </div>
     );
 }
