@@ -29,7 +29,7 @@
     "react": "^18",
     "react-dom": "^18",
     "react-social-icons": "^6.15.0",
-    "react-social-login-buttons": "^4.1.0"
+    "react-social-login-buttons": "^4.1.0",
     "yup": "^1.4.0"
   },
   "devDependencies": {
