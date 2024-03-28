@@ -9,15 +9,23 @@
     "lint": "next lint"
   },
   "dependencies": {
+    "@ant-design/icons": "^5.3.3",
+    "@ant-design/nextjs-registry": "^1.0.0",
     "@emotion/react": "^11.11.4",
     "@emotion/styled": "^11.11.0",
     "@mui/material": "^5.15.12",
+    "@mui/material-next": "^6.0.0-alpha.125",
+    "@mui/x-date-pickers": "^6.19.6",
     "@nextui-org/react": "^2.2.10",
-    "antd": "^5.15.3",
+    "antd": "^5.15.2",
+    "axios": "^1.6.8",
+    "dayjs": "^1.11.10",
+    "export-to-csv": "^1.2.4",
     "framer-motion": "^11.0.8",
     "next": "14.1.0",
     "react": "^18",
-    "react-dom": "^18"
+    "react-dom": "^18",
+    "yup": "^1.4.0"
   },
   "devDependencies": {
     "autoprefixer": "^10.0.1",
