@@ -16,6 +16,7 @@ export const getWebPages = async (count, page, key, val) => {
     }
 };
 
+
 // get all webpages count // TODO: Change this function accordingly
 export const getWebPagesCount = async (key, val) => {
     try {

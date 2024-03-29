@@ -10,11 +10,12 @@ import {
     getPagesByDatetimeCount,
     getPagesByStatus,
     getPagesByStatusCount,
-    getWebPages,
     getWebPagesCount,
     updateWebpagesStatus,
-    updateWebpagesStatusBulk
+    updateWebpagesStatusBulk,
+
 } from "@/services/WebpagesService";
+
 import {useDisclosure} from "@nextui-org/react";
 import EditWebpageForm from "@/app/components/forms/webpages/EditWebpageForm";
 import {message} from "antd";
@@ -51,10 +52,10 @@ export default function AutomatedMessage() {
     // columns // TODO: Change the following columns according the to yours
     const columns = [
         {name: "ID", uid: "id", sortable: true, type: "text"},
-        {name: "NAME", uid: "name", sortable: true, type: "text"},
-        {name: "PATH", uid: "path", sortable: true, type: "text"},
-        {name: "CREATED ON", uid: "date_created", sortable: false, type: "datetime"},
-        {name: "STATUS", uid: "status", sortable: false, type: "status"},
+        {name: "MESSAGE", uid: "message", sortable: true, type: "text"},
+        {name: "TRIGGER", uid: "trigger", sortable: true, type: "text"},
+        {name: "CREATED ON", uid: "last_update", sortable: false, type: "datetime"},
+        {name: "STATUS", uid: "is_active", sortable: false, type: "status"},
         {name: "CHANGE STATUS", uid: "statusButtons", sortable: false, type: "statusButtons"},
         {name: "ACTIONS", uid: "menu", sortable: false, type: "menu"},
         // all usable types: text, twoText, datetime, label, status, statusButtons, buttons, menu, copy, icon, iconText, iconTwoText
@@ -62,10 +63,10 @@ export default function AutomatedMessage() {
 
     // initially visible columns // TODO: Change the following columns according the to yours
     const init_cols = [
-        "name",
-        "path",
-        "date_created",
-        "status",
+        "message",
+        "trigger",
+        "last_update",
+        "is_active",
         "statusButtons",
         "menu"
     ];
@@ -258,7 +259,7 @@ export default function AutomatedMessage() {
         getWebPagesCount(searchColumn, searchFieldValue).then((response) => setPagesCount(response));
 
         // fetch data from API // TODO: Change the following function
-        getWebPages(rowsPerPage, currentPage, searchColumn, searchFieldValue)
+        GetAutomatedMessage(rowsPerPage, currentPage, searchColumn, searchFieldValue)
             .then(response => setData(response === null ? [] : response.length === 0 ? [] : response))
             .catch(error => console.error(error));
 
@@ -271,7 +272,7 @@ export default function AutomatedMessage() {
         getWebPagesCount(key, val).then((response) => setPagesCount(response));
 
         // fetch data from API // TODO: Change the following function
-        getWebPages(rowsPerPage, page, key, val)
+        GetAutomatedMessage(rowsPerPage, page, key, val)
             .then(response => setData(response === null ? [] : response.length === 0 ? [] : response))
             .catch(error => console.error(error));
 
