@@ -51,23 +51,21 @@ export default function AnalyticsWebpages() {
     // columns // TODO: Change the following columns according the to yours
     const columns = [
         {name: "ID", uid: "id", sortable: true, type: "text"},
-        {name: "NAME", uid: "name", sortable: true, type: "text"},
-        {name: "PATH", uid: "path", sortable: true, type: "text"},
-        {name: "CREATED ON", uid: "date_created", sortable: false, type: "datetime"},
-        {name: "STATUS", uid: "status", sortable: false, type: "status"},
-        {name: "CHANGE STATUS", uid: "statusButtons", sortable: false, type: "statusButtons"},
-        {name: "ACTIONS", uid: "menu", sortable: false, type: "menu"},
+        {name: "IP ADDRESS", uid: "ipAddress", sortable: false, type: "text"},
+        {name: "DEVICE", uid: "device", sortable: true, type: "text"},    
+        {name: "COUNTRY", uid: "country", sortable: false, type: "text"},
+        {name: "SOURCE", uid: "source", sortable: false, type: "text"},
+        
         // all usable types: text, twoText, datetime, label, status, statusButtons, buttons, menu, copy, icon, iconText, iconTwoText
     ];
 
     // initially visible columns // TODO: Change the following columns according the to yours
     const init_cols = [
-        "name",
-        "path",
-        "date_created",
-        "status",
-        "statusButtons",
-        "menu"
+        "ipAddress",
+        "device",
+        "country",
+        "source",
+        
     ];
 
     // ----------------------- BUTTONS -------------------------
