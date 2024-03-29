@@ -51,23 +51,20 @@ export default function Dashboard() {
     // columns // TODO: Change the following columns according the to yours
     const columns = [
         {name: "ID", uid: "id", sortable: true, type: "text"},
-        {name: "NAME", uid: "name", sortable: true, type: "text"},
-        {name: "PATH", uid: "path", sortable: true, type: "text"},
-        {name: "CREATED ON", uid: "date_created", sortable: false, type: "datetime"},
-        {name: "STATUS", uid: "status", sortable: false, type: "status"},
-        {name: "CHANGE STATUS", uid: "statusButtons", sortable: false, type: "statusButtons"},
+        {name: "WEBSITE NAME", uid: "website_name", sortable: true, type: "text"},
+        {name: "URL", uid: "url", type: "text"},
+        {name: "ACCESSED DATE", uid: "accessed", sortable: false, type: "datetime"},
         {name: "ACTIONS", uid: "menu", sortable: false, type: "menu"},
         // all usable types: text, twoText, datetime, label, status, statusButtons, buttons, menu, copy, icon, iconText, iconTwoText
     ];
 
     // initially visible columns // TODO: Change the following columns according the to yours
     const init_cols = [
-        "name",
-        "path",
-        "date_created",
+        "website_name",
+        "url",
+        "accessed",
         "status",
-        "statusButtons",
-        "menu"
+        "statusButtons"
     ];
 
     // ----------------------- BUTTONS -------------------------
