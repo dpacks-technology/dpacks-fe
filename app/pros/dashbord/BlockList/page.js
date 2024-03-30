@@ -60,6 +60,7 @@ export default function History() {
         "url",
         "last_access_date",
         "status",
+
     ];
 
     // ----------------------- BUTTONS -------------------------
