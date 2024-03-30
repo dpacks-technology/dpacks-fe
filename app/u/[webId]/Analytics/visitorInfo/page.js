@@ -51,10 +51,10 @@ export default function AnalyticsWebpages() {
     // columns // TODO: Change the following columns according the to yours
     const columns = [
         {name: "ID", uid: "id", sortable: true, type: "text"},
-        {name: "IP ADDRESS", uid: "ipAddress", sortable: false, type: "text"},
+        {name: "IP ADDRESS", uid: "ipAddress", sortable: true, type: "text"},
         {name: "DEVICE", uid: "device", sortable: true, type: "text"},    
-        {name: "COUNTRY", uid: "country", sortable: false, type: "text"},
-        {name: "SOURCE", uid: "source", sortable: false, type: "text"},
+        {name: "COUNTRY", uid: "country", sortable: true, type: "text"},
+        {name: "SOURCE", uid: "source", sortable: true, type: "text"},
         
         // all usable types: text, twoText, datetime, label, status, statusButtons, buttons, menu, copy, icon, iconText, iconTwoText
     ];
@@ -357,7 +357,7 @@ export default function AnalyticsWebpages() {
 
                 // action buttons
                 actionButtons={actionButtons}
-                statusOptions={statusOptions}
+                // statusOptions={statusOptions}
                 menuButtons={menuButtons}
 
                 // status change
