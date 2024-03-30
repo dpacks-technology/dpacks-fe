@@ -4,17 +4,11 @@
 import Table from "@/app/components/Table";
 import React, {useCallback, useEffect} from "react";
 import {
-    deletePage,
-    deleteWebpagesBulk,
     getPagesByDatetime,
     getPagesByDatetimeCount,
-    getPagesByStatus,
-    getPagesByStatusCount,
     getWebPages,
     getWebPagesCount,
-    updateWebpagesStatus,
-    updateWebpagesStatusBulk
-} from "@/services/WebpagesService";
+} from "@/services/DashboardService";
 import {useDisclosure} from "@nextui-org/react";
 import EditWebpageForm from "@/app/components/forms/webpages/EditWebpageForm";
 import {message} from "antd";
