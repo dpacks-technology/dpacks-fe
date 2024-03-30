@@ -31,7 +31,7 @@ const LeftNavigation2 = () => {
             {contextHolder}
             <Model modelForm={
 
-                pathname === "/u/1/web/webpages" && <AddWebpageForm notificationMessage={notificationMessage} />
+               pathname == "pros/dashbord/BlockList" && <AddWebpageForm notificationMessage={notificationMessage} />
 
                 // TODO: add other forms
 
