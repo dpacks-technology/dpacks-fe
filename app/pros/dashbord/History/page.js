@@ -4,10 +4,6 @@
 import Table from "@/app/components/Table";
 import React, {useCallback, useEffect} from "react";
 import {
-    deletePage,
-    deleteWebpagesBulk,
-    getPagesByDatetime,
-    getPagesByDatetimeCount,
     getPagesByStatus,
     getPagesByStatusCount,
     getWebPages,
@@ -53,9 +49,8 @@ export default function History() {
         {name: "ID", uid: "id", sortable: true, type: "text"},
         {name: "NAME", uid: "name", sortable: true, type: "text"},
         {name: "URL", uid: "url", sortable: true, type: "text"},
-        {name: "LAST ACCESS ON", uid: "last_accessed", sortable: false, type: "datetime"},
+        {name: "LAST ACCESS ON", uid: "last_access_date", sortable: false, type: "datetime"},
         {name: "STATUS", uid: "status", sortable: false, type: "status"},
-        {name: "CHANGE STATUS", uid: "statusButtons", sortable: false, type: "statusButtons"},
         {name: "ACTIONS", uid: "menu", sortable: false, type: "menu"},
         // all usable types: text, twoText, datetime, label, status, statusButtons, buttons, menu, copy, icon, iconText, iconTwoText
     ];
@@ -64,9 +59,8 @@ export default function History() {
     const init_cols = [
         "name",
         "url",
-        "last_accessed",
+        "last_access_date",
         "status",
-        "statusButtons",
         "menu"
     ];
 

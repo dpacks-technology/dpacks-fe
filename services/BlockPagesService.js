@@ -9,7 +9,7 @@ const BloackPageService = axios.create({
 // get all webpages // TODO: Change this function accordingly
 export const getWebPages = async (count, page, key, val) => {
     try {
-        const response = await BloackPageService.get(`/api/web/webpages/${count}/${page}?key=${key}&val=${val}`);
+        const response = await BloackPageService.get(`http://localhost:4000/api/pros/Access/BlockLists/${count}/${page}?key=${key}&val=${val}`);
         return response.data;
     } catch (error) {
         throw error;
@@ -19,7 +19,7 @@ export const getWebPages = async (count, page, key, val) => {
 // get all webpages count // TODO: Change this function accordingly
 export const getWebPagesCount = async (key, val) => {
     try {
-        const response = await BloackPageService.get(`/api/web/webpages/count?key=${key}&val=${val}`);
+        const response = await BloackPageService.get(`http://localhost:4000/api/pros/Access/BlockList/count?key=${key}&val=${val}`);
         return response.data;
     } catch (error) {
         throw error;
@@ -35,7 +35,7 @@ export const getPagesByStatus = async (count, page, status, key, val) => {
     console.log(statusString);
 
     try {
-        const response = await BloackPageService.get(`/api/web/webpages/status/${count}/${page}?status=${statusString}&key=${key}&val=${val}`);
+        const response = await BloackPageService.get(`http://localhost:4000/api/pros/Access/BlockList/status/${count}/${page}?status=${statusString}&key=${key}&val=${val}`);
         console.log(response.data);
         return response.data;
     } catch (error) {
@@ -52,7 +52,7 @@ export const getPagesByStatusCount = async (status, key, val) => {
     console.log(statusString);
 
     try {
-        const response = await BloackPageService.get(`/api/web/webpages/status/count?status=${statusString}&key=${key}&val=${val}`);
+        const response = await BloackPageService.get(`http://localhost:4000/api/pros/Access/BlockList/status/count?status=${statusString}&key=${key}&val=${val}`);
         console.log(response.data);
         return response.data;
     } catch (error) {
@@ -60,60 +60,3 @@ export const getPagesByStatusCount = async (status, key, val) => {
     }
 }
 
-// get all webpages by datetime // TODO: Change this function accordingly
-export const getPagesByDatetime = async (count, page, start, end, key, val) => {
-
-    console.log(start);
-
-    try {
-        const response = await BloackPageService.get(`/api/web/webpages/datetime/${count}/${page}?start=${start}&end=${end}&key=${key}&val=${val}`);
-        console.log(response.data);
-        return response.data;
-    } catch (error) {
-        throw error;
-    }
-}
-
-
-// get all webpages by status and datetime count // TODO: Change this function accordingly
-export const getPageById = async (id) => {
-    try {
-        const response = await BloackPageService.get(`/api/web/webpage/${id}`);
-        return response.data;
-    } catch (error) {
-        throw error;
-    }
-}
-
-
-// get all webpages by status and datetime count // TODO: Change this function accordingly
-export const updateWebpagesStatusBulk = async (ids, status) => {
-    let idsString = ids.join(',');
-
-    try {
-        const response = await BloackPageService.put(`/api/web/webpages/status/bulk/${idsString}`, {status: status});
-        return response.data;
-    } catch (error) {
-        throw error;
-    }
-}
-
-// get all webpages by status and datetime count // TODO: Change this function accordingly
-export const updateWebpagesStatus = async (id, status) => {
-    try {
-        const response = await BloackPageService.put(`/api/web/webpages/status/${id}`, {status: status});
-        return response.data;
-    } catch (error) {
-        throw error;
-    }
-}
-
-// get all webpages by status and datetime count // TODO: Change this function accordingly
-export const AddWebpage = async (data) => {
-    try {
-        const response = await BloackPageService.post(`/api/web/webpage`, data);
-        return response.data;
-    } catch (error) {
-        throw error;
-    }
-}
