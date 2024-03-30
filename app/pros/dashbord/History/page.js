@@ -51,7 +51,6 @@ export default function History() {
         {name: "URL", uid: "url", sortable: true, type: "text"},
         {name: "LAST ACCESS ON", uid: "last_access_date", sortable: false, type: "datetime"},
         {name: "STATUS", uid: "status", sortable: false, type: "status"},
-        {name: "ACTIONS", uid: "menu", sortable: false, type: "menu"},
         // all usable types: text, twoText, datetime, label, status, statusButtons, buttons, menu, copy, icon, iconText, iconTwoText
     ];
 
@@ -61,7 +60,6 @@ export default function History() {
         "url",
         "last_access_date",
         "status",
-        "menu"
     ];
 
     // ----------------------- BUTTONS -------------------------

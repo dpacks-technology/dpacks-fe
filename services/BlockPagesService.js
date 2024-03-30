@@ -60,3 +60,25 @@ export const getPagesByStatusCount = async (status, key, val) => {
     }
 }
 
+// get all webpages by status and datetime count // TODO: Change this function accordingly
+export const updateWebpagesStatusBulk = async (ids, status) => {
+    let idsString = ids.join(',');
+
+    try {
+        const response = await BloackPageService.put(`http://localhost:4000/api/pros/Access/BlockList/status/bulk/${idsString}`, {status: status});
+        return response.data;
+    } catch (error) {
+        throw error;
+    }
+}
+
+// get all webpages by status and datetime count // TODO: Change this function accordingly
+export const updateWebpagesStatus = async (id, status) => {
+    try {
+        const response = await BloackPageService.put(`http://localhost:4000/api/pros/Access/BlockList/status/${id}`, {status: status});
+        return response.data;
+    } catch (error) {
+        throw error;
+    }
+}
+
