@@ -166,7 +166,7 @@ export default function Webpages() {
         {
             name: "Offline", // status name
             uid: 0, // status id (the value in the database)
-            type: "", // status type (color) ["", primary, secondary, danger, warning, success]
+            type: "danger", // status type (color) ["", primary, secondary, danger, warning, success]
             button: true, // if you want to show a button to change the status
             currentStatus: [1], // button showing status, ex: if currently status is 1, then the button will be shown | can use [1,2,...] for multiple statuses
             function: updateStatusButton, // function to change the status
@@ -181,7 +181,7 @@ export default function Webpages() {
         {
             name: "Active", // status name
             uid: 1, // status id (the value in the database)
-            type: "primary", // status type (color) [danger, warning, success, primary]
+            type: "success", // status type (color) [danger, warning, success, primary]
             button: true, // if you want to show a button to change the status
             currentStatus: [0], // button showing status, ex: if currently status is 1, then the button will be shown | can use [1,2,...] for multiple statuses
             function: updateStatusButton, // function to change the status
