@@ -18,7 +18,12 @@ import {
 import {useDisclosure} from "@nextui-org/react";
 import EditWebpageForm from "@/app/components/forms/webpages/EditWebpageForm";
 import {message} from "antd";
-import {getRatelimitCount, getRatelimits} from "@/services/EndpointService";
+import {
+    getRatelimitCount,
+    getRatelimits,
+    getRatelimitsByStatus,
+    getRatelimitsByStatusCount
+} from "@/services/EndpointService";
 
 // Webpages component
 export default function Webpages() {
@@ -302,10 +307,10 @@ export default function Webpages() {
     // status change function
     const statusChange = (statusArray) => {
         // get data count // TODO: Change the following function
-        getPagesByStatusCount(statusArray, searchColumn, searchFieldValue).then((response) => setPagesCount(response));
+        getRatelimitsByStatusCount(statusArray, searchColumn, searchFieldValue).then((response) => setPagesCount(response));
 
         // get data // TODO: Change the following function
-        getPagesByStatus(rowsPerPage, currentPage, statusArray, searchColumn, searchFieldValue).then(response => setData(response === null ? [] : response.length === 0 ? [] : response))
+        getRatelimitsByStatus(rowsPerPage, currentPage, statusArray, searchColumn, searchFieldValue).then(response => setData(response === null ? [] : response.length === 0 ? [] : response))
     }
 
 

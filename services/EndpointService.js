@@ -27,7 +27,7 @@ export const getRatelimitCount = async (key, val) => {
 }
 
 // get all webpages by status // TODO: Change this function accordingly
-export const getPagesByStatus = async (count, page, status, key, val) => {
+export const getRatelimitsByStatus = async (count, page, status, key, val) => {
 
     // convert status array to string with commas
     let statusString = status.join(',');
@@ -35,7 +35,7 @@ export const getPagesByStatus = async (count, page, status, key, val) => {
     console.log(statusString);
 
     try {
-        const response = await endpointService.get(`/api/web/webpages/status/${count}/${page}?status=${statusString}&key=${key}&val=${val}`);
+        const response = await endpointService.get(`/api/ratelimit/ratelimits/status/${count}/${page}?status=${statusString}&key=${key}&val=${val}`);
         console.log(response.data);
         return response.data;
     } catch (error) {
@@ -44,7 +44,7 @@ export const getPagesByStatus = async (count, page, status, key, val) => {
 }
 
 // get all webpages by status count // TODO: Change this function accordingly
-export const getPagesByStatusCount = async (status, key, val) => {
+export const getRatelimitsByStatusCount = async (status, key, val) => {
 
     // convert status array to string with commas
     let statusString = status.join(',');
@@ -52,7 +52,7 @@ export const getPagesByStatusCount = async (status, key, val) => {
     console.log(statusString);
 
     try {
-        const response = await endpointService.get(`/api/web/webpages/status/count?status=${statusString}&key=${key}&val=${val}`);
+        const response = await endpointService.get(`/api/ratelimit/ratelimits/status/count?status=${statusString}&key=${key}&val=${val}`);
         console.log(response.data);
         return response.data;
     } catch (error) {
