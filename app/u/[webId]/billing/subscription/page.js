@@ -1,6 +1,7 @@
 "use client"
 
 import {useState} from "react";
+import SubscriptionPlan from "@/app/components/SubscriptionPlans";
 
 export default function Subscription() {
     // Dummy data for demonstration
@@ -8,6 +9,7 @@ export default function Subscription() {
     const features = ["Advanced features", "Moderate Storage", "Email Support"];
     const cost = "$10/month";
 
+    //function to change page status
     const [pageStatus, setPageStatus] = useState('view');
 
     // Dummy data for payment details
@@ -24,6 +26,7 @@ export default function Subscription() {
         { id: 3, date: "2023-03-15", amount: "$10" }
     ];
 
+    //defining state for page status
     const changeStatus = (status) => {
         setPageStatus(status);
     }
@@ -45,9 +48,12 @@ export default function Subscription() {
 
 
             {pageStatus === 'update' ?
+                (<SubscriptionPlan />):
                 <>
                     <button onClick={() => {
+
                         changeStatus('view')
+
                     }} style={{
                         padding: '5px 10px',
                         borderRadius: '5px',
@@ -57,8 +63,8 @@ export default function Subscription() {
                         fontSize: '14px'
                     }}>Back
                     </button>
-                    update
-                </>
+                    <p style = {{color: '#333'}}> update </p>
+                </>}
                 :
                 (
                     <>
@@ -71,8 +77,11 @@ export default function Subscription() {
                                 alignItems: 'center'
                             }}>
                                 <span style={{marginRight: '10px'}}>Current Plan: {currentPlan}</span>
+
                     <button onClick={() => {
+
                         changeStatus('update')
+
                     }} style={{
                         padding: '5px 10px',
                         borderRadius: '5px',
@@ -137,7 +146,7 @@ export default function Subscription() {
                 </button>
             </div>
             </>
-)}
+)
 
 
 
