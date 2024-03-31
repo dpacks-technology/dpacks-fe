@@ -26,40 +26,6 @@ export const getApiSubscribersCount = async (key, val) => {
     }
 }
 
-// // get all webpages by status // TODO: Change this function accordingly
-// export const getPagesByStatus = async (count, page, status, key, val) => {
-//
-//     // convert status array to string with commas
-//     let statusString = status.join(',');
-//
-//     console.log(statusString);
-//
-//     try {
-//         const response = await apiManagement.get(`/api/web/webpages/status/${count}/${page}?status=${statusString}&key=${key}&val=${val}`);
-//         console.log(response.data);
-//         return response.data;
-//     } catch (error) {
-//         throw error;
-//     }
-// }
-
-// // get all webpages by status count // TODO: Change this function accordingly
-// export const getPagesByStatusCount = async (status, key, val) => {
-//
-//     // convert status array to string with commas
-//     let statusString = status.join(',');
-//
-//     console.log(statusString);
-//
-//     try {
-//         const response = await apiManagement.get(`/api/web/webpages/status/count?status=${statusString}&key=${key}&val=${val}`);
-//         console.log(response.data);
-//         return response.data;
-//     } catch (error) {
-//         throw error;
-//     }
-// }
-
 
 // get all webpages by datetime // TODO: Change this function accordingly
 export const getApiSubscribersByDatetime = async (count, page, start, end, key, val) => {
@@ -75,6 +41,7 @@ export const getApiSubscribersByDatetime = async (count, page, start, end, key, 
     }
 }
 
+
 // get all webpages by datetime count // TODO: Change this function accordingly
 export const getApiSubscribersByDatetimeCount = async (start, end, key, val) => {
     try {
@@ -86,15 +53,6 @@ export const getApiSubscribersByDatetimeCount = async (start, end, key, val) => 
     }
 }
 
-// get all webpages by status and datetime // TODO: Change this function accordingly
-// export const editPages = async (id, data) => {
-//     try {
-//         const response = await apiManagement.put(`/api/web/webpages/${id}`, data);
-//         return response.data;
-//     } catch (error) {
-//         throw error;
-//     }
-// }
 
 // get all webpages by status and datetime count // TODO: Change this function accordingly
 export const getApiSubscriberById = async (id) => {
