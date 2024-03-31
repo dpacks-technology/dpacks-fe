@@ -2,18 +2,16 @@ import {Button} from "@nextui-org/react";
 import Input from "@/app/components/Input";
 import React from "react";
 import {Form, message} from "antd";
-import schema from "@/app/validaitions/WebPageAddValidation";
+import schema from "@/app/validaitions/ApiSubscriberAddValidation";
 import FormItem from "antd/es/form/FormItem";
-import {AddWebpage} from "@/services/WebpagesService";
+import {AddApiSubscriber} from "@/services/ApiManagementService";
 
 const AddApiSubscriberForm = ({...props}) => {
 
     // state
     const [saving, setSaving] = React.useState(false);
     const [error, setError] = React.useState({});
-    const [name, setName] = React.useState("");
-    const [path, setPath] = React.useState("");
-    const [webId, setWebId] = React.useState("");
+    const [user_id, setUserId] = React.useState("");
 
     // backend validation error message
     const [messageApi, contextHolder] = message.useMessage(); // message api
@@ -26,20 +24,20 @@ const AddApiSubscriberForm = ({...props}) => {
 
 
     // add webpage function
-    const addWebpage = async () => {
+    const addApiSubscriber = async () => {
 
         // set saving
         setSaving(true);
 
         try {
             // data // TODO: add/change fields
-            const data = {name, path, webId};
+            const data = {user_id};
 
             // validate
             await schema.validate(data, {abortEarly: false});
 
             // add webpage // TODO: change the function
-            await AddWebpage(data).then((response) => {
+            await AddApiSubscriber(data).then((response) => {
                 props.notificationMessage("success", "Record added"); // refresh data with success message
                 props.onClose(); // close modal
             }).then((error) => {
@@ -63,32 +61,12 @@ const AddApiSubscriberForm = ({...props}) => {
                     {/* TODO: Change the form */}
                     <FormItem>
                         <Input
-                            label={"Name"}
-                            type="text" placeholder="Webpage name"
-                            value={name}
-                            onChange={(e) => setName(e.target.value)}
-                            status={error.name ? "error" : ""}
-                            error={error.name}
-                        />
-                    </FormItem>
-                    <FormItem>
-                        <Input
-                            label={"Path"}
-                            type="text" placeholder="Webpage path"
-                            value={path}
-                            onChange={(e) => setPath(e.target.value)}
-                            status={error.path ? "error" : ""}
-                            error={error.path}
-                        />
-                    </FormItem>
-                    <FormItem>
-                        <Input
-                            label={"Web ID"}
-                            type="text" placeholder="Web ID"
-                            value={webId}
-                            onChange={(e) => setWebId(e.target.value)}
-                            status={error.webId ? "error" : ""}
-                            error={error.webId}
+                            label={"UserID"}
+                            type="text" placeholder="User Id"
+                            value={user_id}
+                            onChange={(e) => setUserId(e.target.value)}
+                            status={error.user_id ? "error" : ""}
+                            error={error.user_id}
                         />
                     </FormItem>
                 </div>
@@ -104,7 +82,7 @@ const AddApiSubscriberForm = ({...props}) => {
                     <Button
                         disabled={saving}
                         color="primary" variant="flat" onPress={() => {
-                        addWebpage().then(() => {
+                        addApiSubscriber().then(() => {
                             setSaving(false);
                         });
                     }}>

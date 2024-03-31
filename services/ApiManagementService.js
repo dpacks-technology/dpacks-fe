@@ -109,11 +109,11 @@ export const getApiSubscriberById = async (id) => {
 // }
 
 // get all webpages by status and datetime count // TODO: Change this function accordingly
-// export const AddWebpage = async (data) => {
-//     try {
-//         const response = await apiManagement.post(`/api/web/webpage`, data);
-//         return response.data;
-//     } catch (error) {
-//         throw error;
-//     }
-// }
+export const AddApiSubscriber = async (data) => {
+    try {
+        const response = await apiManagement.post(`/api/api_subscribers/subscriber`, data);
+        return response.data;
+    } catch (error) {
+        throw error;
+    }
+}
