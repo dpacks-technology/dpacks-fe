@@ -9,7 +9,7 @@ const   visitorinfoServices = axios.create({
 // get all webpages // TODO: Change this function accordingly
 export const getWebPages = async (count, page, key, val) => {
     try {
-        const response = await  visitorinfoServices.get(`/api/analytics/visitorInfo/${count}/${page}?key=${key}&val=${val}`);
+        const response = await  visitorinfoServices.get(`/api/analytics/visitorsInfo/${count}/${page}?key=${key}&val=${val}`);
         return response.data;
     } catch (error) {
         throw error;
@@ -59,7 +59,7 @@ export const getPagesByDatetimeCount = async (start, end, key, val) => {
 // get all webpages by status and datetime count // TODO: Change this function accordingly
 export const getPageById = async (id) => {
     try {
-        const response = await  visitorinfoServices.get(`/api/web/webpage/${id}`);
+        const response = await  visitorinfoServices.get(`/api/analytics/visitorInfo/${id}`);
         return response.data;
     } catch (error) {
         throw error;
