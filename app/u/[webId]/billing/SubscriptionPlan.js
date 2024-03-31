@@ -1,5 +1,5 @@
 import React from 'react';
-import Button from './Button'; // Import your Button component
+import Button from 'antd/lib/button';
 
 export default function SubscriptionPlans() {
     const plans = [

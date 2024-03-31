@@ -1,6 +1,7 @@
 "use client"
 
 import {useState} from "react";
+import SubscriptionPlans from "@/app/u/[webId]/billing/SubscriptionPlan";
 
 export default function Subscription() {
     // Dummy data for demonstration
@@ -57,7 +58,7 @@ export default function Subscription() {
                         fontSize: '14px'
                     }}>Back
                     </button>
-                    update
+                    <SubscriptionPlans/>
                 </>
                 :
                 (
