@@ -60,6 +60,7 @@ export default function Webpages() {
         {name: "User_Id", uid: "user_id", sortable: true, type: "text"},
         {name: "Client_Id", uid: "client_id", sortable: true, type: "text"},
         {name: "Key", uid: "key", sortable: false, type: "text"},
+        {name: "Created_On", uid: "created_on", sortable: false, type: "datetime"},
         {name: "ACTIONS", uid: "menu", sortable: false, type: "buttons"},
         // all usable types: text, twoText, datetime, label, status, statusButtons, buttons, menu, copy, icon, iconText, iconTwoText
     ];
@@ -81,25 +82,22 @@ export default function Webpages() {
      * 5. Change the button names, texts, icons, types and functions
      ***/
         // action button functions
-    const viewButton = (id) => { // view button function // TODO: Change the following function
-            // not used here
-            // console.log("view: " + id);
-        }
 
-    const editButton = (id) => { // edit button function // TODO: Change the following function
+    const regenerateButton = (id) => { // edit button function // TODO: Change the following function
+        if(!confirm("Are you sure you want to regenerate?")) return;
         // not used here
         // console.log("edit: " + id);
     }
 
     const deleteButton = (id) => { // delete button function // TODO: Change the following function
+        if(!confirm("Are you sure you want to delete?")) return;
         // not used here
         // console.log("delete: " + id);
     }
 
     // action buttons // TODO: Change the following buttons
     const actionButtons = [
-        {name: "View", text: "View", icon: "", type: "default", function: viewButton},
-        {name: "Edit", text: "Edit", icon: "", type: "primary", function: editButton},
+        {name: "Edit", text: "Regenerate", icon: "", type: "success", function: regenerateButton},
         {name: "Delete", text: "Delete", icon: "", type: "danger", function: deleteButton},
     ];
 
