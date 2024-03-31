@@ -4,7 +4,7 @@ import React from "react";
 import {Form, message} from "antd";
 import schema from "@/app/validaitions/ApiSubscriberAddValidation";
 import FormItem from "antd/es/form/FormItem";
-import {AddApiSubscriber} from "@/services/ApiManagementService";
+import {AddApiSubscriber} from "@/services/ApiSubscriberService";
 
 const AddApiSubscriberForm = ({...props}) => {
 

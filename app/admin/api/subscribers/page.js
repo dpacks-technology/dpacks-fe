@@ -19,11 +19,12 @@ import {useDisclosure} from "@nextui-org/react";
 import EditWebpageForm from "@/app/components/forms/webpages/EditWebpageForm";
 import {message} from "antd";
 import {
+    deleteApiSubscriber, deleteApiSubscribersBulk,
     getApiSubscribersByDatetime,
     getApiSubscribersByDatetimeCount,
     getApiSubscribersCount,
-    getSubscribers
-} from "@/services/ApiManagementService";
+    getSubscribers, regenerateApiKey
+} from "@/services/ApiSubscriberService";
 
 // Webpages component
 export default function Webpages() {
@@ -85,14 +86,22 @@ export default function Webpages() {
 
     const regenerateButton = (id) => { // edit button function // TODO: Change the following function
         if(!confirm("Are you sure you want to regenerate?")) return;
-        // not used here
-        // console.log("edit: " + id);
+
+        regenerateApiKey(id).then(() => {
+            refreshData("success", "Regenerated");
+        }).catch((error) => {
+            headerMessage("error", error.response.data.error);
+        });
     }
 
     const deleteButton = (id) => { // delete button function // TODO: Change the following function
         if(!confirm("Are you sure you want to delete?")) return;
-        // not used here
-        // console.log("delete: " + id);
+        // delete function
+        deleteApiSubscriber(id).then(() => {
+            refreshData("success", "Deleted");
+        }).catch((error) => {
+            headerMessage("error", error.response.data.error);
+        });
     }
 
     // action buttons // TODO: Change the following buttons
@@ -102,48 +111,15 @@ export default function Webpages() {
     ];
 
 
-    // 2. menu buttons (3 dots button)
-    /***
-     * 1. To use following menu button set, first you have to add a column with the type of "menu"
-     * 2. Not compulsory to use, you can either use or ignore
-     * 3. You can define button functions first, which describes what happens when clicked
-     * 5. Change the button names, texts, icons, types and functions
-     ***/
-        // menu button functions
-    const viewMenuButton = (id) => { // view button function // TODO: Change the following function
-            // not used here
-            // console.log("view: " + id);
-        }
 
-    const editMenuButton = (id) => { // edit button function // TODO: Change the following function
-        // not used here
-        // console.log("edit: " + id);
-    }
 
-    const deleteMenuButton = (id) => { // delete button function // TODO: Change the following function
 
-        // delete function
-        deletePage(id).then(() => {
-            refreshData("success", "Deleted");
-        }).catch((error) => {
-            headerMessage("error", error.response.data.error);
-        });
-
-    }
-
-    // menu buttons // TODO: Change the following buttons
-    const menuButtons = [
-        {name: "View", text: "View", function: viewMenuButton},
-        {name: "Edit", text: "Edit", function: onOpen}, // edit function set to open model (onOpen function)
-        {name: "Delete", text: "Delete", function: deleteMenuButton},
-    ];
-
+    // ----------------------- BULK ACTION FUNCTIONS -------------------------
 
     // delete bulk
     const deleteBulk = (ids) => {
-
         // delete bulk function // TODO: Change the following function
-        deleteWebpagesBulk(ids).then(() => {
+        deleteApiSubscribersBulk(ids).then(() => {
             refreshData("success", "Deleted");
         }).catch((error) => {
             headerMessage("error", error.response.data.error);
@@ -263,14 +239,6 @@ export default function Webpages() {
 
                 // action buttons
                 actionButtons={actionButtons}
-                menuButtons={menuButtons}
-
-
-                // edit model and functions
-                editMenuButton={editMenuButton}
-                editItemIsOpen={isOpen}
-                editItemOnOpenChange={onOpenChange}
-                editForm={<EditWebpageForm refreshData={refreshData}/>}
 
                 // search, sorting and filtering
                 searchColumn={searchColumn}

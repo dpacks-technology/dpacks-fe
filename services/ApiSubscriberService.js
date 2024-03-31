@@ -65,48 +65,47 @@ export const getApiSubscriberById = async (id) => {
 }
 
 // get all webpages by status and datetime count // TODO: Change this function accordingly
-// export const deletePage = async (id) => {
-//     try {
-//         const response = await apiManagement.delete(`/api/web/webpages/${id}`);
-//         return response.data;
-//     } catch (error) {
-//         throw error;
-//     }
-// }
+export const deleteApiSubscriber = async (id) => {
+    try {
+        const response = await apiManagement.delete(`/api/api_subscribers/subscriber/${id}`);
+        return response.data;
+    } catch (error) {
+        throw error;
+    }
+}
 
 // get all webpages by status and datetime count // TODO: Change this function accordingly
-// export const deleteWebpagesBulk = async (ids) => {
-//     let idsString = ids.join(',');
-//
-//     try {
-//         const response = await apiManagement.delete(`/api/web/webpages/bulk/${idsString}`);
-//         return response.data;
-//     } catch (error) {
-//         throw error;
-//     }
-// }
+export const deleteApiSubscribersBulk = async (ids) => {
+    let idsString = ids.join(',');
 
-// get all webpages by status and datetime count // TODO: Change this function accordingly
-// export const updateWebpagesStatusBulk = async (ids, status) => {
-//     let idsString = ids.join(',');
-//
-//     try {
-//         const response = await apiManagement.put(`/api/web/webpages/status/bulk/${idsString}`, {status: status});
-//         return response.data;
-//     } catch (error) {
-//         throw error;
-//     }
-// }
+    try {
+        const response = await apiManagement.delete(`/api/api_subscribers/subscriber/bulk/${idsString}`);
+        return response.data;
+    } catch (error) {
+        throw error;
+    }
+}
 
-// get all webpages by status and datetime count // TODO: Change this function accordingly
-// export const updateWebpagesStatus = async (id, status) => {
-//     try {
-//         const response = await apiManagement.put(`/api/web/webpages/status/${id}`, {status: status});
-//         return response.data;
-//     } catch (error) {
-//         throw error;
-//     }
-// }
+export const regenerateApiKey = async (id) => {
+    try {
+        const response = await apiManagement.put(`/api/api_subscribers/subscriber/${id}`);
+        return response.data;
+    } catch (error) {
+        throw error;
+    }
+}
+
+export const regenerateApiKeyBulk = async (ids) => {
+    let idsString = ids.join(',');
+
+    try {
+        const response = await apiManagement.put(`/api/api_subscribers/subscribers/${idsString}`);
+        return response.data;
+    } catch (error) {
+        throw error;
+    }
+}
+
 
 // get all webpages by status and datetime count // TODO: Change this function accordingly
 export const AddApiSubscriber = async (data) => {
