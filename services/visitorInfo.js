@@ -35,7 +35,7 @@ export const getPagesByDatetime = async (count, page, start, end, key, val) => {
     console.log(start);
 
     try {
-        const response = await  visitorinfoServices.get(`/api/web/webpages/datetime/${count}/${page}?start=${start}&end=${end}&key=${key}&val=${val}`);
+        const response = await  visitorinfoServices.get(`/api/analytics/visitorInfo/datetime/${count}/${page}?start=${start}&end=${end}&key=${key}&val=${val}`);
         console.log(response.data);
         return response.data;
     } catch (error) {
