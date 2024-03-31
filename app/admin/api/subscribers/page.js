@@ -18,7 +18,12 @@ import {
 import {useDisclosure} from "@nextui-org/react";
 import EditWebpageForm from "@/app/components/forms/webpages/EditWebpageForm";
 import {message} from "antd";
-import {getSubscribers} from "@/services/ApiManagementService";
+import {
+    getApiSubscribersByDatetime,
+    getApiSubscribersByDatetimeCount,
+    getApiSubscribersCount,
+    getSubscribers
+} from "@/services/ApiManagementService";
 
 // Webpages component
 export default function Webpages() {
@@ -55,14 +60,14 @@ export default function Webpages() {
         {name: "User_Id", uid: "user_id", sortable: true, type: "text"},
         {name: "Client_Id", uid: "client_id", sortable: true, type: "text"},
         {name: "Key", uid: "key", sortable: false, type: "text"},
-        {name: "ACTIONS", uid: "menu", sortable: false, type: "menu"},
+        {name: "ACTIONS", uid: "menu", sortable: false, type: "buttons"},
         // all usable types: text, twoText, datetime, label, status, statusButtons, buttons, menu, copy, icon, iconText, iconTwoText
     ];
 
     // initially visible columns // TODO: Change the following columns according the to yours
     const init_cols = [
-        "User_Id",
-        "cid",
+        "user_id",
+        "client_id",
         "key",
         "menu"
     ];
@@ -136,90 +141,6 @@ export default function Webpages() {
     ];
 
 
-    // 3. status options (status of the data and buttons to change the status)
-    /***
-     * 1. To show status as a label, first you have to add a column with the type of "status"
-     * 1. To use following status button set (to change the status), then you have to add a column with the type of "statusButtons"
-     * 2. Not compulsory to use, you can either use or ignore
-     * 3. You can define button functions first, which describes what happens when clicked
-     * 5. Change the button names, texts, icons, types and functions
-     * 6. You can add more status options
-     ***/
-
-        // update status button function // TODO: Change the following function
-    const updateStatusButton = (id, status) => {
-
-            // update status function
-            updateWebpagesStatus(id, status).then(() => {
-                refreshData("success", "Updated");
-            }).catch((error) => {
-                headerMessage("error", error.response.data.error);
-            });
-
-        }
-
-    // status options // TODO: Change the following options
-    const statusOptions = [
-        {
-            name: "Offline", // status name
-            uid: 0, // status id (the value in the database)
-            type: "", // status type (color) ["", primary, secondary, danger, warning, success]
-            button: true, // if you want to show a button to change the status
-            currentStatus: [1], // button showing status, ex: if currently status is 1, then the button will be shown | can use [1,2,...] for multiple statuses
-            function: updateStatusButton, // function to change the status
-
-            // icon
-            icon: <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5}
-                       stroke="currentColor" className="w-5 h-5">
-                <path strokeLinecap="round" strokeLinejoin="round"
-                      d="m9.75 9.75 4.5 4.5m0-4.5-4.5 4.5M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z"/>
-            </svg>
-        },
-        {
-            name: "Active", // status name
-            uid: 1, // status id (the value in the database)
-            type: "primary", // status type (color) [danger, warning, success, primary]
-            button: true, // if you want to show a button to change the status
-            currentStatus: [0], // button showing status, ex: if currently status is 1, then the button will be shown | can use [1,2,...] for multiple statuses
-            function: updateStatusButton, // function to change the status
-
-            // icon
-            icon: <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5}
-                       stroke="currentColor" className="w-5 h-5">
-                <path strokeLinecap="round" strokeLinejoin="round"
-                      d="M9 12.75 11.25 15 15 9.75M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z"/>
-            </svg>
-        }
-
-        // ...add more status options (if needed)
-
-    ]
-
-    // ----------------------- BULK ACTION FUNCTIONS -------------------------
-    // update status bulk function
-    const updateStatusBulk = (ids, status) => {
-
-        // update status bulk function // TODO: Change the following function
-        updateWebpagesStatusBulk(ids, status).then(() => {
-            refreshData("success", "Updated");
-        }).catch((error) => {
-            headerMessage("error", error.response.data.error);
-        });
-
-    };
-
-    // handle delete bulk function -- NO NEED OF CHANGING
-    const handleUpdateStatusBulk = (selectedKeys, status) => {
-        if (selectedKeys === 'all') { // if all items are selected
-            updateStatusBulk(data.map(item => item.id), status);
-        } else {
-            updateStatusBulk(
-                Array.from(selectedKeys).map((str) => parseInt(str, 10)),
-                status
-            );
-        }
-    };
-
     // delete bulk
     const deleteBulk = (ids) => {
 
@@ -252,7 +173,7 @@ export default function Webpages() {
             headerMessage(type, message);
 
         // fetch data count from API // TODO: Change the following function
-        getWebPagesCount(searchColumn, searchFieldValue).then((response) => setPagesCount(response));
+        getApiSubscribersCount(searchColumn, searchFieldValue).then((response) => setPagesCount(response));
 
         // fetch data from API // TODO: Change the following function
         getSubscribers(rowsPerPage, currentPage, searchColumn, searchFieldValue)
@@ -265,7 +186,7 @@ export default function Webpages() {
     const fetchTableData = (useCallback((page, key, val) => {
 
         // fetch data count from API // TODO: Change the following function
-        getWebPagesCount(key, val).then((response) => setPagesCount(response));
+        getApiSubscribersCount(key, val).then((response) => setPagesCount(response));
 
         // fetch data from API // TODO: Change the following function
         getSubscribers(rowsPerPage, page, key, val)
@@ -287,24 +208,12 @@ export default function Webpages() {
             fetchTableData(currentPage, searchColumn, searchFieldValue);
         } else {
             // get data count // TODO: Change the following function
-            getPagesByDatetimeCount(start, end, searchColumn, searchFieldValue).then((response) => setPagesCount(response));
+            getApiSubscribersByDatetimeCount(start, end, searchColumn, searchFieldValue).then((response) => setPagesCount(response));
 
             // get data // TODO: Change the following function
-            getPagesByDatetime(rowsPerPage, currentPage, start, end, searchColumn, searchFieldValue).then(response => setData(response === null ? [] : response.length === 0 ? [] : response))
+            getApiSubscribersByDatetime(rowsPerPage, currentPage, start, end, searchColumn, searchFieldValue).then(response => setData(response === null ? [] : response.length === 0 ? [] : response))
         }
     }
-
-
-    // ----------------------- STATUS CHANGE FUNCTIONS -------------------------
-    // status change function
-    const statusChange = (statusArray) => {
-        // get data count // TODO: Change the following function
-        getPagesByStatusCount(statusArray, searchColumn, searchFieldValue).then((response) => setPagesCount(response));
-
-        // get data // TODO: Change the following function
-        getPagesByStatus(rowsPerPage, currentPage, statusArray, searchColumn, searchFieldValue).then(response => setData(response === null ? [] : response.length === 0 ? [] : response))
-    }
-
 
     // ----------------------- TABLE FUNCTIONS ------------------------- (NO NEED OF CHANGING)
 
@@ -356,11 +265,8 @@ export default function Webpages() {
 
                 // action buttons
                 actionButtons={actionButtons}
-                statusOptions={statusOptions}
                 menuButtons={menuButtons}
 
-                // status change
-                statusChange={statusChange}
 
                 // edit model and functions
                 editMenuButton={editMenuButton}
@@ -377,7 +283,6 @@ export default function Webpages() {
                 changeSorting={changeSorting}
 
                 // bulk actions
-                handleUpdateStatusBulk={handleUpdateStatusBulk}
                 handleDeleteBulk={handleDeleteBulk}
 
                 // pagination
