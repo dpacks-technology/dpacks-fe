@@ -33,6 +33,8 @@ const LeftNavigation2 = () => {
                 // TODO: add other forms
                 <>
                     {pathname === "/u/1/web/webpages" && <AddWebpageForm notificationMessage={notificationMessage}/>}
+                    {pathname === "/u/1/example1/example1" && <AddWebpageForm notificationMessage={notificationMessage}/>}
+                    {pathname === "/u/1/example2/example2" && <AddWebpageForm notificationMessage={notificationMessage}/>}
                 </>
             } title={"Add webpage"} button={"Add"} isOpen={isOpen} onOpenChange={onOpenChange}/>
             <nav className="w-48 h-full fixed top-0 left-16">
