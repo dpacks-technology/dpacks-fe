@@ -5,6 +5,8 @@ import {message} from "antd";
 import Model from "@/app/components/Model";
 import AddWebpageForm from "@/app/components/forms/webpages/AddWebpageForm";
 import {usePathname} from "next/navigation";
+import AddAutomatedMessageForm from "@/app/components/forms/webchats/AddAutomatedMessageForm";
+import AddAutoRespondsForm from "@/app/components/forms/webchats/AddAutomatedMessageForm";
 
 const LeftNavigation2 = () => {
 
@@ -31,7 +33,7 @@ const LeftNavigation2 = () => {
             {contextHolder}
             <Model modelForm={
 
-                pathname === "/u/1/web/webpages" && <AddWebpageForm notificationMessage={notificationMessage} />
+                pathname === "/u/1/chat/automatedMessage" && <AddAutoRespondsForm notificationMessage={notificationMessage} />
 
                 // TODO: add other forms
 

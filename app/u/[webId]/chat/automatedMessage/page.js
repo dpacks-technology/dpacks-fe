@@ -3,18 +3,18 @@
 // Importing modules
 import Table from "@/app/components/Table";
 import React, {useCallback, useEffect} from "react";
-import {
-    deletePage,
-    deleteWebpagesBulk,
-    getPagesByDatetime,
-    getPagesByDatetimeCount,
-    getPagesByStatus,
-    getPagesByStatusCount,
-    getWebPagesCount,
-    updateWebpagesStatus,
-    updateWebpagesStatusBulk,
-
-} from "@/services/WebpagesService";
+import{
+    GetAutoResponds,
+    deleteAutoResponds,
+    deleteAutoRespondsBulk,
+    getAutoRespondsByDatetime,
+    getAutoRespondsByDatetimeCount,
+    getAutoRespondsByStatus,
+    getAutoRespondsByStatusCount,
+    getAutoRespondsCount,
+    updateAutoRespondsStatus,
+    updateAutoRespondsStatusBulk,
+}from "@/services/AutoRespondService";
 
 import {useDisclosure} from "@nextui-org/react";
 import EditWebpageForm from "@/app/components/forms/webpages/EditWebpageForm";
@@ -54,8 +54,8 @@ export default function AutomatedMessage() {
         {name: "ID", uid: "id", sortable: true, type: "text"},
         {name: "MESSAGE", uid: "message", sortable: true, type: "text"},
         {name: "TRIGGER", uid: "trigger", sortable: true, type: "text"},
-        {name: "CREATED ON", uid: "last_update", sortable: false, type: "datetime"},
-        {name: "STATUS", uid: "is_active", sortable: false, type: "status"},
+        {name: "CREATED ON", uid: "last_updated", sortable: false, type: "datetime"},
+        {name: "STATUS", uid: "status", sortable: false, type: "status"},
         {name: "CHANGE STATUS", uid: "statusButtons", sortable: false, type: "statusButtons"},
         {name: "ACTIONS", uid: "menu", sortable: false, type: "menu"},
         // all usable types: text, twoText, datetime, label, status, statusButtons, buttons, menu, copy, icon, iconText, iconTwoText
@@ -65,8 +65,8 @@ export default function AutomatedMessage() {
     const init_cols = [
         "message",
         "trigger",
-        "last_update",
-        "is_active",
+        "last_updated",
+        "status",
         "statusButtons",
         "menu"
     ];
@@ -124,7 +124,7 @@ export default function AutomatedMessage() {
     const deleteMenuButton = (id) => { // delete button function // TODO: Change the following function
 
         // delete function
-        deletePage(id).then(() => {
+        deleteAutoResponds(id).then(() => {
             refreshData("success", "Deleted");
         }).catch((error) => {
             headerMessage("error", error.response.data.error);
@@ -154,7 +154,7 @@ export default function AutomatedMessage() {
     const updateStatusButton = (id, status) => {
 
             // update status function
-            updateWebpagesStatus(id, status).then(() => {
+            updateAutoRespondsStatus(id, status).then(() => {
                 refreshData("success", "Updated");
             }).catch((error) => {
                 headerMessage("error", error.response.data.error);
@@ -165,7 +165,7 @@ export default function AutomatedMessage() {
     // status options // TODO: Change the following options
     const statusOptions = [
         {
-            name: "Offline", // status name
+            name: "Disabled", // status name
             uid: 0, // status id (the value in the database)
             type: "", // status type (color) ["", primary, secondary, danger, warning, success]
             button: true, // if you want to show a button to change the status
@@ -180,7 +180,7 @@ export default function AutomatedMessage() {
             </svg>
         },
         {
-            name: "Active", // status name
+            name: "Enabled", // status name
             uid: 1, // status id (the value in the database)
             type: "primary", // status type (color) [danger, warning, success, primary]
             button: true, // if you want to show a button to change the status
@@ -204,7 +204,7 @@ export default function AutomatedMessage() {
     const updateStatusBulk = (ids, status) => {
 
         // update status bulk function // TODO: Change the following function
-        updateWebpagesStatusBulk(ids, status).then(() => {
+        updateAutoRespondsStatusBulk(ids, status).then(() => {
             refreshData("success", "Updated");
         }).catch((error) => {
             headerMessage("error", error.response.data.error);
@@ -228,7 +228,7 @@ export default function AutomatedMessage() {
     const deleteBulk = (ids) => {
 
         // delete bulk function // TODO: Change the following function
-        deleteWebpagesBulk(ids).then(() => {
+        deleteAutoRespondsBulk(ids).then(() => {
             refreshData("success", "Deleted");
         }).catch((error) => {
             headerMessage("error", error.response.data.error);
@@ -256,10 +256,10 @@ export default function AutomatedMessage() {
             headerMessage(type, message);
 
         // fetch data count from API // TODO: Change the following function
-        getWebPagesCount(searchColumn, searchFieldValue).then((response) => setPagesCount(response));
+        getAutoRespondsCount(searchColumn, searchFieldValue).then((response) => setPagesCount(response));
 
         // fetch data from API // TODO: Change the following function
-        GetAutomatedMessage(rowsPerPage, currentPage, searchColumn, searchFieldValue)
+        GetAutoResponds(rowsPerPage, currentPage, searchColumn, searchFieldValue)
             .then(response => setData(response === null ? [] : response.length === 0 ? [] : response))
             .catch(error => console.error(error));
 
@@ -269,10 +269,10 @@ export default function AutomatedMessage() {
     const fetchTableData = (useCallback((page, key, val) => {
 
         // fetch data count from API // TODO: Change the following function
-        getWebPagesCount(key, val).then((response) => setPagesCount(response));
+        getAutoRespondsCount(key, val).then((response) => setPagesCount(response));
 
         // fetch data from API // TODO: Change the following function
-        GetAutomatedMessage(rowsPerPage, page, key, val)
+        GetAutoResponds(rowsPerPage, page, key, val)
             .then(response => setData(response === null ? [] : response.length === 0 ? [] : response))
             .catch(error => console.error(error));
 
@@ -291,10 +291,10 @@ export default function AutomatedMessage() {
             fetchTableData(currentPage, searchColumn, searchFieldValue);
         } else {
             // get data count // TODO: Change the following function
-            getPagesByDatetimeCount(start, end, searchColumn, searchFieldValue).then((response) => setPagesCount(response));
+            getAutoRespondsByDatetimeCount(start, end, searchColumn, searchFieldValue).then((response) => setPagesCount(response));
 
             // get data // TODO: Change the following function
-            getPagesByDatetime(rowsPerPage, currentPage, start, end, searchColumn, searchFieldValue).then(response => setData(response === null ? [] : response.length === 0 ? [] : response))
+            getAutoRespondsByDatetime(rowsPerPage, currentPage, start, end, searchColumn, searchFieldValue).then(response => setData(response === null ? [] : response.length === 0 ? [] : response))
         }
     }
 
@@ -303,10 +303,10 @@ export default function AutomatedMessage() {
     // status change function
     const statusChange = (statusArray) => {
         // get data count // TODO: Change the following function
-        getPagesByStatusCount(statusArray, searchColumn, searchFieldValue).then((response) => setPagesCount(response));
+        getAutoRespondsByStatusCount(statusArray, searchColumn, searchFieldValue).then((response) => setPagesCount(response));
 
         // get data // TODO: Change the following function
-        getPagesByStatus(rowsPerPage, currentPage, statusArray, searchColumn, searchFieldValue).then(response => setData(response === null ? [] : response.length === 0 ? [] : response))
+        getAutoRespondsByStatus(rowsPerPage, currentPage, statusArray, searchColumn, searchFieldValue).then(response => setData(response === null ? [] : response.length === 0 ? [] : response))
     }
 
 
