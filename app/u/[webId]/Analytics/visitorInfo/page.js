@@ -4,17 +4,14 @@
 import Table from "@/app/components/Table";
 import React, {useCallback, useEffect} from "react";
 import {
-    deletePage,
-    deleteWebpagesBulk,
+    
     getPagesByDatetime,
     getPagesByDatetimeCount,
-    getPagesByStatus,
-    getPagesByStatusCount,
+   
     getWebPages,
     getWebPagesCount,
-    updateWebpagesStatus,
-    updateWebpagesStatusBulk
-} from "@/services/WebpagesService";
+    
+} from "@/services/visitorInfo";
 import {useDisclosure} from "@nextui-org/react";
 import EditWebpageForm from "@/app/components/forms/webpages/EditWebpageForm";
 import {message} from "antd";
@@ -51,17 +48,17 @@ export default function AnalyticsWebpages() {
     // columns // TODO: Change the following columns according the to yours
     const columns = [
         {name: "ID", uid: "id", sortable: true, type: "text"},
-        {name: "IP ADDRESS", uid: "ipAddress", sortable: true, type: "text"},
+        {name: "IP ADDRESS", uid: "ip_address", sortable: false, type: "text"},
         {name: "DEVICE", uid: "device", sortable: true, type: "text"},    
         {name: "COUNTRY", uid: "country", sortable: true, type: "text"},
-        {name: "SOURCE", uid: "source", sortable: true, type: "text"},
+        {name: "SOURCE", uid: "source", sortable: false, type: "text"},
         
         // all usable types: text, twoText, datetime, label, status, statusButtons, buttons, menu, copy, icon, iconText, iconTwoText
     ];
 
     // initially visible columns // TODO: Change the following columns according the to yours
     const init_cols = [
-        "ipAddress",
+        "ip_address",
         "device",
         "country",
         "source",
