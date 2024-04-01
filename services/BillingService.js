@@ -150,7 +150,7 @@ export const UpdateTransactionStatus = async (id, status) => {
 }
 
 // get all webpages by status and datetime count // TODO: Change this function accordingly
-export const AddWebpage = async (data) => {
+export const AddTransaction = async (data) => {
     try {
         const response = await billingService.post(`/api/billing/transactions`, data);
         return response.data;
