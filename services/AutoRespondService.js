@@ -151,7 +151,7 @@ export const updateAutoRespondsStatus = async (id, status) => {
 }
 
 // get all webpages by status and datetime count // TODO: Change this function accordingly
-export const AddAutoResponds = async (data) => {
+export const addAutoRespond = async (data) => {
     try {
         const response = await webpagesService.post(`/api/chat/auto_respond`, data);
         return response.data;

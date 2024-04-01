@@ -17,8 +17,9 @@ import{
 }from "@/services/AutoRespondService";
 
 import {useDisclosure} from "@nextui-org/react";
-import EditWebpageForm from "@/app/components/forms/webpages/EditWebpageForm";
+
 import {message} from "antd";
+import EditAutomatedMessageForm from "@/app/components/forms/webchats/EditAutomatedMessageForm";
 
 // Webpages component
 export default function AutomatedMessage() {
@@ -370,7 +371,7 @@ export default function AutomatedMessage() {
                 editMenuButton={editMenuButton}
                 editItemIsOpen={isOpen}
                 editItemOnOpenChange={onOpenChange}
-                editForm={<EditWebpageForm refreshData={refreshData}/>}
+                editForm={<EditAutomatedMessageForm refreshData={refreshData}/>}
 
                 // search, sorting and filtering
                 searchColumn={searchColumn}

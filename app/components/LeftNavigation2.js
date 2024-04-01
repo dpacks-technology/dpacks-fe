@@ -3,9 +3,9 @@ import React, {useEffect} from 'react';
 import {Button, useDisclosure} from "@nextui-org/react";
 import {message} from "antd";
 import Model from "@/app/components/Model";
-import AddWebpageForm from "@/app/components/forms/webpages/AddWebpageForm";
+
 import {usePathname} from "next/navigation";
-import AddAutomatedMessageForm from "@/app/components/forms/webchats/AddAutomatedMessageForm";
+
 import AddAutoRespondsForm from "@/app/components/forms/webchats/AddAutomatedMessageForm";
 
 const LeftNavigation2 = () => {
