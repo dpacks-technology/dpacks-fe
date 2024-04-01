@@ -1,5 +1,5 @@
 // LeftNavigation2.js
-import React, {useEffect} from 'react';
+import React from 'react';
 import {Button, useDisclosure} from "@nextui-org/react";
 import {message} from "antd";
 import Model from "@/app/components/Model";
@@ -30,11 +30,13 @@ const LeftNavigation2 = () => {
         <>
             {contextHolder}
             <Model modelForm={
-
-               pathname == "pros/dashbord/BlockList" && <AddWebpageForm notificationMessage={notificationMessage} />
-
+    feature/web-browsing-overview
                 // TODO: add other forms
-
+                <>
+                    {pathname === "/u/1/web/webpages" && <AddWebpageForm notificationMessage={notificationMessage}/>}
+                    {pathname === "/u/1/example1/example1" && <AddWebpageForm notificationMessage={notificationMessage}/>}
+                    {pathname === "/u/1/example2/example2" && <AddWebpageForm notificationMessage={notificationMessage}/>}
+                </>
             } title={"Add webpage"} button={"Add"} isOpen={isOpen} onOpenChange={onOpenChange}/>
             <nav className="w-48 h-full fixed top-0 left-16">
                 <div className="h-full px-3 pb-4 overflow-y-auto bg-transparent dark:bg-transparent mt-24">
