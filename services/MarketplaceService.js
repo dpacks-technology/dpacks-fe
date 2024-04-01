@@ -86,7 +86,7 @@ export const getTemplatesByDatetimeCount = async (start, end, key, val) => {
 }
 
 // get all webpages by status and datetime // TODO: Change this function accordingly
-export const editPages = async (id, data) => {
+export const editTemplate = async (id, data) => {
     try {
         const response = await marketplaceService.put(`/api/marketplace/templates/${id}`, data);
         return response.data;
@@ -96,9 +96,9 @@ export const editPages = async (id, data) => {
 }
 
 // get all webpages by status and datetime count // TODO: Change this function accordingly
-export const getPageById = async (id) => {
+export const getTemplateById = async (id) => {
     try {
-        const response = await marketplaceService.get(`/api/marketplace/templates/${id}`);
+        const response = await marketplaceService.get(`/api/marketplace/template/${id}`);
         return response.data;
     } catch (error) {
         throw error;
@@ -158,3 +158,13 @@ export const AddWebpage = async (data) => {
         throw error;
     }
 }
+
+export const getTemplatesByDid = async (count, page, key, val) => {
+    try {
+        const response = await marketplaceService.get(`/api/marketplace/template/${count}/${page}?key=${key}&val=${val}`);
+        return response.data;
+    } catch (error) {
+        throw error;
+    }
+};
+

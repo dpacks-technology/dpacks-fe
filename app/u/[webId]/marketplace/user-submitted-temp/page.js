@@ -16,7 +16,7 @@ import {
     updateTemplatesStatusBulk, editTemplate
 } from "@/services/MarketplaceService";
 import {useDisclosure} from "@nextui-org/react";
-//import EditWebpageForm from "@/app/components/forms/webpages/EditWebpageForm";
+import EditTemplatesDetailsForm from "@/app/components/forms/marketplace/EditTemplatesDetailsForm";
 import {message} from "antd";
 
 // Webpages component
@@ -57,12 +57,9 @@ export default function ReviewTemplates() {
         {name: "CREATED ON", uid: "submitteddate", sortable: false, type: "datetime"},
         {name: "MAIN FILE", uid: "mainfile", sortable: false, type: "buttons"},
         {name: "THUMBNAIL", uid: "thmbnlfile", sortable: false, type: "buttons"},
-        {name: "DEVELOPER", uid: "devpname", sortable: true, type: "text"},
-        {name: "DID", uid: "userid", sortable: false, type: "text"},
         {name: "MESSAGE", uid: "dmessage", sortable: false, type: "text"},
         {name: "PRICE", uid: "price", sortable: false, type: "text"},
         {name: "STATUS", uid: "status", sortable: false, type: "status"},
-        {name: "CHANGE STATUS", uid: "statusButtons", sortable: false, type: "statusButtons"},
         {name: "ACTIONS", uid: "menu", sortable: false, type: "menu"},
 
         // {name: "PATH", uid: "path", sortable: true, type: "text"},
@@ -80,10 +77,11 @@ export default function ReviewTemplates() {
         "category",
         "submitteddate",
         "mainfile",
+        "thmbnlfile",
+        "dmessage",
         "devpname",
         "price",
         "status",
-        "statusButtons",
         "menu",
     ];
 
@@ -114,10 +112,9 @@ export default function ReviewTemplates() {
     // action buttons // TODO: Change the following buttons
     const actionButtons = [
         {name: "View", text: "View", icon: "", type: "primary", function: viewButton},
-        // {name: "Edit", text: "Edit", icon: "", type: "primary", function: editButton},
+        //{name: "Edit", text: "Edit", icon: "", type: "primary", function: editButton},
         // {name: "Delete", text: "Delete", icon: "", type: "danger", function: deleteButton},
     ];
-
 
     // 2. menu buttons (3 dots button)
     /***
@@ -135,7 +132,6 @@ export default function ReviewTemplates() {
     const editMenuButton = (id) => { // edit button function // TODO: Change the following function
         // not used here
         // console.log("edit: " + id);
-
     }
 
     const deleteMenuButton = (id) => { // delete button function // TODO: Change the following function
@@ -152,7 +148,7 @@ export default function ReviewTemplates() {
     // menu buttons // TODO: Change the following buttons
     const menuButtons = [
         // {name: "View", text: "View", function: viewMenuButton},
-        // {name: "Edit", text: "Edit", function: onOpen}, // edit function set to open model (onOpen function)
+        {name: "Edit", text: "Edit", function: onOpen}, // edit function set to open model (onOpen function)
         {name: "Delete", text: "Delete", function: deleteMenuButton},
     ];
 
@@ -185,46 +181,44 @@ export default function ReviewTemplates() {
             name: "Pending", // status name
             uid: 0, // status id (the value in the database)
             type: "primary", // status type (color) ["", primary, secondary, danger, warning, success]
-            button: true, // if you want to show a button to change the status
-            currentStatus: [1,2], // button showing status, ex: if currently status is 1, then the button will be shown | can use [1,2,...] for multiple statuses
-            function: updateStatusButton, // function to change the status
-
+            button: false, // if you want to show a button to change the status
+            //currentStatus: [1,2], // button showing status, ex: if currently status is 1, then the button will be shown | can use [1,2,...] for multiple statuses
+            //function: updateStatusButton, // function to change the status
             // icon
-            icon: <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5}
-                       stroke="currentColor" className="w-4 h-4">
-                <path strokeLinecap="round" strokeLinejoin="round" d="M9 15 3 9m0 0 6-6M3 9h12a6 6 0 0 1 0 12h-3"/>
-            </svg>
-
+            // icon: <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5}
+            //            stroke="currentColor" className="w-4 h-4">
+            //     <path strokeLinecap="round" strokeLinejoin="round" d="M9 15 3 9m0 0 6-6M3 9h12a6 6 0 0 1 0 12h-3"/>
+            // </svg>
         },
         {
             name: "Accepted", // status name
             uid: 1, // status id (the value in the database)
             type: "success", // status type (color) [danger, warning, success, primary]
-            button: true, // if you want to show a button to change the status
-            currentStatus: [0,2], // button showing status, ex: if currently status is 1, then the button will be shown | can use [1,2,...] for multiple statuses
-            function: updateStatusButton, // function to change the status
-
-            // icon
-            icon: <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5}
-                       stroke="currentColor" className="w-5 h-5">
-                <path strokeLinecap="round" strokeLinejoin="round"
-                      d="M9 12.75 11.25 15 15 9.75M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z"/>
-            </svg>
+            button: false, // if you want to show a button to change the status
+            // currentStatus: [0,2], // button showing status, ex: if currently status is 1, then the button will be shown | can use [1,2,...] for multiple statuses
+            // function: updateStatusButton, // function to change the status
+            //
+            // // icon
+            // icon: <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5}
+            //            stroke="currentColor" className="w-5 h-5">
+            //     <path strokeLinecap="round" strokeLinejoin="round"
+            //           d="M9 12.75 11.25 15 15 9.75M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z"/>
+            // </svg>
         },
         {
             name: "Rejected", // status name
             uid: 2, // status id (the value in the database)
             type: "danger", // status type (color) [danger, warning, success, primary]
-            button: true, // if you want to show a button to change the status
-            currentStatus: [0, 1], // button showing status, ex: if currently status is 1, then the button will be shown | can use [1,2,...] for multiple statuses
-            function: updateStatusButton, // function to change the status
-
-            // icon
-            icon: <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5}
-                       stroke="currentColor" className="w-5 h-5">
-                <path strokeLinecap="round" strokeLinejoin="round"
-                      d="m9.75 9.75 4.5 4.5m0-4.5-4.5 4.5M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z"/>
-            </svg>
+            button: false, // if you want to show a button to change the status
+            // currentStatus: [0, 1], // button showing status, ex: if currently status is 1, then the button will be shown | can use [1,2,...] for multiple statuses
+            // function: updateStatusButton, // function to change the status
+            //
+            // // icon
+            // icon: <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5}
+            //            stroke="currentColor" className="w-5 h-5">
+            //     <path strokeLinecap="round" strokeLinejoin="round"
+            //           d="m9.75 9.75 4.5 4.5m0-4.5-4.5 4.5M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z"/>
+            // </svg>
 
         }
 
@@ -400,10 +394,10 @@ export default function ReviewTemplates() {
                 statusChange={statusChange}
 
                 // edit model and functions
-                // editMenuButton={editMenuButton}
-                // editItemIsOpen={isOpen}
-                // editItemOnOpenChange={onOpenChange}
-                // editForm={<EditWebpageForm refreshData={refreshData}/>}
+                editMenuButton={editMenuButton}
+                editItemIsOpen={isOpen}
+                editItemOnOpenChange={onOpenChange}
+                editForm={<EditTemplatesDetailsForm refreshData={refreshData}/>}
 
                 // search, sorting and filtering
                 searchColumn={searchColumn}
