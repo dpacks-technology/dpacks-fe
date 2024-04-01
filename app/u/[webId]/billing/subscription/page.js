@@ -32,11 +32,11 @@ export default function Subscription() {
     }
 
     return (
-        <div style={{
-            backgroundColor: 'white',
+        <div
+            className={"bg-dark w-full"}
+            style={{
             padding: '30px',
             borderRadius: '10px',
-            width: '600px',
             margin: 'auto',
             marginTop: '50px',
             boxShadow: '0px 4px 8px rgba(0, 0, 0, 0.1)',
@@ -54,7 +54,6 @@ export default function Subscription() {
                         padding: '5px 10px',
                         borderRadius: '5px',
                         background: 'blue',
-                        color: 'white',
                         border: 'none',
                         fontSize: '14px'
                     }}>Back
@@ -65,7 +64,6 @@ export default function Subscription() {
                 <>
                     <div style={{width: '100%', marginBottom: '20px'}}>
                         <h2 style={{
-                            color: '#333',
                             marginBottom: '20px',
                             fontSize: '24px',
                             display: 'flex',
@@ -81,7 +79,6 @@ export default function Subscription() {
                                 padding: '5px 10px',
                                 borderRadius: '5px',
                                 background: 'blue',
-                                color: 'white',
                                 border: 'none',
                                 fontSize: '14px'
                             }}>Update Plan
@@ -89,12 +86,12 @@ export default function Subscription() {
                         </h2>
 
 
-                        <ul style={{listStyleType: 'disc', color: '#333'}}>
+                        <ul style={{listStyleType: 'disc'}}>
                             {features.map((feature, index) => (
                                 <li key={index}>{feature}</li>
                             ))}
                         </ul>
-                        <p style={{color: '#333', marginTop: '20px'}}>Total Per Month: {cost}</p>
+                        <p style={{marginTop: '20px'}}>Total Per Month: {cost}</p>
                     </div>
 
                     <div style={{width: '100%', display: 'flex', justifyContent: 'space-between'}}>
@@ -106,9 +103,9 @@ export default function Subscription() {
                             marginBottom: '20px'
                         }}>
                             {/* Content for payment details */}
-                            <h3 style={{color: 'blue', marginBottom: '10px'}}>Payment Details</h3>
+                            <h3 style={{marginBottom: '10px'}}>Payment Details</h3>
                             {paymentDetails.map((detail, index) => (
-                                <p key={index} style={{color: '#333'}}>{detail.title}: {detail.value}</p>
+                                <p key={index}>{detail.title}: {detail.value}</p>
                             ))}
                         </div>
                         <div style={{
@@ -119,12 +116,12 @@ export default function Subscription() {
                             marginBottom: '20px'
                         }}>
                             {/* Content for invoices */}
-                            <h3 style={{color: 'blue', marginBottom: '10px'}}>Invoices</h3>
+                            <h3 style={{marginBottom: '10px'}}>Invoices</h3>
                             {invoices.map(invoice => (
                                 <div key={invoice.id} style={{marginBottom: '10px'}}>
-                                    <p style={{color: '#333'}}>Invoice ID: {invoice.id}</p>
-                                    <p style={{color: '#333'}}>Date: {invoice.date}</p>
-                                    <p style={{color: '#333'}}>Amount: {invoice.amount}</p>
+                                    <p>Invoice ID: {invoice.id}</p>
+                                    <p>Date: {invoice.date}</p>
+                                    <p>Amount: {invoice.amount}</p>
                                 </div>
                             ))}
                         </div>
@@ -135,7 +132,6 @@ export default function Subscription() {
                             padding: '10px 20px',
                             borderRadius: '5px',
                             background: 'red',
-                            color: 'white',
                             border: 'none'
                         }}>Unsubscribe Current Plan
                         </button>

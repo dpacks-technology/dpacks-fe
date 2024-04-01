@@ -29,7 +29,7 @@ export default function SubscriptionPlans() {
 
     return (
         <>
-            <div className="sm:flex sm:flex-col sm:align-center">
+            <div className="sm:flex sm:flex-col sm:align-center w-full">
                 <div
                     className="relative self-center mt-6 bg-gray-950 rounded-lg p-0.5 flex sm:mt-8 border border-zinc-800">
                     {intervals.map(interval => (
@@ -48,7 +48,7 @@ export default function SubscriptionPlans() {
                     ))}
                 </div>
             </div>
-            <div className="flex space-x-4 justify-center">
+            <div className="flex space-x-4 justify-center w-full">
                 {plans.length > 0 && plans.map((plan, index) => (
                     <div key={index} className="bg-gray-950 bg-opacity-60 rounded-lg w-1/4 p-6 ml-4 mt-8"
                          style={{height: '300px'}}>
