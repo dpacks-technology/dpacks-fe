@@ -1,7 +1,7 @@
 "use client"
 
 import {useState} from "react";
-import SubscriptionPlan from "@/app/components/SubscriptionPlans";
+import SubscriptionPlans from "@/app/components/SubscriptionPlans";
 
 export default function Subscription() {
     // Dummy data for demonstration
@@ -47,12 +47,9 @@ export default function Subscription() {
 
 
             {pageStatus === 'update' ?
-                (<SubscriptionPlan/>) :
                 <>
                     <button onClick={() => {
-
                         changeStatus('view')
-
                     }} style={{
                         padding: '5px 10px',
                         borderRadius: '5px',
@@ -62,90 +59,90 @@ export default function Subscription() {
                         fontSize: '14px'
                     }}>Back
                     </button>
-                    <p style={{color: '#333'}}> update </p>
-                </>}
-            :
-            (
-            <>
-                <div style={{width: '100%', marginBottom: '20px'}}>
-                    <h2 style={{
-                        color: '#333',
-                        marginBottom: '20px',
-                        fontSize: '24px',
-                        display: 'flex',
-                        alignItems: 'center'
-                    }}>
-                        <span style={{marginRight: '10px'}}>Current Plan: {currentPlan}</span>
+                    <SubscriptionPlans/>
+                </>
+                :
+                <>
+                    <div style={{width: '100%', marginBottom: '20px'}}>
+                        <h2 style={{
+                            color: '#333',
+                            marginBottom: '20px',
+                            fontSize: '24px',
+                            display: 'flex',
+                            alignItems: 'center'
+                        }}>
+                            <span style={{marginRight: '10px'}}>Current Plan: {currentPlan}</span>
 
-                        <button onClick={() => {
+                            <button onClick={() => {
 
-                            changeStatus('update')
+                                changeStatus('update')
 
-                        }} style={{
-                            padding: '5px 10px',
+                            }} style={{
+                                padding: '5px 10px',
+                                borderRadius: '5px',
+                                background: 'blue',
+                                color: 'white',
+                                border: 'none',
+                                fontSize: '14px'
+                            }}>Update Plan
+                            </button>
+                        </h2>
+
+
+                        <ul style={{listStyleType: 'disc', color: '#333'}}>
+                            {features.map((feature, index) => (
+                                <li key={index}>{feature}</li>
+                            ))}
+                        </ul>
+                        <p style={{color: '#333', marginTop: '20px'}}>Total Per Month: {cost}</p>
+                    </div>
+
+                    <div style={{width: '100%', display: 'flex', justifyContent: 'space-between'}}>
+                        <div style={{
+                            width: 'calc(50% - 20px)',
+                            border: '2px solid blue',
+                            padding: '20px',
+                            borderRadius: '10px',
+                            marginBottom: '20px'
+                        }}>
+                            {/* Content for payment details */}
+                            <h3 style={{color: 'blue', marginBottom: '10px'}}>Payment Details</h3>
+                            {paymentDetails.map((detail, index) => (
+                                <p key={index} style={{color: '#333'}}>{detail.title}: {detail.value}</p>
+                            ))}
+                        </div>
+                        <div style={{
+                            width: 'calc(50% - 20px)',
+                            border: '2px solid blue',
+                            padding: '20px',
+                            borderRadius: '10px',
+                            marginBottom: '20px'
+                        }}>
+                            {/* Content for invoices */}
+                            <h3 style={{color: 'blue', marginBottom: '10px'}}>Invoices</h3>
+                            {invoices.map(invoice => (
+                                <div key={invoice.id} style={{marginBottom: '10px'}}>
+                                    <p style={{color: '#333'}}>Invoice ID: {invoice.id}</p>
+                                    <p style={{color: '#333'}}>Date: {invoice.date}</p>
+                                    <p style={{color: '#333'}}>Amount: {invoice.amount}</p>
+                                </div>
+                            ))}
+                        </div>
+                    </div>
+
+                    <div style={{width: '100%', display: 'flex', justifyContent: 'space-between'}}>
+                        <button style={{
+                            padding: '10px 20px',
                             borderRadius: '5px',
-                            background: 'blue',
+                            background: 'red',
                             color: 'white',
-                            border: 'none',
-                            fontSize: '14px'
-                        }}>Update Plan
+                            border: 'none'
+                        }}>Unsubscribe Current Plan
                         </button>
-                    </h2>
-
-
-                    <ul style={{listStyleType: 'disc', color: '#333'}}>
-                        {features.map((feature, index) => (
-                            <li key={index}>{feature}</li>
-                        ))}
-                    </ul>
-                    <p style={{color: '#333', marginTop: '20px'}}>Total Per Month: {cost}</p>
-                </div>
-
-                <div style={{width: '100%', display: 'flex', justifyContent: 'space-between'}}>
-                    <div style={{
-                        width: 'calc(50% - 20px)',
-                        border: '2px solid blue',
-                        padding: '20px',
-                        borderRadius: '10px',
-                        marginBottom: '20px'
-                    }}>
-                        {/* Content for payment details */}
-                        <h3 style={{color: 'blue', marginBottom: '10px'}}>Payment Details</h3>
-                        {paymentDetails.map((detail, index) => (
-                            <p key={index} style={{color: '#333'}}>{detail.title}: {detail.value}</p>
-                        ))}
                     </div>
-                    <div style={{
-                        width: 'calc(50% - 20px)',
-                        border: '2px solid blue',
-                        padding: '20px',
-                        borderRadius: '10px',
-                        marginBottom: '20px'
-                    }}>
-                        {/* Content for invoices */}
-                        <h3 style={{color: 'blue', marginBottom: '10px'}}>Invoices</h3>
-                        {invoices.map(invoice => (
-                            <div key={invoice.id} style={{marginBottom: '10px'}}>
-                                <p style={{color: '#333'}}>Invoice ID: {invoice.id}</p>
-                                <p style={{color: '#333'}}>Date: {invoice.date}</p>
-                                <p style={{color: '#333'}}>Amount: {invoice.amount}</p>
-                            </div>
-                        ))}
-                    </div>
-                </div>
+                </>
+            }
 
-                <div style={{width: '100%', display: 'flex', justifyContent: 'space-between'}}>
-                    <button style={{
-                        padding: '10px 20px',
-                        borderRadius: '5px',
-                        background: 'red',
-                        color: 'white',
-                        border: 'none'
-                    }}>Unsubscribe Current Plan
-                    </button>
-                </div>
-            </>
-            )
         </div>
     );
 }
