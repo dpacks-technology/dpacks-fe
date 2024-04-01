@@ -1,52 +1,71 @@
-import React from 'react';
-import Button from './Button'; // Import your Button component
+"use client"
+import React, {useState} from "react";
 
-export default function SubscriptionPlans() {
-    const plans = [
-        {
-            name: 'Free',
-            price: '$0',
-            features: ['Basic features', 'Limited storage', 'No support'],
-        },
-        {
-            name: 'Standard',
-            price: '$9.99/month',
-            features: ['Advanced features', 'Moderate storage', 'Email support'],
-        },
-        {
-            name: 'Premium',
-            price: '$19.99/month',
-            features: ['All features', 'Unlimited storage', 'Priority support'],
-        },
-    ];
+const plans = [
+    {
+        name: 'Free',
+        monthlyPrice: '$0',
+        annualPrice: '$0',
+        features: ['Basic features', 'Limited storage', 'No support'],
+    },
+    {
+        name: 'Standard',
+        monthlyPrice: '$9.99',
+        annualPrice: '$99.99',
+        features: ['Advanced features', 'Moderate storage', 'Email support'],
+    },
+    {
+        name: 'Premium',
+        monthlyPrice: '$19.99',
+        annualPrice: '$199.99',
+        features: ['All features', 'Unlimited storage', 'Priority support'],
+    },
+];
+
+export default function SubscriptionPlan() {
+    const [billingInterval, setBillingInterval] = useState('monthly');
+    const intervals = ['monthly', 'yearly'];
 
     return (
-        <div className="flex justify-center space-x-4">
-            {plans.map((plan, index) => (
-                <div key={index} className="border rounded-lg p-4 shadow-md">
-                    <h2 className="text-2xl font-semibold">{plan.name}</h2>
-                    <p className="text-lg font-medium">{plan.price}</p>
-                    <ul className="mt-4 space-y-2">
-                        {plan.features.map((feature, index) => (
-                            <li key={index} className="flex items-center space-x-2">
-                                <svg
-                                    className="w-6 h-6 text-green-500"
-                                    fill="none"
-                                    strokeLinecap="round"
-                                    strokeLinejoin="round"
-                                    strokeWidth="2"
-                                    viewBox="0 0 24 24"
-                                    stroke="currentColor"
-                                >
-                                    <path d="M5 13l4 4L19 7"></path>
-                                </svg>
-                                <span>{feature}</span>
-                            </li>
-                        ))}
-                    </ul>
-                    <Button className="mt-4">Subscribe</Button>
+        <>
+            <div className="sm:flex sm:flex-col sm:align-center">
+                <div
+                    className="relative self-center mt-6 bg-gray-950 rounded-lg p-0.5 flex sm:mt-8 border border-zinc-800">
+                    {intervals.map(interval => (
+                        <button
+                            key={interval}
+                            onClick={() => setBillingInterval(interval)}
+                            type="button"
+                            className={`${
+                                billingInterval === interval
+                                    ? 'relative w-1/2 bg-zinc-700 border-zinc-800 shadow-sm text-white'
+                                    : 'ml-0.5 relative w-1/2 border border-transparent text-zinc-400'
+                            } rounded-md m-1 py-2 text-sm font-medium whitespace-nowrap focus:outline-none focus:ring-2 focus:ring-pink-500 focus:ring-opacity-50 focus:z-10 sm:w-auto sm:px-8`}
+                        >
+                            {`${interval.charAt(0).toUpperCase()}${interval.slice(1)} billing`}
+                        </button>
+                    ))}
                 </div>
-            ))}
-        </div>
+            </div>
+            <div className="flex space-x-4 justify-center w-full">
+                {plans.length > 0 && plans.map((plan, index) => (
+                    <div key={index} className="bg-gray-950 bg-opacity-60 rounded-lg w-1/4 p-6 ml-4 mt-8"
+                         style={{height: '300px'}}>
+                        <h2 className={"uppercase"}>{plan.name}</h2>
+                        <p className="text-lg mt-10 mb-8" style={{fontSize: '3rem'}}>{billingInterval === "monthly" ? plan.monthlyPrice : plan.annualPrice}</p>
+
+                        <ul className="text-white">
+                            {plan.features.length > 0 && plan.features.map((feature, index) => (
+                                <li key={index}>{feature}</li>
+                            ))}
+                        </ul>
+                        <button className="bg-white text-black py-2 px-4 mt-4 rounded-lg">Subscribe</button>
+                    </div>
+                ))}
+            </div>
+        </>
     );
 }
+
+
+
