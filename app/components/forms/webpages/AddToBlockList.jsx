@@ -32,7 +32,7 @@ const AddToBlockList = ({...props}) => {
 
         try {
             // data // TODO: add/change fields
-            const data = {name, path, webId};
+            const data = {webpageName, url,};
 
             // validate
             await schema.validate(data, {abortEarly: false});

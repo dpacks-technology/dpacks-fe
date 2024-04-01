@@ -82,3 +82,13 @@ export const updateWebpagesStatus = async (id, status) => {
     }
 }
 
+
+// get all webpages by status and datetime count // TODO: Change this function accordingly
+export const AddWebpage = async (data) => {
+    try {
+        const response = await webpagesService.post(`/api/web/webpage`, data);
+        return response.data;
+    } catch (error) {
+        throw error;
+    }
+}
