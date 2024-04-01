@@ -30,6 +30,7 @@ const LeftNavigation2 = () => {
         <>
             {contextHolder}
             <Model modelForm={
+    feature/web-browsing-overview
                 // TODO: add other forms
                 <>
                     {pathname === "/u/1/web/webpages" && <AddWebpageForm notificationMessage={notificationMessage}/>}

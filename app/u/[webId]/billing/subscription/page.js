@@ -1,9 +1,16 @@
+"use client"
+
+import {useState} from "react";
+import SubscriptionPlan from "@/app/components/SubscriptionPlans";
 
 export default function Subscription() {
     // Dummy data for demonstration
     const currentPlan = "Standard ";
     const features = ["Advanced features", "Moderate Storage", "Email Support"];
     const cost = "$10/month";
+
+    //function to change page status
+    const [pageStatus, setPageStatus] = useState('view');
 
     // Dummy data for payment details
     const paymentDetails = [
@@ -19,6 +26,11 @@ export default function Subscription() {
         { id: 3, date: "2023-03-15", amount: "$10" }
     ];
 
+    //defining state for page status
+    const changeStatus = (status) => {
+        setPageStatus(status);
+    }
+
     return (
         <div style={{
             backgroundColor: 'white',
@@ -32,16 +44,45 @@ export default function Subscription() {
             flexDirection: 'column',
             alignItems: 'center'
         }}>
-            <div style={{width: '100%', marginBottom: '20px'}}>
-                <h2 style={{
-                    color: '#333',
-                    marginBottom: '20px',
-                    fontSize: '24px',
-                    display: 'flex',
-                    alignItems: 'center'
-                }}>
-                    <span style={{marginRight: '10px'}}>Current Plan: {currentPlan}</span>
-                    <button style={{
+
+
+
+            {pageStatus === 'update' ?
+                (<SubscriptionPlan />):
+                <>
+                    <button onClick={() => {
+
+                        changeStatus('view')
+
+                    }} style={{
+                        padding: '5px 10px',
+                        borderRadius: '5px',
+                        background: 'blue',
+                        color: 'white',
+                        border: 'none',
+                        fontSize: '14px'
+                    }}>Back
+                    </button>
+                    <p style = {{color: '#333'}}> update </p>
+                </>}
+                :
+                (
+                    <>
+                        <div style={{width: '100%', marginBottom: '20px'}}>
+                            <h2 style={{
+                                color: '#333',
+                                marginBottom: '20px',
+                                fontSize: '24px',
+                                display: 'flex',
+                                alignItems: 'center'
+                            }}>
+                                <span style={{marginRight: '10px'}}>Current Plan: {currentPlan}</span>
+
+                    <button onClick={() => {
+
+                        changeStatus('update')
+
+                    }} style={{
                         padding: '5px 10px',
                         borderRadius: '5px',
                         background: 'blue',
@@ -51,6 +92,8 @@ export default function Subscription() {
                     }}>Update Plan
                     </button>
                 </h2>
+
+
                 <ul style={{listStyleType: 'disc', color: '#333'}}>
                     {features.map((feature, index) => (
                         <li key={index}>{feature}</li>
@@ -102,6 +145,11 @@ export default function Subscription() {
                 }}>Unsubscribe Current Plan
                 </button>
             </div>
+            </>
+)
+
+
+
         </div>
     );
 }
