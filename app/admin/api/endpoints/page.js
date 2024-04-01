@@ -20,7 +20,7 @@ import EditWebpageForm from "@/app/components/forms/webpages/EditWebpageForm";
 import {message} from "antd";
 import {
     getRatelimitCount,
-    getRatelimits,
+    getRatelimits, getRatelimitsByDatetime, getRatelimitsByDatetimeCount,
     getRatelimitsByStatus,
     getRatelimitsByStatusCount
 } from "@/services/EndpointService";
@@ -69,6 +69,7 @@ export default function Webpages() {
     // initially visible columns // TODO: Change the following columns according the to yours
     const init_cols = [
         "path",
+        "ratelimit",
         "created_on",
         "status",
         "statusButtons",
@@ -295,10 +296,10 @@ export default function Webpages() {
             fetchTableData(currentPage, searchColumn, searchFieldValue);
         } else {
             // get data count // TODO: Change the following function
-            getPagesByDatetimeCount(start, end, searchColumn, searchFieldValue).then((response) => setPagesCount(response));
+            getRatelimitsByDatetimeCount(start, end, searchColumn, searchFieldValue).then((response) => setPagesCount(response));
 
             // get data // TODO: Change the following function
-            getPagesByDatetime(rowsPerPage, currentPage, start, end, searchColumn, searchFieldValue).then(response => setData(response === null ? [] : response.length === 0 ? [] : response))
+            getRatelimitsByDatetime(rowsPerPage, currentPage, start, end, searchColumn, searchFieldValue).then(response => setData(response === null ? [] : response.length === 0 ? [] : response))
         }
     }
 
