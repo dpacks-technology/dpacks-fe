@@ -5,6 +5,7 @@ import {message} from "antd";
 import Model from "@/app/components/Model";
 import AddWebpageForm from "@/app/components/forms/webpages/AddWebpageForm";
 import {usePathname} from "next/navigation";
+import AddRatelimitForm from "@/app/components/forms/endpoint/AddEndpointRatelimitForm";
 
 const LeftNavigation2 = () => {
 
@@ -35,6 +36,8 @@ const LeftNavigation2 = () => {
                 return <AddWebpageForm notificationMessage={notificationMessage}/>;
             case "/u/1/example2/example2":
                 return <AddWebpageForm notificationMessage={notificationMessage}/>;
+            case "/admin/api/endpoints":
+                return <AddRatelimitForm notificationMessage={notificationMessage}/>;
             default:
                 return null;
         }
