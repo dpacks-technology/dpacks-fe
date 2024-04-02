@@ -13,6 +13,7 @@ const AddToBlockList = ({...props}) => {
     const [error, setError] = React.useState({});
     const [webpageName, SetwebpageName] = React.useState("");
     const [url, setUrl] = React.useState("");
+    const [status,String] = React.useState(0);
 
     // backend validation error message
     const [messageApi, contextHolder] = message.useMessage(); // message api
@@ -32,7 +33,7 @@ const AddToBlockList = ({...props}) => {
 
         try {
             // data // TODO: add/change fields
-            const data = {webpageName, url,};
+            const data = {webpageName, url,status};
 
             // validate
             await schema.validate(data, {abortEarly: false});
