@@ -3,22 +3,11 @@
 // Importing modules
 import Table from "@/app/components/Table";
 import React, {useCallback, useEffect} from "react";
-import {
-    deletePage,
-    deleteWebpagesBulk,
-    getPagesByDatetime,
-    getPagesByDatetimeCount,
-    getPagesByStatus,
-    getPagesByStatusCount,
-    getWebPages,
-    getWebPagesCount,
-    updateWebpagesStatus,
-    updateWebpagesStatusBulk
-} from "@/services/WebpagesService";
 import {useDisclosure} from "@nextui-org/react";
 import EditWebpageForm from "@/app/components/forms/webpages/EditWebpageForm";
 import {message} from "antd";
 import {
+    deleteRatelimit, deleteRatelimitsBulk,
     getRatelimitCount,
     getRatelimits, getRatelimitsByDatetime, getRatelimitsByDatetimeCount,
     getRatelimitsByStatus,
@@ -62,7 +51,7 @@ export default function Webpages() {
         {name: "CREATED ON", uid: "created_on", sortable: false, type: "datetime"},
         {name: "STATUS", uid: "status", sortable: false, type: "status"},
         {name: "CHANGE STATUS", uid: "statusButtons", sortable: false, type: "statusButtons"},
-        {name: "ACTIONS", uid: "menu", sortable: false, type: "menu"},
+        {name: "ACTIONS", uid: "menu", sortable: false, type: "buttons"},
         // all usable types: text, twoText, datetime, label, status, statusButtons, buttons, menu, copy, icon, iconText, iconTwoText
     ];
 
@@ -91,19 +80,21 @@ export default function Webpages() {
         }
 
     const editButton = (id) => { // edit button function // TODO: Change the following function
-        // not used here
-        // console.log("edit: " + id);
+
     }
 
     const deleteButton = (id) => { // delete button function // TODO: Change the following function
-        // not used here
-        // console.log("delete: " + id);
+        if (!confirm("Are you sure you want to delete this item?") )return;
+        deleteRatelimit(id).then(() => {
+            refreshData("success", "Deleted");
+        }).catch((error) => {
+            headerMessage("error", error.response.data.error);
+        });
     }
 
     // action buttons // TODO: Change the following buttons
     const actionButtons = [
-        {name: "View", text: "View", icon: "", type: "default", function: viewButton},
-        {name: "Edit", text: "Edit", icon: "", type: "primary", function: editButton},
+        {name: "Edit", text: "Edit", icon: "", type: "success", function: onOpen},
         {name: "Delete", text: "Delete", icon: "", type: "danger", function: deleteButton},
     ];
 
@@ -127,20 +118,14 @@ export default function Webpages() {
     }
 
     const deleteMenuButton = (id) => { // delete button function // TODO: Change the following function
-
-        // delete function
-        deletePage(id).then(() => {
-            refreshData("success", "Deleted");
-        }).catch((error) => {
-            headerMessage("error", error.response.data.error);
-        });
-
+        // not used here
+        // console.log("edit: " + id);
     }
 
     // menu buttons // TODO: Change the following buttons
     const menuButtons = [
         {name: "View", text: "View", function: viewMenuButton},
-        {name: "Edit", text: "Edit", function: onOpen}, // edit function set to open model (onOpen function)
+        {name: "Edit", text: "Edit", function: editMenuButton}, // edit function set to open model (onOpen function)
         {name: "Delete", text: "Delete", function: deleteMenuButton},
     ];
 
@@ -233,7 +218,7 @@ export default function Webpages() {
     const deleteBulk = (ids) => {
 
         // delete bulk function // TODO: Change the following function
-        deleteWebpagesBulk(ids).then(() => {
+        deleteRatelimitsBulk(ids).then(() => {
             refreshData("success", "Deleted");
         }).catch((error) => {
             headerMessage("error", error.response.data.error);
