@@ -128,11 +128,11 @@ export const deleteWebpagesBulk = async (ids) => {
 }
 
 // get all webpages by status and datetime count // TODO: Change this function accordingly
-export const updateWebpagesStatusBulk = async (ids, status) => {
+export const updateRatelimitsStatusBulk = async (ids, status) => {
     let idsString = ids.join(',');
 
     try {
-        const response = await endpointService.put(`/api/web/webpages/status/bulk/${idsString}`, {status: status});
+        const response = await endpointService.put(`/api/ratelimit/ratelimits/status/bulk/${idsString}`, {status: status});
         return response.data;
     } catch (error) {
         throw error;
@@ -140,9 +140,9 @@ export const updateWebpagesStatusBulk = async (ids, status) => {
 }
 
 // get all webpages by status and datetime count // TODO: Change this function accordingly
-export const updateWebpagesStatus = async (id, status) => {
+export const updateRatelimitStatus = async (id, status) => {
     try {
-        const response = await endpointService.put(`/api/web/webpages/status/${id}`, {status: status});
+        const response = await endpointService.put(`/api/ratelimit/ratelimits/status/${id}`, {status: status});
         return response.data;
     } catch (error) {
         throw error;

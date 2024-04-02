@@ -22,7 +22,7 @@ import {
     getRatelimitCount,
     getRatelimits, getRatelimitsByDatetime, getRatelimitsByDatetimeCount,
     getRatelimitsByStatus,
-    getRatelimitsByStatusCount
+    getRatelimitsByStatusCount, updateRatelimitsStatusBulk, updateRatelimitStatus
 } from "@/services/EndpointService";
 
 // Webpages component
@@ -159,7 +159,7 @@ export default function Webpages() {
     const updateStatusButton = (id, status) => {
 
             // update status function
-            updateWebpagesStatus(id, status).then(() => {
+            updateRatelimitStatus(id, status).then(() => {
                 refreshData("success", "Updated");
             }).catch((error) => {
                 headerMessage("error", error.response.data.error);
@@ -209,7 +209,7 @@ export default function Webpages() {
     const updateStatusBulk = (ids, status) => {
 
         // update status bulk function // TODO: Change the following function
-        updateWebpagesStatusBulk(ids, status).then(() => {
+        updateRatelimitsStatusBulk(ids, status).then(() => {
             refreshData("success", "Updated");
         }).catch((error) => {
             headerMessage("error", error.response.data.error);
