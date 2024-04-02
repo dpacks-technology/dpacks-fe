@@ -86,9 +86,9 @@ export const getRatelimitsByDatetimeCount = async (start, end, key, val) => {
 }
 
 // get all webpages by status and datetime // TODO: Change this function accordingly
-export const editPages = async (id, data) => {
+export const EditRatelimit = async (id, data) => {
     try {
-        const response = await endpointService.put(`/api/web/webpages/${id}`, data);
+        const response = await endpointService.put(`/api/ratelimit/ratelimits/${id}`, data);
         return response.data;
     } catch (error) {
         throw error;
@@ -96,9 +96,9 @@ export const editPages = async (id, data) => {
 }
 
 // get all webpages by status and datetime count // TODO: Change this function accordingly
-export const getPageById = async (id) => {
+export const getRatelimitById = async (id) => {
     try {
-        const response = await endpointService.get(`/api/web/webpage/${id}`);
+        const response = await endpointService.get(`/api/ratelimit/ratelimit/${id}`);
         return response.data;
     } catch (error) {
         throw error;

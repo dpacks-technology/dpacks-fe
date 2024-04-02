@@ -1,21 +1,16 @@
 import {Button} from "@nextui-org/react";
-import Input from "@/app/components/Input";
-import React from "react";
+import React, {useEffect} from "react";
 import {Col, Form, InputNumber, message, Row, Slider} from "antd";
-import schema from "@/app/validaitions/EndpointAddValidation";
+import schema from "@/app/validaitions/EndpointEditValidation";
 import FormItem from "antd/es/form/FormItem";
-import {AddRatelimit} from "@/services/EndpointService";
+import {getRatelimitById, EditRatelimit} from "@/services/EndpointService";
 
-
-const AddRatelimitForm = ({...props}) => {
+const EditRatelimitForm = ({...props}) => {
 
     // state
     const [saving, setSaving] = React.useState(false);
     const [error, setError] = React.useState({});
-    const [path, setPath] = React.useState("");
     const [ratelimit, setRatelimit] = React.useState("");
-
-
 
     // backend validation error message
     const [messageApi, contextHolder] = message.useMessage(); // message api
@@ -26,23 +21,22 @@ const AddRatelimitForm = ({...props}) => {
         });
     };
 
-
-    // add webpage function
-    const addRatelimit = async () => {
+    // edit webpage function
+    const editRatelimit = async () => {
 
         // set saving
         setSaving(true);
 
         try {
             // data // TODO: add/change fields
-            const data = {path, ratelimit};
+            const data = {ratelimit: ratelimit};
 
             // validate
             await schema.validate(data, {abortEarly: false});
 
-            // add webpage // TODO: change the function
-            await AddRatelimit(data).then((response) => {
-                props.notificationMessage("success", "Record added"); // refresh data with success message
+            // edit webpage // TODO: change the function
+            await EditRatelimit(props.id, data).then(() => {
+                props.refreshData("success", "Saved"); // refresh data with success message
                 props.onClose(); // close modal
             }).then((error) => {
                 Message("error", error.response.data.error) // backend validation error
@@ -57,22 +51,21 @@ const AddRatelimitForm = ({...props}) => {
 
     }
 
+    // get webpage by id
+    useEffect(() => {
+        // get webpage by id from backend function
+        getRatelimitById(props.id).then((response) => {
+            setRatelimit(response.ratelimit); // set name
+        }).then(() => {
+        });
+    }, []);
+
     return (
         <>
             {contextHolder}
             <Form>
                 <div>
                     {/* TODO: Change the form */}
-                    <FormItem>
-                        <Input
-                            label={"Path"}
-                            type="text" placeholder="/api"
-                            value={path}
-                            onChange={(e) => setPath(e.target.value)}
-                            status={error.path ? "error" : ""}
-                            error={error.path}
-                        />
-                    </FormItem>
                     <FormItem>
                         <Row className="flex flex-row justify-around">
                             <Col span={14}>
@@ -111,7 +104,7 @@ const AddRatelimitForm = ({...props}) => {
                     <Button
                         disabled={saving}
                         color="primary" variant="flat" onPress={() => {
-                        addRatelimit().then(() => {
+                        editRatelimit().then(() => {
                             setSaving(false);
                         });
                     }}>
@@ -124,4 +117,4 @@ const AddRatelimitForm = ({...props}) => {
     );
 }
 
-export default AddRatelimitForm;
+export default EditRatelimitForm;
