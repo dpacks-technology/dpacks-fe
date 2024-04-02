@@ -54,12 +54,12 @@ export default function Webpages() {
     // columns // TODO: Change the following columns according the to yours
     const columns = [
         {name: "Alert ID", uid: "id", sortable: true, type: "text"},
-        {name: "Alert Threshold", uid: "alert_threshold", sortable: true, type: "text"},
-        {name: "Alert Subject", uid: "alert_subject", sortable: true, type: "text"},
-        {name: "Alert Content", uid: "alert_content", sortable: true, type: "text"},
-        {name: "When Alert Required", uid: "when_alert_required", sortable: true, type: "text"},
-        {name: "Repeat On", uid: "repeat_on", sortable: true, type: "text"},
-        {name: "Customer Reminder Date", uid: "custom_reminder_date", sortable: true, type: "datetime"},
+        {name: "Alert Threshold", uid: "alert_threshold", sortable: false, type: "text"},
+        {name: "Alert Subject", uid: "alert_subject", sortable: false, type: "text"},
+        {name: "Alert Content", uid: "alert_content", sortable: false, type: "text"},
+        {name: "When Alert Required", uid: "when_alert_required", sortable: false, type: "text"},
+        {name: "Repeat On", uid: "repeat_on", sortable: false, type: "text"},
+        {name: "Customer Reminder Date", uid: "custom_reminder_date", sortable: false, type: "datetime"},
         {name: "Status", uid: "status", sortable: true, type: "status"},
        
         // all usable types: text, twoText, datetime, label, status, statusButtons, buttons, menu, copy, icon, iconText, iconTwoText

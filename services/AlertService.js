@@ -59,7 +59,7 @@ export const GetAlertByStatus = async (count, page, status, key, val) => {
     console.log(statusString);
 
     try {
-        const response = await AlertService.get(`/api/web/webpages/status/${count}/${page}?status=${statusString}&key=${key}&val=${val}`);
+        const response = await AlertService.get(`/api/analytical_alerts/Alert/status/${count}/${page}?status=${statusString}&key=${key}&val=${val}`);
         console.log(response.data);
         return response.data;
     } catch (error) {
@@ -76,7 +76,7 @@ export const GetAlertByStatusCount = async (status, key, val) => {
     console.log(statusString);
 
     try {
-        const response = await AlertService.get(`/api/web/webpages/status/count?status=${statusString}&key=${key}&val=${val}`);
+        const response = await AlertService.get(`/api/analytical_alerts/Alert/status/count?status=${statusString}&key=${key}&val=${val}`);
         console.log(response.data);
         return response.data;
     } catch (error) {
@@ -89,7 +89,7 @@ export const GetAlertByStatusCount = async (status, key, val) => {
 // get all webpages by status and datetime // TODO: Change this function accordingly
 export const EditAlertPage = async (id, data) => {
     try {
-        const response = await AlertService.put(`/api/web/webpages/${id}`, data);
+        const response = await AlertService.put(`/api/analytical_alerts/Alert/${id}`, data);
         return response.data;
     } catch (error) {
         throw error;
@@ -100,7 +100,7 @@ export const EditAlertPage = async (id, data) => {
 // get all webpages by status and datetime count // TODO: Change this function accordingly
 export const DeleteAlertByID = async (id) => {
     try {
-        const response = await AlertService.delete(`/api/web/webpages/${id}`);
+        const response = await AlertService.delete(`/api/analytical_alerts/Alert/${id}`);
         return response.data;
     } catch (error) {
         throw error;
@@ -112,7 +112,7 @@ export const DeleteAlertByIDBulk = async (ids) => {
     let idsString = ids.join(',');
 
     try {
-        const response = await AlertService.delete(`/api/web/webpages/bulk/${idsString}`);
+        const response = await AlertService.delete(`/api/analytical_alerts/Alert/bulk/${idsString}`);
         return response.data;
     } catch (error) {
         throw error;
@@ -124,7 +124,7 @@ export const UpdateAlerttatusBulk = async (ids, status) => {
     let idsString = ids.join(',');
 
     try {
-        const response = await AlertService.put(`/api/web/webpages/status/bulk/${idsString}`, {status: status});
+        const response = await AlertService.put(`/api/analytical_alerts/Alert/status/bulk/${idsString}`, {status: status});
         return response.data;
     } catch (error) {
         throw error;
@@ -134,7 +134,7 @@ export const UpdateAlerttatusBulk = async (ids, status) => {
 // get all webpages by status and datetime count // TODO: Change this function accordingly
 export const UpdateAlerttatus = async (id, status) => {
     try {
-        const response = await AlertService.put(`/api/web/webpages/status/${id}`, {status: status});
+        const response = await AlertService.put(`/api/analytical_alerts/Alert/status/${id}`, {status: status});
         return response.data;
     } catch (error) {
         throw error;
