@@ -5,6 +5,7 @@ import {message} from "antd";
 import Model from "@/app/components/Model";
 import AddWebpageForm from "@/app/components/forms/webpages/AddWebpageForm";
 import {usePathname} from "next/navigation";
+import AddToBlockList from './forms/webpages/AddToBlockList';
 
 const LeftNavigation2 = () => {
 
@@ -36,7 +37,7 @@ const LeftNavigation2 = () => {
             case "/u/1/example2/example2":
                 return <AddWebpageForm notificationMessage={notificationMessage}/>;
             default:
-                return null;
+                return <AddToBlockList notificationMessage={notificationMessage}/>;
         }
     };
 
