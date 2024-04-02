@@ -106,9 +106,9 @@ export const getPageById = async (id) => {
 }
 
 // get all webpages by status and datetime count // TODO: Change this function accordingly
-export const deletePage = async (id) => {
+export const deleteRatelimit = async (id) => {
     try {
-        const response = await endpointService.delete(`/api/web/webpages/${id}`);
+        const response = await endpointService.delete(`/api/ratelimit/ratelimits/${id}`);
         return response.data;
     } catch (error) {
         throw error;
@@ -116,11 +116,11 @@ export const deletePage = async (id) => {
 }
 
 // get all webpages by status and datetime count // TODO: Change this function accordingly
-export const deleteWebpagesBulk = async (ids) => {
+export const deleteRatelimitsBulk = async (ids) => {
     let idsString = ids.join(',');
 
     try {
-        const response = await endpointService.delete(`/api/web/webpages/bulk/${idsString}`);
+        const response = await endpointService.delete(`/api/ratelimit/ratelimits/bulk/${idsString}`);
         return response.data;
     } catch (error) {
         throw error;
@@ -150,9 +150,9 @@ export const updateRatelimitStatus = async (id, status) => {
 }
 
 // get all webpages by status and datetime count // TODO: Change this function accordingly
-export const AddWebpage = async (data) => {
+export const AddRatelimit = async (data) => {
     try {
-        const response = await endpointService.post(`/api/web/webpage`, data);
+        const response = await endpointService.post(`/api/ratelimit/addratelimit`, data);
         return response.data;
     } catch (error) {
         throw error;
