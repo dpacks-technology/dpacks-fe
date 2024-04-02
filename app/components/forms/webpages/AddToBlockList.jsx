@@ -2,18 +2,18 @@ import {Button} from "@nextui-org/react";
 import Input from "@/app/components/Input";
 import React from "react";
 import {Form, message} from "antd";
-import schema from "@/app/validaitions/WebPageAddValidation";
+import schema from "@/app/validaitions/AddBlockListValidation";
 import FormItem from "antd/es/form/FormItem";
-import {AddWebpage} from "@/services/WebpagesService";
+import { AddToBlocklist } from "@/services/BlockPagesService";
 
 const AddToBlockList = ({...props}) => {
 
     // state
     const [saving, setSaving] = React.useState(false);
     const [error, setError] = React.useState({});
-    const [webpageName, SetwebpageName] = React.useState("");
+    const [name, Setname] = React.useState("");
     const [url, setUrl] = React.useState("");
-    const [status,String] = React.useState(0);
+    const [status,setStatus] = React.useState(0);
 
     // backend validation error message
     const [messageApi, contextHolder] = message.useMessage(); // message api
@@ -26,20 +26,20 @@ const AddToBlockList = ({...props}) => {
 
 
     // add webpage function
-    const addWebpage = async () => {
+    const addBlock = async () => {
 
         // set saving
         setSaving(true);
 
         try {
             // data // TODO: add/change fields
-            const data = {webpageName, url,status};
+            const data = {name, url,status};
 
-            // validate
+            //validate
             await schema.validate(data, {abortEarly: false});
 
             // add webpage // TODO: change the function
-            await AddWebpage(data).then((response) => {
+            await AddToBlocklist(data).then((response) => {
                 props.notificationMessage("success", "Record added"); // refresh data with success message
                 props.onClose(); // close modal
             }).then((error) => {
@@ -65,8 +65,8 @@ const AddToBlockList = ({...props}) => {
                         <Input
                             label={"Website Name"}
                             type="text" placeholder="Website Name"
-                            value={webpageName}
-                            onChange={(e) => SetwebpageName(e.target.value)}
+                            value={name}
+                            onChange={(e) => Setname(e.target.value)}
                             status={error.name ? "error" : ""}
                             error={error.name}
                         />
@@ -77,8 +77,8 @@ const AddToBlockList = ({...props}) => {
                             type="text" placeholder="Webpage url"
                             value={url}
                             onChange={(e) => setUrl(e.target.value)}
-                            status={error.path ? "error" : ""}
-                            error={error.path}
+                            status={error.url ? "error" : ""}
+                            error={error.url}
                         />
                     </FormItem>
                     
@@ -95,7 +95,7 @@ const AddToBlockList = ({...props}) => {
                     <Button
                         disabled={saving}
                         color="primary" variant="flat" onPress={() => {
-                        addWebpage().then(() => {
+                        addBlock().then(() => {
                             setSaving(false);
                         });
                     }}>
