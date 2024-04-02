@@ -7,9 +7,11 @@ const AlertService = axios.create({
 });
 
 // get all webpages // TODO: Change this function accordingly
-export const GetAllAlert = async (count, page, key, val, id) => {
+export const GetAllAlert = async (count, page, key, val, webId) => {
     try {
-        const response = await AlertService.get(`/api/web/webpages/${count}/${page}/${id}?key=${key}&val=${val}`);
+         console.log("test")
+        const response = await AlertService.get(`/api/analytical_alerts/Alert/${count}/${page}/${webId}?key=${key}&val=${val}`);
+        console.log(response.data);
         return response.data;
     } catch (error) {
         throw error;
@@ -17,9 +19,9 @@ export const GetAllAlert = async (count, page, key, val, id) => {
 };
 
 // get all webpages count // TODO: Change this function accordingly
-export const GetAlertCount = async (key, val,id) => {
+export const GetAlertCount = async (key, val,webId) => {
     try {
-        const response = await AlertService.get(`/api/web/webpages/count/${id}?key=${key}&val=${val}`);
+        const response = await AlertService.get(`/api/analytical_alerts/Alert/count/${webId}?key=${key}&val=${val}`);
         return response.data;
     } catch (error) {
         throw error;

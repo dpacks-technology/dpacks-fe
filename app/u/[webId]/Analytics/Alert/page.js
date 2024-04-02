@@ -21,7 +21,9 @@ export default function Webpages() {
 
     // ----------------------- PARAMS ------------------------- (NO NEED OF CHANGING)
     // params
-    const {webId} = useParams();
+    var params = useParams();
+    const webId = params.webId;
+    
 
     // ----------------------- DEFAULT COLUMNS -------------------------
     // default columns // TODO: Change the following functions
@@ -51,12 +53,13 @@ export default function Webpages() {
     // ----------------------- COLUMNS -------------------------
     // columns // TODO: Change the following columns according the to yours
     const columns = [
-        {name: "Alert Threshold", uid: "AlertThreshold", sortable: true, type: "text"},
-        {name: "Alert Subject", uid: "AlertSubject", sortable: true, type: "text"},
-        {name: "Alert Content", uid: "AlertContent", sortable: true, type: "text"},
-        {name: "When Alert Required", uid: "whenAlertRequired", sortable: true, type: "text"},
-        {name: "Repeat On", uid: "RepeatOn", sortable: true, type: "text"},
-        {name: "Customer Reminder Date", uid: "CustomerReminderDate", sortable: true, type: "datetime"},
+        {name: "Alert ID", uid: "id", sortable: true, type: "text"},
+        {name: "Alert Threshold", uid: "alert_threshold", sortable: true, type: "text"},
+        {name: "Alert Subject", uid: "alert_subject", sortable: true, type: "text"},
+        {name: "Alert Content", uid: "alert_content", sortable: true, type: "text"},
+        {name: "When Alert Required", uid: "when_alert_required", sortable: true, type: "text"},
+        {name: "Repeat On", uid: "repeat_on", sortable: true, type: "text"},
+        {name: "Customer Reminder Date", uid: "custom_reminder_date", sortable: true, type: "datetime"},
         {name: "Status", uid: "status", sortable: true, type: "status"},
        
         // all usable types: text, twoText, datetime, label, status, statusButtons, buttons, menu, copy, icon, iconText, iconTwoText
@@ -64,12 +67,12 @@ export default function Webpages() {
 
     // initially visible columns // TODO: Change the following columns according the to yours
     const init_cols = [
-        "AlertThreshold",
-        "AlertSubject",
-        "AlertContent",
+        "alert_threshold",
+        "alert_subject",
+        "alert_content",
         "whenAlertRequired",
-        "RepeatOn",
-        "CustomerReminderDate",
+        "repeat_on",
+        "custom_reminder_date",
         "status"
 
     ];
@@ -170,7 +173,7 @@ export default function Webpages() {
         {
             name: "Offline", // status name
             uid: 0, // status id (the value in the database)
-            type: "", // status type (color) ["", primary, secondary, danger, warning, success]
+            type: "danger", // status type (color) ["", primary, secondary, danger, warning, success]
             button: true, // if you want to show a button to change the status
             currentStatus: [1], // button showing status, ex: if currently status is 1, then the button will be shown | can use [1,2,...] for multiple statuses
             function: updateStatusButton, // function to change the status
@@ -218,6 +221,7 @@ export default function Webpages() {
     // handle delete bulk function -- NO NEED OF CHANGING
     const handleUpdateStatusBulk = (selectedKeys, status) => {
         if (selectedKeys === 'all') { // if all items are selected
+            console.log(data);
             updateStatusBulk(data.map(item => item.id), status);
         } else {
             updateStatusBulk(
@@ -242,6 +246,7 @@ export default function Webpages() {
     // handle delete bulk function -- NO NEED OF CHANGING
     const handleDeleteBulk = (selectedKeys) => {
         if (selectedKeys === 'all') { // if all items are selected
+            console.log(data);
             deleteBulk(data.map(item => item.id));
         } else {
             deleteBulk(
