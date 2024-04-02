@@ -4,6 +4,7 @@ import {Button, useDisclosure} from "@nextui-org/react";
 import {message} from "antd";
 import Model from "@/app/components/Model";
 import AddWebpageForm from "@/app/components/forms/webpages/AddWebpageForm";
+import AddToBlockList from "@/app/components/forms/webpages/AddToBlockList";
 import {usePathname} from "next/navigation";
 
 const LeftNavigation2 = () => {
@@ -44,14 +45,14 @@ const LeftNavigation2 = () => {
         <>
             {contextHolder}
             <Model modelForm={
-                getComponentByPath(pathname, notificationMessage)
+
             } title={"Add webpage"} button={"Add"} isOpen={isOpen} onOpenChange={onOpenChange}/>
             <nav className="w-48 h-full fixed top-0 left-16">
                 <div className="h-full px-3 pb-4 overflow-y-auto bg-transparent dark:bg-transparent mt-24">
                     <ul className="space-y-2 font-medium">
                         <li className={"mb-8"}>
                             <div className={"inline-block ml-2"}>
-                                <Button color="primary" className={"w-32 h-12"} variant={"flat"}
+                                <Button color="primary" className={"w-32 h-12"}  variant={"flat"}
                                         onPress={handleAddButton}>
                                     <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
                                          strokeWidth={1.5} stroke="currentColor" className="w-5 h-5">
