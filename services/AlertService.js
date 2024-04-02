@@ -6,11 +6,22 @@ const AlertService = axios.create({
     baseURL: Keys.USER_SERVICE_API_URL
 });
 
+
+// get all webpages by status and datetime count // TODO: Change this function accordingly
+export const CreateNewAlert = async (data) => {
+    try {
+        const response = await AlertService.post(`/api/analytical_alerts/Alert`, data);
+        return response.data;
+    } catch (error) {
+        throw error;
+    }
+}
+
 // get all webpages // TODO: Change this function accordingly
 export const GetAllAlert = async (count, page, key, val, webId) => {
     try {
          console.log("test")
-        const response = await AlertService.get(`/api/analytical_alerts/Alert/${count}/${page}/${webId}?key=${key}&val=${val}`);
+        const response = await AlertService.get(`/api/analytical_alerts/Alerts/${count}/${page}/${webId}?key=${key}&val=${val}`);
         console.log(response.data);
         return response.data;
     } catch (error) {
@@ -27,6 +38,17 @@ export const GetAlertCount = async (key, val,webId) => {
         throw error;
     }
 }
+
+// get all webpages by status and datetime count // TODO: Change this function accordingly
+export const GetAlertbyId = async (id) => {
+    try {
+        const response = await AlertService.get(`/api/analytical_alerts/Alert/${id}`);
+        return response.data;
+    } catch (error) {
+        throw error;
+    }
+}
+
 
 // get all webpages by status // TODO: Change this function accordingly
 export const GetAlertByStatus = async (count, page, status, key, val) => {
@@ -74,15 +96,6 @@ export const EditAlertPage = async (id, data) => {
     }
 }
 
-// get all webpages by status and datetime count // TODO: Change this function accordingly
-export const GetAlertbyId = async (id) => {
-    try {
-        const response = await AlertService.get(`/api/web/webpage/${id}`);
-        return response.data;
-    } catch (error) {
-        throw error;
-    }
-}
 
 // get all webpages by status and datetime count // TODO: Change this function accordingly
 export const DeleteAlertByID = async (id) => {
@@ -128,12 +141,3 @@ export const UpdateAlerttatus = async (id, status) => {
     }
 }
 
-// get all webpages by status and datetime count // TODO: Change this function accordingly
-export const CreateNewAlert = async (data) => {
-    try {
-        const response = await AlertService.post(`/api/web/webpage`, data);
-        return response.data;
-    } catch (error) {
-        throw error;
-    }
-}
