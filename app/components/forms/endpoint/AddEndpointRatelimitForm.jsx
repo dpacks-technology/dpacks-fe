@@ -66,7 +66,7 @@ const AddRatelimitForm = ({...props}) => {
                     <FormItem>
                         <Input
                             label={"Path"}
-                            type="text" placeholder="Webpage path"
+                            type="text" placeholder="/api"
                             value={path}
                             onChange={(e) => setPath(e.target.value)}
                             status={error.path ? "error" : ""}
@@ -81,6 +81,7 @@ const AddRatelimitForm = ({...props}) => {
                                     max={60}
                                     onChange={(e)=> setRatelimit(e)}
                                     value={typeof ratelimit === 'number' ? ratelimit : 0}
+
                                 />
                             </Col>
                             <Col span={6}>
@@ -89,6 +90,8 @@ const AddRatelimitForm = ({...props}) => {
                                     max={20}
                                     value={ratelimit}
                                     onChange={(e)=> setRatelimit(e)}
+                                    status={error.ratelimit ? "error" : ""}
+                                    error={error.ratelimit}
                                 />
                             </Col>
                         </Row>
