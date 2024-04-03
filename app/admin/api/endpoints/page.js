@@ -1,23 +1,18 @@
-
 'use client';
+
 // Importing modules
 import Table from "@/app/components/Table";
 import React, {useCallback, useEffect} from "react";
-import {
-    deletePage,
-    deleteWebpagesBulk,
-    getPagesByDatetime,
-    getPagesByDatetimeCount,
-    getPagesByStatus,
-    getPagesByStatusCount,
-    getWebPages,
-    getWebPagesCount,
-    updateWebpagesStatus,
-    updateWebpagesStatusBulk
-} from "@/services/WebpagesService";
 import {useDisclosure} from "@nextui-org/react";
-import EditWebpageForm from "@/app/components/forms/webpages/EditWebpageForm";
+import EditRatelimitForm from "@/app/components/forms/endpoint/EditEndpointRatelimitForm";
 import {message} from "antd";
+import {
+    deleteRatelimit, deleteRatelimitsBulk,
+    getRatelimitCount,
+    getRatelimits, getRatelimitsByDatetime, getRatelimitsByDatetimeCount,
+    getRatelimitsByStatus,
+    getRatelimitsByStatusCount, updateRatelimitsStatusBulk, updateRatelimitStatus
+} from "@/services/EndpointService";
 
 // Webpages component
 export default function Webpages() {
@@ -51,9 +46,9 @@ export default function Webpages() {
     // columns // TODO: Change the following columns according the to yours
     const columns = [
         {name: "ID", uid: "id", sortable: true, type: "text"},
-        {name: "NAME", uid: "name", sortable: true, type: "text"},
         {name: "PATH", uid: "path", sortable: true, type: "text"},
-        {name: "CREATED ON", uid: "date_created", sortable: false, type: "datetime"},
+        {name: "RateLimit", uid: "ratelimit", sortable: false, type: "text"},
+        {name: "CREATED ON", uid: "created_on", sortable: false, type: "datetime"},
         {name: "STATUS", uid: "status", sortable: false, type: "status"},
         {name: "CHANGE STATUS", uid: "statusButtons", sortable: false, type: "statusButtons"},
         {name: "ACTIONS", uid: "menu", sortable: false, type: "menu"},
@@ -62,9 +57,9 @@ export default function Webpages() {
 
     // initially visible columns // TODO: Change the following columns according the to yours
     const init_cols = [
-        "name",
         "path",
-        "date_created",
+        "ratelimit",
+        "created_on",
         "status",
         "statusButtons",
         "menu"
@@ -86,18 +81,17 @@ export default function Webpages() {
 
     const editButton = (id) => { // edit button function // TODO: Change the following function
         // not used here
-        // console.log("edit: " + id);
+        // console.log("view: " + id);
     }
 
     const deleteButton = (id) => { // delete button function // TODO: Change the following function
         // not used here
-        // console.log("delete: " + id);
+        // console.log("view: " + id);
     }
 
     // action buttons // TODO: Change the following buttons
     const actionButtons = [
-        {name: "View", text: "View", icon: "", type: "default", function: viewButton},
-        {name: "Edit", text: "Edit", icon: "", type: "primary", function: editButton},
+        {name: "Edit", text: "Edit", icon: "", type: "success", function: editButton},
         {name: "Delete", text: "Delete", icon: "", type: "danger", function: deleteButton},
     ];
 
@@ -110,10 +104,6 @@ export default function Webpages() {
      * 5. Change the button names, texts, icons, types and functions
      ***/
         // menu button functions
-    const viewMenuButton = (id) => { // view button function // TODO: Change the following function
-            // not used here
-            // console.log("view: " + id);
-        }
 
     const editMenuButton = (id) => { // edit button function // TODO: Change the following function
         // not used here
@@ -121,19 +111,16 @@ export default function Webpages() {
     }
 
     const deleteMenuButton = (id) => { // delete button function // TODO: Change the following function
-
-        // delete function
-        deletePage(id).then(() => {
+        if (!confirm("Are you sure you want to delete this item?") )return;
+        deleteRatelimit(id).then(() => {
             refreshData("success", "Deleted");
         }).catch((error) => {
             headerMessage("error", error.response.data.error);
         });
-
     }
 
     // menu buttons // TODO: Change the following buttons
     const menuButtons = [
-        {name: "View", text: "View", function: viewMenuButton},
         {name: "Edit", text: "Edit", function: onOpen}, // edit function set to open model (onOpen function)
         {name: "Delete", text: "Delete", function: deleteMenuButton},
     ];
@@ -153,7 +140,7 @@ export default function Webpages() {
     const updateStatusButton = (id, status) => {
 
             // update status function
-            updateWebpagesStatus(id, status).then(() => {
+            updateRatelimitStatus(id, status).then(() => {
                 refreshData("success", "Updated");
             }).catch((error) => {
                 headerMessage("error", error.response.data.error);
@@ -166,7 +153,7 @@ export default function Webpages() {
         {
             name: "Offline", // status name
             uid: 0, // status id (the value in the database)
-            type: "", // status type (color) ["", primary, secondary, danger, warning, success]
+            type: "danger", // status type (color) ["", primary, secondary, danger, warning, success]
             button: true, // if you want to show a button to change the status
             currentStatus: [1], // button showing status, ex: if currently status is 1, then the button will be shown | can use [1,2,...] for multiple statuses
             function: updateStatusButton, // function to change the status
@@ -181,7 +168,7 @@ export default function Webpages() {
         {
             name: "Active", // status name
             uid: 1, // status id (the value in the database)
-            type: "primary", // status type (color) [danger, warning, success, primary]
+            type: "success", // status type (color) [danger, warning, success, primary]
             button: true, // if you want to show a button to change the status
             currentStatus: [0], // button showing status, ex: if currently status is 1, then the button will be shown | can use [1,2,...] for multiple statuses
             function: updateStatusButton, // function to change the status
@@ -203,7 +190,7 @@ export default function Webpages() {
     const updateStatusBulk = (ids, status) => {
 
         // update status bulk function // TODO: Change the following function
-        updateWebpagesStatusBulk(ids, status).then(() => {
+        updateRatelimitsStatusBulk(ids, status).then(() => {
             refreshData("success", "Updated");
         }).catch((error) => {
             headerMessage("error", error.response.data.error);
@@ -227,7 +214,7 @@ export default function Webpages() {
     const deleteBulk = (ids) => {
 
         // delete bulk function // TODO: Change the following function
-        deleteWebpagesBulk(ids).then(() => {
+        deleteRatelimitsBulk(ids).then(() => {
             refreshData("success", "Deleted");
         }).catch((error) => {
             headerMessage("error", error.response.data.error);
@@ -255,10 +242,10 @@ export default function Webpages() {
             headerMessage(type, message);
 
         // fetch data count from API // TODO: Change the following function
-        getWebPagesCount(searchColumn, searchFieldValue).then((response) => setPagesCount(response));
+        getRatelimitCount(searchColumn, searchFieldValue).then((response) => setPagesCount(response));
 
         // fetch data from API // TODO: Change the following function
-        getWebPages(rowsPerPage, currentPage, searchColumn, searchFieldValue)
+        getRatelimits(rowsPerPage, currentPage, searchColumn, searchFieldValue)
             .then(response => setData(response === null ? [] : response.length === 0 ? [] : response))
             .catch(error => console.error(error));
 
@@ -268,10 +255,10 @@ export default function Webpages() {
     const fetchTableData = (useCallback((page, key, val) => {
 
         // fetch data count from API // TODO: Change the following function
-        getWebPagesCount(key, val).then((response) => setPagesCount(response));
+        getRatelimitCount(key, val).then((response) => setPagesCount(response));
 
         // fetch data from API // TODO: Change the following function
-        getWebPages(rowsPerPage, page, key, val)
+        getRatelimits(rowsPerPage, page, key, val)
             .then(response => setData(response === null ? [] : response.length === 0 ? [] : response))
             .catch(error => console.error(error));
 
@@ -290,10 +277,10 @@ export default function Webpages() {
             fetchTableData(currentPage, searchColumn, searchFieldValue);
         } else {
             // get data count // TODO: Change the following function
-            getPagesByDatetimeCount(start, end, searchColumn, searchFieldValue).then((response) => setPagesCount(response));
+            getRatelimitsByDatetimeCount(start, end, searchColumn, searchFieldValue).then((response) => setPagesCount(response));
 
             // get data // TODO: Change the following function
-            getPagesByDatetime(rowsPerPage, currentPage, start, end, searchColumn, searchFieldValue).then(response => setData(response === null ? [] : response.length === 0 ? [] : response))
+            getRatelimitsByDatetime(rowsPerPage, currentPage, start, end, searchColumn, searchFieldValue).then(response => setData(response === null ? [] : response.length === 0 ? [] : response))
         }
     }
 
@@ -302,10 +289,10 @@ export default function Webpages() {
     // status change function
     const statusChange = (statusArray) => {
         // get data count // TODO: Change the following function
-        getPagesByStatusCount(statusArray, searchColumn, searchFieldValue).then((response) => setPagesCount(response));
+        getRatelimitsByStatusCount(statusArray, searchColumn, searchFieldValue).then((response) => setPagesCount(response));
 
         // get data // TODO: Change the following function
-        getPagesByStatus(rowsPerPage, currentPage, statusArray, searchColumn, searchFieldValue).then(response => setData(response === null ? [] : response.length === 0 ? [] : response))
+        getRatelimitsByStatus(rowsPerPage, currentPage, statusArray, searchColumn, searchFieldValue).then(response => setData(response === null ? [] : response.length === 0 ? [] : response))
     }
 
 
@@ -369,7 +356,9 @@ export default function Webpages() {
                 editMenuButton={editMenuButton}
                 editItemIsOpen={isOpen}
                 editItemOnOpenChange={onOpenChange}
-                editForm={<EditWebpageForm refreshData={refreshData}/>}
+                editForm={<EditRatelimitForm refreshData={refreshData}/>}
+
+
 
                 // search, sorting and filtering
                 searchColumn={searchColumn}
