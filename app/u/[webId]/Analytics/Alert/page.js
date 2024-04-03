@@ -59,7 +59,6 @@ export default function Webpages() {
         {name: "Alert Content", uid: "alert_content", sortable: false, type: "text"},
         {name: "When Alert Required", uid: "when_alert_required", sortable: false, type: "text"},
         {name: "Repeat On", uid: "repeat_on", sortable: false, type: "text"},
-        {name: "Customer Reminder Date", uid: "custom_reminder_date", sortable: false, type: "datetime"},
         {name: "Status", uid: "status", sortable: true, type: "status"},
        
         // all usable types: text, twoText, datetime, label, status, statusButtons, buttons, menu, copy, icon, iconText, iconTwoText
@@ -72,7 +71,6 @@ export default function Webpages() {
         "alert_content",
         "whenAlertRequired",
         "repeat_on",
-        "custom_reminder_date",
         "status"
 
     ];
