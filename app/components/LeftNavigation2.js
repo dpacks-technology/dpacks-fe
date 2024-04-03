@@ -5,7 +5,7 @@ import {message} from "antd";
 import Model from "@/app/components/Model";
 import AddWebpageForm from "@/app/components/forms/webpages/AddWebpageForm";
 import {usePathname} from "next/navigation";
-import AddToBlockList from './forms/webpages/AddToBlockList';
+import AddToBlockList from './forms/webpages/BlockList/AddToBlockList';
 
 const LeftNavigation2 = () => {
 
