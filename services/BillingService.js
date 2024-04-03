@@ -96,7 +96,7 @@ export const editPages = async (id, data) => {
 }
 
 // get all webpages by status and datetime count // TODO: Change this function accordingly
-export const getPageById = async (id) => {
+export const getTransactionById = async (id) => {
     try {
         const response = await billingService.get(`/api/billing/transaction/${id}`);
         return response.data;

@@ -2,7 +2,17 @@
 
 import {useState} from "react";
 import SubscriptionPlans from "@/app/components/SubscriptionPlans";
+import Table from "@/app/components/Table";
+import {
+    DeleteTransactionByID,
+    GetTransactionByStatus,
+    GetTransactions,
+    GetTransactionCount,
+    UpdateTransactionStatus,
+    UpdateTransactionStatusBulk
+} from "@/services/BillingService";
 
+import {useDisclosure} from "@nextui-org/react";
 export default function Subscription() {
     // Dummy data for demonstration
     const currentPlan = "Standard ";
@@ -29,6 +39,20 @@ export default function Subscription() {
     //defining state for page status
     const changeStatus = (status) => {
         setPageStatus(status);
+    }
+
+    const deleteButton = (id) => { // delete button function // TODO: Change the following function
+        // not used here
+        // console.log("delete: " + id);
+
+
+        // delete function
+        DeleteTransactionByID(id).then(() => {
+            refreshData("success", "Deleted");
+        }).catch((error) => {
+            headerMessage("error", error.response.data.error);
+        });
+
     }
 
     return (
@@ -128,12 +152,15 @@ export default function Subscription() {
                     </div>
 
                     <div style={{width: '100%', display: 'flex', justifyContent: 'space-between'}}>
+
                         <button style={{
+                            name:"Delete",
                             padding: '10px 20px',
                             borderRadius: '5px',
                             background: 'red',
-                            border: 'none'
+                            border: 'none', function : deleteButton,
                         }}>Unsubscribe Current Plan
+
                         </button>
                     </div>
                 </>

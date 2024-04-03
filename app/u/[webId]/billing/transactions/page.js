@@ -15,6 +15,7 @@ import {
     UpdateTransactionStatus,
     UpdateTransactionStatusBulk
 } from "@/services/BillingService";
+
 import {useDisclosure} from "@nextui-org/react";
 import EditWebpageForm from "@/app/components/forms/webpages/EditWebpageForm";
 import {message} from "antd";
@@ -127,7 +128,7 @@ export default function Transaction() {
     const deleteMenuButton = (id) => { // delete button function // TODO: Change the following function
 
         // delete function
-        deletePage(id).then(() => {
+        DeleteTransactionByID(id).then(() => {
             refreshData("success", "Deleted");
         }).catch((error) => {
             headerMessage("error", error.response.data.error);
