@@ -37,7 +37,7 @@ const AddSubscriptionForm = ({...props}) => {
 
    // const [isCompanyAvailable, setIsCompanyAvailable] = useState(false);
     // backend validation error message
-    
+
     const [messageApi, contextHolder] = message.useMessage(); // message api
 
     const paymentMethods = [
