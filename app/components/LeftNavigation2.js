@@ -3,10 +3,12 @@ import React from 'react';
 import {Button, useDisclosure} from "@nextui-org/react";
 import {message} from "antd";
 import Model from "@/app/components/Model";
-import AddWebpageForm from "@/app/components/forms/webpages/AddWebpageForm";
+
 import {usePathname} from "next/navigation";
 import AddRatelimitForm from "@/app/components/forms/endpoint/AddEndpointRatelimitForm";
 import AddApiSubscriberForm from "@/app/components/forms/apisubscriber/AddApiSubscriberForm";
+
+import AddAutoRespondsForm from "@/app/components/forms/webchats/AddAutomatedMessageForm";
 
 const LeftNavigation2 = () => {
 
@@ -38,8 +40,10 @@ const LeftNavigation2 = () => {
                 return <AddWebpageForm notificationMessage={notificationMessage}/>;
             case "example2/example2":
                 return <AddWebpageForm notificationMessage={notificationMessage}/>;
-            case "/admin/api/endpoints":
+            case "api/endpoints":
                 return <AddRatelimitForm notificationMessage={notificationMessage}/>;
+            case "chat/automatedMessage":
+                return <AddAutoRespondsForm notificationMessage={notificationMessage}/>;
             default:
                 return null;
         }
