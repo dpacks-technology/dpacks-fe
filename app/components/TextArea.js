@@ -6,7 +6,21 @@ const { TextArea } = Input;
 export default function Textarea({ ...props }) {
     return (
 
-        <TextArea rows={4} placeholder="maxLength is 6" {...props} maxLength={6} />
+        <>
+            {props.label &&
+                <label className={"text-xs text-light dark:text-dark"}>{props.label}</label>
+            }
+
+            <TextArea rows={4} {...props} maxLength={6}
+                className={"mt-2" + (props.className ? " " + props.className : "")}
+                {...props}
+            />
+
+            {props.error &&
+                <span className={"mt-2 text-danger text-xs"}>{props.error}</span>
+            }
+
+        </>
 
     );
 }
