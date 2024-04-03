@@ -9,6 +9,7 @@ import AddRatelimitForm from "@/app/components/forms/endpoint/AddEndpointRatelim
 import AddApiSubscriberForm from "@/app/components/forms/apisubscriber/AddApiSubscriberForm";
 
 import AddAutoRespondsForm from "@/app/components/forms/webchats/AddAutomatedMessageForm";
+import AddWebpageForm from "@/app/components/forms/sites/AddSiteForm";
 
 const LeftNavigation2 = () => {
 
