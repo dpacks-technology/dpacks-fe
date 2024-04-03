@@ -2,25 +2,24 @@ import axios from 'axios';
 import Keys from "@/Keys";
 
 // Create an axios instance -- NO NEED TO CHANGE THIS
-const webpagesService = axios.create({
+const endpointService = axios.create({
     baseURL: Keys.USER_SERVICE_API_URL
 });
 
 // get all webpages // TODO: Change this function accordingly
-export const getWebPages = async (count, page, key, val) => {
+export const getRatelimits = async (count, page, key, val) => {
     try {
-        const response = await webpagesService.get(`/api/web/webpages/${count}/${page}?key=${key}&val=${val}`);
+        const response = await endpointService.get(`/api/ratelimit/ratelimits/${count}/${page}?key=${key}&val=${val}`);
         return response.data;
     } catch (error) {
         throw error;
     }
 };
 
-
 // get all webpages count // TODO: Change this function accordingly
-export const getWebPagesCount = async (key, val) => {
+export const getRatelimitCount = async (key, val) => {
     try {
-        const response = await webpagesService.get(`/api/web/webpages/count?key=${key}&val=${val}`);
+        const response = await endpointService.get(`/api/ratelimit/ratelimits/count?key=${key}&val=${val}`);
         return response.data;
     } catch (error) {
         throw error;
@@ -28,7 +27,7 @@ export const getWebPagesCount = async (key, val) => {
 }
 
 // get all webpages by status // TODO: Change this function accordingly
-export const getPagesByStatus = async (count, page, status, key, val) => {
+export const getRatelimitsByStatus = async (count, page, status, key, val) => {
 
     // convert status array to string with commas
     let statusString = status.join(',');
@@ -36,7 +35,7 @@ export const getPagesByStatus = async (count, page, status, key, val) => {
     console.log(statusString);
 
     try {
-        const response = await webpagesService.get(`/api/web/webpages/status/${count}/${page}?status=${statusString}&key=${key}&val=${val}`);
+        const response = await endpointService.get(`/api/ratelimit/ratelimits/status/${count}/${page}?status=${statusString}&key=${key}&val=${val}`);
         console.log(response.data);
         return response.data;
     } catch (error) {
@@ -45,7 +44,7 @@ export const getPagesByStatus = async (count, page, status, key, val) => {
 }
 
 // get all webpages by status count // TODO: Change this function accordingly
-export const getPagesByStatusCount = async (status, key, val) => {
+export const getRatelimitsByStatusCount = async (status, key, val) => {
 
     // convert status array to string with commas
     let statusString = status.join(',');
@@ -53,7 +52,7 @@ export const getPagesByStatusCount = async (status, key, val) => {
     console.log(statusString);
 
     try {
-        const response = await webpagesService.get(`/api/web/webpages/status/count?status=${statusString}&key=${key}&val=${val}`);
+        const response = await endpointService.get(`/api/ratelimit/ratelimits/status/count?status=${statusString}&key=${key}&val=${val}`);
         console.log(response.data);
         return response.data;
     } catch (error) {
@@ -62,12 +61,12 @@ export const getPagesByStatusCount = async (status, key, val) => {
 }
 
 // get all webpages by datetime // TODO: Change this function accordingly
-export const getPagesByDatetime = async (count, page, start, end, key, val) => {
+export const getRatelimitsByDatetime = async (count, page, start, end, key, val) => {
 
     console.log(start);
 
     try {
-        const response = await webpagesService.get(`/api/web/webpages/datetime/${count}/${page}?start=${start}&end=${end}&key=${key}&val=${val}`);
+        const response = await endpointService.get(`/api/ratelimit/ratelimits/datetime/${count}/${page}?start=${start}&end=${end}&key=${key}&val=${val}`);
         console.log(response.data);
         return response.data;
     } catch (error) {
@@ -76,9 +75,9 @@ export const getPagesByDatetime = async (count, page, start, end, key, val) => {
 }
 
 // get all webpages by datetime count // TODO: Change this function accordingly
-export const getPagesByDatetimeCount = async (start, end, key, val) => {
+export const getRatelimitsByDatetimeCount = async (start, end, key, val) => {
     try {
-        const response = await webpagesService.get(`/api/web/webpages/datetime/count?start=${start}&end=${end}&key=${key}&val=${val}`);
+        const response = await endpointService.get(`/api/ratelimit/ratelimits/datetime/count?start=${start}&end=${end}&key=${key}&val=${val}`);
         console.log(response.data);
         return response.data;
     } catch (error) {
@@ -87,9 +86,9 @@ export const getPagesByDatetimeCount = async (start, end, key, val) => {
 }
 
 // get all webpages by status and datetime // TODO: Change this function accordingly
-export const editPages = async (id, data) => {
+export const EditRatelimit = async (id, data) => {
     try {
-        const response = await webpagesService.put(`/api/web/webpages/${id}`, data);
+        const response = await endpointService.put(`/api/ratelimit/ratelimits/${id}`, data);
         return response.data;
     } catch (error) {
         throw error;
@@ -97,9 +96,9 @@ export const editPages = async (id, data) => {
 }
 
 // get all webpages by status and datetime count // TODO: Change this function accordingly
-export const getPageById = async (id) => {
+export const getRatelimitById = async (id) => {
     try {
-        const response = await webpagesService.get(`/api/web/webpage/${id}`);
+        const response = await endpointService.get(`/api/ratelimit/ratelimit/${id}`);
         return response.data;
     } catch (error) {
         throw error;
@@ -107,9 +106,9 @@ export const getPageById = async (id) => {
 }
 
 // get all webpages by status and datetime count // TODO: Change this function accordingly
-export const deletePage = async (id) => {
+export const deleteRatelimit = async (id) => {
     try {
-        const response = await webpagesService.delete(`/api/web/webpages/${id}`);
+        const response = await endpointService.delete(`/api/ratelimit/ratelimits/${id}`);
         return response.data;
     } catch (error) {
         throw error;
@@ -117,11 +116,11 @@ export const deletePage = async (id) => {
 }
 
 // get all webpages by status and datetime count // TODO: Change this function accordingly
-export const deleteWebpagesBulk = async (ids) => {
+export const deleteRatelimitsBulk = async (ids) => {
     let idsString = ids.join(',');
 
     try {
-        const response = await webpagesService.delete(`/api/web/webpages/bulk/${idsString}`);
+        const response = await endpointService.delete(`/api/ratelimit/ratelimits/bulk/${idsString}`);
         return response.data;
     } catch (error) {
         throw error;
@@ -129,11 +128,11 @@ export const deleteWebpagesBulk = async (ids) => {
 }
 
 // get all webpages by status and datetime count // TODO: Change this function accordingly
-export const updateWebpagesStatusBulk = async (ids, status) => {
+export const updateRatelimitsStatusBulk = async (ids, status) => {
     let idsString = ids.join(',');
 
     try {
-        const response = await webpagesService.put(`/api/web/webpages/status/bulk/${idsString}`, {status: status});
+        const response = await endpointService.put(`/api/ratelimit/ratelimits/status/bulk/${idsString}`, {status: status});
         return response.data;
     } catch (error) {
         throw error;
@@ -141,9 +140,9 @@ export const updateWebpagesStatusBulk = async (ids, status) => {
 }
 
 // get all webpages by status and datetime count // TODO: Change this function accordingly
-export const updateWebpagesStatus = async (id, status) => {
+export const updateRatelimitStatus = async (id, status) => {
     try {
-        const response = await webpagesService.put(`/api/web/webpages/status/${id}`, {status: status});
+        const response = await endpointService.put(`/api/ratelimit/ratelimits/status/${id}`, {status: status});
         return response.data;
     } catch (error) {
         throw error;
@@ -151,9 +150,9 @@ export const updateWebpagesStatus = async (id, status) => {
 }
 
 // get all webpages by status and datetime count // TODO: Change this function accordingly
-export const AddWebpage = async (data) => {
+export const AddRatelimit = async (data) => {
     try {
-        const response = await webpagesService.post(`/api/web/webpage`, data);
+        const response = await endpointService.post(`/api/ratelimit/addratelimit`, data);
         return response.data;
     } catch (error) {
         throw error;

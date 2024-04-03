@@ -1,26 +1,28 @@
-
 'use client';
+
 // Importing modules
 import Table from "@/app/components/Table";
 import React, {useCallback, useEffect} from "react";
-import {
-    deletePage,
-    deleteWebpagesBulk,
-    getPagesByDatetime,
-    getPagesByDatetimeCount,
-    getPagesByStatus,
-    getPagesByStatusCount,
-    getWebPages,
-    getWebPagesCount,
-    updateWebpagesStatus,
-    updateWebpagesStatusBulk
-} from "@/services/WebpagesService";
+import{
+    GetAutoResponds,
+    deleteAutoResponds,
+    deleteAutoRespondsBulk,
+    getAutoRespondsByDatetime,
+    getAutoRespondsByDatetimeCount,
+    getAutoRespondsByStatus,
+    getAutoRespondsByStatusCount,
+    getAutoRespondsCount,
+    updateAutoRespondsStatus,
+    updateAutoRespondsStatusBulk,
+}from "@/services/AutoRespondService";
+
 import {useDisclosure} from "@nextui-org/react";
-import EditWebpageForm from "@/app/components/forms/webpages/EditWebpageForm";
+
 import {message} from "antd";
+import EditAutomatedMessageForm from "@/app/components/forms/webchats/EditAutomatedMessageForm";
 
 // Webpages component
-export default function Webpages() {
+export default function AutomatedMessage() {
 
     // ----------------------- DEFAULT COLUMNS -------------------------
     // default columns // TODO: Change the following functions
@@ -51,9 +53,9 @@ export default function Webpages() {
     // columns // TODO: Change the following columns according the to yours
     const columns = [
         {name: "ID", uid: "id", sortable: true, type: "text"},
-        {name: "NAME", uid: "name", sortable: true, type: "text"},
-        {name: "PATH", uid: "path", sortable: true, type: "text"},
-        {name: "CREATED ON", uid: "date_created", sortable: false, type: "datetime"},
+        {name: "MESSAGE", uid: "message", sortable: true, type: "text"},
+        {name: "TRIGGER", uid: "trigger", sortable: true, type: "text"},
+        {name: "CREATED ON", uid: "last_updated", sortable: false, type: "datetime"},
         {name: "STATUS", uid: "status", sortable: false, type: "status"},
         {name: "CHANGE STATUS", uid: "statusButtons", sortable: false, type: "statusButtons"},
         {name: "ACTIONS", uid: "menu", sortable: false, type: "menu"},
@@ -62,9 +64,9 @@ export default function Webpages() {
 
     // initially visible columns // TODO: Change the following columns according the to yours
     const init_cols = [
-        "name",
-        "path",
-        "date_created",
+        "message",
+        "trigger",
+        "last_updated",
         "status",
         "statusButtons",
         "menu"
@@ -123,7 +125,7 @@ export default function Webpages() {
     const deleteMenuButton = (id) => { // delete button function // TODO: Change the following function
 
         // delete function
-        deletePage(id).then(() => {
+        deleteAutoResponds(id).then(() => {
             refreshData("success", "Deleted");
         }).catch((error) => {
             headerMessage("error", error.response.data.error);
@@ -153,7 +155,7 @@ export default function Webpages() {
     const updateStatusButton = (id, status) => {
 
             // update status function
-            updateWebpagesStatus(id, status).then(() => {
+            updateAutoRespondsStatus(id, status).then(() => {
                 refreshData("success", "Updated");
             }).catch((error) => {
                 headerMessage("error", error.response.data.error);
@@ -164,7 +166,7 @@ export default function Webpages() {
     // status options // TODO: Change the following options
     const statusOptions = [
         {
-            name: "Offline", // status name
+            name: "Disabled", // status name
             uid: 0, // status id (the value in the database)
             type: "", // status type (color) ["", primary, secondary, danger, warning, success]
             button: true, // if you want to show a button to change the status
@@ -179,7 +181,7 @@ export default function Webpages() {
             </svg>
         },
         {
-            name: "Active", // status name
+            name: "Enabled", // status name
             uid: 1, // status id (the value in the database)
             type: "primary", // status type (color) [danger, warning, success, primary]
             button: true, // if you want to show a button to change the status
@@ -203,7 +205,7 @@ export default function Webpages() {
     const updateStatusBulk = (ids, status) => {
 
         // update status bulk function // TODO: Change the following function
-        updateWebpagesStatusBulk(ids, status).then(() => {
+        updateAutoRespondsStatusBulk(ids, status).then(() => {
             refreshData("success", "Updated");
         }).catch((error) => {
             headerMessage("error", error.response.data.error);
@@ -227,7 +229,7 @@ export default function Webpages() {
     const deleteBulk = (ids) => {
 
         // delete bulk function // TODO: Change the following function
-        deleteWebpagesBulk(ids).then(() => {
+        deleteAutoRespondsBulk(ids).then(() => {
             refreshData("success", "Deleted");
         }).catch((error) => {
             headerMessage("error", error.response.data.error);
@@ -255,10 +257,10 @@ export default function Webpages() {
             headerMessage(type, message);
 
         // fetch data count from API // TODO: Change the following function
-        getWebPagesCount(searchColumn, searchFieldValue).then((response) => setPagesCount(response));
+        getAutoRespondsCount(searchColumn, searchFieldValue).then((response) => setPagesCount(response));
 
         // fetch data from API // TODO: Change the following function
-        getWebPages(rowsPerPage, currentPage, searchColumn, searchFieldValue)
+        GetAutoResponds(rowsPerPage, currentPage, searchColumn, searchFieldValue)
             .then(response => setData(response === null ? [] : response.length === 0 ? [] : response))
             .catch(error => console.error(error));
 
@@ -268,10 +270,10 @@ export default function Webpages() {
     const fetchTableData = (useCallback((page, key, val) => {
 
         // fetch data count from API // TODO: Change the following function
-        getWebPagesCount(key, val).then((response) => setPagesCount(response));
+        getAutoRespondsCount(key, val).then((response) => setPagesCount(response));
 
         // fetch data from API // TODO: Change the following function
-        getWebPages(rowsPerPage, page, key, val)
+        GetAutoResponds(rowsPerPage, page, key, val)
             .then(response => setData(response === null ? [] : response.length === 0 ? [] : response))
             .catch(error => console.error(error));
 
@@ -290,10 +292,10 @@ export default function Webpages() {
             fetchTableData(currentPage, searchColumn, searchFieldValue);
         } else {
             // get data count // TODO: Change the following function
-            getPagesByDatetimeCount(start, end, searchColumn, searchFieldValue).then((response) => setPagesCount(response));
+            getAutoRespondsByDatetimeCount(start, end, searchColumn, searchFieldValue).then((response) => setPagesCount(response));
 
             // get data // TODO: Change the following function
-            getPagesByDatetime(rowsPerPage, currentPage, start, end, searchColumn, searchFieldValue).then(response => setData(response === null ? [] : response.length === 0 ? [] : response))
+            getAutoRespondsByDatetime(rowsPerPage, currentPage, start, end, searchColumn, searchFieldValue).then(response => setData(response === null ? [] : response.length === 0 ? [] : response))
         }
     }
 
@@ -302,10 +304,10 @@ export default function Webpages() {
     // status change function
     const statusChange = (statusArray) => {
         // get data count // TODO: Change the following function
-        getPagesByStatusCount(statusArray, searchColumn, searchFieldValue).then((response) => setPagesCount(response));
+        getAutoRespondsByStatusCount(statusArray, searchColumn, searchFieldValue).then((response) => setPagesCount(response));
 
         // get data // TODO: Change the following function
-        getPagesByStatus(rowsPerPage, currentPage, statusArray, searchColumn, searchFieldValue).then(response => setData(response === null ? [] : response.length === 0 ? [] : response))
+        getAutoRespondsByStatus(rowsPerPage, currentPage, statusArray, searchColumn, searchFieldValue).then(response => setData(response === null ? [] : response.length === 0 ? [] : response))
     }
 
 
@@ -369,7 +371,7 @@ export default function Webpages() {
                 editMenuButton={editMenuButton}
                 editItemIsOpen={isOpen}
                 editItemOnOpenChange={onOpenChange}
-                editForm={<EditWebpageForm refreshData={refreshData}/>}
+                editForm={<EditAutomatedMessageForm refreshData={refreshData}/>}
 
                 // search, sorting and filtering
                 searchColumn={searchColumn}
