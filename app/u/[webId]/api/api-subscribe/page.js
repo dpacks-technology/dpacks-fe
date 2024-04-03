@@ -54,6 +54,9 @@ export default function apiSubscribe({params}) {
     };
 
     const deleteSubscription = async () => {
+        //check if user is sure
+        if(!confirm("Are you sure you want to delete this subscription?")) return;
+
         try {
             const response = await axios.delete(`http://localhost:4001/api/keypairs/${params.webId}`);
             if(response.status === 200){

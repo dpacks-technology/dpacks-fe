@@ -6,6 +6,8 @@ import LeftNavigation1 from "@/app/components/LeftNavigation1";
 import LeftNavigation2 from "@/app/components/LeftNavigation2";
 import RightNavigation1 from "@/app/components/RightNavigation1";
 import {cloneElement, useState} from "react";
+import Link from "next/link";
+import Image from "next/image";
 
 export default function PanelLayout({ childrenBody }) {
 
@@ -34,9 +36,9 @@ export default function PanelLayout({ childrenBody }) {
                                         d="M2 4.75A.75.75 0 012.75 4h14.5a.75.75 0 010 1.5H2.75A.75.75 0 012 4.75zm0 10.5a.75.75 0 01.75-.75h7.5a.75.75 0 010 1.5h-7.5a.75.75 0 01-.75-.75zM2 10a.75.75 0 01.75-.75h14.5a.75.75 0 010 1.5H2.75A.75.75 0 012 10z" />
                                 </svg>
                             </button>
-                            <a href="https://dpacks.net" className="flex ms-2">
+                            <Link href="/u" className="flex ms-2 z-50">
                                 <img src={logoSrc} className="w-32 " alt="Dpacks Logo" />
-                            </a>
+                            </Link>
                         </div>
                         <SearchBar className={"content-start"} />
                         <div className="flex items-center">
