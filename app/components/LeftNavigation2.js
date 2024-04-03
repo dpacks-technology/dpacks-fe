@@ -20,7 +20,8 @@ const LeftNavigation2 = () => {
     };
 
     // get url pathname
-    const pathname = usePathname();
+    const fullPathname = usePathname();
+    const pathname = [fullPathname.split("/")[3], fullPathname.split("/")[4]].join("/")
 
     const handleAddButton = () => {
         onOpen();
@@ -29,11 +30,11 @@ const LeftNavigation2 = () => {
     // TODO: Add more components for add form
     const getComponentByPath = (pathname, notificationMessage) => {
         switch (pathname) {
-            case "/u/1/web/webpages":
+            case "web/webpages":
                 return <AddWebpageForm notificationMessage={notificationMessage}/>;
-            case "/u/1/example1/example1":
+            case "example1/example1":
                 return <AddWebpageForm notificationMessage={notificationMessage}/>;
-            case "/u/1/example2/example2":
+            case "example2/example2":
                 return <AddWebpageForm notificationMessage={notificationMessage}/>;
             default:
                 return null;
