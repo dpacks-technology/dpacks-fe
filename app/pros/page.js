@@ -1,4 +1,4 @@
-export default function AdminDashboard() {
+export default function Dashboard() {
     return (
         <div>
             <div className="grid grid-cols-3 gap-4 mb-4">
