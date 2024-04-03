@@ -27,16 +27,25 @@ const LeftNavigation2 = () => {
         onOpen();
     }
 
+    // TODO: Add more components for add form
+    const getComponentByPath = (pathname, notificationMessage) => {
+        switch (pathname) {
+            case "web/webpages":
+                return <AddWebpageForm notificationMessage={notificationMessage}/>;
+            case "example1/example1":
+                return <AddWebpageForm notificationMessage={notificationMessage}/>;
+            case "example2/example2":
+                return <AddWebpageForm notificationMessage={notificationMessage}/>;
+            default:
+                return null;
+        }
+    };
+
     return (
         <>
             {contextHolder}
             <Model modelForm={
-                // TODO: add other forms
-                <>
-                    {pathname === "web/webpages" && <AddWebpageForm notificationMessage={notificationMessage}/>}
-                    {/*{pathname === "example1/example1" && <AddWebpageForm notificationMessage={notificationMessage}/>}*/}
-                    {/*{pathname === "example2/example2" && <AddWebpageForm notificationMessage={notificationMessage}/>}*/}
-                </>
+                getComponentByPath(pathname, notificationMessage)
             } title={"Add webpage"} button={"Add"} isOpen={isOpen} onOpenChange={onOpenChange}/>
             <nav className="w-48 h-full fixed top-0 left-16">
                 <div className="h-full px-3 pb-4 overflow-y-auto bg-transparent dark:bg-transparent mt-24">
