@@ -3,12 +3,13 @@ import React from 'react';
 import { Button, useDisclosure } from "@nextui-org/react";
 import { message } from "antd";
 import Model from "@/app/components/Model";
-import {usePathname} from "next/navigation";
+import { usePathname } from "next/navigation";
 import AddRatelimitForm from "@/app/components/forms/endpoint/AddEndpointRatelimitForm";
 import AddApiSubscriberForm from "@/app/components/forms/apisubscriber/AddApiSubscriberForm";
 
 import AddAutoRespondsForm from "@/app/components/forms/webchats/AddAutomatedMessageForm";
 import AddWebpageForm from "@/app/components/forms/sites/AddSiteForm";
+import CreateAlertForm from './forms/webpages/CreateAlertForm';
 
 const LeftNavigation2 = () => {
 
@@ -42,21 +43,25 @@ const LeftNavigation2 = () => {
         console.log(pathname)
         switch (pathname) {
             case "web/webpages":
-                return <AddWebpageForm notificationMessage={notificationMessage}/>;
+                return <AddWebpageForm notificationMessage={notificationMessage} />;
             case "example1/example1":
-                return <AddWebpageForm notificationMessage={notificationMessage}/>;
+                return <AddWebpageForm notificationMessage={notificationMessage} />;
             case "example2/example2":
-                return <AddWebpageForm notificationMessage={notificationMessage}/>;
+                return <AddWebpageForm notificationMessage={notificationMessage} />;
             case "api/endpoints":
-                return <AddRatelimitForm notificationMessage={notificationMessage}/>;
+                return <AddRatelimitForm notificationMessage={notificationMessage} />;
             case "chat/automatedMessage":
-                return <AddAutoRespondsForm notificationMessage={notificationMessage}/>;
+                return <AddAutoRespondsForm notificationMessage={notificationMessage} />;
+            case "Analytics/Alert":
+                return <CreateAlertForm notificationMessage={notificationMessage} />;
+
+
             default:
                 return null;
         }
     };
 
-    
+
 
     return (
         <>
