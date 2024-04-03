@@ -2,7 +2,9 @@
 import Input from "@/app/components/Input";
 import Textarea from "@/app/components/TextArea";
 import { Tag } from 'antd';
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
+import { GetUserData } from "@/services/UserProfileService";
+import { useParams } from "next/navigation";
 
 
 export default function Profile() {
@@ -12,6 +14,7 @@ export default function Profile() {
     const [aboutMe, setAboutMe] = useState("");
     const [lastName, setLastName] = useState("");
     const [phone, setPhone] = useState("");
+    const [favouriteCategories, setFavouriteCategories] = useState([]);
 
     const data = [
         { id: 1, status: 'processing', color: 'processing' },
@@ -19,6 +22,31 @@ export default function Profile() {
         { id: 3, status: 'pending', color: 'warning' },
         // Add more data as needed
     ];
+
+    // useEffect hook to fetch data when the component mounts
+    useEffect(() => {
+        const fetchData = async () => {
+            try {
+                const response = await GetUserData(3);
+                setFirstName(response.data.username);
+                setEmail(response.data.email);
+                setAboutMe(response.data.userDescription);
+                setLastName(response.data.lastName);
+                setPhone(response.data.phoneNumber);
+                const categories = JSON.parse(response.data.favourCategory);
+                setFavouriteCategories(categories);
+            } catch (error) {
+                console.error("Failed to fetch data: ", error);
+            }
+        };
+
+        fetchData();
+    }, []);
+
+    const UpdateUser = () => {
+        // Update user data
+    }
+
 
     return (
         <div>
@@ -45,9 +73,9 @@ export default function Profile() {
 
                     <label className="text-xs text-light dark:text-dark">Category</label>
                     <div className="mt-2 bg-black p-3 rounded-xl h-28">
-                        {data.map(item => (
-                            <Tag key={item.id} bordered={false} color={item.color} closable={!isDisabled}>
-                                {item.status}
+                        {favouriteCategories.map((item, index) => (
+                            <Tag key={index} color="" closable={!isDisabled}>
+                                {item.category}
                             </Tag>
                         ))}
                     </div>
@@ -56,7 +84,7 @@ export default function Profile() {
 
             <div className="flex justify-center gap-5 mt-5">
                 <button className={`bg-success-50 text-light dark:text-dark px-5 py-2 rounded-lg ${isDisabled ? 'hidden' : ''}`}>Save</button>
-                <button className={`bg-success-50 text-light dark:text-dark px-5 py-2 rounded-lg ${isDisabled ? 'hidden' : ''}`}>Cancel</button>
+                <button onClick={() => setIsDisabled(!isDisabled)} className={`bg-success-50 text-light dark:text-dark px-5 py-2 rounded-lg ${isDisabled ? 'hidden' : ''}`}>Cancel</button>
             </div>
         </div>
     );
