@@ -3,7 +3,6 @@
 import {useEffect, useState} from 'react';
 import axios from 'axios';
 import React from "react";
-import ButtonComponent from "@/app/components/Button";
 import Input from "@/app/components/Input";
 import {Button, Card} from "@nextui-org/react";
 
@@ -55,6 +54,9 @@ export default function apiSubscribe({params}) {
     };
 
     const deleteSubscription = async () => {
+        //check if user is sure
+        if(!confirm("Are you sure you want to delete this subscription?")) return;
+
         try {
             const response = await axios.delete(`http://localhost:4001/api/keypairs/${params.webId}`);
             if(response.status === 200){
@@ -80,20 +82,20 @@ export default function apiSubscribe({params}) {
 
             <Card className="bg-gray-700 w-3/4 p-10 ml-auto mr-auto flex-col items-center">
                 {!clientId && !apiKey ? (
-                    <ButtonComponent
-                        name="Subscribe to API"
+                    <Button
                         variant="solid"
                         color="primary"
                         size="lg"
-                        onClick={subscribe}
-                    />
+                        onClick={subscribe}>
+                        Subscribe to API
+                    </Button>
                 ) : (
                     <div className="w-full p-10 flex-col items-center">
                         <h4 className="text-white text-lg pb-1 pl-1">Client ID</h4>
                         <Input
                             hiddenLabel
                             id="clientID"
-                            className="mb-5 w-full bg-white rounded-lg"
+                            className="mb-5 w-full rounded-lg"
                             variant="filled"
                             InputProps={{
                                 readOnly: true,
@@ -104,7 +106,7 @@ export default function apiSubscribe({params}) {
                         <Input
                             hiddenLabel
                             id="apiKey"
-                            className="mb-5 w-full bg-white rounded-lg"
+                            className="mb-5 w-full rounded-lg"
                             variant="filled"
                             InputProps={{
                                 readOnly: true,
