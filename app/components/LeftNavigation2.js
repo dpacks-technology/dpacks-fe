@@ -26,7 +26,13 @@ const LeftNavigation2 = () => {
 
     // get url pathname
     const fullPathname = usePathname();
-    const pathname = [fullPathname.split("/")[3], fullPathname.split("/")[4]].join("/")
+
+    let pathname;
+
+    if (fullPathname.split("/")[1] === "admin")
+        pathname = [fullPathname.split("/")[2], fullPathname.split("/")[3]].join("/")
+    else
+        pathname = [fullPathname.split("/")[3], fullPathname.split("/")[4]].join("/")
 
     const handleAddButton = () => {
         onOpen();
@@ -34,6 +40,7 @@ const LeftNavigation2 = () => {
 
     // TODO: Add more components for add form
     const getComponentByPath = (pathname, notificationMessage) => {
+        console.log(pathname)
         switch (pathname) {
             case "web/webpages":
                 return <AddWebpageForm notificationMessage={notificationMessage}/>;
