@@ -3,10 +3,13 @@ import React from 'react';
 import {Button, useDisclosure} from "@nextui-org/react";
 import {message} from "antd";
 import Model from "@/app/components/Model";
-import AddWebpageForm from "@/app/components/forms/webpages/AddWebpageForm";
+
 import {usePathname} from "next/navigation";
 import AddRatelimitForm from "@/app/components/forms/endpoint/AddEndpointRatelimitForm";
 import AddApiSubscriberForm from "@/app/components/forms/apisubscriber/AddApiSubscriberForm";
+
+import AddAutoRespondsForm from "@/app/components/forms/webchats/AddAutomatedMessageForm";
+import AddWebpageForm from "@/app/components/forms/sites/AddSiteForm";
 
 const LeftNavigation2 = () => {
 
@@ -23,7 +26,13 @@ const LeftNavigation2 = () => {
 
     // get url pathname
     const fullPathname = usePathname();
-    const pathname = [fullPathname.split("/")[3], fullPathname.split("/")[4]].join("/")
+
+    let pathname;
+
+    if (fullPathname.split("/")[1] === "admin")
+        pathname = [fullPathname.split("/")[2], fullPathname.split("/")[3]].join("/")
+    else
+        pathname = [fullPathname.split("/")[3], fullPathname.split("/")[4]].join("/")
 
     const handleAddButton = () => {
         onOpen();
@@ -31,6 +40,7 @@ const LeftNavigation2 = () => {
 
     // TODO: Add more components for add form
     const getComponentByPath = (pathname, notificationMessage) => {
+        console.log(pathname)
         switch (pathname) {
             case "web/webpages":
                 return <AddWebpageForm notificationMessage={notificationMessage}/>;
@@ -38,8 +48,10 @@ const LeftNavigation2 = () => {
                 return <AddWebpageForm notificationMessage={notificationMessage}/>;
             case "example2/example2":
                 return <AddWebpageForm notificationMessage={notificationMessage}/>;
-            case "/admin/api/endpoints":
+            case "api/endpoints":
                 return <AddRatelimitForm notificationMessage={notificationMessage}/>;
+            case "chat/automatedMessage":
+                return <AddAutoRespondsForm notificationMessage={notificationMessage}/>;
             default:
                 return null;
         }
