@@ -4,6 +4,12 @@ import CardTbl from "@/app/components/Analytics/CardTbl";
 import { Divider, Table } from 'antd';
 import ReactECharts from 'echarts-for-react';
 import { useParams } from "next/navigation";
+import { 
+    getTraffic,
+    visitorSource,
+    visitorCountry,
+    visitorDevice
+ } from "@/services/AnalyticsDashbordService";
 
 const dataSource = [
     {
@@ -55,37 +61,50 @@ export default function Analytics() {
     const [visitorDeviceData, setVisitorDeviceData] = useState([]);
     const { webId } = useParams();
 
+
+    useEffect(() => {
+        fetchUserCountByCountry();
+        FetchTraffic();
+        fetchVisitorSourceData();
+        fetchVisitorDeviceData();
+    }, []);
+    
+
     const fetchUserCountByCountry = () => {
-        
-        setUserCountByCountry(data);
+        visitorCountry(webId).then((data) => {
+            setUserCountByCountry(data);
+        }).catch((error) => {
+            console.log(error);
+        });
     };
+
     // Fetch website traffic data
-    const fetchWebsiteTrafficData = () => {
-        // Example fetch call to fetch website traffic data
-        // Replace with your actual API endpoint or database call
-        const data = [150, 230, 224, 218, 135, 147, 260];
-        setWebsiteTrafficData(data);
+    const FetchTraffic = () => {
+        getTraffic(webId).then((data) => {
+            setWebsiteTrafficData(data);
+        }).catch((error) => {
+            console.log(error);
+        });
     };
 
     const fetchVisitorSourceData = () => {
-        // Example fetch call to fetch visitor source data
-        // Replace with your actual API endpoint or database call
-        const data = [
-            { value: 100, name: 'WhatsApp' },
-            { value: 200, name: 'Facebook' },
-            { value: 150, name: 'Direct Users' },
-            { value: 50, name: 'Referral Links' }
-        ];
-        setVisitorSourceData(data);
+        visitorSource(webId).then((data) => {
+            setVisitorSourceData(data);
+        }).catch((error) => {
+            console.log(error);
+        });
     };
 
     // Fetch visitor device data
     const fetchVisitorDeviceData = () => {
-        // Example fetch call to fetch visitor device data
-        // Replace with your actual API endpoint or database call
-        const data = [150, 230, 224];
-        setVisitorDeviceData(data);
+        visitorDevice(webId).then((data) => {
+            setVisitorDeviceData(data);
+        }).catch((error) => {
+            console.log(error);
+        });
     };
+
+
 
     
 
