@@ -61,46 +61,49 @@ export default function Analytics() {
     const [visitorDeviceData, setVisitorDeviceData] = useState([]);
     const { webId } = useParams();
 
-
     useEffect(() => {
         fetchUserCountByCountry();
-        FetchTraffic();
+        fetchTraffic();
         fetchVisitorSourceData();
         fetchVisitorDeviceData();
     }, []);
-    
+
 
     const fetchUserCountByCountry = () => {
         visitorCountry(webId).then((data) => {
             setUserCountByCountry(data);
         }).catch((error) => {
-            console.log(error);
+            console.error("Error fetching user count by country:", error);
         });
     };
 
-    // Fetch website traffic data
-    const FetchTraffic = () => {
+    const fetchTraffic = () => {
         getTraffic(webId).then((data) => {
-            setWebsiteTrafficData(data);
+            setWebsiteTrafficData(data.map(entry => entry.session_count));
         }).catch((error) => {
-            console.log(error);
+            console.error("Error fetching website traffic data:", error);
         });
     };
 
     const fetchVisitorSourceData = () => {
         visitorSource(webId).then((data) => {
-            setVisitorSourceData(data);
+            setVisitorSourceData(data.map(entry => ({
+                value: entry.user_count,
+                name: entry.user_source
+            })));
         }).catch((error) => {
-            console.log(error);
+            console.error("Error fetching visitor source data:", error);
         });
     };
 
-    // Fetch visitor device data
-    const fetchVisitorDeviceData = () => {
+const fetchVisitorDeviceData = () => {
         visitorDevice(webId).then((data) => {
-            setVisitorDeviceData(data);
+            setVisitorDeviceData(data.map(entry => ({
+                data: entry.device_count,
+                type: entry.device_name
+            })));
         }).catch((error) => {
-            console.log(error);
+            console.error("Error fetching visitor device data:", error);
         });
     };
 
@@ -131,32 +134,18 @@ export default function Analytics() {
 
                     <h1 className="text-2xl mt-5 font-bold text-center">Website Traffic</h1>
                     <ReactECharts
-                        className="w-full mt-6"
-                        option={{
-                            xAxis: {
-                                type: 'category',
-                                data: ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun']
-                            },
-                            legend: {
-                                data: ['Sales']
-
-                            },
-
-                            yAxis: {
-                                type: 'value'
-                            },
-                            tooltip: {
-                                trigger: 'axis',
-                                axisPointer: {
-                                    type: 'shadow'
-                                }
-                            },
-                            series: [{
-                                data: [150, 230, 224, 218, 135, 147, 260],
-                                type: 'bar'
-                            }]
-                        }}
-                    />
+                    option={{
+                        // Existing option configuration
+                        xAxis: {
+                            type: 'category',
+                            data: ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun']
+                        },
+                        series: [{
+                            data: websiteTrafficData,
+                            type: 'bar'
+                        }]
+                    }}
+                />
 
 
                 </div>
