@@ -3,9 +3,7 @@ import Input from "@/app/components/Input";
 import Textarea from "@/app/components/TextArea";
 import { Tag } from 'antd';
 import React, { useEffect, useState } from "react";
-import { GetUserData } from "@/services/UserProfileService";
-import { useParams } from "next/navigation";
-
+import { GetUserData, UpdateUser } from "@/services/UserProfileService";
 
 export default function Profile() {
     const [isDisabled, setIsDisabled] = React.useState(true);
@@ -16,16 +14,18 @@ export default function Profile() {
     const [phone, setPhone] = useState("");
     const [favouriteCategories, setFavouriteCategories] = useState([]);
     const [isButtonVisible, setIsButtonVisible] = useState(true);
+    
+    
 
     // useEffect hook to fetch data when the component mounts
     useEffect(() => {
         const fetchData = async () => {
             try {
-                const response = await GetUserData(3);
+                const response = await GetUserData(3)
                 setFirstName(response.data.username);
                 setEmail(response.data.email);
                 setAboutMe(response.data.userDescription);
-                setLastName(response.data.lastName);
+                setLastName(response.data.lname);
                 setPhone(response.data.phoneNumber);
                 const categories = JSON.parse(response.data.favourCategory);
                 setFavouriteCategories(categories);
@@ -37,9 +37,34 @@ export default function Profile() {
         fetchData();
     }, []);
 
-    const UpdateUser = () => {
-        // Update user data
-    }
+    const UpdateUserData = async () => {
+        try {
+            let data = {
+                name: firstName,
+                lname: lastName,
+                email: email,
+                phoneNumber: phone,
+                userDescription: aboutMe,
+                favourCategory: JSON.stringify(favouriteCategories)
+            };
+
+            console.log(data);
+    
+            const response = await UpdateUser(1,data).then((response) => {
+                console.log(response);
+            }).catch((error) => {
+                console.error("Failed to update user data: ", error);
+            });
+    
+            if (response.status === 200) {
+                alert("User data updated successfully");
+            } else {
+                alert("Failed to update user data");
+            }
+        } catch (error) {
+            console.error("Failed to update user data: ", error);
+        }
+    };
 
 
     return (
@@ -47,7 +72,7 @@ export default function Profile() {
             <h1 className="text-center text-4xl font-bold">Profile</h1>
             <div className="flex justify-end">
                 <button id="editbtn" className={`text-xs text-light dark:text-dark ${isButtonVisible ? '' : 'hidden'}`}
-                    
+
                     onClick={() => {
                         setIsDisabled(!isDisabled)
                         setIsButtonVisible(!isButtonVisible);
@@ -81,13 +106,18 @@ export default function Profile() {
             </div>
 
             <div className="flex justify-center gap-5 mt-5">
-                <button className={`bg-success-50 text-light dark:text-dark px-5 py-2 rounded-lg ${isDisabled ? 'hidden' : ''}`}>Save</button>
-                <button onClick={() =>{ 
+                <button
+                    onClick={UpdateUserData}
+                    className={`bg-success-50 text-light dark:text-dark px-5 py-2 rounded-lg ${isDisabled ? 'hidden' : ''}`}
+                >
+                    Save
+                </button>
+                <button onClick={() => {
                     setIsDisabled(!isDisabled)
                     setIsButtonVisible(!isButtonVisible);
                 }
-                    
-                    } className={`bg-success-50 text-light dark:text-dark px-5 py-2 rounded-lg ${isDisabled ? 'hidden' : ''}`}>Cancel</button>
+
+                } className={`bg-success-50 text-light dark:text-dark px-5 py-2 rounded-lg ${isDisabled ? 'hidden' : ''}`}>Cancel</button>
             </div>
         </div>
     );
