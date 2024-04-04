@@ -4,6 +4,7 @@ import Textarea from "@/app/components/TextArea";
 import { Tag } from 'antd';
 import React, { useEffect, useState } from "react";
 import { GetUserData, UpdateUser } from "@/services/UserProfileService";
+import {Tooltip } from 'antd'
 
 export default function Profile() {
     const [isDisabled, setIsDisabled] = React.useState(true);
@@ -73,6 +74,10 @@ export default function Profile() {
         <div>
             <h1 className="text-center text-4xl font-bold">Profile</h1>
             <div className="flex justify-end">
+
+            <Tooltip placement="top" title="Edit Profile">
+          
+       
                 <button id="editbtn" className={`text-xs text-light dark:text-dark ${isButtonVisible ? '' : 'hidden'}`}
 
                     onClick={() => {
@@ -84,6 +89,7 @@ export default function Profile() {
                         <path stroke-linecap="round" stroke-linejoin="round" d="m16.862 4.487 1.687-1.688a1.875 1.875 0 1 1 2.652 2.652L10.582 16.07a4.5 4.5 0 0 1-1.897 1.13L6 18l.8-2.685a4.5 4.5 0 0 1 1.13-1.897l8.932-8.931Zm0 0L19.5 7.125M18 14v4.75A2.25 2.25 0 0 1 15.75 21H5.25A2.25 2.25 0 0 1 3 18.75V8.25A2.25 2.25 0 0 1 5.25 6H10" />
                     </svg>
                 </button>
+            </Tooltip>
             </div>
 
             <div className="grid grid-cols-2 gap-10">
