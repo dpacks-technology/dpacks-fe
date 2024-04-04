@@ -19,8 +19,8 @@ export const GetUserData = async (UId) => {
 // get all webpages by status and datetime count // TODO: Change this function accordingly
 export const UpdateUser = async (UId,data) => {
     try {
+        console.log(data);
         const response = await UserProfileService.put(`http://localhost:4000/api/pros/Users/Update/${UId}`,data);
-        console.log(response);
         return response.data;
     } catch (error) {
         throw error;
