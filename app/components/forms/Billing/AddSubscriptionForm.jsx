@@ -19,7 +19,11 @@ const AddSubscriptionForm = ({...props}) => {
     // state
     const [saving, setSaving] = React.useState(false);
     const [error, setError] = React.useState({});
-    //const [plan_name, setCompanyName] = useState("");
+    const [ ID, setID] = useState("");
+    const [UserID, setUserID] = useState("");
+    const [PlanID, setPlanID] = useState("");
+    const [PlanName, setPlanName] = useState("");
+    const [Amount, setAmount] = useState("");
     const [Company, setCompanyName] = useState("");
     const [streetNo, setStreetNo] = useState("");
     const [City, setCity] = useState("");
@@ -32,10 +36,14 @@ const AddSubscriptionForm = ({...props}) => {
     const [LastName, setLastName] = useState("");
     const [Month, setMonth] = useState("");
     const [Year, setYear] = useState("");
-    const [SecurityCode, setSecurityCode] = useState("");
+    const [CVV, setCVV] = useState("");
     const [Terms, setTerms] = useState(false);
 
-   // const [isCompanyAvailable, setIsCompanyAvailable] = useState(false);
+   const [Status, setStatus] = useState("");
+
+
+
+    // const [isCompanyAvailable, setIsCompanyAvailable] = useState(false);
     // backend validation error message
 
     const [messageApi, contextHolder] = message.useMessage(); // message api
@@ -62,6 +70,11 @@ const AddSubscriptionForm = ({...props}) => {
         try {
             // data // TODO: add/change fields
             const data = {
+               id: parseInt(ID),
+                user_id: parseInt(UserID),
+                plan_id: parseInt(PlanID),
+                plan_name:PlanName,
+                amount: parseFloat(Amount),
                 company_name: Company,
                 street_no: streetNo,
                 city: City,
@@ -71,11 +84,12 @@ const AddSubscriptionForm = ({...props}) => {
                 payment_method: PaymentMethod,
                 given_name: GivenName,
                 last_name: LastName,
-                month: Month,
-                year: Year,
-                cvv: SecurityCode,
+                month: parseInt(Month),
+                year: parseInt(Year),
+                cvv: parseInt (CVV),
                 terms: Terms,
-                card_no: CardNo,
+                card_number: parseInt(CardNo),
+                status: parseInt(Status),
             };
 
             console.log(data);
@@ -95,8 +109,10 @@ const AddSubscriptionForm = ({...props}) => {
             });
 
         } catch (validationError) {
+
             //console.log(validationError.errors)
             // set error
+
             let errorsObject = {}
             validationError.errors && validationError.errors.map(obj => errorsObject[Object.keys(obj)[0]] = Object.values(obj)[0]);
             console.log(errorsObject)
@@ -116,6 +132,71 @@ const AddSubscriptionForm = ({...props}) => {
                         <h2>Billing Details</h2>
 
                         <div className="flex flex-wrap gap-4">
+
+                            <FormItem>
+                                <Input
+                                    label={"ID :"}
+                                    type="integer"
+                                    placeholder=" "
+                                    value={ID}
+                                    onChange={(e) => setID(e.target.value)}
+                                    status={error.ID  ? "error" : ""}
+                                    error={error.ID}
+                                />
+                            </FormItem>
+
+                            <FormItem>
+                                <Input
+                                    label={"UserID :"}
+                                    type="integer"
+                                    placeholder=" "
+                                    value={UserID}
+                                    onChange={(e) => setUserID(e.target.value)}
+                                    status={error.UserID  ? "error" : ""}
+                                    error={error.UserID}
+                                />
+                            </FormItem>
+
+                            <FormItem>
+                                <Input
+                                    label={"PlanID :"}
+                                    type="integer"
+                                    placeholder=" "
+                                    value={PlanID}
+                                    onChange={(e) => setPlanID(e.target.value)}
+                                    status={error.PlanID  ? "error" : ""}
+                                    error={error.PlanID}
+                                />
+                            </FormItem>
+
+                            <FormItem>
+                                <Input
+                                    label={"PlanName :"}
+                                    type="text"
+                                    placeholder=" "
+                                    value={PlanName}
+                                    onChange={(e) => setPlanName(e.target.value)}
+                                    status={error.PlanName  ? "error" : ""}
+                                    error={error.PlanName}
+                                />
+                            </FormItem>
+
+
+                            <FormItem>
+                                <Input
+                                    label={"Amount :"}
+                                    type="decimal"
+                                    placeholder=" "
+                                    value={Amount}
+                                    onChange={(e) => setAmount(e.target.value)}
+                                    status={error.Amount  ? "error" : ""}
+                                    error={error.Amount}
+                                />
+                            </FormItem>
+
+
+
+
                             <FormItem>
                                 <Input
                                     label={"Company Name :"}
@@ -267,7 +348,7 @@ const AddSubscriptionForm = ({...props}) => {
                             <FormItem>
                                 <Input
                                     label={"Month"}
-                                    type="text"
+                                    type="integer"
                                     placeholder="MM"
                                     value={Month}
                                     onChange={(e) => setMonth(e.target.value)}
@@ -279,7 +360,7 @@ const AddSubscriptionForm = ({...props}) => {
                             <FormItem>
                                 <Input
                                     label={"Year"}
-                                    type="text"
+                                    type="integer"
                                     placeholder="YYYY"
                                     value={Year}
                                     onChange={(e) => setYear(e.target.value)}
@@ -291,29 +372,56 @@ const AddSubscriptionForm = ({...props}) => {
                             <FormItem>
                                 <Input
                                     label={"CVV"}
-                                    type="text"
+                                    type="integer"
                                     placeholder="CVV"
-                                    value={SecurityCode}
-                                    onChange={(e) => setSecurityCode(e.target.value)}
-                                    status={error.SecurityCode ? "error" : ""}
-                                    error={error.SecurityCode}
+                                    value={CVV}
+                                    onChange={(e) => setCVV(e.target.value)}
+                                    status={error.CVV ? "error" : ""}
+                                    error={error.CVV}
                                 />
                             </FormItem>
 
+                            {/*<FormItem>*/}
+                            {/*    <Checkbox*/}
+                            {/*        label={"I agree to the terms and conditions"}*/}
+                            {/*        checked={Terms}*/}
+                            {/*        onChange={(e) => setTerms(e.target.checked)}*/}
+                            {/*        status={error.Terms ? "error" : ""}*/}
+                            {/*        error={error.Terms}*/}
+                            {/*    />*/}
+                            {/*</FormItem>*/}
+
                             <FormItem>
-                                <Checkbox
-                                    label="I agree to the terms and conditions"
-                                    checked={Terms}
-                                    onChange={(e) => setTerms(e.target.checked)}
+                                <Input
+                                    label={"Terms"}
+                                    type="text"
+                                    placeholder="Terms"
+                                    value={Terms}
+                                    onChange={(e) => setTerms(e.target.value)}
                                     status={error.Terms ? "error" : ""}
                                     error={error.Terms}
                                 />
                             </FormItem>
+
+
+                            <FormItem>
+                                <Input
+                                    label={"Status"}
+                                    type="integer"
+                                    placeholder="Status"
+                                    value={Status}
+                                    onChange={(e) => setStatus(e.target.value)}
+                                    status={error.Status ? "error" : ""}
+                                    error={error.Status}
+                                />
+                            </FormItem>
+
                         </div>
                     </div>
 
                     {/* Buttons */}
                     <div className={"mt-6 mb-3 flex gap-3 justify-end"}>
+
                         {/* close button */}
                         <Button color="danger" variant="flat" onPress={props.onClose}>
                             Back
@@ -322,16 +430,16 @@ const AddSubscriptionForm = ({...props}) => {
                         {/* save button */}
                         <Button
                             disabled={saving}
-                            color="primary"
-                            variant="flat"
-                            onPress={() => {
-                                addTransaction().then(() => {
-                                    setSaving(false);
-                                });
-                            }}
-                        >
-                            {saving ? "Saving..." : "Subscribe"}
+                            color="primary" variant="flat" onPress={() => {
+                            addTransaction().then(() => {
+                                setSaving(false);
+                            });
+                        }}>
+                            {saving ? "Saving..." : "Purchase"}
                         </Button>
+
+
+
                     </div>
                 </Form>
 
