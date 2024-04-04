@@ -90,6 +90,7 @@ export const GetAlertByStatusCount = async (status, key, val) => {
 // get all webpages by status and datetime // TODO: Change this function accordingly
 export const EditAlertPage = async (id, data) => {
     try {
+        console.log(data);
         const response = await AlertService.put(`/api/analytical_alerts/Alert/${id}`, data);
         return response.data;
     } catch (error) {

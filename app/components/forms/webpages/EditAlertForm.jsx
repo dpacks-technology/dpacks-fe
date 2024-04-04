@@ -1,7 +1,7 @@
 import {Button} from "@nextui-org/react";
 import Input from "@/app/components/Input";
 import React, {useEffect} from "react";
-import {EditAlertPage, GetAlertbyId,DeleteAlertByID} from "@/services/AlertService";
+import {EditAlertPage, GetAlertbyId} from "@/services/AlertService";
 import {Form, message} from "antd";
 import schema from "@/app/validaitions/WebPageEditValidation";
 import FormItem from "antd/es/form/FormItem";
