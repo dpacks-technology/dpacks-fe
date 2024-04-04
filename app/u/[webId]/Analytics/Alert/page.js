@@ -10,7 +10,8 @@ import {
     GetAllAlert,
     GetAlertCount,
     UpdateAlerttatus,
-    UpdateAlerttatusBulk
+    UpdateAlerttatusBulk,
+    DeleteAlertByIDBulk
 } from "@/services/AlertService";
 import {useDisclosure} from "@nextui-org/react";
 import EditWebpageForm from "@/app/components/forms/webpages/EditWebpageForm";
@@ -60,6 +61,7 @@ export default function Webpages() {
         {name: "When Alert Required", uid: "when_alert_required", sortable: false, type: "text"},
         {name: "Repeat On", uid: "repeat_on", sortable: false, type: "text"},
         {name: "Status", uid: "status", sortable: true, type: "status"},
+        {name: "Actions", uid: "actions", sortable: false, type: "menu"},
        
         // all usable types: text, twoText, datetime, label, status, statusButtons, buttons, menu, copy, icon, iconText, iconTwoText
     ];
@@ -71,7 +73,8 @@ export default function Webpages() {
         "alert_content",
         "whenAlertRequired",
         "repeat_on",
-        "status"
+        "status",
+        "actions"
 
     ];
 
@@ -233,7 +236,7 @@ export default function Webpages() {
     const deleteBulk = (ids) => {
 
         // delete bulk function // TODO: Change the following function
-        deleteWebpagesBulk(ids).then(() => {
+        DeleteAlertByIDBulk(ids).then(() => {
             refreshData("success", "Deleted");
         }).catch((error) => {
             headerMessage("error", error.response.data.error);

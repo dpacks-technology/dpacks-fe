@@ -10,6 +10,7 @@ const AlertService = axios.create({
 // get all webpages by status and datetime count // TODO: Change this function accordingly
 export const CreateNewAlert = async (data) => {
     try {
+        console.log(data);
         const response = await AlertService.post(`/api/analytical_alerts/Alert`, data);
         return response.data;
     } catch (error) {
