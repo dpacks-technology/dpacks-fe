@@ -11,10 +11,11 @@ import {
     GetAlertCount,
     UpdateAlerttatus,
     UpdateAlerttatusBulk,
-    DeleteAlertByIDBulk
+    DeleteAlertByIDBulk,
+    DeleteAlertByID
 } from "@/services/AlertService";
 import {useDisclosure} from "@nextui-org/react";
-import EditWebpageForm from "@/app/components/forms/webpages/EditWebpageForm";
+import {EditAlertForm} from "@/app/components/forms/webpages/EditAlertForm";
 import {message} from "antd";
 
 // Webpages component
@@ -98,8 +99,12 @@ export default function Webpages() {
     }
 
     const deleteButton = (id) => { // delete button function // TODO: Change the following function
-        // not used here
-        // console.log("delete: " + id);
+        // delete function
+        DeleteAlertByID(id).then(() => {
+            refreshData("success", "Deleted");
+        }).catch((error) => {
+            headerMessage("error", error.response.data.error);
+        });
     }
 
     // action buttons // TODO: Change the following buttons
@@ -124,18 +129,24 @@ export default function Webpages() {
         }
 
     const editMenuButton = (id) => { // edit button function // TODO: Change the following function
-        // not used here
-        // console.log("edit: " + id);
+        
+        // edit function
+        EditAlertPage(id).then(() => {
+            refreshData("success", "Updated");
+        }).catch((error) => {
+            headerMessage("error", error.response.data.error);
+        });
     }
 
     const deleteMenuButton = (id) => { // delete button function // TODO: Change the following function
 
         // delete function
-        deletePage(id).then(() => {
+        DeleteAlertByID(id).then(() => {
             refreshData("success", "Deleted");
         }).catch((error) => {
             headerMessage("error", error.response.data.error);
         });
+
 
     }
 
@@ -379,7 +390,7 @@ export default function Webpages() {
                 editMenuButton={editMenuButton}
                 editItemIsOpen={isOpen}
                 editItemOnOpenChange={onOpenChange}
-                editForm={<EditWebpageForm refreshData={refreshData}/>}
+                editForm={<EditAlertForm refreshData={refreshData}/>}
 
                 // search, sorting and filtering
                 searchColumn={searchColumn}
