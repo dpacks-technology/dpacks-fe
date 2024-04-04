@@ -3,48 +3,97 @@ import React from "react";
 import CardTbl from "@/app/components/Analytics/CardTbl";
 import { Divider, Table } from 'antd';
 import ReactECharts from 'echarts-for-react';
+import { useParams } from "next/navigation";
 
 const dataSource = [
     {
-      key: '1',
-      country: 'USA',
-      UserCount: 500,
-      Percentage: 25,
+        key: '1',
+        country: 'USA',
+        UserCount: 500,
+        Percentage: 25,
     },
     {
-      key: '2',
-      country: 'UK',
-      UserCount: 700,
-      Percentage: 35,
+        key: '2',
+        country: 'UK',
+        UserCount: 700,
+        Percentage: 35,
     },
     {
-      key: '3',
-      country: 'India',
-      UserCount: 400,
-      Percentage: 20,
+        key: '3',
+        country: 'India',
+        UserCount: 400,
+        Percentage: 20,
     },
     {
-      key: '4',
-      country: 'Australia',
-      UserCount: 500,
-      Percentage: 25,
+        key: '4',
+        country: 'Australia',
+        UserCount: 500,
+        Percentage: 25,
     },
-  ];
-  const columns = [
+];
+const columns = [
     {
-      title: 'Country',
-      dataIndex: 'country',
-      key: 'country',
+        title: 'Country',
+        dataIndex: 'country',
+        key: 'country',
     },
     {
-      title: 'Count',
-      dataIndex: 'UserCount',
-      key: 'UserCount',
+        title: 'Count',
+        dataIndex: 'UserCount',
+        key: 'UserCount',
     },
 
-  ];
+];
+
+
+
 
 export default function Analytics() {
+    const [userCountByCountry, setUserCountByCountry] = useState([]);
+    const [websiteTrafficData, setWebsiteTrafficData] = useState([]);
+    const [visitorSourceData, setVisitorSourceData] = useState([]);
+    const [visitorDeviceData, setVisitorDeviceData] = useState([]);
+    const { webId } = useParams();
+
+    const fetchUserCountByCountry = () => {
+        
+        const data = [
+            { country: 'USA', userCount: 500 },
+            { country: 'UK', userCount: 700 },
+            { country: 'India', userCount: 400 },
+            { country: 'Australia', userCount: 500 }
+        ];
+        setUserCountByCountry(data);
+    };
+    // Fetch website traffic data
+    const fetchWebsiteTrafficData = () => {
+        // Example fetch call to fetch website traffic data
+        // Replace with your actual API endpoint or database call
+        const data = [150, 230, 224, 218, 135, 147, 260];
+        setWebsiteTrafficData(data);
+    };
+
+    const fetchVisitorSourceData = () => {
+        // Example fetch call to fetch visitor source data
+        // Replace with your actual API endpoint or database call
+        const data = [
+            { value: 100, name: 'WhatsApp' },
+            { value: 200, name: 'Facebook' },
+            { value: 150, name: 'Direct Users' },
+            { value: 50, name: 'Referral Links' }
+        ];
+        setVisitorSourceData(data);
+    };
+
+    // Fetch visitor device data
+    const fetchVisitorDeviceData = () => {
+        // Example fetch call to fetch visitor device data
+        // Replace with your actual API endpoint or database call
+        const data = [150, 230, 224];
+        setVisitorDeviceData(data);
+    };
+
+
 
     return (
         <div >
@@ -106,7 +155,7 @@ export default function Analytics() {
                     <h1 className="text-2xl mt-5 font-bold text-center">Visitor Source</h1>
                     <ReactECharts
                         option={{
-                            
+
                             tooltip: {},
                             series: [{
                                 name: 'User Source',
@@ -129,7 +178,7 @@ export default function Analytics() {
                 <div className="w-full h-96 border-1 overflow-scroll">
                     <h1 className="text-2xl mt-5 font-bold text-center pb-6">User by Country</h1>
 
-                    <Table dataSource={dataSource} columns={columns}/>;
+                    <Table dataSource={dataSource} columns={columns} />;
 
 
                 </div>
@@ -139,7 +188,7 @@ export default function Analytics() {
 
                 {/* visitor devices data horizonal grph */}
                 <div className="w-full h-96 border-1">
-                <h1 className="text-2xl mt-5 font-bold text-center">Visitor Devices</h1>
+                    <h1 className="text-2xl mt-5 font-bold text-center">Visitor Devices</h1>
 
                     <ReactECharts
                         className="p-5"
