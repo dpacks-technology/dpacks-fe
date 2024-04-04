@@ -57,12 +57,6 @@ export default function Analytics() {
 
     const fetchUserCountByCountry = () => {
         
-        const data = [
-            { country: 'USA', userCount: 500 },
-            { country: 'UK', userCount: 700 },
-            { country: 'India', userCount: 400 },
-            { country: 'Australia', userCount: 500 }
-        ];
         setUserCountByCountry(data);
     };
     // Fetch website traffic data
@@ -92,6 +86,8 @@ export default function Analytics() {
         const data = [150, 230, 224];
         setVisitorDeviceData(data);
     };
+
+    
 
 
 
