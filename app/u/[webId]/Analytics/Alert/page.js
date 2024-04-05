@@ -1,26 +1,29 @@
-
 'use client';
+
 // Importing modules
 import Table from "@/app/components/Table";
 import React, {useCallback, useEffect} from "react";
+import { useParams } from 'next/navigation'
 import {
-    deletePage,
-    deleteWebpagesBulk,
-    getPagesByDatetime,
-    getPagesByDatetimeCount,
-    getPagesByStatus,
-    getPagesByStatusCount,
-    getWebPages,
-    getWebPagesCount,
-    updateWebpagesStatus,
-    updateWebpagesStatusBulk
-} from "@/services/WebpagesService";
+    GetAlertByStatus,
+    GetAlertByStatusCount,
+    GetAllAlert,
+    GetAlertCount,
+    UpdateAlerttatus,
+    UpdateAlerttatusBulk
+} from "@/services/AlertService";
 import {useDisclosure} from "@nextui-org/react";
 import EditWebpageForm from "@/app/components/forms/webpages/EditWebpageForm";
 import {message} from "antd";
 
 // Webpages component
 export default function Webpages() {
+
+    // ----------------------- PARAMS ------------------------- (NO NEED OF CHANGING)
+    // params
+    var params = useParams();
+    const webId = params.webId;
+    
 
     // ----------------------- DEFAULT COLUMNS -------------------------
     // default columns // TODO: Change the following functions
@@ -50,24 +53,28 @@ export default function Webpages() {
     // ----------------------- COLUMNS -------------------------
     // columns // TODO: Change the following columns according the to yours
     const columns = [
-        {name: "ID", uid: "id", sortable: true, type: "text"},
-        {name: "NAME", uid: "name", sortable: true, type: "text"},
-        {name: "PATH", uid: "path", sortable: true, type: "text"},
-        {name: "CREATED ON", uid: "date_created", sortable: false, type: "datetime"},
-        {name: "STATUS", uid: "status", sortable: false, type: "status"},
-        {name: "CHANGE STATUS", uid: "statusButtons", sortable: false, type: "statusButtons"},
-        {name: "ACTIONS", uid: "menu", sortable: false, type: "menu"},
+        {name: "Alert ID", uid: "id", sortable: true, type: "text"},
+        {name: "Alert Threshold", uid: "alert_threshold", sortable: false, type: "text"},
+        {name: "Alert Subject", uid: "alert_subject", sortable: false, type: "text"},
+        {name: "Alert Content", uid: "alert_content", sortable: false, type: "text"},
+        {name: "When Alert Required", uid: "when_alert_required", sortable: false, type: "text"},
+        {name: "Repeat On", uid: "repeat_on", sortable: false, type: "text"},
+        {name: "Customer Reminder Date", uid: "custom_reminder_date", sortable: false, type: "datetime"},
+        {name: "Status", uid: "status", sortable: true, type: "status"},
+       
         // all usable types: text, twoText, datetime, label, status, statusButtons, buttons, menu, copy, icon, iconText, iconTwoText
     ];
 
     // initially visible columns // TODO: Change the following columns according the to yours
     const init_cols = [
-        "name",
-        "path",
-        "date_created",
-        "status",
-        "statusButtons",
-        "menu"
+        "alert_threshold",
+        "alert_subject",
+        "alert_content",
+        "whenAlertRequired",
+        "repeat_on",
+        "custom_reminder_date",
+        "status"
+
     ];
 
     // ----------------------- BUTTONS -------------------------
@@ -153,7 +160,7 @@ export default function Webpages() {
     const updateStatusButton = (id, status) => {
 
             // update status function
-            updateWebpagesStatus(id, status).then(() => {
+            UpdateAlerttatus(id, status).then(() => {
                 refreshData("success", "Updated");
             }).catch((error) => {
                 headerMessage("error", error.response.data.error);
@@ -166,7 +173,7 @@ export default function Webpages() {
         {
             name: "Offline", // status name
             uid: 0, // status id (the value in the database)
-            type: "", // status type (color) ["", primary, secondary, danger, warning, success]
+            type: "danger", // status type (color) ["", primary, secondary, danger, warning, success]
             button: true, // if you want to show a button to change the status
             currentStatus: [1], // button showing status, ex: if currently status is 1, then the button will be shown | can use [1,2,...] for multiple statuses
             function: updateStatusButton, // function to change the status
@@ -203,7 +210,7 @@ export default function Webpages() {
     const updateStatusBulk = (ids, status) => {
 
         // update status bulk function // TODO: Change the following function
-        updateWebpagesStatusBulk(ids, status).then(() => {
+        UpdateAlerttatusBulk(ids, status).then(() => {
             refreshData("success", "Updated");
         }).catch((error) => {
             headerMessage("error", error.response.data.error);
@@ -214,6 +221,7 @@ export default function Webpages() {
     // handle delete bulk function -- NO NEED OF CHANGING
     const handleUpdateStatusBulk = (selectedKeys, status) => {
         if (selectedKeys === 'all') { // if all items are selected
+            console.log(data);
             updateStatusBulk(data.map(item => item.id), status);
         } else {
             updateStatusBulk(
@@ -238,6 +246,7 @@ export default function Webpages() {
     // handle delete bulk function -- NO NEED OF CHANGING
     const handleDeleteBulk = (selectedKeys) => {
         if (selectedKeys === 'all') { // if all items are selected
+            console.log(data);
             deleteBulk(data.map(item => item.id));
         } else {
             deleteBulk(
@@ -255,10 +264,10 @@ export default function Webpages() {
             headerMessage(type, message);
 
         // fetch data count from API // TODO: Change the following function
-        getWebPagesCount(searchColumn, searchFieldValue).then((response) => setPagesCount(response));
+        GetAlertCount(searchColumn, searchFieldValue,webId).then((response) => setPagesCount(response));
 
         // fetch data from API // TODO: Change the following function
-        getWebPages(rowsPerPage, currentPage, searchColumn, searchFieldValue)
+        GetAllAlert(rowsPerPage, currentPage, searchColumn, searchFieldValue,webId)
             .then(response => setData(response === null ? [] : response.length === 0 ? [] : response))
             .catch(error => console.error(error));
 
@@ -268,10 +277,10 @@ export default function Webpages() {
     const fetchTableData = (useCallback((page, key, val) => {
 
         // fetch data count from API // TODO: Change the following function
-        getWebPagesCount(key, val).then((response) => setPagesCount(response));
+        GetAlertCount(key, val,webId).then((response) => setPagesCount(response));
 
         // fetch data from API // TODO: Change the following function
-        getWebPages(rowsPerPage, page, key, val)
+        GetAllAlert(rowsPerPage, page, key, val,webId)
             .then(response => setData(response === null ? [] : response.length === 0 ? [] : response))
             .catch(error => console.error(error));
 
@@ -302,10 +311,10 @@ export default function Webpages() {
     // status change function
     const statusChange = (statusArray) => {
         // get data count // TODO: Change the following function
-        getPagesByStatusCount(statusArray, searchColumn, searchFieldValue).then((response) => setPagesCount(response));
+        GetAlertByStatusCount(statusArray, searchColumn, searchFieldValue).then((response) => setPagesCount(response));
 
         // get data // TODO: Change the following function
-        getPagesByStatus(rowsPerPage, currentPage, statusArray, searchColumn, searchFieldValue).then(response => setData(response === null ? [] : response.length === 0 ? [] : response))
+        GetAlertByStatus(rowsPerPage, currentPage, statusArray, searchColumn, searchFieldValue).then(response => setData(response === null ? [] : response.length === 0 ? [] : response))
     }
 
 
