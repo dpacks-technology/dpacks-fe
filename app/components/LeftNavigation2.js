@@ -4,9 +4,9 @@ import { Button, useDisclosure } from "@nextui-org/react";
 import { message } from "antd";
 import Model from "@/app/components/Model";
 import {usePathname} from "next/navigation";
+import AddToBlockList from './forms/webpages/BlockList/AddToBlockList';
 import AddRatelimitForm from "@/app/components/forms/endpoint/AddEndpointRatelimitForm";
 import AddApiSubscriberForm from "@/app/components/forms/apisubscriber/AddApiSubscriberForm";
-
 import AddAutoRespondsForm from "@/app/components/forms/webchats/AddAutomatedMessageForm";
 import AddWebpageForm from "@/app/components/forms/sites/AddSiteForm";
 
@@ -52,7 +52,7 @@ const LeftNavigation2 = () => {
             case "chat/automatedMessage":
                 return <AddAutoRespondsForm notificationMessage={notificationMessage}/>;
             default:
-                return null;
+                return <AddToBlockList notificationMessage={notificationMessage}/>;
         }
     };
 
