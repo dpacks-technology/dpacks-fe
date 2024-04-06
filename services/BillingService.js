@@ -2,25 +2,24 @@ import axios from 'axios';
 import Keys from "@/Keys";
 
 // Create an axios instance -- NO NEED TO CHANGE THIS
-const webpagesService = axios.create({
+const billingService = axios.create({
     baseURL: Keys.USER_SERVICE_API_URL
 });
 
-// get all webpages // TODO: Change this function accordingly
-export const getWebPages = async (count, page, key, val) => {
+// get all transactions // TODO: Change this function accordingly
+export const GetTransactions = async (count, page, key, val) => {
     try {
-        const response = await webpagesService.get(`/api/web/webpages/${count}/${page}?key=${key}&val=${val}`);
+        const response = await billingService.get(`/api/billing/transactions/${count}/${page}?key=${key}&val=${val}`);
         return response.data;
     } catch (error) {
         throw error;
     }
 };
 
-
 // get all webpages count // TODO: Change this function accordingly
-export const getWebPagesCount = async (key, val) => {
+export const GetTransactionCount = async (key, val) => {
     try {
-        const response = await webpagesService.get(`/api/web/webpages/count?key=${key}&val=${val}`);
+        const response = await billingService.get(`/api/billing/transactions/count?key=${key}&val=${val}`);
         return response.data;
     } catch (error) {
         throw error;
@@ -28,7 +27,7 @@ export const getWebPagesCount = async (key, val) => {
 }
 
 // get all webpages by status // TODO: Change this function accordingly
-export const getPagesByStatus = async (count, page, status, key, val) => {
+export const GetTransactionByStatus = async (count, page, status, key, val) => {
 
     // convert status array to string with commas
     let statusString = status.join(',');
@@ -36,7 +35,7 @@ export const getPagesByStatus = async (count, page, status, key, val) => {
     console.log(statusString);
 
     try {
-        const response = await webpagesService.get(`/api/web/webpages/status/${count}/${page}?status=${statusString}&key=${key}&val=${val}`);
+        const response = await billingService.get(`/api/billing/transactions/status/${count}/${page}?status=${statusString}&key=${key}&val=${val}`);
         console.log(response.data);
         return response.data;
     } catch (error) {
@@ -45,7 +44,7 @@ export const getPagesByStatus = async (count, page, status, key, val) => {
 }
 
 // get all webpages by status count // TODO: Change this function accordingly
-export const getPagesByStatusCount = async (status, key, val) => {
+export const GetTransactionByStatusCount = async (status, key, val) => {
 
     // convert status array to string with commas
     let statusString = status.join(',');
@@ -53,7 +52,7 @@ export const getPagesByStatusCount = async (status, key, val) => {
     console.log(statusString);
 
     try {
-        const response = await webpagesService.get(`/api/web/webpages/status/count?status=${statusString}&key=${key}&val=${val}`);
+        const response = await billingService.get(`/api/billing/transactions/status/count?status=${statusString}&key=${key}&val=${val}`);
         console.log(response.data);
         return response.data;
     } catch (error) {
@@ -62,12 +61,12 @@ export const getPagesByStatusCount = async (status, key, val) => {
 }
 
 // get all webpages by datetime // TODO: Change this function accordingly
-export const getPagesByDatetime = async (count, page, start, end, key, val) => {
+export const GetTransactionDateTime = async (count, page, start, end, key, val) => {
 
     console.log(start);
 
     try {
-        const response = await webpagesService.get(`/api/web/webpages/datetime/${count}/${page}?start=${start}&end=${end}&key=${key}&val=${val}`);
+        const response = await billingService.get(`/api/billing/transactions/datetime/${count}/${page}?start=${start}&end=${end}&key=${key}&val=${val}`);
         console.log(response.data);
         return response.data;
     } catch (error) {
@@ -76,9 +75,9 @@ export const getPagesByDatetime = async (count, page, start, end, key, val) => {
 }
 
 // get all webpages by datetime count // TODO: Change this function accordingly
-export const getPagesByDatetimeCount = async (start, end, key, val) => {
+export const GetTransactionByDatetimeCount = async (start, end, key, val) => {
     try {
-        const response = await webpagesService.get(`/api/web/webpages/datetime/count?start=${start}&end=${end}&key=${key}&val=${val}`);
+        const response = await billingService.get(`/api/billing/transactions/datetime/count?start=${start}&end=${end}&key=${key}&val=${val}`);
         console.log(response.data);
         return response.data;
     } catch (error) {
@@ -89,7 +88,7 @@ export const getPagesByDatetimeCount = async (start, end, key, val) => {
 // get all webpages by status and datetime // TODO: Change this function accordingly
 export const editPages = async (id, data) => {
     try {
-        const response = await webpagesService.put(`/api/web/webpages/${id}`, data);
+        const response = await billingService.put(`/api/billing/transactions/${id}`, data);
         return response.data;
     } catch (error) {
         throw error;
@@ -99,7 +98,7 @@ export const editPages = async (id, data) => {
 // get all webpages by status and datetime count // TODO: Change this function accordingly
 export const getPageById = async (id) => {
     try {
-        const response = await webpagesService.get(`/api/web/webpage/${id}`);
+        const response = await billingService.get(`/api/billing/transaction/${id}`);
         return response.data;
     } catch (error) {
         throw error;
@@ -107,9 +106,9 @@ export const getPageById = async (id) => {
 }
 
 // get all webpages by status and datetime count // TODO: Change this function accordingly
-export const deletePage = async (id) => {
+export const DeleteTransactionByID = async (id) => {
     try {
-        const response = await webpagesService.delete(`/api/web/webpages/${id}`);
+        const response = await billingService.delete(`/api/billing/transactions/${id}`);
         return response.data;
     } catch (error) {
         throw error;
@@ -117,11 +116,11 @@ export const deletePage = async (id) => {
 }
 
 // get all webpages by status and datetime count // TODO: Change this function accordingly
-export const deleteWebpagesBulk = async (ids) => {
+export const DeleteTransactionByIDBulk = async (ids) => {
     let idsString = ids.join(',');
 
     try {
-        const response = await webpagesService.delete(`/api/web/webpages/bulk/${idsString}`);
+        const response = await billingService.delete(`/api/billing/transactions/bulk/${idsString}`);
         return response.data;
     } catch (error) {
         throw error;
@@ -129,11 +128,11 @@ export const deleteWebpagesBulk = async (ids) => {
 }
 
 // get all webpages by status and datetime count // TODO: Change this function accordingly
-export const updateWebpagesStatusBulk = async (ids, status) => {
+export const UpdateTransactionStatusBulk = async (ids, status) => {
     let idsString = ids.join(',');
 
     try {
-        const response = await webpagesService.put(`/api/web/webpages/status/bulk/${idsString}`, {status: status});
+        const response = await billingService.put(`/api/billing/transactions/status/bulk/${idsString}`, {status: status});
         return response.data;
     } catch (error) {
         throw error;
@@ -141,9 +140,9 @@ export const updateWebpagesStatusBulk = async (ids, status) => {
 }
 
 // get all webpages by status and datetime count // TODO: Change this function accordingly
-export const updateWebpagesStatus = async (id, status) => {
+export const UpdateTransactionStatus = async (id, status) => {
     try {
-        const response = await webpagesService.put(`/api/web/webpages/status/${id}`, {status: status});
+        const response = await billingService.put(`/api/billing/transactions/status/${id}`, {status: status});
         return response.data;
     } catch (error) {
         throw error;
@@ -153,7 +152,7 @@ export const updateWebpagesStatus = async (id, status) => {
 // get all webpages by status and datetime count // TODO: Change this function accordingly
 export const AddWebpage = async (data) => {
     try {
-        const response = await webpagesService.post(`/api/web/webpage`, data);
+        const response = await billingService.post(`/api/billing/transactions`, data);
         return response.data;
     } catch (error) {
         throw error;

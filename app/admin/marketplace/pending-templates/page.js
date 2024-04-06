@@ -1,5 +1,5 @@
-
 'use client';
+
 // Importing modules
 import Table from "@/app/components/Table";
 import React, {useCallback, useEffect} from "react";
@@ -20,7 +20,7 @@ import EditWebpageForm from "@/app/components/forms/webpages/EditWebpageForm";
 import {message} from "antd";
 
 // Webpages component
-export default function Webpages() {
+export default function ReviewTemplates() {
 
     // ----------------------- DEFAULT COLUMNS -------------------------
     // default columns // TODO: Change the following functions

@@ -1,26 +1,22 @@
-
 'use client';
+
 // Importing modules
 import Table from "@/app/components/Table";
 import React, {useCallback, useEffect} from "react";
 import {
-    deletePage,
-    deleteWebpagesBulk,
-    getPagesByDatetime,
-    getPagesByDatetimeCount,
     getPagesByStatus,
     getPagesByStatusCount,
     getWebPages,
     getWebPagesCount,
     updateWebpagesStatus,
     updateWebpagesStatusBulk
-} from "@/services/WebpagesService";
+} from "@/services/BlockPagesService";
 import {useDisclosure} from "@nextui-org/react";
 import EditWebpageForm from "@/app/components/forms/webpages/EditWebpageForm";
 import {message} from "antd";
 
 // Webpages component
-export default function Webpages() {
+export default function History() {
 
     // ----------------------- DEFAULT COLUMNS -------------------------
     // default columns // TODO: Change the following functions
@@ -52,22 +48,19 @@ export default function Webpages() {
     const columns = [
         {name: "ID", uid: "id", sortable: true, type: "text"},
         {name: "NAME", uid: "name", sortable: true, type: "text"},
-        {name: "PATH", uid: "path", sortable: true, type: "text"},
-        {name: "CREATED ON", uid: "date_created", sortable: false, type: "datetime"},
+        {name: "URL", uid: "url", sortable: true, type: "text"},
+        {name: "LAST ACCESS ON", uid: "last_access_date", sortable: false, type: "datetime"},
         {name: "STATUS", uid: "status", sortable: false, type: "status"},
-        {name: "CHANGE STATUS", uid: "statusButtons", sortable: false, type: "statusButtons"},
-        {name: "ACTIONS", uid: "menu", sortable: false, type: "menu"},
         // all usable types: text, twoText, datetime, label, status, statusButtons, buttons, menu, copy, icon, iconText, iconTwoText
     ];
 
     // initially visible columns // TODO: Change the following columns according the to yours
     const init_cols = [
         "name",
-        "path",
-        "date_created",
+        "url",
+        "last_access_date",
         "status",
-        "statusButtons",
-        "menu"
+
     ];
 
     // ----------------------- BUTTONS -------------------------
@@ -97,7 +90,6 @@ export default function Webpages() {
     // action buttons // TODO: Change the following buttons
     const actionButtons = [
         {name: "View", text: "View", icon: "", type: "default", function: viewButton},
-        {name: "Edit", text: "Edit", icon: "", type: "primary", function: editButton},
         {name: "Delete", text: "Delete", icon: "", type: "danger", function: deleteButton},
     ];
 
@@ -134,7 +126,6 @@ export default function Webpages() {
     // menu buttons // TODO: Change the following buttons
     const menuButtons = [
         {name: "View", text: "View", function: viewMenuButton},
-        {name: "Edit", text: "Edit", function: onOpen}, // edit function set to open model (onOpen function)
         {name: "Delete", text: "Delete", function: deleteMenuButton},
     ];
 
@@ -164,9 +155,9 @@ export default function Webpages() {
     // status options // TODO: Change the following options
     const statusOptions = [
         {
-            name: "Offline", // status name
+            name: "Blocked", // status name
             uid: 0, // status id (the value in the database)
-            type: "", // status type (color) ["", primary, secondary, danger, warning, success]
+            type: "danger", // status type (color) ["", primary, secondary, danger, warning, success]
             button: true, // if you want to show a button to change the status
             currentStatus: [1], // button showing status, ex: if currently status is 1, then the button will be shown | can use [1,2,...] for multiple statuses
             function: updateStatusButton, // function to change the status

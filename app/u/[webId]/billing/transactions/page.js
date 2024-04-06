@@ -1,33 +1,33 @@
-
 'use client';
+
 // Importing modules
 import Table from "@/app/components/Table";
 import React, {useCallback, useEffect} from "react";
 import {
-    deletePage,
-    deleteWebpagesBulk,
-    getPagesByDatetime,
-    getPagesByDatetimeCount,
-    getPagesByStatus,
-    getPagesByStatusCount,
-    getWebPages,
-    getWebPagesCount,
-    updateWebpagesStatus,
-    updateWebpagesStatusBulk
-} from "@/services/WebpagesService";
+    DeleteTransactionByID,
+    DeleteTransactionByIDBulk,
+    GetTransactionDateTime,
+    GetTransactionByDatetimeCount,
+    GetTransactionByStatus,
+    GetTransactionByStatusCount,
+    GetTransactions,
+    GetTransactionCount,
+    UpdateTransactionStatus,
+    UpdateTransactionStatusBulk
+} from "@/services/BillingService";
 import {useDisclosure} from "@nextui-org/react";
 import EditWebpageForm from "@/app/components/forms/webpages/EditWebpageForm";
 import {message} from "antd";
 
 // Webpages component
-export default function Webpages() {
+export default function Transaction() {
 
     // ----------------------- DEFAULT COLUMNS -------------------------
-    // default columns // TODO: Change the following functions
+    // default columns //
     const dateColumn = "datetime" // default date column
     const sortColumn = {column: "id", direction: "ascending"} // default sort column
 
-    // ----------------------- MESSAGE ------------------------- (NO NEED OF CHANGING)
+
     // message
     const [messageApi, contextHolder] = message.useMessage();
     const headerMessage = (type, message) => {
@@ -48,26 +48,30 @@ export default function Webpages() {
     const [searchColumn, setSearchColumn] = React.useState(sortColumn.column); // default search column
 
     // ----------------------- COLUMNS -------------------------
-    // columns // TODO: Change the following columns according the to yours
+    // columns //
     const columns = [
         {name: "ID", uid: "id", sortable: true, type: "text"},
-        {name: "NAME", uid: "name", sortable: true, type: "text"},
-        {name: "PATH", uid: "path", sortable: true, type: "text"},
-        {name: "CREATED ON", uid: "date_created", sortable: false, type: "datetime"},
+        {name: "PLAN NAME", uid: "plan_name", sortable: true, type: "text"},
         {name: "STATUS", uid: "status", sortable: false, type: "status"},
         {name: "CHANGE STATUS", uid: "statusButtons", sortable: false, type: "statusButtons"},
-        {name: "ACTIONS", uid: "menu", sortable: false, type: "menu"},
+        {name: "AMOUNT", uid: "amount", sortable: false, type: "float"},
+        {name: "PAID ON", uid: "transaction_date", sortable: false, type: "datetime"},
+        {name: "Email", uid: "email", sortable: false, type: "text"},
+         // action buttons
+
+
         // all usable types: text, twoText, datetime, label, status, statusButtons, buttons, menu, copy, icon, iconText, iconTwoText
     ];
 
-    // initially visible columns // TODO: Change the following columns according the to yours
+    // initially visible columns //
     const init_cols = [
-        "name",
-        "path",
-        "date_created",
+        "plan_name",
         "status",
+        "amount",
         "statusButtons",
-        "menu"
+        "transaction_date",
+        "email"
+
     ];
 
     // ----------------------- BUTTONS -------------------------
@@ -94,11 +98,11 @@ export default function Webpages() {
         // console.log("delete: " + id);
     }
 
-    // action buttons // TODO: Change the following buttons
+    // action buttons //
     const actionButtons = [
         {name: "View", text: "View", icon: "", type: "default", function: viewButton},
-        {name: "Edit", text: "Edit", icon: "", type: "primary", function: editButton},
-        {name: "Delete", text: "Delete", icon: "", type: "danger", function: deleteButton},
+      //  {name: "Edit", text: "Edit", icon: "", type: "primary", function: editButton},
+       // {name: "Delete", text: "Delete", icon: "", type: "danger", function: deleteButton},
     ];
 
 
@@ -153,7 +157,7 @@ export default function Webpages() {
     const updateStatusButton = (id, status) => {
 
             // update status function
-            updateWebpagesStatus(id, status).then(() => {
+            UpdateTransactionStatus(id, status).then(() => {
                 refreshData("success", "Updated");
             }).catch((error) => {
                 headerMessage("error", error.response.data.error);
@@ -164,11 +168,11 @@ export default function Webpages() {
     // status options // TODO: Change the following options
     const statusOptions = [
         {
-            name: "Offline", // status name
+            name: "Pending", // status name
             uid: 0, // status id (the value in the database)
             type: "", // status type (color) ["", primary, secondary, danger, warning, success]
             button: true, // if you want to show a button to change the status
-            currentStatus: [1], // button showing status, ex: if currently status is 1, then the button will be shown | can use [1,2,...] for multiple statuses
+            currentStatus: [1,2], // button showing status, ex: if currently status is 1, then the button will be shown | can use [1,2,...] for multiple statuses
             function: updateStatusButton, // function to change the status
 
             // icon
@@ -179,11 +183,11 @@ export default function Webpages() {
             </svg>
         },
         {
-            name: "Active", // status name
+            name: "Approved", // status name
             uid: 1, // status id (the value in the database)
             type: "primary", // status type (color) [danger, warning, success, primary]
             button: true, // if you want to show a button to change the status
-            currentStatus: [0], // button showing status, ex: if currently status is 1, then the button will be shown | can use [1,2,...] for multiple statuses
+            currentStatus: [0, 2], // button showing status, ex: if currently status is 1, then the button will be shown | can use [1,2,...] for multiple statuses
             function: updateStatusButton, // function to change the status
 
             // icon
@@ -192,9 +196,24 @@ export default function Webpages() {
                 <path strokeLinecap="round" strokeLinejoin="round"
                       d="M9 12.75 11.25 15 15 9.75M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z"/>
             </svg>
-        }
+        },
+        {
+            name: "Rejected", // status name
+            uid: 2, // status id (the value in the database)
+            type: "", // status type (color) ["", primary, secondary, danger, warning, success]
+            button: true, // if you want to show a button to change the status
+            currentStatus: [0,1], // button showing status, ex: if currently status is 1, then the button will be shown | can use [1,2,...] for multiple statuses
+            function: updateStatusButton, // function to change the status
 
-        // ...add more status options (if needed)
+            // icon
+            icon: <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5}
+                       stroke="currentColor" className="w-5 h-5">
+                <path strokeLinecap="round" strokeLinejoin="round"
+                      d="m9.75 9.75 4.5 4.5m0-4.5-4.5 4.5M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z"/>
+            </svg>
+        },
+
+
 
     ]
 
@@ -203,7 +222,7 @@ export default function Webpages() {
     const updateStatusBulk = (ids, status) => {
 
         // update status bulk function // TODO: Change the following function
-        updateWebpagesStatusBulk(ids, status).then(() => {
+        UpdateTransactionStatusBulk(ids, status).then(() => {
             refreshData("success", "Updated");
         }).catch((error) => {
             headerMessage("error", error.response.data.error);
@@ -214,7 +233,7 @@ export default function Webpages() {
     // handle delete bulk function -- NO NEED OF CHANGING
     const handleUpdateStatusBulk = (selectedKeys, status) => {
         if (selectedKeys === 'all') { // if all items are selected
-            updateStatusBulk(data.map(item => item.id), status);
+            UpdateTransactionStatus(data.map(item => item.id), status);
         } else {
             updateStatusBulk(
                 Array.from(selectedKeys).map((str) => parseInt(str, 10)),
@@ -227,7 +246,7 @@ export default function Webpages() {
     const deleteBulk = (ids) => {
 
         // delete bulk function // TODO: Change the following function
-        deleteWebpagesBulk(ids).then(() => {
+        DeleteTransactionByID(ids).then(() => {
             refreshData("success", "Deleted");
         }).catch((error) => {
             headerMessage("error", error.response.data.error);
@@ -255,10 +274,10 @@ export default function Webpages() {
             headerMessage(type, message);
 
         // fetch data count from API // TODO: Change the following function
-        getWebPagesCount(searchColumn, searchFieldValue).then((response) => setPagesCount(response));
+        GetTransactionCount(searchColumn, searchFieldValue).then((response) => setPagesCount(response));
 
         // fetch data from API // TODO: Change the following function
-        getWebPages(rowsPerPage, currentPage, searchColumn, searchFieldValue)
+        GetTransactions(rowsPerPage, currentPage, searchColumn, searchFieldValue)
             .then(response => setData(response === null ? [] : response.length === 0 ? [] : response))
             .catch(error => console.error(error));
 
@@ -268,10 +287,10 @@ export default function Webpages() {
     const fetchTableData = (useCallback((page, key, val) => {
 
         // fetch data count from API // TODO: Change the following function
-        getWebPagesCount(key, val).then((response) => setPagesCount(response));
+        GetTransactionCount(key, val).then((response) => setPagesCount(response));
 
         // fetch data from API // TODO: Change the following function
-        getWebPages(rowsPerPage, page, key, val)
+        GetTransactions(rowsPerPage, page, key, val)
             .then(response => setData(response === null ? [] : response.length === 0 ? [] : response))
             .catch(error => console.error(error));
 
@@ -290,10 +309,10 @@ export default function Webpages() {
             fetchTableData(currentPage, searchColumn, searchFieldValue);
         } else {
             // get data count // TODO: Change the following function
-            getPagesByDatetimeCount(start, end, searchColumn, searchFieldValue).then((response) => setPagesCount(response));
+            GetTransactionByDatetimeCount(start, end, searchColumn, searchFieldValue).then((response) => setPagesCount(response));
 
             // get data // TODO: Change the following function
-            getPagesByDatetime(rowsPerPage, currentPage, start, end, searchColumn, searchFieldValue).then(response => setData(response === null ? [] : response.length === 0 ? [] : response))
+            GetTransactionDateTime(rowsPerPage, currentPage, start, end, searchColumn, searchFieldValue).then(response => setData(response === null ? [] : response.length === 0 ? [] : response))
         }
     }
 
@@ -302,10 +321,10 @@ export default function Webpages() {
     // status change function
     const statusChange = (statusArray) => {
         // get data count // TODO: Change the following function
-        getPagesByStatusCount(statusArray, searchColumn, searchFieldValue).then((response) => setPagesCount(response));
+        GetTransactionByStatusCount(statusArray, searchColumn, searchFieldValue).then((response) => setPagesCount(response));
 
         // get data // TODO: Change the following function
-        getPagesByStatus(rowsPerPage, currentPage, statusArray, searchColumn, searchFieldValue).then(response => setData(response === null ? [] : response.length === 0 ? [] : response))
+        GetTransactionByStatus(rowsPerPage, currentPage, statusArray, searchColumn, searchFieldValue).then(response => setData(response === null ? [] : response.length === 0 ? [] : response))
     }
 
 
