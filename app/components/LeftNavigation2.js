@@ -51,6 +51,8 @@ const LeftNavigation2 = () => {
                 return <AddRatelimitForm notificationMessage={notificationMessage}/>;
             case "chat/automatedMessage":
                 return <AddAutoRespondsForm notificationMessage={notificationMessage}/>;
+            case "api/subscribers":
+                return <AddApiSubscriberForm notificationMessage={notificationMessage}/>;
             default:
                 return <AddToBlockList notificationMessage={notificationMessage}/>;
         }

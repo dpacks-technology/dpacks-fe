@@ -16,7 +16,7 @@ export const getSubscribers = async (count, page, key, val) => {
     }
 };
 
-// get all webpages count // TODO: Change this function accordingly
+
 export const getApiSubscribersCount = async (key, val) => {
     try {
         const response = await apiManagement.get(`/api/api_subscribers/subscribers/count?key=${key}&val=${val}`);
@@ -27,7 +27,7 @@ export const getApiSubscribersCount = async (key, val) => {
 }
 
 
-// get all webpages by datetime // TODO: Change this function accordingly
+
 export const getApiSubscribersByDatetime = async (count, page, start, end, key, val) => {
 
     console.log(start);
@@ -42,7 +42,7 @@ export const getApiSubscribersByDatetime = async (count, page, start, end, key, 
 }
 
 
-// get all webpages by datetime count // TODO: Change this function accordingly
+
 export const getApiSubscribersByDatetimeCount = async (start, end, key, val) => {
     try {
         const response = await apiManagement.get(`/api/api_subscribers/subscribers/datetime/count?start=${start}&end=${end}&key=${key}&val=${val}`);
@@ -54,7 +54,7 @@ export const getApiSubscribersByDatetimeCount = async (start, end, key, val) => 
 }
 
 
-// get all webpages by status and datetime count // TODO: Change this function accordingly
+
 export const getApiSubscriberById = async (id) => {
     try {
         const response = await apiManagement.get(`/api/api_subscribers/subscriber/${id}`);
@@ -64,7 +64,7 @@ export const getApiSubscriberById = async (id) => {
     }
 }
 
-// get all webpages by status and datetime count // TODO: Change this function accordingly
+
 export const deleteApiSubscriber = async (id) => {
     try {
         const response = await apiManagement.delete(`/api/api_subscribers/subscriber/${id}`);
@@ -74,7 +74,7 @@ export const deleteApiSubscriber = async (id) => {
     }
 }
 
-// get all webpages by status and datetime count // TODO: Change this function accordingly
+
 export const deleteApiSubscribersBulk = async (ids) => {
     let idsString = ids.join(',');
 
@@ -107,7 +107,7 @@ export const regenerateApiKeyBulk = async (ids) => {
 }
 
 
-// get all webpages by status and datetime count // TODO: Change this function accordingly
+
 export const AddApiSubscriber = async (data) => {
     try {
         const response = await apiManagement.post(`/api/api_subscribers/subscriber`, data);
