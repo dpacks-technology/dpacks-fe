@@ -6,7 +6,6 @@ import {DeleteSiteService, GetSitesService} from "@/services/SitesService";
 import {Button} from "@nextui-org/react";
 import {useRouter} from "next/navigation";
 
-
 export default function Dashboard() {
 
     const [sites, setSites] = useState([]);
