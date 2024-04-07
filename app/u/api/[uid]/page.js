@@ -81,10 +81,10 @@ export default function apiSubscribe({params}) {
     return(
         <div className="w-full h-screen flex items-center justify-center">
 
-            <Card className="bg-gray-800 w-3/4 p-10 ml-auto mr-auto flex-col items-center flex">
+            <Card className="dark:bg-secondaryDark w-3/4 p-10 ml-auto mr-auto flex-col items-center flex">
                 {!clientId && !apiKey ? (
                     <Button
-                        variant="solid"
+                        variant="flat"
                         color="primary"
                         size="lg"
                         onClick={subscribe}>
@@ -117,7 +117,7 @@ export default function apiSubscribe({params}) {
 
                         <div className="flex flex-row justify-between gap-5 mt-5">
                             <Button
-                                variant="solid"
+                                variant="flat"
                                 color="success"
                                 size="lg"
                                 onClick={regenerate}
@@ -127,7 +127,7 @@ export default function apiSubscribe({params}) {
 
                             <Button
                                 name="Delete"
-                                variant="solid"
+                                variant="flat"
                                 color="danger"
                                 size="lg"
                                 onClick={deleteSubscription}
