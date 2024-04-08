@@ -3,23 +3,21 @@
 // Importing modules
 import Table from "@/app/components/Table";
 import React, {useCallback, useEffect} from "react";
-import {
-    deletePage,
-    deleteWebpagesBulk,
-    getPagesByDatetime,
-    getPagesByDatetimeCount,
-    getPagesByStatus,
-    getPagesByStatusCount,
-    getWebPages,
-    getWebPagesCount,
-    updateWebpagesStatus,
-    updateWebpagesStatusBulk
-} from "@/services/WebpagesService";
 import {useDisclosure} from "@nextui-org/react";
-import EditWebpageForm from "@/app/components/forms/webpages/EditWebpageForm";
 import {message} from "antd";
-import {getAdmins, getAdminsCount, deleteAdmin, editAdmin} from "@/services/AdminManagementService";
-import EditAdminForm from "@/app/components/forms/webpages/EditAdminForm";
+import {
+    getAdmins,
+    getAdminsCount,
+    deleteAdmin,
+    updateAdminStatus,
+    updateAdminStatusBulk,
+    deleteAdminsBulk,
+    getAdminsByDatetimeCount,
+    getAdminsByDatetime,
+    getAdminsByStatusCount,
+    getAdminsByStatus
+} from "@/services/AdminManagementService";
+import EditAdminForm from "@/app/components/forms/admins/EditAdminForm";
 
 // Webpages component
 export default function Webpages() {
@@ -50,84 +48,41 @@ export default function Webpages() {
     const [searchColumn, setSearchColumn] = React.useState(sortColumn.column); // default search column
 
     // ----------------------- COLUMNS -------------------------
-    // columns // TODO: Change the following columns according the to yours
+    // columns //
     const columns = [
         {name: "ID", uid: "id", sortable: true, type: "text"},
         {name: "NAME", uid: "name", sortable: true, type: "text"},
         {name: "PHONE", uid: "phone", sortable: true, type: "text"},
         {name: "EMAIL", uid: "email", sortable: true, type: "email"},
+        {name: "ADDED ON", uid: "added_on", sortable: false, type: "datetime"},
         {name: "STATUS", uid: "status", sortable: false, type: "status"},
         {name: "CHANGE STATUS", uid: "statusButtons", sortable: false, type: "statusButtons"},
         {name: "ACTIONS", uid: "menu", sortable: false, type: "menu"},
         // all usable types: text, twoText, datetime, label, status, statusButtons, buttons, menu, copy, icon, iconText, iconTwoText
     ];
 
-    // initially visible columns // TODO: Change the following columns according the to yours
+    // initially visible columns //
     const init_cols = [
         "name",
         "phone",
         "email",
+        "added_on",
         "status",
         "statusButtons",
         "menu"
     ];
 
     // ----------------------- BUTTONS -------------------------
-    // 1. action buttons (buttons)
-    /***
-     * 1. To use following button set, first you have to add a column with the type of "buttons"
-     * 2. Not compulsory to use, you can either use or ignore
-     * 3. You can define button functions first, which describes what happens when clicked
-     * 5. Change the button names, texts, icons, types and functions
-     ***/
-        // action button functions
-    const viewButton = (id) => { // view button function // TODO: Change the following function
-            // not used here
-            // console.log("view: " + id);
-        }
-
-    const editButton = (id) => { // edit button function // TODO: Change the following function
-        // not used here
-        // console.log("edit: " + id);
-    }
-
-    const deleteButton = (id) => { // delete button function // TODO: Change the following function
-        // delete function
-        /*deleteAdmin(id).then(() => {
-            refreshData("success", "Deleted");
-        }).catch((error) => {
-            headerMessage("error", error.response.data.error);
-        });*/
-        // console.log("delete: " + id);
-    }
-
-    // action buttons // TODO: Change the following buttons
-    const actionButtons = [
-        //{name: "View", text: "View", icon: "", type: "default", function: viewButton},
-        {name: "Edit", text: "Edit", icon: "", type: "primary", function: editButton},
-        {name: "Delete", text: "Delete", icon: "", type: "danger", function: deleteButton},
-    ];
 
 
-    // 2. menu buttons (3 dots button)
-    /***
-     * 1. To use following menu button set, first you have to add a column with the type of "menu"
-     * 2. Not compulsory to use, you can either use or ignore
-     * 3. You can define button functions first, which describes what happens when clicked
-     * 5. Change the button names, texts, icons, types and functions
-     ***/
-        // menu button functions
-    const viewMenuButton = (id) => { // view button function // TODO: Change the following function
-            // not used here
-            // console.log("view: " + id);
-        }
-
-    const editMenuButton = (id) => { // edit button function // TODO: Change the following function
+    // menu buttons (3 dots button)
+    // menu button functions
+    const editMenuButton = (id) => { // edit button function
         // not used here
         // console.log("view: " + id);
     }
 
-    const deleteMenuButton = (id) => { // delete button function // TODO: Change the following function
+    const deleteMenuButton = (id) => { // delete button function
 
         // delete function
         deleteAdmin(id).then(() => {
@@ -138,29 +93,20 @@ export default function Webpages() {
 
     }
 
-    // menu buttons // TODO: Change the following buttons
+    // menu buttons
     const menuButtons = [
-        //{name: "View", text: "View", function: viewMenuButton},
         {name: "Edit", text: "Edit", function: onOpen}, // edit function set to open model (onOpen function)
         {name: "Delete", text: "Delete", function: deleteMenuButton},
     ];
 
 
-    // 3. status options (status of the data and buttons to change the status)
-    /***
-     * 1. To show status as a label, first you have to add a column with the type of "status"
-     * 1. To use following status button set (to change the status), then you have to add a column with the type of "statusButtons"
-     * 2. Not compulsory to use, you can either use or ignore
-     * 3. You can define button functions first, which describes what happens when clicked
-     * 5. Change the button names, texts, icons, types and functions
-     * 6. You can add more status options
-     ***/
+    // status options (status of the data and buttons to change the status)
 
-        // update status button function // TODO: Change the following function
+    // update status button function
     const updateStatusButton = (id, status) => {
 
             // update status function
-            updateWebpagesStatus(id, status).then(() => {
+            updateAdminStatus(id, status).then(() => {
                 refreshData("success", "Updated");
             }).catch((error) => {
                 headerMessage("error", error.response.data.error);
@@ -168,12 +114,12 @@ export default function Webpages() {
 
         }
 
-    // status options // TODO: Change the following options
+    // status options
     const statusOptions = [
         {
-            name: "Offline", // status name
+            name: "offline", // status name
             uid: 0, // status id (the value in the database)
-            type: "", // status type (color) ["", primary, secondary, danger, warning, success]
+            type: "danger", // status type (color) ["", primary, secondary, danger, warning, success]
             button: true, // if you want to show a button to change the status
             currentStatus: [1], // button showing status, ex: if currently status is 1, then the button will be shown | can use [1,2,...] for multiple statuses
             function: updateStatusButton, // function to change the status
@@ -201,16 +147,14 @@ export default function Webpages() {
             </svg>
         }
 
-        // ...add more status options (if needed)
-
     ]
 
     // ----------------------- BULK ACTION FUNCTIONS -------------------------
     // update status bulk function
     const updateStatusBulk = (ids, status) => {
 
-        // update status bulk function // TODO: Change the following function
-        updateWebpagesStatusBulk(ids, status).then(() => {
+        // update status bulk function
+        updateAdminStatusBulk(ids, status).then(() => {
             refreshData("success", "Updated");
         }).catch((error) => {
             headerMessage("error", error.response.data.error);
@@ -218,7 +162,7 @@ export default function Webpages() {
 
     };
 
-    // handle delete bulk function -- NO NEED OF CHANGING
+    // handle delete bulk function
     const handleUpdateStatusBulk = (selectedKeys, status) => {
         if (selectedKeys === 'all') { // if all items are selected
             updateStatusBulk(data.map(item => item.id), status);
@@ -233,8 +177,8 @@ export default function Webpages() {
     // delete bulk
     const deleteBulk = (ids) => {
 
-        // delete bulk function // TODO: Change the following function
-        deleteWebpagesBulk(ids).then(() => {
+        // delete bulk function
+        deleteAdminsBulk(ids).then(() => {
             refreshData("success", "Deleted");
         }).catch((error) => {
             headerMessage("error", error.response.data.error);
@@ -242,7 +186,7 @@ export default function Webpages() {
 
     }
 
-    // handle delete bulk function -- NO NEED OF CHANGING
+    // handle delete bulk function
     const handleDeleteBulk = (selectedKeys) => {
         if (selectedKeys === 'all') { // if all items are selected
             deleteBulk(data.map(item => item.id));
@@ -261,10 +205,10 @@ export default function Webpages() {
         if (type === "success")
             headerMessage(type, message);
 
-        // fetch data count from API // TODO: Change the following function
+        // fetch data count from API
         getAdminsCount(searchColumn, searchFieldValue).then((response) => setPagesCount(response));
 
-        // fetch data from API // TODO: Change the following function
+        // fetch data from API
         getAdmins(rowsPerPage, currentPage, searchColumn, searchFieldValue)
             .then(response => setData(response === null ? [] : response.length === 0 ? [] : response))
             .catch(error => console.error(error));
@@ -274,17 +218,17 @@ export default function Webpages() {
     // Fetch table data
     const fetchTableData = (useCallback((page, key, val) => {
 
-        // fetch data count from API // TODO: Change the following function
+        // fetch data count from API
         getAdminsCount(key, val).then((response) => setPagesCount(response));
 
-        // fetch data from API // TODO: Change the following function
+        // fetch data from API
         getAdmins(rowsPerPage, page, key, val)
             .then(response => setData(response === null ? [] : response.length === 0 ? [] : response))
             .catch(error => console.error(error));
 
     }, [rowsPerPage]));
 
-    // useEffect to fetch data -- NO NEED OF CHANGING
+    // useEffect to fetch data
     useEffect(() => {
         fetchTableData(currentPage, searchColumn, searchFieldValue);
     }, [currentPage, fetchTableData, rowsPerPage]);
@@ -296,11 +240,11 @@ export default function Webpages() {
         if (start === null || end === null) {
             fetchTableData(currentPage, searchColumn, searchFieldValue);
         } else {
-            // get data count // TODO: Change the following function
-            getPagesByDatetimeCount(start, end, searchColumn, searchFieldValue).then((response) => setPagesCount(response));
+            // get data count
+            getAdminsByDatetimeCount(start, end, searchColumn, searchFieldValue).then((response) => setPagesCount(response));
 
-            // get data // TODO: Change the following function
-            getPagesByDatetime(rowsPerPage, currentPage, start, end, searchColumn, searchFieldValue).then(response => setData(response === null ? [] : response.length === 0 ? [] : response))
+            // get data
+            getAdminsByDatetime(rowsPerPage, currentPage, start, end, searchColumn, searchFieldValue).then(response => setData(response === null ? [] : response.length === 0 ? [] : response))
         }
     }
 
@@ -308,15 +252,15 @@ export default function Webpages() {
     // ----------------------- STATUS CHANGE FUNCTIONS -------------------------
     // status change function
     const statusChange = (statusArray) => {
-        // get data count // TODO: Change the following function
-        getPagesByStatusCount(statusArray, searchColumn, searchFieldValue).then((response) => setPagesCount(response));
+        // get data count
+        getAdminsByStatusCount(statusArray, searchColumn, searchFieldValue).then((response) => setPagesCount(response));
 
-        // get data // TODO: Change the following function
-        getPagesByStatus(rowsPerPage, currentPage, statusArray, searchColumn, searchFieldValue).then(response => setData(response === null ? [] : response.length === 0 ? [] : response))
+        // get data
+        getAdminsByStatus(rowsPerPage, currentPage, statusArray, searchColumn, searchFieldValue).then(response => setData(response === null ? [] : response.length === 0 ? [] : response))
     }
 
 
-    // ----------------------- TABLE FUNCTIONS ------------------------- (NO NEED OF CHANGING)
+    // ----------------------- TABLE FUNCTIONS -------------------------
 
     // pagination functions -- NO NEED OF CHANGING
     const setPage = (page) => { // set page
@@ -342,13 +286,13 @@ export default function Webpages() {
         setSearchColumn(sort.column);
     }
 
-    // useEffect to reset the page number -- NO NEED OF CHANGING
+    // useEffect to reset the page number
     useEffect(() => {
         setCurrentPage(1);
     }, [searchFieldValue]);
 
 
-    // ----------------------- RETURN ------------------------- (NO NEED OF CHANGING)
+    // ----------------------- RETURN -------------------------
 
     // return
     return (
@@ -365,7 +309,6 @@ export default function Webpages() {
                 fetchTableData={fetchTableData}
 
                 // action buttons
-                actionButtons={actionButtons}
                 statusOptions={statusOptions}
                 menuButtons={menuButtons}
 

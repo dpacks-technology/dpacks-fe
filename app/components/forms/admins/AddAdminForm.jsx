@@ -1,13 +1,12 @@
 import {Button} from "@nextui-org/react";
 import Input from "@/app/components/Input";
-import React, {useEffect} from "react";
-import {editPages, getPageById} from "@/services/WebpagesService";
+import React from "react";
 import {Form, message} from "antd";
-import schema from "@/app/validaitions/WebPageEditValidation";
+import schema from "@/app/validaitions/AddAdminValidation";
 import FormItem from "antd/es/form/FormItem";
-import {editAdmin, getAdminById} from "@/services/AdminManagementService";
+import {AddAdminUser} from "@/services/AdminManagementService";
 
-const EditAdminForm = ({...props}) => {
+const AddAdminForm = ({...props}) => {
 
     // state
     const [saving, setSaving] = React.useState(false);
@@ -26,28 +25,30 @@ const EditAdminForm = ({...props}) => {
         });
     };
 
-    // edit webpage function
-    const editAdminUser = async () => {
+
+    // add admin function
+    const addAdmin = async () => {
 
         // set saving
         setSaving(true);
 
+        //const number = parseInt(phone);
+
         try {
-            // data // TODO: add/change fields
+            // data //add/change fields
             const data = {
-                name: name,
-                phone: phone,
+                name:name,
+                phone: parseInt(phone),
                 email: email,
                 password: password
             };
-            //const data
 
             // validate
             await schema.validate(data, {abortEarly: false});
 
-            // edit webpage // TODO: change the function
-            await editAdmin(props.id, data).then(() => {
-                props.refreshData("success", "Saved"); // refresh data with success message
+            // add admin
+            await AddAdminUser(data).then((response) => {
+                props.notificationMessage("success", "Record added"); // refresh data with success message
                 props.onClose(); // close modal
             }).then((error) => {
                 Message("error", error.response.data.error) // backend validation error
@@ -62,18 +63,6 @@ const EditAdminForm = ({...props}) => {
 
     }
 
-    // get webpage by id
-    useEffect(() => {
-        // get webpage by id from backend function
-        getAdminById(props.id).then((response) => {
-            setName(response.name); // set name
-            setPhone(response.phone); // Set phone
-            setEmail(response.email); // Set email
-            setPassword(response.password); // Set password
-        }).then(() => {
-        });
-    }, []);
-
     return (
         <>
             {contextHolder}
@@ -85,7 +74,7 @@ const EditAdminForm = ({...props}) => {
                             status={error.name ? "error" : ""}
                             error={error.name}
                             label={"Name"}
-                            type="text" placeholder="Webpage name"
+                            type="text" placeholder="Name"
                             value={name}
                             onChange={(e) => setName(e.target.value)}
                         />
@@ -125,6 +114,18 @@ const EditAdminForm = ({...props}) => {
                             onChange={(e) => setPassword(e.target.value)}
                         />
                     </FormItem>
+
+                    {/*/!* Confirm Password *!/*/}
+                    {/*<FormItem>*/}
+                    {/*    <Input*/}
+                    {/*        status={error.password ? "error" : ""}*/}
+                    {/*        error={error.password}*/}
+                    {/*        label={"Confirm Password"}*/}
+                    {/*        type="password" placeholder="Confirm Password"*/}
+                    {/*        value={password}*/}
+                    {/*        onChange={(e) => setPassword(e.target.value)}*/}
+                    {/*    />*/}
+                    {/*</FormItem>*/}
                 </div>
 
                 <div className={"mt-6 mb-3 flex gap-3 justify-end"}>
@@ -138,7 +139,7 @@ const EditAdminForm = ({...props}) => {
                     <Button
                         disabled={saving}
                         color="primary" variant="flat" onPress={() => {
-                        editAdminUser().then(() => {
+                        addAdmin().then(() => {
                             setSaving(false);
                         });
                     }}>
@@ -151,4 +152,4 @@ const EditAdminForm = ({...props}) => {
     );
 }
 
-export default EditAdminForm;
+export default AddAdminForm;
