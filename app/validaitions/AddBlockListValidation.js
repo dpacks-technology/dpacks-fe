@@ -6,7 +6,8 @@ const schema = yup.object().shape({
     //validation for web page should have a .colum
     name: yup.string().required({name: 'Webpage Name is required'}),
     url: yup.string().required({url: 'Website Ur; is required'}),
-    status: yup.string().required({status: 'Status is required'})
+    //check user id is a uuid
+    userId: yup.string().required({userId: 'User ID is required'}),
 
 });
 

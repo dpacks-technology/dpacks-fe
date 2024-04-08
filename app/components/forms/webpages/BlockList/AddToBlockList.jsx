@@ -5,8 +5,11 @@ import {Form, message} from "antd";
 import schema from "@/app/validaitions/AddBlockListValidation";
 import FormItem from "antd/es/form/FormItem";
 import { AddToBlocklist } from "@/services/BlockPagesService";
+import { useParams } from "next/navigation";
 
 const AddToBlockList = ({...props}) => {
+
+    const {userId} = useParams();
 
     // state
     const [saving, setSaving] = React.useState(false);
@@ -33,7 +36,7 @@ const AddToBlockList = ({...props}) => {
 
         try {
             // data // TODO: add/change fields
-            const data = {name, url,status};
+            const data = {name, url,userId};
 
             //validate
             await schema.validate(data, {abortEarly: false});
