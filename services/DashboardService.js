@@ -7,9 +7,10 @@ const DashboardService = axios.create({
 });
 
 // get all webpages // TODO: Change this function accordingly
-export const getWebPages = async (count, page, key, val) => {
+export const GetData = async (count, page, key, val,userId) => {
     try {
-        const response = await DashboardService.get(`http://localhost:4000/api/pros/Access/AccessLists/${count}/${page}?key=${key}&val=${val}`);
+        
+        const response = await DashboardService.get(`http://localhost:4000/api/pros/Access/AccessLists/${count}/${page}/${userId}?key=${key}&val=${val}`);
         return response.data;
     } catch (error) {
         throw error;
@@ -17,9 +18,9 @@ export const getWebPages = async (count, page, key, val) => {
 };
 
 // get all webpages count // TODO: Change this function accordingly
-export const getWebPagesCount = async (key, val) => {
+export const GetDataCount = async (key, val,userId) => {
     try {
-        const response = await DashboardService.get(`http://localhost:4000/api/pros/Access/AccessList/count?key=${key}&val=${val}`);
+        const response = await DashboardService.get(`http://localhost:4000/api/pros/Access/AccessList/count/${userId}?key=${key}&val=${val}`);
         return response.data;
     } catch (error) {
         throw error;
@@ -27,7 +28,7 @@ export const getWebPagesCount = async (key, val) => {
 }
 
 // get all webpages by datetime // TODO: Change this function accordingly
-export const getPagesByDatetime = async (count, page, start, end, key, val) => {
+export const GetDataByDatetime = async (count, page, start, end, key, val) => {
 
     console.log(start);
 
@@ -42,7 +43,7 @@ export const getPagesByDatetime = async (count, page, start, end, key, val) => {
 }
 
 // get all webpages by datetime count // TODO: Change this function accordingly
-export const getPagesByDatetimeCount = async (start, end, key, val) => {
+export const GetDataByDatetimeCount = async (start, end, key, val) => {
     try {
         const response = await DashboardService.get(`http://localhost:4000/api/pros/Access/AccessList/datetime/count?start=${start}&end=${end}&key=${key}&val=${val}`);
         console.log(response.data);
