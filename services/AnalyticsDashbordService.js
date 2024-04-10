@@ -8,7 +8,8 @@ const webpagesService = axios.create({
 
 export const getTraffic = async (id,data) => {
     try {
-        const response = await webpagesService.get(`/api/analytical_alerts/traffic/${id}`,data);
+        const response = await webpagesService.get(`/api/analytical_alerts/sessions/${id}`,data);
+        console.log((response.data))
         return response.data;
     } catch (error) {
         throw error;
@@ -19,6 +20,7 @@ export const getTraffic = async (id,data) => {
 export const visitorSource = async (id,data) => {
     try {
         const response = await webpagesService.get(`/api/analytical_alerts/source/${id}`,data);
+        console.log((response.data))
         return response.data;
     } catch (error) {
         throw error;
@@ -28,6 +30,7 @@ export const visitorSource = async (id,data) => {
 export const visitorCountry = async (id,data) => {
     try {
         const response = await webpagesService.get(`/api/analytical_alerts/country/${id}`,data);
+        console.log((response.data))
         return response.data;
     } catch (error) {
         throw error;
@@ -37,7 +40,8 @@ export const visitorCountry = async (id,data) => {
 
 export const visitorDevice = async (id,data) => {
     try {
-        const response = await webpagesService.get(`/api/analytical_alerts/device/${id}`,data);
+        const response = await webpagesService.get(`/api/analytical_alerts/devices/${id}`,data);
+        console.log((response.data))
         return response.data;
     } catch (error) {
         throw error;
