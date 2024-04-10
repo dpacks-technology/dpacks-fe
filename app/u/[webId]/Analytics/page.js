@@ -1,5 +1,5 @@
 "use client"
-import React from "react";
+import React, { useEffect, useState } from "react";
 import CardTbl from "@/app/components/Analytics/CardTbl";
 import { Divider, Table } from 'antd';
 import ReactECharts from 'echarts-for-react';
@@ -10,6 +10,7 @@ import {
     visitorCountry,
     visitorDevice
  } from "@/services/AnalyticsDashbordService";
+
 
 const dataSource = [
     {
@@ -133,7 +134,9 @@ const fetchVisitorDeviceData = () => {
                 <div className="w-full overflow-auto h-96 ">
 
                     <h1 className="text-2xl mt-5 font-bold text-center">Website Traffic</h1>
+
                     <ReactECharts
+                    
                     option={{
                         // Existing option configuration
                         xAxis: {
