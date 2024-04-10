@@ -69,11 +69,19 @@ export default function Analytics() {
 
 
     const fetchUserCountByCountry = () => {
-        visitorCountry(webId).then((data) => {
-            setUserCountByCountry(data);
-        }).catch((error) => {
-            console.error("Error fetching user count by country:", error);
-        });
+        visitorCountry(webId)
+            .then((data) => {
+                // Map the API response to match the dataSource structure
+                const mappedData = data.map((entry, index) => ({
+                    key: String(index + 1), // Assuming key should be unique
+                    country: entry.country_code, // Change this to match your API response key
+                    UserCount: entry.user_count // Change this to match your API response key
+                }));
+                setUserCountByCountry(mappedData);
+            })
+            .catch((error) => {
+                console.error("Error fetching country data:", error);
+            });
     };
 
     const fetchTraffic = () => {
@@ -174,7 +182,7 @@ export default function Analytics() {
                 <div className="w-full h-96 border-1 overflow-scroll">
                     <h1 className="text-2xl mt-5 font-bold text-center pb-6">User by Country</h1>
 
-                    <Table dataSource={dataSource} columns={columns}/>;
+                    <Table dataSource={userCountByCountry} columns={columns}/>;
 
 
                 </div>
