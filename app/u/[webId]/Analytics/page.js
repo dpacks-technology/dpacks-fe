@@ -155,20 +155,15 @@ export default function Analytics() {
                     <h1 className="text-2xl mt-5 font-bold text-center">Visitor Source</h1>
                     <ReactECharts
                         option={{
-
                             tooltip: {},
                             series: [{
                                 name: 'User Source',
                                 type: 'pie',
-                                data: [
-                                    {value: 100, name: 'Search Engine'},
-                                    {value: 200, name: 'Affiliate'},
-                                    {value: 150, name: 'Facebook'},
-                                    {value: 50, name: 'Whatsapp'}
-                                ]
+                                data: visitorSourceData
                             }]
                         }}
                     />
+
 
 
 
