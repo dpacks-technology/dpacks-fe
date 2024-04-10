@@ -120,13 +120,7 @@ export default function Analytics() {
             <div>
                 <h1 className="text text-3xl font-bold">Dashboard</h1>
             </div>
-            <div className="grid grid-cols-4 m-3">
-                <CardTbl name="Real Time User Count" count="1M"/>
-                <CardTbl name="Visited Users" count="8.23K"/>
-                <CardTbl name="Active Users" count="2.3M"/>
-                <CardTbl name="Sessions(Live)" count="8K"/>
-                <Divider/>
-            </div>
+
 
 
             {/* desgign h1 for header as website traffic */}
