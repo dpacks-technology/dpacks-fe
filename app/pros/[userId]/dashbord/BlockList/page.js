@@ -52,7 +52,6 @@ export default function History() {
     // columns // TODO: Change the following columns according the to yours
     const columns = [
         {name: "ID", uid: "id", sortable: true, type: "text"},
-        {name: "NAME", uid: "name", sortable: true, type: "text"},
         {name: "URL", uid: "url", sortable: true, type: "text"},
         {name: "LAST ACCESS ON", uid: "last_access_date", sortable: false, type: "datetime"},
         {name: "STATUS", uid: "status", sortable: false, type: "status"},
@@ -61,7 +60,6 @@ export default function History() {
 
     // initially visible columns // TODO: Change the following columns according the to yours
     const init_cols = [
-        "name",
         "url",
         "last_access_date",
         "status",
