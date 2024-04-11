@@ -8,8 +8,10 @@ import {usePathname} from "next/navigation";
 import AddRatelimitForm from "@/app/components/forms/endpoint/AddEndpointRatelimitForm";
 import AddApiSubscriberForm from "@/app/components/forms/apisubscriber/AddApiSubscriberForm";
 
+
 import AddAutoRespondsForm from "@/app/components/forms/webchats/AddAutomatedMessageForm";
 import AddWebpageForm from "@/app/components/forms/sites/AddSiteForm";
+import PersonolizedC from './forms/Profile/personolizedContent';
 
 const LeftNavigation2 = () => {
 
@@ -52,6 +54,8 @@ const LeftNavigation2 = () => {
                 return <AddRatelimitForm notificationMessage={notificationMessage}/>;
             case "chat/automatedMessage":
                 return <AddAutoRespondsForm notificationMessage={notificationMessage}/>;
+            case "dashbord/Profile":
+                    return <PersonolizedC notificationMessage={notificationMessage}/>;
             default:
                 return null;
         }
