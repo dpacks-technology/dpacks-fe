@@ -8,7 +8,7 @@ import React, { useEffect, useState } from "react";
 import axios from "axios";
 import MultiSelect from "../components/SelectWithTag";
 import { users } from "../components/PersonlizedContent/SIgnUp/data";
-import form1 from "@/app/validaitions/VisitorRegValidations";
+import {form2,form1} from "@/app/validaitions/VisitorRegValidations";
 
 export default function GetNamePage() {
   const [page, setPage] = useState(0);
@@ -114,7 +114,8 @@ export default function GetNamePage() {
                         className="w-80 text-black m-2"
                         value={firstName}
                         onChange={(e) => setFirstName(e.target.value)}
-                        error={error.name}
+                        status={error.firstName ? "error" : ""}
+                        error={error.firstName}
                       />
                     </FormItem>
                     <FormItem>
@@ -127,8 +128,8 @@ export default function GetNamePage() {
                         className="w-80 text-black m-2"
                         value={lastName}
                         onChange={(e) => setLastName(e.target.value)}
-                        status={error.name ? "error" : ""}
-                        error={error.name}
+                        status={error.lastName ? "error" : ""}
+                        error={error.lastName}
                       />
                     </FormItem>
                     <FormItem>
@@ -172,8 +173,8 @@ export default function GetNamePage() {
                         className="w-80 text-black m-2"
                         value={email}
                         onChange={(e) => setEmail(e.target.value)}
-                        status={error.name ? "error" : ""}
-                        error={error.name}
+                        status={error.email ? "error" : ""}
+                        error={error.email}
                       />
                     </FormItem>
                     <FormItem>
@@ -186,8 +187,8 @@ export default function GetNamePage() {
                         className="w-80 text-black m-2"
                         value={phone}
                         onChange={(e) => setPhone(e.target.value)}
-                        status={error.name ? "error" : ""}
-                        error={error.name}
+                        status={error.phone ? "error" : ""}
+                        error={error.phone}
                       />
                     </FormItem>
                     <FormItem >
@@ -195,7 +196,26 @@ export default function GetNamePage() {
                         <Button variant={"flat"} color={"primary"} onClick={() => setPage(0)}>
                           Back
                         </Button>
-                        <Button variant={"flat"} color={"primary"} onClick={() => setPage(2)}>
+                        <Button variant={"flat"} color={"primary"} className={"md:w-2/6 w-full"} onClick={async () => {
+                          try {
+                            // data // TODO: add/change fields
+                            const data = { email,phone };
+
+                            console.log(data)
+                            // validate
+                            await form2.validate(data, { abortEarly: false });
+                            setPage(2);
+                            //clear error massage
+                            setError({});
+                          }
+                          catch (validationError) {
+                            console.log(validationError.errors)
+                            // set error
+                            let errorsObject = {}
+                            validationError.errors && validationError.errors.map(obj => errorsObject[Object.keys(obj)[0]] = Object.values(obj)[0]);
+                            setError(errorsObject);
+                          }
+                        }}>
                           Next
                         </Button>
                       </div>
@@ -225,18 +245,7 @@ export default function GetNamePage() {
                         ]}
                         className="mt-3"
                       />
-                      <Select
-                        label={"Color Theme"}
-                        value={colorTheme}
-                        status={error.name ? "error" : ""}
-                        error={error.name}
-                        onChange={(value) => setColorTheme(value)}
-                        options={[
-                          { value: 'dark', label: 'Dark' },
-                          { value: 'light', label: 'Light' },
-                        ]}
-                        className="mt-3"
-                      />
+                      
                     </FormItem>
                     <FormItem>
                       <div className="flex flex-col gap-5 md:flex-row md:justify-between">
@@ -251,30 +260,6 @@ export default function GetNamePage() {
                   </>
 
                 ) : page === 3 ? (
-                  <>
-                    <FormItem className="md:mt-2">
-                      <MultiSelect
-                        items={users}
-                        selectedItems={selectedUsers.map(user => user.name)}
-                        onChange={handleSelectionChange}
-                        placeholder="Select Categories"
-                        labelOutside={true}
-                      />
-
-                    </FormItem>
-                    <FormItem>
-                      <div className="flex flex-col gap-5 md:flex-row md:justify-between">
-                        <Button variant={"flat"} color={"primary"} onClick={() => setPage(2)}>
-                          Back
-                        </Button>
-                        <Button variant={"flat"} color={"primary"} onClick={() => setPage(4)}>
-                          Next
-                        </Button>
-                      </div>
-                    </FormItem>
-                  </>
-
-                ) : page === 4 ? (
                   <>
                     <FormItem>
                       <Input

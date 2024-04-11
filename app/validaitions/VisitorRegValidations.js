@@ -6,4 +6,18 @@ const form1 = yup.object().shape({
     lastName: yup.string().required({lastName: 'Last Name is required'}),
 });
 
-export default form1;
+const form2 = yup.object().shape({
+    //email and phone number should be have at least 10 characters
+    email: yup.string().required({email: 'Email is required'}),
+    phone: yup.string().required({phone: 'Phone Number is required'}).min(10, {phone: 'Phone Number must be at least 10 characters'}),
+});
+
+//dob and gender
+
+const form3 = yup.object().shape({
+    dob: yup.string().required({dob: 'Date of Birth is required'}),
+    gender: yup.string ().required({gender:'Select one'})
+});
+
+
+export { form1, form2,form3 };
