@@ -6,7 +6,8 @@ import React, { useEffect, useState } from "react";
 import { GetUserData, UpdateUser } from "@/services/UserProfileService";
 import {Tooltip } from 'antd'
 import { useParams } from "next/navigation";
-import { user } from "@nextui-org/react";
+import MultiSelect from "@/app/components/SelectwithTag";
+import { users } from "@/app/components/PersonlizedContent/SIgnUp/data";
 
 
 export default function Profile() {
@@ -19,24 +20,30 @@ export default function Profile() {
     const [favouriteCategories, setFavouriteCategories] = useState([]);
     const [isButtonVisible, setIsButtonVisible] = useState(true);
     const [errorMessage, setErrorMessage] = useState("");
+    const [selectedUsers, setSelectedUsers] = React.useState([]);
     const { userId } = useParams();
+
+    const handleSelectionChange = (selectedItemNames) => {
+        
+        // Assuming 'items' uses 'name' as a unique key; adjust logic if 'id' should be used instead
+        const updatedSelection = users.filter(user => selectedItemNames.includes(user.name));
+        setSelectedUsers(updatedSelection);
+        console.log("Selected Users: ", updatedSelection);
+      };
     // useEffect hook to fetch data when the component mounts
     useEffect(() => {
         const fetchData = async () => {
             try {
                 const response = await GetUserData(userId)
-
                 console.log(response.data);
-
-                setFirstName(response.data.username);
+                setFirstName(response.data.firstName);
                 setEmail(response.data.email);
                 setAboutMe(response.data.userDescription);
-                setLastName(response.data.lname);
+                setLastName(response.data.lastName);
                 setPhone(response.data.phoneNumber);
                 const categories = JSON.parse(response.data.favourCategory);
-
                 console.log(categories);
-                setFavouriteCategories(categories);
+                setSelectedUsers(categories);
             } catch (error) {
                 console.error("Failed to fetch data: ", error);
             }
@@ -49,12 +56,12 @@ export default function Profile() {
     const UpdateUserData = async () => {
         try {
             let data = {
-                username: firstName,
-                lname: lastName,
+                firstName: firstName,
+                lastName: lastName,
                 email: email,
                 phoneNumber: phone,
                 userDescription: aboutMe,
-                favourCategory: JSON.stringify(favouriteCategories)
+                favourCategory: JSON.stringify(selectedUsers)
             };
 
             setIsDisabled(!isDisabled);
@@ -108,15 +115,18 @@ export default function Profile() {
                 <div>
                     <Input disabled={isDisabled} label="Last Name" value={lastName} onChange={e => setLastName(e.target.value)} />
                     <Input disabled={isDisabled} label="Phone" type="number" value={phone} onChange={e => setPhone(e.target.value)} />
+                    <MultiSelect
+                        items={users}
+                        selectedItems={selectedUsers.map(user => user.name)}
+                        onChange={handleSelectionChange}
+                        placeholder="Select Categories"
+                        labelOutside={true}
+                        disable ={isDisabled }
+                        
+                      />
+                    
 
-                    <label className="text-xs text-light dark:text-dark">Category</label>
-                    <div className="mt-2 bg-black p-3 rounded-xl h-28">
-                        {favouriteCategories.map((item, index) => (
-                            <Tag key={index} color="" closable={!isDisabled}>
-                                {item.category}
-                            </Tag>
-                        ))}
-                    </div>
+                   
                 </div>
             </div>
             {errorMessage && <p className="error">{errorMessage}</p>}
@@ -135,6 +145,10 @@ export default function Profile() {
 
                 } className={`bg-success-50 text-light dark:text-dark px-5 py-2 rounded-lg ${isDisabled ? 'hidden' : ''}`}>Cancel</button>
             </div>
+
+        
+
+
 
         </div>
     );

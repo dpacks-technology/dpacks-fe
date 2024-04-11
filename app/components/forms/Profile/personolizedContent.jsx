@@ -6,15 +6,21 @@ import schema from "@/app/validaitions/WebPageAddValidation";
 import FormItem from "antd/es/form/FormItem";
 import {AddWebpage} from "@/services/WebpagesService";
 import Textarea from "../../TextArea";
+import MultiSelect from "../../SelectwithTag";
+import { users } from "../../PersonlizedContent/SIgnUp/data";
+
 
 const PersonolizedC = ({...props}) => {
 
     // state
-    const [saving, setSaving] = React.useState(false);
-    const [error, setError] = React.useState({});
-    const [name, setName] = React.useState("");
-    const [path, setPath] = React.useState("");
-    const [webId, setWebId] = React.useState("");
+    // state
+const [saving, setSaving] = React.useState(false);
+const [error, setError] = React.useState({});
+const [name, setName] = React.useState("");
+const [path, setPath] = React.useState("");
+const [webId, setWebId] = React.useState("");
+const [description, setDescription] = React.useState("");
+const [selectedUsers, setSelectedUsers] = React.useState([]);
 
     // backend validation error message
     const [messageApi, contextHolder] = message.useMessage(); // message api
@@ -24,6 +30,14 @@ const PersonolizedC = ({...props}) => {
             content: message,
         });
     };
+
+    const handleSelectionChange = (selectedItemNames) => {
+        selectedItemNames.pre
+        // Assuming 'items' uses 'name' as a unique key; adjust logic if 'id' should be used instead
+        const updatedSelection = users.filter(user => selectedItemNames.includes(user.name));
+        setSelectedUsers(updatedSelection);
+        console.log("Selected Users: ", updatedSelection);
+      };
 
 
     // add webpage function
@@ -68,15 +82,16 @@ const PersonolizedC = ({...props}) => {
                     <FormItem>
                         
                     </FormItem>
-                    <FormItem>
-                        <Input
-                            label={"Web ID"}
-                            type="text" placeholder="Web ID"
-                            value={webId}
-                            onChange={(e) => setWebId(e.target.value)}
-                            status={error.webId ? "error" : ""}
-                            error={error.webId}
-                        />
+                    <FormItem className="md:mt-2">
+                      
+                      <MultiSelect
+                        items={users}
+                        selectedItems={selectedUsers.map(user => user.name)}
+                        onChange={handleSelectionChange}
+                        placeholder="Select Categories"
+                        labelOutside={true}
+                      />
+
                     </FormItem>
                 </div>
 
