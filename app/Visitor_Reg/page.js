@@ -4,10 +4,11 @@ import { Form, Select } from "antd";
 import FormItem from "antd/es/form/FormItem";
 import Input from "@/app/components/Input";
 import { Button } from "@nextui-org/react";
-import { useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
 import axios from "axios";
 import MultiSelect from "../components/SelectWithTag";
 import { users } from "../components/PersonlizedContent/SIgnUp/data";
+import form1 from "@/app/validaitions/VisitorRegValidations";
 
 export default function GetNamePage() {
   const [page, setPage] = useState(0);
@@ -24,6 +25,7 @@ export default function GetNamePage() {
   const [IsPasswordEmpty, setIsPasswordEmpty] = useState(false);
   const [colorTheme, setColorTheme] = useState("dark");
   const [selectedUsers, setSelectedUsers] = useState([]);
+  const [error, setError] = React.useState({});
 
   const handleSelectionChange = (selectedItemNames) => {
     // Assuming 'items' uses 'name' as a unique key; adjust logic if 'id' should be used instead
@@ -112,6 +114,7 @@ export default function GetNamePage() {
                         className="w-80 text-black m-2"
                         value={firstName}
                         onChange={(e) => setFirstName(e.target.value)}
+                        error={error.name}
                       />
                     </FormItem>
                     <FormItem>
@@ -124,11 +127,32 @@ export default function GetNamePage() {
                         className="w-80 text-black m-2"
                         value={lastName}
                         onChange={(e) => setLastName(e.target.value)}
+                        status={error.name ? "error" : ""}
+                        error={error.name}
                       />
                     </FormItem>
                     <FormItem>
                       <div className="flex flex-row justify-end">
-                        <Button variant={"flat"} color={"primary"} className={"md:w-2/6 w-full"} onClick={() => setPage(1)}>
+                        <Button variant={"flat"} color={"primary"} className={"md:w-2/6 w-full"} onClick={async () => {
+                          try {
+                            // data // TODO: add/change fields
+                            const data = { firstName,lastName };
+
+                            console.log(data)
+                            // validate
+                            await form1.validate(data, { abortEarly: false });
+                            setPage(1);
+                            //clear error massage
+                            setError({});
+                          }
+                          catch (validationError) {
+                            console.log(validationError.errors)
+                            // set error
+                            let errorsObject = {}
+                            validationError.errors && validationError.errors.map(obj => errorsObject[Object.keys(obj)[0]] = Object.values(obj)[0]);
+                            setError(errorsObject);
+                          }
+                        }}>
                           Next
                         </Button>
                       </div>
@@ -148,6 +172,8 @@ export default function GetNamePage() {
                         className="w-80 text-black m-2"
                         value={email}
                         onChange={(e) => setEmail(e.target.value)}
+                        status={error.name ? "error" : ""}
+                        error={error.name}
                       />
                     </FormItem>
                     <FormItem>
@@ -160,6 +186,8 @@ export default function GetNamePage() {
                         className="w-80 text-black m-2"
                         value={phone}
                         onChange={(e) => setPhone(e.target.value)}
+                        status={error.name ? "error" : ""}
+                        error={error.name}
                       />
                     </FormItem>
                     <FormItem >
@@ -183,10 +211,14 @@ export default function GetNamePage() {
                         type={"date"}
                         value={dateOfBirth}
                         onChange={(e) => setDateOfBirth(e.target.value)}
+                        status={error.name ? "error" : ""}
+                        error={error.name}
                       />
                       <Select
                         value={gender}
                         onChange={(value) => setGender(value)}
+                        status={error.name ? "error" : ""}
+                        error={error.name}
                         options={[
                           { value: 'male', label: 'Male' },
                           { value: 'female', label: 'Female' },
@@ -196,6 +228,8 @@ export default function GetNamePage() {
                       <Select
                         label={"Color Theme"}
                         value={colorTheme}
+                        status={error.name ? "error" : ""}
+                        error={error.name}
                         onChange={(value) => setColorTheme(value)}
                         options={[
                           { value: 'dark', label: 'Dark' },
