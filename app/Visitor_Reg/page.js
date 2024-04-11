@@ -1,5 +1,4 @@
 "use client"
-
 import { Form, Select } from "antd";
 import FormItem from "antd/es/form/FormItem";
 import Input from "@/app/components/Input";
@@ -49,7 +48,7 @@ export default function GetNamePage() {
       first_name: firstName,
       last_name: lastName,
       email: email,
-      phone: phone,
+      phone: "+94770723273",
       date_of_birth: dateOfBirth,
       gender: gender,
       password: password,
@@ -59,7 +58,8 @@ export default function GetNamePage() {
 
     //send data to backend using
     try {
-      const response = await axios.post(`http://34.47.130.27:4010`, data);
+      const response = await axios.post(`http://localhost:4010/api/auth/signup`, data);
+      console.log(response.data);
       return response.data;
     } catch (error) {
       throw error;
