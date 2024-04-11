@@ -5,6 +5,9 @@ import { Tag } from 'antd';
 import React, { useEffect, useState } from "react";
 import { GetUserData, UpdateUser } from "@/services/UserProfileService";
 import {Tooltip } from 'antd'
+import { useParams } from "next/navigation";
+import { user } from "@nextui-org/react";
+
 
 export default function Profile() {
     const [isDisabled, setIsDisabled] = React.useState(true);
@@ -16,24 +19,28 @@ export default function Profile() {
     const [favouriteCategories, setFavouriteCategories] = useState([]);
     const [isButtonVisible, setIsButtonVisible] = useState(true);
     const [errorMessage, setErrorMessage] = useState("");
-
-
-
+    const { userId } = useParams();
     // useEffect hook to fetch data when the component mounts
     useEffect(() => {
         const fetchData = async () => {
             try {
-                const response = await GetUserData(1)
+                const response = await GetUserData(userId)
+
+                console.log(response.data);
+
                 setFirstName(response.data.username);
                 setEmail(response.data.email);
                 setAboutMe(response.data.userDescription);
                 setLastName(response.data.lname);
                 setPhone(response.data.phoneNumber);
                 const categories = JSON.parse(response.data.favourCategory);
+
+                console.log(categories);
                 setFavouriteCategories(categories);
             } catch (error) {
                 console.error("Failed to fetch data: ", error);
             }
+
         };
 
         fetchData();
@@ -53,7 +60,7 @@ export default function Profile() {
             setIsDisabled(!isDisabled);
             setIsButtonVisible(!isButtonVisible);
 
-            const response = await UpdateUser(1, data).then((response) => {
+            const response = await UpdateUser(userId, data).then((response) => {
                 console.log(response);
             }).catch((error) => {
                 console.error("Failed to update user data: ", error);
