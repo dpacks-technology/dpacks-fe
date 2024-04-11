@@ -6,6 +6,7 @@ import Input from "@/app/components/Input";
 import {Button} from "@nextui-org/react";
 import React, {useEffect, useState} from "react";
 import axios from "axios";
+import {form2,form1,form3, form4} from "@/app/validaitions/signupValidation";
 
 export default function SignUpPage() {
     const [error, setError] = useState("");
@@ -36,6 +37,7 @@ export default function SignUpPage() {
 
         //send data to backend using
         try {
+
             const data = {
                 first_name: firstName,
                 last_name: lastName,
@@ -46,24 +48,20 @@ export default function SignUpPage() {
                 password: password,
             };
 
-            const response = await axios.post(`http://localhost:4010/api/auth/signup`, data);
-            if(response.status === 200) {
-                console.log("User created successfully");
+            if(!isInvalidConfirmPassword) {
+                const response = await axios.post(`http://localhost:4010/api/auth/signup`, data);
+                if(response.status === 200) {
+                    console.log("User created successfully");
+                }
+                return response.data;
             }
-            return response.data;
+
         } catch (error) {
             throw error;
         }
     }
 
-    const validateFields = () => {
-        if(firstName === "" || lastName === "") {
-            setError("First Name and Last Name cannot be empty")
-        }else{
-            setError("");
-            setPage(1);
-        }
-    }
+
 
     return (
         <>
@@ -97,30 +95,46 @@ export default function SignUpPage() {
                                             <Input
                                                 label={"First Name"}
                                                 className={"w-full"}
-                                                placeholder={"FirstName"}
+                                                placeholder={"First Name"}
                                                 value={firstName}
                                                 onChange={(e) => setFirstName(e.target.value)}
-                                                status={error ? "error" : ""}
-                                                error={error}
+                                                status={error.firstName ? "error" : ""}
+                                                error={error.firstName}
                                             />
                                         </FormItem>
                                         <FormItem>
                                             <Input
                                                 label={"Last Name"}
                                                 className={"w-full"}
-                                                placeholder={"LastName"}
+                                                placeholder={"Last Name"}
                                                 value={lastName}
                                                 onChange={(e) => setLastName(e.target.value)}
-                                                status={error ? "error" : ""}
-                                                error={error}
+                                                status={error.lastName ? "error" : ""}
+                                                error={error.lastName}
 
                                             />
                                         </FormItem>
                                         <FormItem>
                                             <div  className="flex flex-row justify-end">
-                                                <Button variant={"flat"} color={"primary"} className={"md:w-2/6 w-full"} onClick={() => {
-                                                    validateFields();
+                                                <Button variant={"flat"} color={"primary"} className={"md:w-2/6 w-full"} onClick={async () => {
+                                                    try {
+                                                        // data // TODO: add/change fields
+                                                        const data = { firstName,lastName };
 
+                                                        console.log(data)
+                                                        // validate
+                                                        await form1.validate(data, { abortEarly: false });
+                                                        setPage(1);
+                                                        //clear error massage
+                                                        setError({});
+                                                    }
+                                                    catch (validationError) {
+                                                        console.log(validationError.errors)
+                                                        // set error
+                                                        let errorsObject = {}
+                                                        validationError.errors && validationError.errors.map(obj => errorsObject[Object.keys(obj)[0]] = Object.values(obj)[0]);
+                                                        setError(errorsObject);
+                                                    }
                                                 }}>
                                                     Next
                                                 </Button>
@@ -139,6 +153,8 @@ export default function SignUpPage() {
                                                 type={"email"}
                                                 value={email}
                                                 onChange={(e) => setEmail(e.target.value)}
+                                                status={error.email ? "error" : ""}
+                                                error={error.email}
                                             />
                                         </FormItem>
                                         <FormItem>
@@ -149,6 +165,8 @@ export default function SignUpPage() {
                                                 type={"text"}
                                                 value={phone}
                                                 onChange={(e) => setPhone(e.target.value)}
+                                                status={error.phone ? "error" : ""}
+                                                error={error.phone}
                                             />
                                         </FormItem>
                                         <FormItem >
@@ -156,7 +174,26 @@ export default function SignUpPage() {
                                                 <Button variant={"flat"} color={"primary"} onClick={() => setPage(0)}>
                                                     Back
                                                 </Button>
-                                                <Button variant={"flat"} color={"primary"} onClick={() => setPage(2)}>
+                                                <Button variant={"flat"} color={"primary"} className={"md:w-2/6 w-full"} onClick={async () => {
+                                                    try {
+                                                        // data // TODO: add/change fields
+                                                        const data = { email,phone };
+
+                                                        console.log(data)
+                                                        // validate
+                                                        await form2.validate(data, { abortEarly: false });
+                                                        setPage(2);
+                                                        //clear error massage
+                                                        setError({});
+                                                    }
+                                                    catch (validationError) {
+                                                        console.log(validationError.errors)
+                                                        // set error
+                                                        let errorsObject = {}
+                                                        validationError.errors && validationError.errors.map(obj => errorsObject[Object.keys(obj)[0]] = Object.values(obj)[0]);
+                                                        setError(errorsObject);
+                                                    }
+                                                }}>
                                                     Next
                                                 </Button>
                                             </div>
@@ -172,6 +209,8 @@ export default function SignUpPage() {
                                                 type={"date"}
                                                 value={dateOfBirth}
                                                 onChange={(e) => setDateOfBirth(e.target.value)}
+                                                status={error.dateOfBirth ? "error" : ""}
+                                                error={error.dateOfBirth}
                                             />
                                             <Select
                                                 value={gender}
@@ -188,7 +227,26 @@ export default function SignUpPage() {
                                                 <Button variant={"flat"} color={"primary"} onClick={() => setPage(1)}>
                                                     Back
                                                 </Button>
-                                                <Button variant={"flat"} color={"primary"} onClick={() => setPage(3)}>
+                                                <Button variant={"flat"} color={"primary"} className={"md:w-2/6 w-full"} onClick={async () => {
+                                                    try {
+                                                        // data // TODO: add/change fields
+                                                        const data = { dateOfBirth,gender };
+
+                                                        console.log(data)
+                                                        // validate
+                                                        await form3.validate(data, { abortEarly: false });
+                                                        setPage(3);
+                                                        //clear error massage
+                                                        setError({});
+                                                    }
+                                                    catch (validationError) {
+                                                        console.log(validationError.errors)
+                                                        // set error
+                                                        let errorsObject = {}
+                                                        validationError.errors && validationError.errors.map(obj => errorsObject[Object.keys(obj)[0]] = Object.values(obj)[0]);
+                                                        setError(errorsObject);
+                                                    }
+                                                }}>
                                                     Next
                                                 </Button>
                                             </div>
@@ -208,7 +266,7 @@ export default function SignUpPage() {
                                                     setPassword(e.target.value)
                                                 }}
                                                 status={password === "" ? "error" : ""}
-                                                error = {password === "" ? "Password Cannot be empty" : "" }
+                                                error={password === "" ? "Password Cannot be empty" : ""}
                                             />
                                         </FormItem>
                                         <FormItem>
