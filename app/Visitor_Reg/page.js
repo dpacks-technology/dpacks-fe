@@ -6,7 +6,6 @@ import Input from "@/app/components/Input";
 import { Button } from "@nextui-org/react";
 import React, { useEffect, useState } from "react";
 import axios from "axios";
-import MultiSelect from "../components/SelectWithTag";
 import { users } from "../components/PersonlizedContent/SIgnUp/data";
 import {form2,form1,form3} from "@/app/validaitions/VisitorRegValidations";
 
@@ -23,16 +22,9 @@ export default function GetNamePage() {
   const [isInvalidConfirmPassword, setIsInvalidConfirmPassword] = useState(false);
   const [confirmPasswordTouched, setConfirmPasswordTouched] = useState(false);
   const [IsPasswordEmpty, setIsPasswordEmpty] = useState(false);
-  const [colorTheme, setColorTheme] = useState("dark");
-  const [selectedUsers, setSelectedUsers] = useState([]);
   const [error, setError] = React.useState({});
 
-  const handleSelectionChange = (selectedItemNames) => {
-    // Assuming 'items' uses 'name' as a unique key; adjust logic if 'id' should be used instead
-    const updatedSelection = users.filter(user => selectedItemNames.includes(user.name));
-    setSelectedUsers(updatedSelection);
-    console.log("Selected Users: ", updatedSelection);
-  };
+  
 
 
   useEffect(() => {
@@ -53,7 +45,6 @@ export default function GetNamePage() {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-
     const data = {
       first_name: firstName,
       last_name: lastName,
@@ -64,16 +55,15 @@ export default function GetNamePage() {
       password: password,
     };
 
+    console.log(data);
+
     //send data to backend using
     try {
-      const response = await axios.post(`http://localhost:4010/api/auth/signup`, data);
+      const response = await axios.post(`http://34.47.130.27:4010`, data);
       return response.data;
     } catch (error) {
       throw error;
     }
-
-
-
   }
 
   return (
