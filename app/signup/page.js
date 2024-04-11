@@ -7,6 +7,7 @@ import {Button} from "@nextui-org/react";
 import React, {useEffect, useState} from "react";
 import axios from "axios";
 import {form2,form1,form3, form4} from "@/app/validaitions/signupValidation";
+import { useRouter} from "next/navigation";
 
 export default function SignUpPage() {
     const [error, setError] = useState("");
@@ -22,6 +23,7 @@ export default function SignUpPage() {
     const [passwordVisible, setPasswordVisible] = useState("password");
     const [isInvalidConfirmPassword, setIsInvalidConfirmPassword] = useState(false);
     const [confirmPasswordTouched, setConfirmPasswordTouched] = useState(false);
+    const router = useRouter();
 
 
     useEffect(() => {
@@ -51,7 +53,10 @@ export default function SignUpPage() {
             if(!isInvalidConfirmPassword) {
                 const response = await axios.post(`http://localhost:4010/api/auth/signup`, data);
                 if(response.status === 200) {
-                    console.log("User created successfully");
+                    alert("User created successfully");
+                    //redirect to login page
+                    router.push("/login");
+
                 }
                 return response.data;
             }
