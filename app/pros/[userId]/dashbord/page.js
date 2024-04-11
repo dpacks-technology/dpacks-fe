@@ -51,7 +51,6 @@ export default function Dashboard() {
     // columns // TODO: Change the following columns according the to yours
     const columns = [
         {name: "ID", uid: "id", sortable: true, type: "text"},
-        {name: "WEBSITE NAME", uid: "website_name", sortable: true, type: "text"},
         {name: "URL", uid: "website_url", type: "copy"},
         {name: "ACCESSED DATE", uid: "access_date_time", sortable: false, type: "datetime"},
         {name: "ACTIONS", uid: "menu", sortable: false, type: "menu"},
@@ -60,7 +59,7 @@ export default function Dashboard() {
 
     // initially visible columns // TODO: Change the following columns according the to yours
     const init_cols = [
-        "website_name",
+        "id",
         "website_url",
         "access_date_time",
         "status",
