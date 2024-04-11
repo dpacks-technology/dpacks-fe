@@ -8,7 +8,7 @@ import React, { useEffect, useState } from "react";
 import axios from "axios";
 import MultiSelect from "../components/SelectWithTag";
 import { users } from "../components/PersonlizedContent/SIgnUp/data";
-import {form2,form1} from "@/app/validaitions/VisitorRegValidations";
+import {form2,form1,form3} from "@/app/validaitions/VisitorRegValidations";
 
 export default function GetNamePage() {
   const [page, setPage] = useState(0);
@@ -231,14 +231,14 @@ export default function GetNamePage() {
                         type={"date"}
                         value={dateOfBirth}
                         onChange={(e) => setDateOfBirth(e.target.value)}
-                        status={error.name ? "error" : ""}
-                        error={error.name}
+                        status={error.dateOfBirth ? "error" : ""}
+                        error={error.dateOfBirth}
                       />
                       <Select
                         value={gender}
                         onChange={(value) => setGender(value)}
-                        status={error.name ? "error" : ""}
-                        error={error.name}
+                        status={error.gender ? "error" : ""}
+                        error={error.gender}
                         options={[
                           { value: 'male', label: 'Male' },
                           { value: 'female', label: 'Female' },
@@ -252,7 +252,26 @@ export default function GetNamePage() {
                         <Button variant={"flat"} color={"primary"} onClick={() => setPage(1)}>
                           Back
                         </Button>
-                        <Button variant={"flat"} color={"primary"} onClick={() => setPage(3)}>
+                        <Button variant={"flat"} color={"primary"} className={"md:w-2/6 w-full"} onClick={async () => {
+                          try {
+                            // data // TODO: add/change fields
+                            const data = { dateOfBirth,gender };
+
+                            console.log(data)
+                            // validate
+                            await form3.validate(data, { abortEarly: false });
+                            setPage(3);
+                            //clear error massage
+                            setError({});
+                          }
+                          catch (validationError) {
+                            console.log(validationError.errors)
+                            // set error
+                            let errorsObject = {}
+                            validationError.errors && validationError.errors.map(obj => errorsObject[Object.keys(obj)[0]] = Object.values(obj)[0]);
+                            setError(errorsObject);
+                          }
+                        }}>
                           Next
                         </Button>
                       </div>

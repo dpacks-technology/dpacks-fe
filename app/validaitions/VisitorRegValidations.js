@@ -15,7 +15,7 @@ const form2 = yup.object().shape({
 //dob and gender
 
 const form3 = yup.object().shape({
-    dob: yup.string().required({dob: 'Date of Birth is required'}),
+    dateOfBirth: yup.string().required({dateOfBirth: 'Date of Birth is required'}),
     gender: yup.string ().required({gender:'Select one'})
 });
 
