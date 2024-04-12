@@ -66,6 +66,25 @@ export default function SignUpPage() {
         }
     }
 
+    const validate = async (data, form) => {
+        try {
+            // data // TODO: add/change fields
+            console.log(data)
+            // validate
+            await form.validate(data, { abortEarly: false });
+            //clear error massage
+            setError({});
+            setPage(page + 1);
+        }
+        catch (validationError) {
+            console.log(validationError.errors)
+            // set error
+            let errorsObject = {}
+            validationError.errors && validationError.errors.map(obj => errorsObject[Object.keys(obj)[0]] = Object.values(obj)[0]);
+            setError(errorsObject);
+        }
+    }
+
 
 
     return (
@@ -121,26 +140,10 @@ export default function SignUpPage() {
                                         </FormItem>
                                         <FormItem>
                                             <div  className="flex flex-row justify-end">
-                                                <Button variant={"flat"} color={"primary"} className={"md:w-2/6 w-full"} onClick={async () => {
-                                                    try {
-                                                        // data // TODO: add/change fields
-                                                        const data = { firstName,lastName };
+                                                <Button variant={"flat"} color={"primary"} className={"md:w-2/6 w-full"} onClick={async () => (
+                                                    await validate({firstName,lastName}, form1)
 
-                                                        console.log(data)
-                                                        // validate
-                                                        await form1.validate(data, { abortEarly: false });
-                                                        setPage(1);
-                                                        //clear error massage
-                                                        setError({});
-                                                    }
-                                                    catch (validationError) {
-                                                        console.log(validationError.errors)
-                                                        // set error
-                                                        let errorsObject = {}
-                                                        validationError.errors && validationError.errors.map(obj => errorsObject[Object.keys(obj)[0]] = Object.values(obj)[0]);
-                                                        setError(errorsObject);
-                                                    }
-                                                }}>
+                                                )}>
                                                     Next
                                                 </Button>
                                             </div>
@@ -176,29 +179,13 @@ export default function SignUpPage() {
                                         </FormItem>
                                         <FormItem >
                                             <div className="flex flex-col gap-5 md:flex-row md:justify-between">
-                                                <Button variant={"flat"} color={"primary"} onClick={() => setPage(0)}>
+                                                <Button variant={"flat"} color={"primary"} onClick={() => setPage(page - 1)}>
                                                     Back
                                                 </Button>
-                                                <Button variant={"flat"} color={"primary"} className={"md:w-2/6 w-full"} onClick={async () => {
-                                                    try {
-                                                        // data // TODO: add/change fields
-                                                        const data = { email,phone };
+                                                <Button variant={"flat"} color={"primary"} className={"md:w-2/6 w-full"} onClick={async () => (
+                                                    await validate({email,phone}, form2)
 
-                                                        console.log(data)
-                                                        // validate
-                                                        await form2.validate(data, { abortEarly: false });
-                                                        setPage(2);
-                                                        //clear error massage
-                                                        setError({});
-                                                    }
-                                                    catch (validationError) {
-                                                        console.log(validationError.errors)
-                                                        // set error
-                                                        let errorsObject = {}
-                                                        validationError.errors && validationError.errors.map(obj => errorsObject[Object.keys(obj)[0]] = Object.values(obj)[0]);
-                                                        setError(errorsObject);
-                                                    }
-                                                }}>
+                                                )}>
                                                     Next
                                                 </Button>
                                             </div>
@@ -225,6 +212,8 @@ export default function SignUpPage() {
                                                     { value: 'female', label: 'Female' },
                                                 ]}
                                                 className="mt-3"
+                                                status={error.gender ? "error" : ""}
+                                                error={error.gender}
                                             />
                                         </FormItem>
                                         <FormItem>
@@ -232,26 +221,10 @@ export default function SignUpPage() {
                                                 <Button variant={"flat"} color={"primary"} onClick={() => setPage(1)}>
                                                     Back
                                                 </Button>
-                                                <Button variant={"flat"} color={"primary"} className={"md:w-2/6 w-full"} onClick={async () => {
-                                                    try {
-                                                        // data // TODO: add/change fields
-                                                        const data = { dateOfBirth,gender };
+                                                <Button variant={"flat"} color={"primary"} className={"md:w-2/6 w-full"} onClick={async () => (
+                                                    await validate({dateOfBirth,gender}, form3)
 
-                                                        console.log(data)
-                                                        // validate
-                                                        await form3.validate(data, { abortEarly: false });
-                                                        setPage(3);
-                                                        //clear error massage
-                                                        setError({});
-                                                    }
-                                                    catch (validationError) {
-                                                        console.log(validationError.errors)
-                                                        // set error
-                                                        let errorsObject = {}
-                                                        validationError.errors && validationError.errors.map(obj => errorsObject[Object.keys(obj)[0]] = Object.values(obj)[0]);
-                                                        setError(errorsObject);
-                                                    }
-                                                }}>
+                                                )}>
                                                     Next
                                                 </Button>
                                             </div>
@@ -299,7 +272,7 @@ export default function SignUpPage() {
                                             <Button variant={"flat"} color={"primary"} onClick={() => setPage(2)}>
                                                 Back
                                             </Button>
-                                            <Button variant={"flat"} color={"primary"} onClick={handleSubmit}>
+                                            <Button variant={"flat"} color={"primary"} className={"md:w-2/6 w-full"}onClick={handleSubmit}>
                                                 Submit
                                             </Button>
                                         </div>
