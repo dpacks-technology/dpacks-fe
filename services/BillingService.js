@@ -6,28 +6,28 @@ const billingService = axios.create({
     baseURL: Keys.USER_SERVICE_API_URL
 });
 
-// get all transactions // TODO: Change this function accordingly
-export const GetTransactions = async (count, page, key, val) => {
+// get all biliing profiles // TODO: Change this function accordingly
+export const GetBillingProfiles = async (count, page, key, val) => {
     try {
-        const response = await billingService.get(`/api/billing/transactions/${count}/${page}?key=${key}&val=${val}`);
+        const response = await billingService.get(`/api/billing/profiles/${count}/${page}?key=${key}&val=${val}`);
         return response.data;
     } catch (error) {
         throw error;
     }
 };
 
-// get all webpages count // TODO: Change this function accordingly
-export const GetTransactionCount = async (key, val) => {
+// get all biliing profiles count // TODO: Change this function accordingly
+export const GetBillingProfileCount = async (key, val) => {
     try {
-        const response = await billingService.get(`/api/billing/transactions/count?key=${key}&val=${val}`);
+        const response = await billingService.get(`/api/billing/profiles/count?key=${key}&val=${val}`);
         return response.data;
     } catch (error) {
         throw error;
     }
 }
 
-// get all webpages by status // TODO: Change this function accordingly
-export const GetTransactionByStatus = async (count, page, status, key, val) => {
+// get all billing profile by status // TODO: Change this function accordingly
+export const GetBillingProfileByStatus = async (count, page, status, key, val) => {
 
     // convert status array to string with commas
     let statusString = status.join(',');
@@ -35,7 +35,7 @@ export const GetTransactionByStatus = async (count, page, status, key, val) => {
     console.log(statusString);
 
     try {
-        const response = await billingService.get(`/api/billing/transactions/status/${count}/${page}?status=${statusString}&key=${key}&val=${val}`);
+        const response = await billingService.get(`/api/billing/profiles/status/${count}/${page}?status=${statusString}&key=${key}&val=${val}`);
         console.log(response.data);
         return response.data;
     } catch (error) {
@@ -44,7 +44,7 @@ export const GetTransactionByStatus = async (count, page, status, key, val) => {
 }
 
 // get all webpages by status count // TODO: Change this function accordingly
-export const GetTransactionByStatusCount = async (status, key, val) => {
+export const GetBillingProfileByStatusCount = async (status, key, val) => {
 
     // convert status array to string with commas
     let statusString = status.join(',');
@@ -52,7 +52,7 @@ export const GetTransactionByStatusCount = async (status, key, val) => {
     console.log(statusString);
 
     try {
-        const response = await billingService.get(`/api/billing/transactions/status/count?status=${statusString}&key=${key}&val=${val}`);
+        const response = await billingService.get(`/api/billing/profiles/status/count?status=${statusString}&key=${key}&val=${val}`);
         console.log(response.data);
         return response.data;
     } catch (error) {
@@ -61,12 +61,12 @@ export const GetTransactionByStatusCount = async (status, key, val) => {
 }
 
 // get all webpages by datetime // TODO: Change this function accordingly
-export const GetTransactionDateTime = async (count, page, start, end, key, val) => {
+export const GetBillingProfileDateTime = async (count, page, start, end, key, val) => {
 
     console.log(start);
 
     try {
-        const response = await billingService.get(`/api/billing/transactions/datetime/${count}/${page}?start=${start}&end=${end}&key=${key}&val=${val}`);
+        const response = await billingService.get(`/api/billing/profiles/datetime/${count}/${page}?start=${start}&end=${end}&key=${key}&val=${val}`);
         console.log(response.data);
         return response.data;
     } catch (error) {
@@ -75,9 +75,9 @@ export const GetTransactionDateTime = async (count, page, start, end, key, val) 
 }
 
 // get all webpages by datetime count // TODO: Change this function accordingly
-export const GetTransactionByDatetimeCount = async (start, end, key, val) => {
+export const GetBillingProfileByDatetimeCount = async (start, end, key, val) => {
     try {
-        const response = await billingService.get(`/api/billing/transactions/datetime/count?start=${start}&end=${end}&key=${key}&val=${val}`);
+        const response = await billingService.get(`/api/billing/profiles/datetime/count?start=${start}&end=${end}&key=${key}&val=${val}`);
         console.log(response.data);
         return response.data;
     } catch (error) {
@@ -86,9 +86,9 @@ export const GetTransactionByDatetimeCount = async (start, end, key, val) => {
 }
 
 // get all webpages by status and datetime // TODO: Change this function accordingly
-export const editPages = async (id, data) => {
+export const EditBillingProfile = async (id, data) => {
     try {
-        const response = await billingService.put(`/api/billing/transactions/${id}`, data);
+        const response = await billingService.put(`/api/billing/profiles/${id}`, data);
         return response.data;
     } catch (error) {
         throw error;
@@ -96,9 +96,9 @@ export const editPages = async (id, data) => {
 }
 
 // get all webpages by status and datetime count // TODO: Change this function accordingly
-export const getTransactionById = async (id) => {
+export const GetBillingProfileById = async (id) => {
     try {
-        const response = await billingService.get(`/api/billing/transaction/${id}`);
+        const response = await billingService.get(`/api/billing/profile/${id}`);
         return response.data;
     } catch (error) {
         throw error;
@@ -106,9 +106,9 @@ export const getTransactionById = async (id) => {
 }
 
 // get all webpages by status and datetime count // TODO: Change this function accordingly
-export const DeleteTransactionByID = async (id) => {
+export const DeleteBillingProfileByID = async (id) => {
     try {
-        const response = await billingService.delete(`/api/billing/transactions/${id}`);
+        const response = await billingService.delete(`/api/billing/profiles/${id}`);
         return response.data;
     } catch (error) {
         throw error;
@@ -116,11 +116,11 @@ export const DeleteTransactionByID = async (id) => {
 }
 
 // get all webpages by status and datetime count // TODO: Change this function accordingly
-export const DeleteTransactionByIDBulk = async (ids) => {
+export const DeleteBillingProfileByIDBulk = async (ids) => {
     let idsString = ids.join(',');
 
     try {
-        const response = await billingService.delete(`/api/billing/transactions/bulk/${idsString}`);
+        const response = await billingService.delete(`/api/billing/profiles/bulk/${idsString}`);
         return response.data;
     } catch (error) {
         throw error;
@@ -128,11 +128,11 @@ export const DeleteTransactionByIDBulk = async (ids) => {
 }
 
 // get all webpages by status and datetime count // TODO: Change this function accordingly
-export const UpdateTransactionStatusBulk = async (ids, status) => {
+export const UpdateBillingProfileStatusBulk = async (ids, status) => {
     let idsString = ids.join(',');
 
     try {
-        const response = await billingService.put(`/api/billing/transactions/status/bulk/${idsString}`, {status: status});
+        const response = await billingService.put(`/api/billing/profiles/status/bulk/${idsString}`, {status: status});
         return response.data;
     } catch (error) {
         throw error;
@@ -140,9 +140,9 @@ export const UpdateTransactionStatusBulk = async (ids, status) => {
 }
 
 // get all webpages by status and datetime count // TODO: Change this function accordingly
-export const UpdateTransactionStatus = async (id, status) => {
+export const UpdateBillingProfileStatus = async (id, status) => {
     try {
-        const response = await billingService.put(`/api/billing/transactions/status/${id}`, {status: status});
+        const response = await billingService.put(`/api/billing/profiles/status/${id}`, {status: status});
         return response.data;
     } catch (error) {
         throw error;
@@ -150,9 +150,9 @@ export const UpdateTransactionStatus = async (id, status) => {
 }
 
 // get all webpages by status and datetime count // TODO: Change this function accordingly
-export const AddTransaction = async (data) => {
+export const AddBillingProfile = async (data) => {
     try {
-        const response = await billingService.post(`/api/billing/transactions`, data);
+        const response = await billingService.post(`/api/billing/profiles`, data);
         return response.data;
     } catch (error) {
         throw error;

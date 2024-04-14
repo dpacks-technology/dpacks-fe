@@ -4,13 +4,13 @@ import {Button} from "@nextui-org/react";
 import Input from "@/app/components/Input";
 import React, {useState} from "react";
 import {Checkbox, Form, message} from "antd";
-import schema from "@/app/validaitions/TransactionAddValidations";
+import schema from "@/app/validaitions/BillingProfileAddValidation";
 import FormItem from "antd/es/form/FormItem";
-import {AddTransaction} from "@/services/BillingService";
+import {AddBillingProfile} from "@/services/BillingService";
 //import {useParams} from "next/navigation";
 
 
-const AddSubscriptionForm = ({...props}) => {
+const AddBillingProfileForm = ({...props}) => {
 
     //get the webid on url usinbg use params
    // const {webId} = useParams();
@@ -19,11 +19,6 @@ const AddSubscriptionForm = ({...props}) => {
     // state
     const [saving, setSaving] = React.useState(false);
     const [error, setError] = React.useState({});
-    const [ ID, setID] = useState("");
-    const [UserID, setUserID] = useState("");
-    const [PlanID, setPlanID] = useState("");
-    const [PlanName, setPlanName] = useState("");
-    const [Amount, setAmount] = useState("");
     const [Company, setCompanyName] = useState("");
     const [streetNo, setStreetNo] = useState("");
     const [City, setCity] = useState("");
@@ -39,7 +34,7 @@ const AddSubscriptionForm = ({...props}) => {
     const [CVV, setCVV] = useState("");
     const [Terms, setTerms] = useState(false);
 
-   const [Status, setStatus] = useState("");
+
 
 
 
@@ -62,7 +57,7 @@ const AddSubscriptionForm = ({...props}) => {
 
 
     // add Transaction function
-    const addTransaction = async () => {
+    const addBillingProfile = async () => {
 
         // set saving
         setSaving(true);
@@ -70,11 +65,7 @@ const AddSubscriptionForm = ({...props}) => {
         try {
             // data // TODO: add/change fields
             const data = {
-               id: parseInt(ID),
-                user_id: parseInt(UserID),
-                plan_id: parseInt(PlanID),
-                plan_name:PlanName,
-                amount: parseFloat(Amount),
+
                 company_name: Company,
                 street_no: streetNo,
                 city: City,
@@ -89,7 +80,7 @@ const AddSubscriptionForm = ({...props}) => {
                 cvv: parseInt (CVV),
                 terms: Terms,
                 card_number: parseInt(CardNo),
-                status: parseInt(Status),
+               // status: parseInt(Status),
             };
 
             console.log(data);
@@ -99,7 +90,7 @@ const AddSubscriptionForm = ({...props}) => {
             await schema.validate(data, {abortEarly: false});
 
             // add transaction // TODO: change the function
-            await AddTransaction(data).then((response) => {
+            await AddBillingProfile(data).then((response) => {
                 console.log(response)
                 // props.notificationMessage("success", "Record added"); // refresh data with success message
                 // props.onClose(); // close modal
@@ -132,67 +123,6 @@ const AddSubscriptionForm = ({...props}) => {
                         <h2>Billing Details</h2>
 
                         <div className="flex flex-wrap gap-4">
-
-                            <FormItem>
-                                <Input
-                                    label={"ID :"}
-                                    type="integer"
-                                    placeholder=" "
-                                    value={ID}
-                                    onChange={(e) => setID(e.target.value)}
-                                    status={error.ID  ? "error" : ""}
-                                    error={error.ID}
-                                />
-                            </FormItem>
-
-                            <FormItem>
-                                <Input
-                                    label={"UserID :"}
-                                    type="integer"
-                                    placeholder=" "
-                                    value={UserID}
-                                    onChange={(e) => setUserID(e.target.value)}
-                                    status={error.UserID  ? "error" : ""}
-                                    error={error.UserID}
-                                />
-                            </FormItem>
-
-                            <FormItem>
-                                <Input
-                                    label={"PlanID :"}
-                                    type="integer"
-                                    placeholder=" "
-                                    value={PlanID}
-                                    onChange={(e) => setPlanID(e.target.value)}
-                                    status={error.PlanID  ? "error" : ""}
-                                    error={error.PlanID}
-                                />
-                            </FormItem>
-
-                            <FormItem>
-                                <Input
-                                    label={"PlanName :"}
-                                    type="text"
-                                    placeholder=" "
-                                    value={PlanName}
-                                    onChange={(e) => setPlanName(e.target.value)}
-                                    status={error.PlanName  ? "error" : ""}
-                                    error={error.PlanName}
-                                />
-                            </FormItem>
-
-
-                            <FormItem>
-                                <Input
-                                    label={"Amount :"}
-                                    type="decimal"
-                                    placeholder=" "
-                                    value={Amount}
-                                    onChange={(e) => setAmount(e.target.value)}
-                                    status={error.Amount  ? "error" : ""}
-                                    error={error.Amount}
-                                />
-                            </FormItem>
 
 
 
@@ -404,17 +334,7 @@ const AddSubscriptionForm = ({...props}) => {
                             </FormItem>
 
 
-                            <FormItem>
-                                <Input
-                                    label={"Status"}
-                                    type="integer"
-                                    placeholder="Status"
-                                    value={Status}
-                                    onChange={(e) => setStatus(e.target.value)}
-                                    status={error.Status ? "error" : ""}
-                                    error={error.Status}
-                                />
-                            </FormItem>
+
 
                         </div>
                     </div>
@@ -431,7 +351,7 @@ const AddSubscriptionForm = ({...props}) => {
                         <Button
                             disabled={saving}
                             color="primary" variant="flat" onPress={() => {
-                            addTransaction().then(() => {
+                            addBillingProfile().then(() => {
                                 setSaving(false);
                             });
                         }}>
@@ -447,4 +367,4 @@ const AddSubscriptionForm = ({...props}) => {
     );
 }
 
-export default AddSubscriptionForm;
+export default AddBillingProfileForm;

@@ -14,7 +14,6 @@ const schema = yup.object().shape({
     year: yup.number().integer().required({Year: 'Year is required'}),
     card_number: yup.number().integer().required({CardNumber: 'CardNumber is required'}),
    // cvc: yup.number().integer().required({SecurityCode: 'CVC is required'}),
-    amount: yup.number().integer().required({Amount: 'Amount is required'}),
     terms: yup.string().required({Terms: 'Expiry is required'}),
 
 });
