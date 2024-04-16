@@ -31,7 +31,7 @@ export default function LoginPage() {
         const token = localStorage.getItem('token');
         if (token) {
             setLoading(false);
-            router.push('/u');
+            router.push('/admin');
         } else {
             setLoading(false);
         }
@@ -105,7 +105,7 @@ export default function LoginPage() {
                                         <img src={"/images/logos/dpacks-logo-white.png"}
                                              className={"w-1/2 sm:w-1/2 md:w-3/4 lg:w-full xl:w-4/5"}
                                              alt={"DPacks Logo"}/>
-                                        <h1 className={"dark:text-dark mt-3 text-md sm:text-lg mb-3 sm:mb-0"}>Sign
+                                        <h1 className={"dark:text-dark mt-3 text-md sm:text-lg mb-3 sm:mb-0"}>Admin Sign
                                             in</h1>
                                     </div>
                                     <div className={"hidden md:block"}>
