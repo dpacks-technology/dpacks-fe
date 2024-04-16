@@ -88,7 +88,7 @@ export default function apiSubscribe() {
     return(
         <div className="w-full h-screen flex items-center justify-center">
 
-            <Card className="dark:bg-secondaryDark w-3/4 p-10 ml-auto mr-auto flex-col items-center flex">
+            <Card className="dark:bg-secondaryDark w-3/4 h-3/4 p-5 ml-auto mr-auto flex-col items-center flex ">
                 {!clientId && !apiKey ? (
                     <Button
                         variant="flat"
@@ -98,7 +98,7 @@ export default function apiSubscribe() {
                         Subscribe to API
                     </Button>
                 ) : (
-                    <div className="w-full p-10 flex-col items-center">
+                    <div className="w-full p-2 md:p-10 flex-col items-center">
                         <h4 className="text-white text-lg pb-1 pl-1">Client ID</h4>
                         <Input
                             hiddenLabel
@@ -122,7 +122,7 @@ export default function apiSubscribe() {
                             value={apiKey}
                         />
 
-                        <div className="flex flex-row justify-between gap-5 mt-5">
+                        <div className="flex flex-col md:flex-row justify-between gap-5 md:mt-5">
                             <Button
                                 variant="flat"
                                 color="success"
