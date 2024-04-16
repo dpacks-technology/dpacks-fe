@@ -5,18 +5,25 @@ import axios from 'axios';
 import React from "react";
 import Input from "@/app/components/Input";
 import {Button, Card} from "@nextui-org/react";
+import { jwtDecode } from "jwt-decode"
 
 
-export default function apiSubscribe({params}) {
+
+export default function apiSubscribe() {
     // eslint-disable-next-line react-hooks/rules-of-hooks
     const [clientId, setClientId] = useState("");
     // eslint-disable-next-line react-hooks/rules-of-hooks
     const [apiKey, setApiKey] = useState("");
 
-    //const userId = localStorage.getItem('sessionId');
+    const token = localStorage.getItem('token');
+    const decoded = jwtDecode(token);
+    const uid = decoded.id;
+    console.log(decoded);
+    console.log(uid);
+
     const fetchData = async () => {
         try {
-            const response = await axios.get(`http://localhost:4001/api/keypairs/${params.uid}`);
+            const response = await axios.get(`http://localhost:4001/api/keypairs/${uid}`);
             setClientId(response.data.client_id);
             setApiKey(response.data.key);
         } catch (error) {
@@ -26,7 +33,7 @@ export default function apiSubscribe({params}) {
 
     const subscribe = async () => {
         try {
-            const response = await axios.post(`http://localhost:4001/api/keypairs/${params.uid}`);
+            const response = await axios.post(`http://localhost:4001/api/keypairs/${uid}`);
             if(response.status === 200){
                 setClientId(response.data.client_id);
                 setApiKey(response.data.key);
@@ -41,7 +48,7 @@ export default function apiSubscribe({params}) {
 
     const regenerate = async () => {
         try {
-            const response = await axios.put(`http://localhost:4001/api/keypairs/${params.uid}`);
+            const response = await axios.put(`http://localhost:4001/api/keypairs/${uid}`);
             if(response.status === 200){
                 setClientId(response.data.client_id);
                 setApiKey(response.data.key);
@@ -59,7 +66,7 @@ export default function apiSubscribe({params}) {
         if(!confirm("Are you sure you want to delete this subscription?")) return;
 
         try {
-            const response = await axios.delete(`http://localhost:4001/api/keypairs/${params.uid}`);
+            const response = await axios.delete(`http://localhost:4001/api/keypairs/${uid}`);
             if(response.status === 200){
                 setClientId("");
                 setApiKey("");
