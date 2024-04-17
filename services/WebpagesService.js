@@ -1,9 +1,11 @@
 import axios from 'axios';
 import Keys from "@/Keys";
+import {AuthHeaders} from "@/util/AuthHeader";
 
 // Create an axios instance -- NO NEED TO CHANGE THIS
 const webpagesService = axios.create({
-    baseURL: Keys.USER_SERVICE_API_URL
+    baseURL: Keys.USER_SERVICE_API_URL,
+    headers: AuthHeaders
 });
 
 // get all webpages // TODO: Change this function accordingly
@@ -15,6 +17,7 @@ export const getWebPages = async (count, page, key, val) => {
         throw error;
     }
 };
+
 
 // get all webpages count // TODO: Change this function accordingly
 export const getWebPagesCount = async (key, val) => {
