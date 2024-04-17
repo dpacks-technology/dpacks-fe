@@ -9,6 +9,7 @@ import axios from "axios";
 import {form2,form1,form3, form4} from "@/app/validaitions/signupValidation";
 import { useRouter} from "next/navigation";
 import {SignupService} from "@/services/SignupService";
+import schema from "@/app/validaitions/LoginValidation";
 
 export default function SignUpPage() {
     const [error, setError] = useState("");
@@ -80,8 +81,6 @@ export default function SignUpPage() {
         //send data to backend using
         try {
 
-            await validate({password}, form4)
-
             const data = {
                 first_name: firstName,
                 last_name: lastName,
@@ -103,22 +102,25 @@ export default function SignUpPage() {
             //     return response.data;
             // }
 
-            SignupService(data).then(async (response) => {
-                const data = await response;
+            if(!isInvalidConfirmPassword) {
+                SignupService(data).then(async (response) => {
+                    const data = await response;
 
-                // check if the response is successful
-                if (response.status === 200) {
+                    // check if the response is successful
+                    if (response.status === 200) {
 
-                    // show success message
-                    Message("success", data.message);
-                    // redirect to login page
-                    router.push("/login");
+                        // show success message
+                        Message("success", data.message);
+                        // redirect to login page
+                        router.push("/login");
 
-                } else {
-                    // show the error message
-                    alert(data.message);
-                }
-            });
+                    } else {
+                        // show the error message
+                        alert(data.message);
+                    }
+                });
+            }
+
 
         } catch (error) {
             console.log(error);
