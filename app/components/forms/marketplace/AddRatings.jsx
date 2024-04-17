@@ -1,17 +1,23 @@
-import {Button} from "@nextui-org/react";
-import Input from "@/app/components/Input";
-import React, {useEffect} from "react";
-import {editPages, getPageById} from "@/services/WebpagesService";
-import {Form, message} from "antd";
-import schema from "@/app/validaitions/WebPageEditValidation";
-import FormItem from "antd/es/form/FormItem";
+'use client'
 
-const EditWebpageForm = ({...props}) => {
+import {Button} from "@nextui-org/react";
+import React from "react";
+import {Form, message} from "antd";
+import schema from "@/app/validaitions/TemplateAddValidation";
+import FormItem from "antd/es/form/FormItem";
+import { Rate } from 'antd';
+import {AddRating} from "@/services/MarketplaceService";
+import Input from "@/app/components/Input";
+
+const AddRatingsForm = ({...props}) => {
 
     // state
     const [saving, setSaving] = React.useState(false);
     const [error, setError] = React.useState({});
-    const [name, setName] = React.useState("");
+    const [rating, setRating] = React.useState("");
+    const [id, setTemplateId] = React.useState("");
+
+
 
     // backend validation error message
     const [messageApi, contextHolder] = message.useMessage(); // message api
@@ -22,22 +28,25 @@ const EditWebpageForm = ({...props}) => {
         });
     };
 
-    // edit webpage function
-    const editWebpage = async () => {
 
+    // add webpage function
+    const addRating = async () => {
         // set saving
         setSaving(true);
 
+        console.log(rating);
+
         try {
             // data // TODO: add/change fields
-            const data = {name: name};
+            const data = {rating: parseInt(rating),  id: parseInt(props.id)};
+
 
             // validate
-            await schema.validate(data, {abortEarly: false});
+            //await schema.validate(data, { abortEarly: false });
 
-            // edit webpage // TODO: change the function
-            await editPages(props.id, data).then(() => {
-                props.refreshData("success", "Saved"); // refresh data with success message
+            // add webpage // TODO: change the function
+            await AddRating(data).then((response) => {
+                props.notificationMessage("success", "Record added"); // refresh data with success message
                 props.onClose(); // close modal
             }).then((error) => {
                 Message("error", error.response.data.error) // backend validation error
@@ -49,17 +58,8 @@ const EditWebpageForm = ({...props}) => {
             validationError.errors && validationError.errors.map(obj => errorsObject[Object.keys(obj)[0]] = Object.values(obj)[0]);
             setError(errorsObject);
         }
+    };
 
-    }
-
-    // get webpage by id
-    useEffect(() => {
-        // get webpage by id from backend function // TODO: change the function
-        getPageById(props.id).then((response) => {
-            setName(response.name); // set name
-        }).then(() => {
-        });
-    }, []);
 
     return (
         <>
@@ -68,14 +68,7 @@ const EditWebpageForm = ({...props}) => {
                 <div>
                     {/* TODO: Change the form */}
                     <FormItem>
-                    <Input
-                        status={error.name ? "error" : ""}
-                        error={error.name}
-                        label={"Name"}
-                        type="text" placeholder="Webpage name"
-                        value={name}
-                        onChange={(e) => setName(e.target.value)}
-                    />
+                        <Rate defaultValue={0} onChange={(value) => setRating(value)} />
                     </FormItem>
                 </div>
 
@@ -90,7 +83,7 @@ const EditWebpageForm = ({...props}) => {
                     <Button
                         disabled={saving}
                         color="primary" variant="flat" onPress={() => {
-                        editWebpage().then(() => {
+                        addRating().then(() => {
                             setSaving(false);
                         });
                     }}>
@@ -103,4 +96,4 @@ const EditWebpageForm = ({...props}) => {
     );
 }
 
-export default EditWebpageForm;
+export default AddRatingsForm;

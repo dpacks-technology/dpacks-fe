@@ -32,18 +32,24 @@ export default function CardBox({...props}) {
             }
 
             <div className={"p-4 pt-0"}>
-                {(props.title || props.secondary) &&
-                    <CardHeader className="flex pb-0">
-                        {(props.title || props.secondary) &&
-                            <div className="flex flex-col m-2">
-                                {props.title &&
-                                    <p className="text-md text-lightSecondary dark:text-darkSecondary font-bold">{props.title}</p>}
-                                {props.secondary &&
-                                    <p className="text-xs text-lightSecondary dark:text-darkSecondary">{props.secondary}</p>}
-                            </div>
-                        }
-                    </CardHeader>
-                }
+                <div className="flex justify-between">
+                    {(props.title || props.secondary) &&
+                        <div className="flex flex-col m-2">
+                            {props.title &&
+                                <p className="text-md text-lightSecondary dark:text-darkSecondary font-bold">{props.title}</p>}
+                            {props.secondary &&
+                                <p className="text-xs text-lightSecondary dark:text-darkSecondary">{props.secondary}</p>}
+                        </div>
+                    }
+                    {(props.title2 || props.secondary2) &&
+                        <div className="flex flex-col m-2">
+                            {props.title2 &&
+                                <p className="text-sm text-lightSecondary dark:text-darkSecondary font-bold">{props.title2}$</p>}
+                            {props.secondary2 &&
+                                <p className="text-xs text-lightSecondary dark:text-darkSecondary">{props.secondary2}</p>}
+                        </div>
+                    }
+                </div>
                 {props.description &&
                     <div className={"p-3 pt-4 pb-0"}>
                         <CardBody className={"p-5 bg-secondaryLight dark:bg-secondaryDark rounded-2xl"}>
@@ -58,7 +64,7 @@ export default function CardBox({...props}) {
                                 props.buttons.length > 0 && props.buttons.map((button, index) => {
                                     return (
                                         <Button className="p-1" key={index} onPress={button.onClick} color={button.color}
-                                                size="small">
+                                                size="small" disabled={button.disabled}>
                                             {button.name}
                                         </Button>
                                     )
