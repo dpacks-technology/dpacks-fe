@@ -3,33 +3,15 @@ import { Button } from "@nextui-org/react";
 import Input from "@/app/components/Input";
 import React from "react";
 import { Form, message } from "antd";
-import schema from "@/app/validaitions/WebPageAddValidation";
 import FormItem from "antd/es/form/FormItem";
 import { CreateNewAlert } from "@/services/AlertService";
 import { Dropdown } from 'antd';;
 import { Radio } from 'antd';
 import { useParams } from "next/navigation";
+import alertValidation from "@/app/validaitions/AlertValidation";
 
 
-const items = [
-    {
-        key: '1',
-        label:
-            "Daily",
-    },
-    {
-        key: '2',
-        label:
-            "Weekly"
-        ,
-    },
-    {
-        key: '3',
-        label:
-            "Monthly"
-        ,
-    },
-];
+
 
 
 const CreateAlertForm = ({ ...props }) => {
@@ -46,8 +28,7 @@ const CreateAlertForm = ({ ...props }) => {
     const [Threshold, setThreshold] = React.useState();
     const [Subject, setSubject] = React.useState("");
     const [Content, setContent] = React.useState("");
-    const [AlertOn, setAlertOn] = React.useState();
-    const [Repeat, setRepeat] = React.useState("Monthly");
+    const [AlertOn, setAlertOn] = React.useState("Immediate");
 
 
 
@@ -69,10 +50,10 @@ const CreateAlertForm = ({ ...props }) => {
 
         try {
             // data // TODO: add/change fields
-            const data = { Threshold, Subject, Content, AlertOn, Repeat, webId };
+            const data = { Threshold, Subject, Content, AlertOn,webId };
 
             // validate
-            //await schema.validate(data, { abortEarly: false });
+            await alertValidation.validate(data, { abortEarly: false });
 
             // add webpage // TODO: change the function
             await CreateNewAlert(data).then((response) => {
@@ -103,8 +84,8 @@ const CreateAlertForm = ({ ...props }) => {
                             type="number" placeholder="Alert Threshold"
                             value={Threshold}
                             onChange={(e) => setThreshold(parseInt(e.target.value))}
-                            status={error.name ? "error" : ""}
-                            error={error.name}
+                            status={error.Threshold ? "error" : ""}
+                            error={error.Threshold}
                         />
                     </FormItem>
                     <FormItem>
@@ -113,8 +94,8 @@ const CreateAlertForm = ({ ...props }) => {
                             type="text" placeholder="Alert Subject"
                             value={Subject}
                             onChange={(e) => setSubject(e.target.value)}
-                            status={error.path ? "error" : ""}
-                            error={error.path}
+                            status={error.Subject ? "error" : ""}
+                            error={error.Subject}
                         />
                     </FormItem>
 
@@ -124,8 +105,8 @@ const CreateAlertForm = ({ ...props }) => {
                             type="text" placeholder="Alert Content"
                             value={Content}
                             onChange={(e) => setContent(e.target.value)}
-                            status={error.webId ? "error" : ""}
-                            error={error.webId}
+                            status={error.Content ? "error" : ""}
+                            error={error.Content}
                         />
                     </FormItem>
 
@@ -137,6 +118,8 @@ const CreateAlertForm = ({ ...props }) => {
 
                         <Radio.Group buttonStyle="solid" onChange={(e) => setAlertOn(e.target.value)} // added this line
                             value={AlertOn} // added this line
+                            status={error.AlertOn ? "error" : ""} // added this line
+                            error={error.AlertOn} // added this line
                         >
 
                             <Radio.Button value={"Immediate"}>Immediate</Radio.Button>
@@ -144,21 +127,7 @@ const CreateAlertForm = ({ ...props }) => {
 
                         </Radio.Group>
                     </FormItem>
-                    <FormItem>
-                        <Dropdown
-                            menu={{
-                                items,
-                                onClick: ({ key }) => {
-                                    const selectedItem = items.find(item => item.key === key);
-                                    setRepeat(selectedItem.label);
-                                }
-                            }}
-                            placement="bottom"
-                        >
-                            <Button>{Repeat || 'Repeat On'}</Button>
-                        </Dropdown>
-                    </FormItem>
-
+                    
                     <br />
                     <br />
 
