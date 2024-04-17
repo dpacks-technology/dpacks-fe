@@ -3,20 +3,22 @@ import * as yup from 'yup';
 const ProfileValidation = yup.object().shape({
     firstName: yup
         .string()
-        .matches(/^[a-zA-Z\s]*$/, 'First name can only contain letters')
-        .required({firstName: 'First name is required'}),
+        .required({ firstName: 'First name is required' })
+        .matches(/^[A-Za-z\u00C0-\u00FF]+(?:\s[A-Za-z\u00C0-\u00FF]+)*$/, { message: { firstName: 'Can only Contains Letters' }, excludeEmptyString: true }),
+
     lastName: yup
         .string()
-        .matches(/^[a-zA-Z\s]*$/, 'Last name can only contain letters')
-        .required({lastName: 'Last name is required'}),
+        .required({ lastName: 'Last name is required' })
+        .matches(/^[A-Za-z\u00C0-\u00FF]+(?:\s[A-Za-z\u00C0-\u00FF]+)*$/, { message: { lastName: 'Can only Contains Letters' }, excludeEmptyString: true }),
+
     email: yup
         .string()
-        .email('Must be a valid email')
-        .required({email: 'Email is required'}),
+        .email({email:'Must be a valid email'})
+        .required({ email: 'Email is required' }),
     phoneNumber: yup
         .string()
-        .matches(/^\+?[1-9]\d{1,14}$/, 'Phone number must be a valid international format')
-        .required({phoneNumber: 'Phone number is required'}),
+        .required({ phoneNumber: 'Phone number is required' })
+        .matches(/^\+?[1-9]\d{1,14}$/, { message: { phoneNumber: 'Can only contain Numbers' }, excludeEmptyString: true })
 });
 
 export default ProfileValidation;
