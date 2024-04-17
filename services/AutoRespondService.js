@@ -3,33 +3,34 @@ import Keys from "@/Keys";
 import {AuthHeaders} from "@/util/AuthHeader";
 
 // Create an axios instance -- NO NEED TO CHANGE THIS
-const billingService = axios.create({
+const webpagesService = axios.create({
     baseURL: Keys.USER_SERVICE_API_URL,
     headers: AuthHeaders
 });
 
-// get all biliing profiles // TODO: Change this function accordingly
-export const GetBillingProfiles = async (count, page, key, val) => {
+// get all webpages // TODO: Change this function accordingly
+export const GetAutoResponds = async (count, page, key, val) => {
     try {
-        const response = await billingService.get(`/api/billing/profiles/${count}/${page}?key=${key}&val=${val}`);
+        const response = await webpagesService.get(`/api/chat/auto_respond/${count}/${page}?key=${key}&val=${val}`);
         return response.data;
     } catch (error) {
         throw error;
     }
 };
 
-// get all biliing profiles count // TODO: Change this function accordingly
-export const GetBillingProfileCount = async (key, val) => {
+
+// get all webpages count // TODO: Change this function accordingly
+export const getAutoRespondsCount = async (key, val) => {
     try {
-        const response = await billingService.get(`/api/billing/profiles/count?key=${key}&val=${val}`);
+        const response = await webpagesService.get(`/api/chat/auto_respond/count?key=${key}&val=${val}`);
         return response.data;
     } catch (error) {
         throw error;
     }
 }
 
-// get all billing profile by status // TODO: Change this function accordingly
-export const GetBillingProfileByStatus = async (count, page, status, key, val) => {
+// get all webpages by status // TODO: Change this function accordingly
+export const getAutoRespondsByStatus = async (count, page, status, key, val) => {
 
     // convert status array to string with commas
     let statusString = status.join(',');
@@ -37,7 +38,7 @@ export const GetBillingProfileByStatus = async (count, page, status, key, val) =
     console.log(statusString);
 
     try {
-        const response = await billingService.get(`/api/billing/profiles/status/${count}/${page}?status=${statusString}&key=${key}&val=${val}`);
+        const response = await webpagesService.get(`/api/chat/auto_respond/status/${count}/${page}?status=${statusString}&key=${key}&val=${val}`);
         console.log(response.data);
         return response.data;
     } catch (error) {
@@ -46,7 +47,7 @@ export const GetBillingProfileByStatus = async (count, page, status, key, val) =
 }
 
 // get all webpages by status count // TODO: Change this function accordingly
-export const GetBillingProfileByStatusCount = async (status, key, val) => {
+export const getAutoRespondsByStatusCount = async (status, key, val) => {
 
     // convert status array to string with commas
     let statusString = status.join(',');
@@ -54,7 +55,7 @@ export const GetBillingProfileByStatusCount = async (status, key, val) => {
     console.log(statusString);
 
     try {
-        const response = await billingService.get(`/api/billing/profiles/status/count?status=${statusString}&key=${key}&val=${val}`);
+        const response = await webpagesService.get(`/api/chat/auto_respond/status/count?status=${statusString}&key=${key}&val=${val}`);
         console.log(response.data);
         return response.data;
     } catch (error) {
@@ -63,12 +64,12 @@ export const GetBillingProfileByStatusCount = async (status, key, val) => {
 }
 
 // get all webpages by datetime // TODO: Change this function accordingly
-export const GetBillingProfileDateTime = async (count, page, start, end, key, val) => {
+export const getAutoRespondsByDatetime = async (count, page, start, end, key, val) => {
 
     console.log(start);
 
     try {
-        const response = await billingService.get(`/api/billing/profiles/datetime/${count}/${page}?start=${start}&end=${end}&key=${key}&val=${val}`);
+        const response = await webpagesService.get(`/api/chat/auto_respond/datetime/${count}/${page}?start=${start}&end=${end}&key=${key}&val=${val}`);
         console.log(response.data);
         return response.data;
     } catch (error) {
@@ -77,9 +78,9 @@ export const GetBillingProfileDateTime = async (count, page, start, end, key, va
 }
 
 // get all webpages by datetime count // TODO: Change this function accordingly
-export const GetBillingProfileByDatetimeCount = async (start, end, key, val) => {
+export const getAutoRespondsByDatetimeCount = async (start, end, key, val) => {
     try {
-        const response = await billingService.get(`/api/billing/profiles/datetime/count?start=${start}&end=${end}&key=${key}&val=${val}`);
+        const response = await webpagesService.get(`/api/chat/auto_respond/datetime/count?start=${start}&end=${end}&key=${key}&val=${val}`);
         console.log(response.data);
         return response.data;
     } catch (error) {
@@ -88,9 +89,9 @@ export const GetBillingProfileByDatetimeCount = async (start, end, key, val) => 
 }
 
 // get all webpages by status and datetime // TODO: Change this function accordingly
-export const EditBillingProfile = async (id, data) => {
+export const editAutoResponds = async (id, data) => {
     try {
-        const response = await billingService.put(`/api/billing/profiles/${id}`, data);
+        const response = await webpagesService.put(`/api/chat/auto_respond/${id}`, data);
         return response.data;
     } catch (error) {
         throw error;
@@ -98,9 +99,9 @@ export const EditBillingProfile = async (id, data) => {
 }
 
 // get all webpages by status and datetime count // TODO: Change this function accordingly
-export const GetBillingProfileById = async (id) => {
+export const getAutoRespondsById = async (id) => {
     try {
-        const response = await billingService.get(`/api/billing/profile/${id}`);
+        const response = await webpagesService.get(`/api/chat/auto_respond/id/${id}`);
         return response.data;
     } catch (error) {
         throw error;
@@ -108,9 +109,9 @@ export const GetBillingProfileById = async (id) => {
 }
 
 // get all webpages by status and datetime count // TODO: Change this function accordingly
-export const DeleteBillingProfileByID = async (id) => {
+export const deleteAutoResponds = async (id) => {
     try {
-        const response = await billingService.delete(`/api/billing/profiles/${id}`);
+        const response = await webpagesService.delete(`/api/chat/auto_respond/${id}`);
         return response.data;
     } catch (error) {
         throw error;
@@ -118,11 +119,11 @@ export const DeleteBillingProfileByID = async (id) => {
 }
 
 // get all webpages by status and datetime count // TODO: Change this function accordingly
-export const DeleteBillingProfileByIDBulk = async (ids) => {
+export const deleteAutoRespondsBulk = async (ids) => {
     let idsString = ids.join(',');
 
     try {
-        const response = await billingService.delete(`/api/billing/profiles/bulk/${idsString}`);
+        const response = await webpagesService.delete(`/api/chat/auto_respond/bulk/${idsString}`);
         return response.data;
     } catch (error) {
         throw error;
@@ -130,11 +131,11 @@ export const DeleteBillingProfileByIDBulk = async (ids) => {
 }
 
 // get all webpages by status and datetime count // TODO: Change this function accordingly
-export const UpdateBillingProfileStatusBulk = async (ids, status) => {
+export const updateAutoRespondsStatusBulk = async (ids, status) => {
     let idsString = ids.join(',');
 
     try {
-        const response = await billingService.put(`/api/billing/profiles/status/bulk/${idsString}`, {status: status});
+        const response = await webpagesService.put(`/api/chat/auto_respond/status/bulk/${idsString}`, {status: status});
         return response.data;
     } catch (error) {
         throw error;
@@ -142,9 +143,9 @@ export const UpdateBillingProfileStatusBulk = async (ids, status) => {
 }
 
 // get all webpages by status and datetime count // TODO: Change this function accordingly
-export const UpdateBillingProfileStatus = async (id, status) => {
+export const updateAutoRespondsStatus = async (id, status) => {
     try {
-        const response = await billingService.put(`/api/billing/profiles/status/${id}`, {status: status});
+        const response = await webpagesService.put(`/api/chat/auto_respond/status/${id}`, {status: status});
         return response.data;
     } catch (error) {
         throw error;
@@ -152,9 +153,9 @@ export const UpdateBillingProfileStatus = async (id, status) => {
 }
 
 // get all webpages by status and datetime count // TODO: Change this function accordingly
-export const AddBillingProfile = async (data) => {
+export const addAutoRespond = async (data) => {
     try {
-        const response = await billingService.post(`/api/billing/profiles`, data);
+        const response = await webpagesService.post(`/api/chat/auto_respond`, data);
         return response.data;
     } catch (error) {
         throw error;

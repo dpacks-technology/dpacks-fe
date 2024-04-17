@@ -3,32 +3,34 @@
 // Importing modules
 import Table from "@/app/components/Table";
 import React, {useCallback, useEffect} from "react";
+import { useParams } from 'next/navigation'
 import {
-    DeleteBillingProfileByID,
-    DeleteBillingProfileByIDBulk,
-    GetBillingProfileById,
-    GetBillingProfileByDatetimeCount,
-    GetBillingProfileByStatus,
-    GetBillingProfileByStatusCount,
-    GetBillingProfiles,
-    GetBillingProfileCount,
-    UpdateBillingProfileStatus,
-    UpdateBillingProfileStatusBulk, GetBillingProfileDateTime
-} from "@/services/BillingService";
-
+    GetAlertByStatus,
+    GetAlertByStatusCount,
+    GetAllAlert,
+    GetAlertCount,
+    UpdateAlerttatus,
+    UpdateAlerttatusBulk
+} from "@/services/AlertService";
 import {useDisclosure} from "@nextui-org/react";
-import EditBillingProfileForm from "@/app/components/forms/Billing/EditBillingProfileForm";
+import EditWebpageForm from "@/app/components/forms/webpages/EditWebpageForm";
 import {message} from "antd";
 
 // Webpages component
-export default function BillingProfile() {
+export default function Webpages() {
+
+    // ----------------------- PARAMS ------------------------- (NO NEED OF CHANGING)
+    // params
+    var params = useParams();
+    const webId = params.webId;
+    
 
     // ----------------------- DEFAULT COLUMNS -------------------------
-    // default columns //
+    // default columns // TODO: Change the following functions
     const dateColumn = "datetime" // default date column
     const sortColumn = {column: "id", direction: "ascending"} // default sort column
 
-
+    // ----------------------- MESSAGE ------------------------- (NO NEED OF CHANGING)
     // message
     const [messageApi, contextHolder] = message.useMessage();
     const headerMessage = (type, message) => {
@@ -49,40 +51,29 @@ export default function BillingProfile() {
     const [searchColumn, setSearchColumn] = React.useState(sortColumn.column); // default search column
 
     // ----------------------- COLUMNS -------------------------
-    // columns //
+    // columns // TODO: Change the following columns according the to yours
     const columns = [
-        {name: "ID", uid: "id", sortable: true, type: "text"},
-        {name: "COMPANY NAME", uid: "company_name", sortable: true, type: "text"},
-        {name: "STREET NO", uid: "street_no", sortable: true, type: "text"},
-        {name: "CITY", uid: "city", sortable: true, type: "text"},
-        {name: "POSTAL CODE", uid: "postal_code", sortable: true, type: "text"},
-        {name: "COUNTRY", uid: "country", sortable: true, type: "text"},
-        {name: "EMAIL", uid: "email", sortable: true, type: "text"},
-        {name: "GIVEN NAME", uid: "given_name", sortable: true, type: "text"},
-        {name: "MONTH", uid: "month", sortable: true, type: "text"},
-        {name: "YEAR", uid: "year", sortable: true, type: "text"},
-        {name: "CARD NUMBER", uid: "card_number", sortable: true, type: "integer"},
-        {name: "CVC", uid: "cvc", sortable: true, type: "integer"},
-        {name: "TERMS", uid: "terms", sortable: true, type: "text"},
-        {name: "PAYMENT METHOD", uid: "payment_method", sortable: true, type: "text"},
-        {name: "PAID ON", uid: "transaction_date", sortable: false, type: "datetime"},
-        {name: "STATUS", uid: "status", sortable: false, type: "status"},
-        {name: "CHANGE STATUS", uid: "statusButtons", sortable: false, type: "statusButtons"},
-         // action buttons
-
-
+        {name: "Alert ID", uid: "id", sortable: true, type: "text"},
+        {name: "Alert Threshold", uid: "alert_threshold", sortable: false, type: "text"},
+        {name: "Alert Subject", uid: "alert_subject", sortable: false, type: "text"},
+        {name: "Alert Content", uid: "alert_content", sortable: false, type: "text"},
+        {name: "When Alert Required", uid: "when_alert_required", sortable: false, type: "text"},
+        {name: "Repeat On", uid: "repeat_on", sortable: false, type: "text"},
+        {name: "Customer Reminder Date", uid: "custom_reminder_date", sortable: false, type: "datetime"},
+        {name: "Status", uid: "status", sortable: true, type: "status"},
+       
         // all usable types: text, twoText, datetime, label, status, statusButtons, buttons, menu, copy, icon, iconText, iconTwoText
     ];
 
-    // initially visible columns //
+    // initially visible columns // TODO: Change the following columns according the to yours
     const init_cols = [
-        "plan_name",
-        "status",
-        "country",
-        "statusButtons",
-        "transaction_date",
-        "payment_method",
-        "email"
+        "alert_threshold",
+        "alert_subject",
+        "alert_content",
+        "whenAlertRequired",
+        "repeat_on",
+        "custom_reminder_date",
+        "status"
 
     ];
 
@@ -110,11 +101,11 @@ export default function BillingProfile() {
         // console.log("delete: " + id);
     }
 
-    // action buttons //
+    // action buttons // TODO: Change the following buttons
     const actionButtons = [
         {name: "View", text: "View", icon: "", type: "default", function: viewButton},
-      //  {name: "Edit", text: "Edit", icon: "", type: "primary", function: editButton},
-       // {name: "Delete", text: "Delete", icon: "", type: "danger", function: deleteButton},
+        {name: "Edit", text: "Edit", icon: "", type: "primary", function: editButton},
+        {name: "Delete", text: "Delete", icon: "", type: "danger", function: deleteButton},
     ];
 
 
@@ -139,7 +130,7 @@ export default function BillingProfile() {
     const deleteMenuButton = (id) => { // delete button function // TODO: Change the following function
 
         // delete function
-        DeleteBillingProfileByID(id).then(() => {
+        deletePage(id).then(() => {
             refreshData("success", "Deleted");
         }).catch((error) => {
             headerMessage("error", error.response.data.error);
@@ -169,7 +160,7 @@ export default function BillingProfile() {
     const updateStatusButton = (id, status) => {
 
             // update status function
-            UpdateBillingProfileStatus(id, status).then(() => {
+            UpdateAlerttatus(id, status).then(() => {
                 refreshData("success", "Updated");
             }).catch((error) => {
                 headerMessage("error", error.response.data.error);
@@ -180,11 +171,11 @@ export default function BillingProfile() {
     // status options // TODO: Change the following options
     const statusOptions = [
         {
-            name: "Pending", // status name
+            name: "Offline", // status name
             uid: 0, // status id (the value in the database)
-            type: "", // status type (color) ["", primary, secondary, danger, warning, success]
+            type: "danger", // status type (color) ["", primary, secondary, danger, warning, success]
             button: true, // if you want to show a button to change the status
-            currentStatus: [1,2], // button showing status, ex: if currently status is 1, then the button will be shown | can use [1,2,...] for multiple statuses
+            currentStatus: [1], // button showing status, ex: if currently status is 1, then the button will be shown | can use [1,2,...] for multiple statuses
             function: updateStatusButton, // function to change the status
 
             // icon
@@ -195,11 +186,11 @@ export default function BillingProfile() {
             </svg>
         },
         {
-            name: "Approved", // status name
+            name: "Active", // status name
             uid: 1, // status id (the value in the database)
             type: "primary", // status type (color) [danger, warning, success, primary]
             button: true, // if you want to show a button to change the status
-            currentStatus: [0, 2], // button showing status, ex: if currently status is 1, then the button will be shown | can use [1,2,...] for multiple statuses
+            currentStatus: [0], // button showing status, ex: if currently status is 1, then the button will be shown | can use [1,2,...] for multiple statuses
             function: updateStatusButton, // function to change the status
 
             // icon
@@ -208,24 +199,9 @@ export default function BillingProfile() {
                 <path strokeLinecap="round" strokeLinejoin="round"
                       d="M9 12.75 11.25 15 15 9.75M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z"/>
             </svg>
-        },
-        {
-            name: "Rejected", // status name
-            uid: 2, // status id (the value in the database)
-            type: "", // status type (color) ["", primary, secondary, danger, warning, success]
-            button: true, // if you want to show a button to change the status
-            currentStatus: [0,1], // button showing status, ex: if currently status is 1, then the button will be shown | can use [1,2,...] for multiple statuses
-            function: updateStatusButton, // function to change the status
+        }
 
-            // icon
-            icon: <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5}
-                       stroke="currentColor" className="w-5 h-5">
-                <path strokeLinecap="round" strokeLinejoin="round"
-                      d="m9.75 9.75 4.5 4.5m0-4.5-4.5 4.5M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z"/>
-            </svg>
-        },
-
-
+        // ...add more status options (if needed)
 
     ]
 
@@ -234,7 +210,7 @@ export default function BillingProfile() {
     const updateStatusBulk = (ids, status) => {
 
         // update status bulk function // TODO: Change the following function
-         UpdateBillingProfileStatusBulk(ids, status).then(() => {
+        UpdateAlerttatusBulk(ids, status).then(() => {
             refreshData("success", "Updated");
         }).catch((error) => {
             headerMessage("error", error.response.data.error);
@@ -245,7 +221,8 @@ export default function BillingProfile() {
     // handle delete bulk function -- NO NEED OF CHANGING
     const handleUpdateStatusBulk = (selectedKeys, status) => {
         if (selectedKeys === 'all') { // if all items are selected
-            UpdateBillingProfileStatus(data.map(item => item.id), status);
+            console.log(data);
+            updateStatusBulk(data.map(item => item.id), status);
         } else {
             updateStatusBulk(
                 Array.from(selectedKeys).map((str) => parseInt(str, 10)),
@@ -258,7 +235,7 @@ export default function BillingProfile() {
     const deleteBulk = (ids) => {
 
         // delete bulk function // TODO: Change the following function
-         DeleteBillingProfileByID(ids).then(() => {
+        deleteWebpagesBulk(ids).then(() => {
             refreshData("success", "Deleted");
         }).catch((error) => {
             headerMessage("error", error.response.data.error);
@@ -269,6 +246,7 @@ export default function BillingProfile() {
     // handle delete bulk function -- NO NEED OF CHANGING
     const handleDeleteBulk = (selectedKeys) => {
         if (selectedKeys === 'all') { // if all items are selected
+            console.log(data);
             deleteBulk(data.map(item => item.id));
         } else {
             deleteBulk(
@@ -286,10 +264,10 @@ export default function BillingProfile() {
             headerMessage(type, message);
 
         // fetch data count from API // TODO: Change the following function
-        GetBillingProfileCount(searchColumn, searchFieldValue).then((response) => setPagesCount(response));
+        GetAlertCount(searchColumn, searchFieldValue,webId).then((response) => setPagesCount(response));
 
         // fetch data from API // TODO: Change the following function
-        GetBillingProfiles(rowsPerPage, currentPage, searchColumn, searchFieldValue)
+        GetAllAlert(rowsPerPage, currentPage, searchColumn, searchFieldValue,webId)
             .then(response => setData(response === null ? [] : response.length === 0 ? [] : response))
             .catch(error => console.error(error));
 
@@ -299,10 +277,10 @@ export default function BillingProfile() {
     const fetchTableData = (useCallback((page, key, val) => {
 
         // fetch data count from API // TODO: Change the following function
-        GetBillingProfileCount(key, val).then((response) => setPagesCount(response));
+        GetAlertCount(key, val,webId).then((response) => setPagesCount(response));
 
         // fetch data from API // TODO: Change the following function
-        GetBillingProfiles(rowsPerPage, page, key, val)
+        GetAllAlert(rowsPerPage, page, key, val,webId)
             .then(response => setData(response === null ? [] : response.length === 0 ? [] : response))
             .catch(error => console.error(error));
 
@@ -321,10 +299,10 @@ export default function BillingProfile() {
             fetchTableData(currentPage, searchColumn, searchFieldValue);
         } else {
             // get data count // TODO: Change the following function
-             GetBillingProfileByDatetimeCount(start, end, searchColumn, searchFieldValue).then((response) => setPagesCount(response));
+            getPagesByDatetimeCount(start, end, searchColumn, searchFieldValue).then((response) => setPagesCount(response));
 
             // get data // TODO: Change the following function
-            GetBillingProfileDateTime(rowsPerPage, currentPage, start, end, searchColumn, searchFieldValue).then(response => setData(response === null ? [] : response.length === 0 ? [] : response))
+            getPagesByDatetime(rowsPerPage, currentPage, start, end, searchColumn, searchFieldValue).then(response => setData(response === null ? [] : response.length === 0 ? [] : response))
         }
     }
 
@@ -333,10 +311,10 @@ export default function BillingProfile() {
     // status change function
     const statusChange = (statusArray) => {
         // get data count // TODO: Change the following function
-        GetBillingProfileByStatusCount(statusArray, searchColumn, searchFieldValue).then((response) => setPagesCount(response));
+        GetAlertByStatusCount(statusArray, searchColumn, searchFieldValue).then((response) => setPagesCount(response));
 
         // get data // TODO: Change the following function
-        GetBillingProfileByStatus(rowsPerPage, currentPage, statusArray, searchColumn, searchFieldValue).then(response => setData(response === null ? [] : response.length === 0 ? [] : response))
+        GetAlertByStatus(rowsPerPage, currentPage, statusArray, searchColumn, searchFieldValue).then(response => setData(response === null ? [] : response.length === 0 ? [] : response))
     }
 
 
@@ -400,7 +378,7 @@ export default function BillingProfile() {
                 editMenuButton={editMenuButton}
                 editItemIsOpen={isOpen}
                 editItemOnOpenChange={onOpenChange}
-                editForm={<EditBillingProfileForm refreshData={refreshData}/>}
+                editForm={<EditWebpageForm refreshData={refreshData}/>}
 
                 // search, sorting and filtering
                 searchColumn={searchColumn}
