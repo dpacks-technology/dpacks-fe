@@ -3,12 +3,12 @@ import {  useState } from 'react';
 
 import {AddMessage, GetMessagesByVisitorId} from "@/services/MessageService";
 
-const ChatWithAdmin = ({ webIds }) => {
+const ChatWithAdmin = ({ webId }) => {
     const [visitorEmail, setVisitorEmail] = useState('');
     const [enteredEmail, setEnteredEmail] = useState(false);
     const [message, setMessage] = useState('');
     const [messages, setMessages] = useState([]);
-    const webId="5";
+
 
 
     const handleVisitorEmailChange = (event) => {

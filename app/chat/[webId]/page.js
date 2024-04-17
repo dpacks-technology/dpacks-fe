@@ -3,17 +3,18 @@ import React, { useState } from 'react';
 import FAQ from './FAQ';
 import ChatWithAdmin from './ChatWithAdmin';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faCommentAlt } from '@fortawesome/free-regular-svg-icons';
+import { useParams } from "next/navigation";
 import {faArrowLeft} from "@fortawesome/free-solid-svg-icons";
 
 const Chat = () => {
-    const [isOpen, setIsOpen] = useState(false);
+    const [isOpen, setIsOpen] = useState(true);
     const [selectedOption, setSelectedOption] = useState(null);
+    const { webId } = useParams();
 
     const headerText = selectedOption? (
         selectedOption === 'faq'? 'FAQ' : 'Chat with admin'
     ) : 'Chat';
-    const webId = '5';
+
 
     const handleGoBack = () => {
         setSelectedOption(null);
@@ -25,47 +26,13 @@ const Chat = () => {
 
     return (
         <>
-            <div
-                className="chat-icon"
-                style={{
-                    position: 'fixed',
-                    bottom: '20px',
-                    right: '20px',
-                    width: '60px',
-                    height: '60px',
-                    backgroundColor: '#0f100f',
-                    borderRadius: '50%',
-                    display: 'flex',
-                    justifyContent: 'center',
-                    alignItems: 'center',
-                    cursor: 'pointer',
-                    transition: 'background-color 0.3s ease',
-                }}
-                onClick={() => setIsOpen(true)}
-            >
-                <FontAwesomeIcon icon={faCommentAlt} size="2x" color="white" />
-            </div>
             {isOpen && (
-                <div
-                    className="chat-window"
-                    style={{
-                        position: 'fixed',
-                        bottom: '60px',
-                        right: '20px',
-                        width: '320px',
-                        height: '440px',
-                        backgroundColor: '#fff',
-                        border: '1px solid #ddd',
-                        borderRadius: '4px',
-                        boxShadow: '0 2px 4px rgba(0, 0, 0, 0.1)',
-                        zIndex: 100,
-                    }}
-                >
+
                     <div
                         className="chat-header"
                         style={{
                             display: 'flex',
-                            justifyContent: 'space-between',
+
                             alignItems: 'center',
                             padding: '10px',
                             backgroundColor: '#004a77',
@@ -107,7 +74,7 @@ const Chat = () => {
                                 X
                             </button>
                         )}
-                    </div>
+
                     {!selectedOption && (
                         <div
                             className="chat-options"
