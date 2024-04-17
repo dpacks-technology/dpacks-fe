@@ -7,6 +7,7 @@ import AddWebpageForm from "@/app/components/forms/webpages/AddWebpageForm";
 import {usePathname} from "next/navigation";
 import AddRatelimitForm from "@/app/components/forms/endpoint/AddEndpointRatelimitForm";
 import AddApiSubscriberForm from "@/app/components/forms/apisubscriber/AddApiSubscriberForm";
+import AddTemplateForm from "@/app/components/forms/marketplace/AddTemplateForm";
 
 const LeftNavigation2 = () => {
 
@@ -40,6 +41,8 @@ const LeftNavigation2 = () => {
                 return <AddWebpageForm notificationMessage={notificationMessage}/>;
             case "/admin/api/endpoints":
                 return <AddRatelimitForm notificationMessage={notificationMessage}/>;
+            case "marketplace/template":
+                return <AddTemplateForm notificationMessage={notificationMessage}/>;
             default:
                 return null;
         }

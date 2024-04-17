@@ -10,10 +10,11 @@ import {
     getTemplatesByDatetimeCount,
     getTemplatesByStatus,
     getTemplatesByStatusCount,
-    getTemplates,
+    //getTemplates,
     getTemplatesCount,
     updateTemplatesStatus,
-    updateTemplatesStatusBulk, editTemplate
+    updateTemplatesStatusBulk,
+    getTemplatesByDid
 } from "@/services/MarketplaceService";
 import {useDisclosure} from "@nextui-org/react";
 import EditTemplatesDetailsForm from "@/app/components/forms/marketplace/EditTemplatesDetailsForm";
@@ -286,7 +287,7 @@ export default function ReviewTemplates() {
         getTemplatesCount(searchColumn, searchFieldValue).then((response) => setPagesCount(response));
 
         // fetch data from API // TODO: Change the following function
-        getTemplates(rowsPerPage, currentPage, searchColumn, searchFieldValue)
+        getTemplatesByDid(rowsPerPage, currentPage, searchColumn, searchFieldValue)
             .then(response => setData(response === null ? [] : response.length === 0 ? [] : response))
             .catch(error => console.error(error));
 
@@ -299,7 +300,7 @@ export default function ReviewTemplates() {
         getTemplatesCount(key, val).then((response) => setPagesCount(response));
 
         // fetch data from API // TODO: Change the following function
-        getTemplates(rowsPerPage, page, key, val)
+        getTemplatesByDid(rowsPerPage, page, key, val)
             .then(response => setData(response === null ? [] : response.length === 0 ? [] : response))
             .catch(error => console.error(error));
 

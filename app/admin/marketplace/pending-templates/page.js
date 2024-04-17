@@ -13,7 +13,8 @@ import {
     getTemplates,
     getTemplatesCount,
     updateTemplatesStatus,
-    updateTemplatesStatusBulk, editTemplate
+    updateTemplatesStatusBulk,
+    downloadById
 } from "@/services/MarketplaceService";
 import {useDisclosure} from "@nextui-org/react";
 //import EditWebpageForm from "@/app/components/forms/webpages/EditWebpageForm";
@@ -57,7 +58,6 @@ export default function ReviewTemplates() {
         {name: "CREATED ON", uid: "submitteddate", sortable: false, type: "datetime"},
         {name: "MAIN FILE", uid: "mainfile", sortable: false, type: "buttons"},
         {name: "THUMBNAIL", uid: "thmbnlfile", sortable: false, type: "buttons"},
-        {name: "DEVELOPER", uid: "devpname", sortable: true, type: "text"},
         {name: "DID", uid: "userid", sortable: false, type: "text"},
         {name: "MESSAGE", uid: "dmessage", sortable: false, type: "text"},
         {name: "PRICE", uid: "price", sortable: false, type: "text"},
@@ -80,7 +80,6 @@ export default function ReviewTemplates() {
         "category",
         "submitteddate",
         "mainfile",
-        "devpname",
         "price",
         "status",
         "statusButtons",
@@ -99,6 +98,31 @@ export default function ReviewTemplates() {
     const viewButton = (id) => { // view button function // TODO: Change the following function
             // not used here
             // console.log("view: " + id);
+            downloadById(id).then((res) => {
+                console.log(res.mainfile)
+
+                var url = res.mainfile;
+
+                // Open the URL in a new tab
+                var newWindow = window.open(url, '_blank');
+
+                // Initiate the file download
+                var anchor = document.createElement('a');
+                anchor.href = url;
+                anchor.download = '';
+                anchor.style.display = 'none';
+                document.body.appendChild(anchor);
+                anchor.click();
+
+                // Close the tab after a short delay (e.g., 1 second)
+                setTimeout(function() {
+                    newWindow.close();
+                }, 1000); // 1 second
+
+            }).catch((error) => {
+                console.log(error)
+                headerMessage("error", error.response.data.error);
+            });
         }
 
     const editButton = (id) => { // edit button function // TODO: Change the following function

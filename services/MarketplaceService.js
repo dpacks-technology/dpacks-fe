@@ -150,21 +150,56 @@ export const updateTemplatesStatus = async (id, status) => {
 }
 
 // get all webpages by status and datetime count // TODO: Change this function accordingly
-export const AddWebpage = async (data) => {
+export const AddTemplate = async (data) => {
     try {
-        const response = await marketplaceService.post(`/api/marketplace/templates`, data);
+        const response = await marketplaceService.post(`/api/marketplace/template`, data);
         return response.data;
     } catch (error) {
         throw error;
     }
 }
 
+export const downloadById = async (id) => {
+    try {
+        const response = await marketplaceService.get(`/api/marketplace/templat/${id}`);
+        return response.data;
+    } catch (error) {
+        throw error;
+    }
+}
+1
 export const getTemplatesByDid = async (count, page, key, val) => {
     try {
-        const response = await marketplaceService.get(`/api/marketplace/template/${count}/${page}?key=${key}&val=${val}`);
+        const response = await marketplaceService.get(`/api/marketplace/templates/user/${count}/${page}?key=${key}&val=${val}`);
         return response.data;
     } catch (error) {
         throw error;
     }
 };
 
+export const getActiveTemplates = async (count, page) => {
+    try {
+        const response = await marketplaceService.get(`/api/marketplace/templates/acceptstatus/${count}/${page}`);
+        return response.data;
+    } catch (error) {
+        throw error;
+    }
+}
+
+export const AddRating = async (data) => {
+    try {
+        const response = await marketplaceService.post(`/api/marketplace/template/rating`, data);
+        return response.data;
+    } catch (error) {
+        throw error;
+    }
+}
+
+// export const getSumAndCount = async () => {
+//     try {
+//         const response = await marketplaceService.get(`/api/marketplace/templates/sumcount`);
+//         return response.data;
+//     } catch (error) {
+//         throw error;
+//     }
+// }
