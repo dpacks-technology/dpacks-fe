@@ -1,9 +1,11 @@
 
 import axios from "axios";
 import Keys from "@/Keys";
+import {AuthHeaders} from "@/util/AuthHeader";
 
 const messageService = axios.create({
     baseURL: Keys.MESSAGE_SERVICE_API_URL,
+    headers: AuthHeaders
 });
 
 export const GetMessagesByWebId = async (webId) => {
