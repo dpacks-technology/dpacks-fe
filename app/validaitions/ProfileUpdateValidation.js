@@ -18,7 +18,7 @@ const ProfileValidation = yup.object().shape({
     phoneNumber: yup
         .string()
         .required({ phoneNumber: 'Phone number is required' })
-        .matches(/^\+?[1-9]\d{1,14}$/, { message: { phoneNumber: 'Can only contain Numbers' }, excludeEmptyString: true })
+        .matches(/^\+?[1-9]\d{1,14}$/, { message: { phoneNumber: 'Invalid Format' }, excludeEmptyString: true })
 });
 
 export default ProfileValidation;

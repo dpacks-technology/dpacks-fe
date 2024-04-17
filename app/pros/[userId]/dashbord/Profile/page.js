@@ -157,7 +157,7 @@ export default function Profile() {
                     <Input
                         disabled={isDisabled}
                         label="Phone"
-                        type="number"
+                        type="text"
                         value={phone}
                         onChange={e => setPhone(e.target.value)}
                         status={error.phoneNumber ? "error" : ""}
