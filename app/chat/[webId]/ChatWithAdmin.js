@@ -3,12 +3,12 @@ import {  useState } from 'react';
 
 import {AddMessage, GetMessagesByVisitorId} from "@/services/MessageService";
 
-const ChatWithAdmin = ({ webId }) => {
+const ChatWithAdmin = ({ webIds }) => {
     const [visitorEmail, setVisitorEmail] = useState('');
     const [enteredEmail, setEnteredEmail] = useState(false);
     const [message, setMessage] = useState('');
     const [messages, setMessages] = useState([]);
-
+    const webId="5";
 
 
     const handleVisitorEmailChange = (event) => {
@@ -40,7 +40,8 @@ const ChatWithAdmin = ({ webId }) => {
             time: new Date().toISOString(),
         };
 
-        const response = await AddMessage(webId, data);
+
+        const response = await AddMessage({webId}, data);
         setMessages((prevMessages) => [...prevMessages, response]);
         setMessage('');
     };
