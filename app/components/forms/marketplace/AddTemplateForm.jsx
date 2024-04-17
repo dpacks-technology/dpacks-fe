@@ -129,7 +129,7 @@ const AddTemplateForm = ({...props}) => {
                     <FormItem>
                         <Input
                             label={"Price"}
-                            type="decimal" placeholder="Price should be between $10-$100"
+                            type="decimal" placeholder="Enter the price of the template if any"
                             value={price}
                             onChange={(e) => setTemplatePrice(e.target.value)}
                             status={error.price ? "error" : ""}

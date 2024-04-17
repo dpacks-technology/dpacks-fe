@@ -6,8 +6,8 @@ const schema = yup.object().shape({
     category: yup.string().required('Category is required'),
     mainfile: yup.string().required('Main File must be a valid URL'),
     thmbnlfile: yup.string().required('Thumbnail Image must be a valid URL'),
-    dmessage: yup.string().required("Developer's Message is required")
-    //price: yup.number().typeError('Price must be a number').required('Price is required').min(10, 'Price should be at least $10').max(100, 'Price should not exceed $100')
+    dmessage: yup.string().required("Developer's Message is required"),
+    price: yup.number().typeError('Price must be a number').max(50, 'Price should not exceed $50')
 });
 
 export default schema;
