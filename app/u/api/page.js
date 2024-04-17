@@ -3,20 +3,27 @@
 import {useEffect, useState} from 'react';
 import axios from 'axios';
 import React from "react";
-import ButtonComponent from "@/app/components/Button";
 import Input from "@/app/components/Input";
 import {Button, Card} from "@nextui-org/react";
+import { jwtDecode } from "jwt-decode"
 
 
-export default function apiSubscribe({params}) {
+
+export default function apiSubscribe() {
     // eslint-disable-next-line react-hooks/rules-of-hooks
     const [clientId, setClientId] = useState("");
     // eslint-disable-next-line react-hooks/rules-of-hooks
     const [apiKey, setApiKey] = useState("");
 
+    const token = localStorage.getItem('token');
+    const decoded = jwtDecode(token);
+    const uid = decoded.id;
+    console.log(decoded);
+    console.log(uid);
+
     const fetchData = async () => {
         try {
-            const response = await axios.get(`http://localhost:4001/api/keypairs/${params.webId}`);
+            const response = await axios.get(`http://localhost:4001/api/keypairs/${uid}`);
             setClientId(response.data.client_id);
             setApiKey(response.data.key);
         } catch (error) {
@@ -26,7 +33,7 @@ export default function apiSubscribe({params}) {
 
     const subscribe = async () => {
         try {
-            const response = await axios.post(`http://localhost:4001/api/keypairs/${params.webId}`);
+            const response = await axios.post(`http://localhost:4001/api/keypairs/${uid}`);
             if(response.status === 200){
                 setClientId(response.data.client_id);
                 setApiKey(response.data.key);
@@ -41,7 +48,7 @@ export default function apiSubscribe({params}) {
 
     const regenerate = async () => {
         try {
-            const response = await axios.put(`http://localhost:4001/api/keypairs/${params.webId}`);
+            const response = await axios.put(`http://localhost:4001/api/keypairs/${uid}`);
             if(response.status === 200){
                 setClientId(response.data.client_id);
                 setApiKey(response.data.key);
@@ -55,8 +62,11 @@ export default function apiSubscribe({params}) {
     };
 
     const deleteSubscription = async () => {
+        //check if user is sure
+        if(!confirm("Are you sure you want to delete this subscription?")) return;
+
         try {
-            const response = await axios.delete(`http://localhost:4001/api/keypairs/${params.webId}`);
+            const response = await axios.delete(`http://localhost:4001/api/keypairs/${uid}`);
             if(response.status === 200){
                 setClientId("");
                 setApiKey("");
@@ -76,24 +86,24 @@ export default function apiSubscribe({params}) {
 
 
     return(
-        <div className="w-full h-full flex items-center justify-center">
+        <div className="w-full h-screen flex items-center justify-center">
 
-            <Card className="bg-gray-700 w-3/4 p-10 ml-auto mr-auto flex-col items-center">
+            <Card className="dark:bg-secondaryDark w-3/4 p-5 ml-auto mr-auto flex-col items-center flex ">
                 {!clientId && !apiKey ? (
-                    <ButtonComponent
-                        name="Subscribe to API"
-                        variant="solid"
+                    <Button
+                        variant="flat"
                         color="primary"
                         size="lg"
-                        onClick={subscribe}
-                    />
+                        onClick={subscribe}>
+                        Subscribe to API
+                    </Button>
                 ) : (
-                    <div className="w-full p-10 flex-col items-center">
+                    <div className="w-full p-2 md:p-10 flex-col items-center">
                         <h4 className="text-white text-lg pb-1 pl-1">Client ID</h4>
                         <Input
                             hiddenLabel
                             id="clientID"
-                            className="mb-5 w-full bg-white rounded-lg"
+                            className="mb-5 w-full rounded-lg"
                             variant="filled"
                             InputProps={{
                                 readOnly: true,
@@ -104,7 +114,7 @@ export default function apiSubscribe({params}) {
                         <Input
                             hiddenLabel
                             id="apiKey"
-                            className="mb-5 w-full bg-white rounded-lg"
+                            className="mb-5 w-full rounded-lg"
                             variant="filled"
                             InputProps={{
                                 readOnly: true,
@@ -112,9 +122,9 @@ export default function apiSubscribe({params}) {
                             value={apiKey}
                         />
 
-                        <div className="flex flex-row justify-between gap-5 mt-5">
+                        <div className="flex flex-col md:flex-row justify-between gap-5 md:mt-5">
                             <Button
-                                variant="solid"
+                                variant="flat"
                                 color="success"
                                 size="lg"
                                 onClick={regenerate}
@@ -124,7 +134,7 @@ export default function apiSubscribe({params}) {
 
                             <Button
                                 name="Delete"
-                                variant="solid"
+                                variant="flat"
                                 color="danger"
                                 size="lg"
                                 onClick={deleteSubscription}

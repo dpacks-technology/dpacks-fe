@@ -1,0 +1,20 @@
+.chat-dashboard {
+    display: flex;
+    flex-direction: column; /* Change flex direction to column */
+    width: 100%;
+    height: 100vh;
+}
+
+.chat-history-container {
+    flex: 1; /* Set flexible space to occupy remaining vertical space */
+    overflow-y: auto;
+}
+
+
+.chat-list-container{
+    flex: 10; /* Both sections take equal space */
+    overflow-y: auto; /* Enable scrolling for long content */
+}
+
+/* Additional styles for specific components (optional) */
+
