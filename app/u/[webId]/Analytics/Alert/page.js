@@ -60,7 +60,6 @@ export default function Webpages() {
         {name: "Alert Subject", uid: "alert_subject", sortable: false, type: "text"},
         {name: "Alert Content", uid: "alert_content", sortable: false, type: "text"},
         {name: "When Alert Required", uid: "when_alert_required", sortable: false, type: "text"},
-        {name: "Repeat On", uid: "repeat_on", sortable: false, type: "text"},
         {name: "Status", uid: "status", sortable: true, type: "status"},
         {name: "Actions", uid: "actions", sortable: false, type: "menu"},
        
@@ -73,7 +72,6 @@ export default function Webpages() {
         "alert_subject",
         "alert_content",
         "whenAlertRequired",
-        "repeat_on",
         "status",
         "actions"
 
