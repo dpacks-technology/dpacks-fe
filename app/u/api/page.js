@@ -88,7 +88,7 @@ export default function apiSubscribe() {
     return(
         <div className="w-full h-screen flex items-center justify-center">
 
-            <Card className="dark:bg-secondaryDark w-3/4 h-3/4 p-5 ml-auto mr-auto flex-col items-center flex ">
+            <Card className="dark:bg-secondaryDark w-3/4 p-5 ml-auto mr-auto flex-col items-center flex ">
                 {!clientId && !apiKey ? (
                     <Button
                         variant="flat"
