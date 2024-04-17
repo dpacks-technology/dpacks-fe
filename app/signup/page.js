@@ -1,6 +1,6 @@
 "use client"
 
-import {Form, Select} from "antd";
+import {Form, Select, message} from "antd";
 import FormItem from "antd/es/form/FormItem";
 import Input from "@/app/components/Input";
 import {Button} from "@nextui-org/react";
@@ -8,6 +8,7 @@ import React, {useEffect, useState} from "react";
 import axios from "axios";
 import {form2,form1,form3, form4} from "@/app/validaitions/signupValidation";
 import { useRouter} from "next/navigation";
+import {SignupService} from "@/services/SignupService";
 
 export default function SignUpPage() {
     const [error, setError] = useState("");
@@ -26,6 +27,24 @@ export default function SignUpPage() {
     const router = useRouter();
 
 
+    // backend validation error message
+    const [messageApi, contextHolder] = message.useMessage(); // message api
+    const Message = (type, message) => { // message function
+        messageApi.open({
+            type: type,
+            content: message,
+        });
+    };
+
+    // check if the user is already authenticated
+    useEffect(() => {
+        const token = localStorage.getItem('token');
+        if (token) {
+            router.push('/u');
+        }
+    }, [router]);
+
+    //to dynamically check the confirm password
     useEffect(() => {
         if (password !== confirmPassword && confirmPasswordTouched) {
             setIsInvalidConfirmPassword(true);
@@ -33,38 +52,6 @@ export default function SignUpPage() {
             setIsInvalidConfirmPassword(false);
         }
     }, [password, confirmPassword]);
-
-    const handleSubmit = async (e) => {
-        e.preventDefault();
-
-        //send data to backend using
-        try {
-
-            const data = {
-                first_name: firstName,
-                last_name: lastName,
-                email: email,
-                phone: phone,
-                date_of_birth: dateOfBirth,
-                gender: gender,
-                password: password,
-            };
-
-            if(!isInvalidConfirmPassword) {
-                const response = await axios.post(`http://localhost:4010/api/auth/signup`, data);
-                if(response.status === 200) {
-                    alert("User created successfully");
-                    //redirect to login page
-                    router.push("/login");
-
-                }
-                return response.data;
-            }
-
-        } catch (error) {
-            throw error;
-        }
-    }
 
     const validate = async (data, form) => {
         try {
@@ -84,6 +71,62 @@ export default function SignUpPage() {
             setError(errorsObject);
         }
     }
+
+
+    const handleSubmit = async (e) => {
+        e.preventDefault();
+        setError({});
+
+        //send data to backend using
+        try {
+
+            await validate({password}, form4)
+
+            const data = {
+                first_name: firstName,
+                last_name: lastName,
+                email: email,
+                phone: phone,
+                date_of_birth: dateOfBirth,
+                gender: gender,
+                password: password,
+            };
+
+            // if(!isInvalidConfirmPassword) {
+            //     const response = await axios.post(`http://localhost:4010/api/auth/signup`, data);
+            //     if(response.status === 200) {
+            //         alert("User created successfully");
+            //         //redirect to login page
+            //         router.push("/login");
+            //
+            //     }
+            //     return response.data;
+            // }
+
+            SignupService(data).then(async (response) => {
+                const data = await response;
+
+                // check if the response is successful
+                if (response.status === 200) {
+
+                    // show success message
+                    Message("success", data.message);
+                    // redirect to login page
+                    router.push("/login");
+
+                } else {
+                    // show the error message
+                    alert(data.message);
+                }
+            });
+
+        } catch (error) {
+            console.log(error);
+            throw error;
+        }
+    }
+
+
 
 
 

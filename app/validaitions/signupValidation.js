@@ -8,7 +8,7 @@ const form1 = yup.object().shape({
 
 const form2 = yup.object().shape({
     //email and phone number should be have at least 10 characters
-    email: yup.string().required({email: 'Email is required'}),
+    email: yup.string().email({email: 'Invalid email format'}).required({email: 'Email is required'}),
     phone: yup.string().required({phone: 'Phone Number is required'}).min(10, {phone: 'Phone Number must be at least 10 characters'}),
 });
 
@@ -20,7 +20,7 @@ const form3 = yup.object().shape({
 });
 
 const form4 = yup.object().shape({
-    password: yup.string().required({dateOfBirth: 'Password is required'}).min(8, {password: 'Password must be at least 8 characters'}),
+    password: yup.string().required({password: 'Password is required'}).min(8, {password: 'Password must be at least 8 characters'}),
 
 });
 
