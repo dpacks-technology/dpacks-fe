@@ -1,7 +1,7 @@
 import {Button} from "@nextui-org/react";
 import Input from "@/app/components/Input";
 import React from "react";
-import {Form, message} from "antd";
+import {Form, message, Checkbox} from "antd";
 import schema from "@/app/validaitions/AddAdminValidation";
 import FormItem from "antd/es/form/FormItem";
 import {AddAdminUser} from "@/services/AdminManagementService";
@@ -15,6 +15,7 @@ const AddAdminForm = ({...props}) => {
     const [phone, setPhone] = React.useState("");
     const [email, setEmail] = React.useState("");
     const [password, setPassword] = React.useState("");
+    const [passwordVisible, setPasswordVisible] = React.useState("password");
 
     // backend validation error message
     const [messageApi, contextHolder] = message.useMessage(); // message api
@@ -38,7 +39,7 @@ const AddAdminForm = ({...props}) => {
             // data //add/change fields
             const data = {
                 name:name,
-                phone: parseInt(phone),
+                phone: phone,
                 email: email,
                 password: password
             };
@@ -109,10 +110,17 @@ const AddAdminForm = ({...props}) => {
                             status={error.password ? "error" : ""}
                             error={error.password}
                             label={"Password"}
-                            type="password" placeholder="Password"
+                            type={passwordVisible}
+                            placeholder="Password"
                             value={password}
                             onChange={(e) => setPassword(e.target.value)}
                         />
+                    </FormItem>
+                    <FormItem>
+                        <Checkbox onChange={(e) =>
+                            setPasswordVisible(e.target.checked ? "text" : "password")}>
+                            Show Password
+                        </Checkbox>
                     </FormItem>
 
                     {/*/!* Confirm Password *!/*/}

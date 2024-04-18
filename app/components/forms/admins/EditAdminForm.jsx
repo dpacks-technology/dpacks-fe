@@ -1,8 +1,8 @@
 import {Button} from "@nextui-org/react";
 import Input from "@/app/components/Input";
 import React, {useEffect} from "react";
-import {Form, message} from "antd";
-import schema from "@/app/validaitions/WebPageEditValidation";
+import {Checkbox, Form, message} from "antd";
+import schema from "@/app/validaitions/AddAdminValidation";
 import FormItem from "antd/es/form/FormItem";
 import {editAdmin, getAdminById} from "@/services/AdminManagementService";
 
@@ -15,6 +15,7 @@ const EditAdminForm = ({...props}) => {
     const [phone, setPhone] = React.useState("");
     const [email, setEmail] = React.useState("");
     const [password, setPassword] = React.useState("");
+    const [passwordVisible, setPasswordVisible] = React.useState("password");
 
     // backend validation error message
     const [messageApi, contextHolder] = message.useMessage(); // message api
@@ -35,14 +36,14 @@ const EditAdminForm = ({...props}) => {
             // data //
             const data = {
                 name:name,
-                phone: parseInt(phone),
+                phone: phone,
                 email: email,
                 password: password
             };
             //const data
 
             // validate
-            //await schema.validate(data, {abortEarly: false});
+            await schema.validate(data, {abortEarly: false});
 
             // edit admin //
             await editAdmin(props.id, data).then(() => {
@@ -119,11 +120,19 @@ const EditAdminForm = ({...props}) => {
                             status={error.password ? "error" : ""}
                             error={error.password}
                             label={"Password"}
-                            type="password" placeholder="Password"
+                            type={passwordVisible}
+                            placeholder="Password"
                             value={password}
                             onChange={(e) => setPassword(e.target.value)}
                         />
                     </FormItem>
+                    <FormItem>
+                        <Checkbox onChange={(e) =>
+                            setPasswordVisible(e.target.checked ? "text" : "password")}>
+                            Show Password
+                        </Checkbox>
+                    </FormItem>
+
 
                 </div>
 
