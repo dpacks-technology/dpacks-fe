@@ -19,8 +19,8 @@ import {
 } from "@/services/AdminManagementService";
 import EditAdminForm from "@/app/components/forms/admins/EditAdminForm";
 
-// Webpages component
-export default function Webpages() {
+// admin component
+export default function Admin() {
 
     // ----------------------- DEFAULT COLUMNS -------------------------
     // default columns // TODO: Change the following functions
