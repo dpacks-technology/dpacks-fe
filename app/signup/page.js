@@ -150,7 +150,7 @@ export default function SignUpPage() {
                                             © {new Date().getFullYear()} DPacks. All rights reserved.
                                         </p>
                                         <p style={{fontSize: "9px"}} className={"dark:text-darkSecondary"}>
-                                            Static data management and global distribution technology.
+                                            Web enhancing and static data management technology.
                                         </p>
                                     </div>
                                 </div>

@@ -2,6 +2,7 @@
 
 import Link from "next/link";
 import EditSiteForm from "@/app/components/forms/sites/EditSiteForm";
+import EditWebProjectForm from "@/app/components/forms/project/EditWebProjectForm";
 
 export default function EditSite({ params: { webId } }) {
 
@@ -12,7 +13,7 @@ export default function EditSite({ params: { webId } }) {
             <div className={"container"}>
                 <Link href={"/u"}>Back</Link>
                 <h1>Edit Site - {webId}</h1>
-                <EditSiteForm webId={webId}/>
+                <EditWebProjectForm webId={webId}/>
             </div>
         </>
     );
