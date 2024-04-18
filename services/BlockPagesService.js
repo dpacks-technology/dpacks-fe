@@ -22,9 +22,9 @@ export const AddToBlocklist = async (data) => {
 }
 
 // get all webpages // TODO: Change this function accordingly
-export const getWebPages = async (count, page, key, val) => {
+export const getWebPages = async (count, page, key, val,userId) => {
     try {
-        const response = await BloackPageService.get(`http://localhost:4000/api/pros/Access/BlockLists/${count}/${page}?key=${key}&val=${val}`);
+        const response = await BloackPageService.get(`http://localhost:4000/api/pros/Access/BlockLists/${userId}/${count}/${page}?key=${key}&val=${val}`);
         return response.data;
     } catch (error) {
         throw error;
@@ -32,9 +32,9 @@ export const getWebPages = async (count, page, key, val) => {
 };
 
 // get all webpages count // TODO: Change this function accordingly
-export const getWebPagesCount = async (key, val) => {
+export const getWebPagesCount = async (key, val,userId) => {
     try {
-        const response = await BloackPageService.get(`http://localhost:4000/api/pros/Access/BlockList/count?key=${key}&val=${val}`);
+        const response = await BloackPageService.get(`http://localhost:4000/api/pros/Access/BlockList/count/${userId}?key=${key}&val=${val}`);
         return response.data;
     } catch (error) {
         throw error;

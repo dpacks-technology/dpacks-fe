@@ -4,7 +4,7 @@ import { Button, useDisclosure } from "@nextui-org/react";
 import { message } from "antd";
 import Model from "@/app/components/Model";
 import {usePathname} from "next/navigation";
-import AddToBlockList from './forms/webpages/BlockList/AddToBlockList';
+import AddToBlockList from '@/app/components/forms/Visitor/BlockList/AddToBlockList';
 import AddRatelimitForm from "@/app/components/forms/endpoint/AddEndpointRatelimitForm";
 import AddApiSubscriberForm from "@/app/components/forms/apisubscriber/AddApiSubscriberForm";
 import AddTemplateForm from "@/app/components/forms/marketplace/AddTemplateForm";
