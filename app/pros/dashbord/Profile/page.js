@@ -64,16 +64,13 @@ export default function Profile() {
                 userDescription: aboutMe,
                 favourCategory: JSON.stringify(selectedUsers)
             };
-
-
-            console.log("Data: ", data);
             await ProfileValidation.validate(data, { abortEarly: false });
 
             setError({});
             setIsDisabled(!isDisabled);
             setIsButtonVisible(!isButtonVisible);
 
-            const response = await UpdateUser(userId, data).then((response) => {
+            const response = await UpdateUser(data).then((response) => {
                 console.log(response);
             }).catch((error) => {
                 console.error("Failed to update user data: ", error);
