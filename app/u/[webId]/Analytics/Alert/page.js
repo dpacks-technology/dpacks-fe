@@ -3,20 +3,27 @@
 // Importing modules
 import Table from "@/app/components/Table";
 import React, {useCallback, useEffect} from "react";
+import { useParams } from 'next/navigation'
 import {
-    getPagesByStatus,
-    getPagesByStatusCount,
-    getWebPages,
-    getWebPagesCount,
-    updateWebpagesStatus,
-    updateWebpagesStatusBulk
-} from "@/services/BlockPagesService";
+    GetAlertByStatus,
+    GetAlertByStatusCount,
+    GetAllAlert,
+    GetAlertCount,
+    UpdateAlerttatus,
+    UpdateAlerttatusBulk
+} from "@/services/AlertService";
 import {useDisclosure} from "@nextui-org/react";
 import EditWebpageForm from "@/app/components/forms/webpages/EditWebpageForm";
 import {message} from "antd";
 
 // Webpages component
-export default function History() {
+export default function Webpages() {
+
+    // ----------------------- PARAMS ------------------------- (NO NEED OF CHANGING)
+    // params
+    var params = useParams();
+    const webId = params.webId;
+    
 
     // ----------------------- DEFAULT COLUMNS -------------------------
     // default columns // TODO: Change the following functions
@@ -46,20 +53,27 @@ export default function History() {
     // ----------------------- COLUMNS -------------------------
     // columns // TODO: Change the following columns according the to yours
     const columns = [
-        {name: "ID", uid: "id", sortable: true, type: "text"},
-        {name: "NAME", uid: "name", sortable: true, type: "text"},
-        {name: "URL", uid: "url", sortable: true, type: "text"},
-        {name: "LAST ACCESS ON", uid: "last_access_date", sortable: false, type: "datetime"},
-        {name: "STATUS", uid: "status", sortable: false, type: "status"},
+        {name: "Alert ID", uid: "id", sortable: true, type: "text"},
+        {name: "Alert Threshold", uid: "alert_threshold", sortable: false, type: "text"},
+        {name: "Alert Subject", uid: "alert_subject", sortable: false, type: "text"},
+        {name: "Alert Content", uid: "alert_content", sortable: false, type: "text"},
+        {name: "When Alert Required", uid: "when_alert_required", sortable: false, type: "text"},
+        {name: "Repeat On", uid: "repeat_on", sortable: false, type: "text"},
+        {name: "Customer Reminder Date", uid: "custom_reminder_date", sortable: false, type: "datetime"},
+        {name: "Status", uid: "status", sortable: true, type: "status"},
+       
         // all usable types: text, twoText, datetime, label, status, statusButtons, buttons, menu, copy, icon, iconText, iconTwoText
     ];
 
     // initially visible columns // TODO: Change the following columns according the to yours
     const init_cols = [
-        "name",
-        "url",
-        "last_access_date",
-        "status",
+        "alert_threshold",
+        "alert_subject",
+        "alert_content",
+        "whenAlertRequired",
+        "repeat_on",
+        "custom_reminder_date",
+        "status"
 
     ];
 
@@ -90,6 +104,7 @@ export default function History() {
     // action buttons // TODO: Change the following buttons
     const actionButtons = [
         {name: "View", text: "View", icon: "", type: "default", function: viewButton},
+        {name: "Edit", text: "Edit", icon: "", type: "primary", function: editButton},
         {name: "Delete", text: "Delete", icon: "", type: "danger", function: deleteButton},
     ];
 
@@ -126,6 +141,7 @@ export default function History() {
     // menu buttons // TODO: Change the following buttons
     const menuButtons = [
         {name: "View", text: "View", function: viewMenuButton},
+        {name: "Edit", text: "Edit", function: onOpen}, // edit function set to open model (onOpen function)
         {name: "Delete", text: "Delete", function: deleteMenuButton},
     ];
 
@@ -144,7 +160,7 @@ export default function History() {
     const updateStatusButton = (id, status) => {
 
             // update status function
-            updateWebpagesStatus(id, status).then(() => {
+            UpdateAlerttatus(id, status).then(() => {
                 refreshData("success", "Updated");
             }).catch((error) => {
                 headerMessage("error", error.response.data.error);
@@ -155,7 +171,7 @@ export default function History() {
     // status options // TODO: Change the following options
     const statusOptions = [
         {
-            name: "Blocked", // status name
+            name: "Offline", // status name
             uid: 0, // status id (the value in the database)
             type: "danger", // status type (color) ["", primary, secondary, danger, warning, success]
             button: true, // if you want to show a button to change the status
@@ -194,7 +210,7 @@ export default function History() {
     const updateStatusBulk = (ids, status) => {
 
         // update status bulk function // TODO: Change the following function
-        updateWebpagesStatusBulk(ids, status).then(() => {
+        UpdateAlerttatusBulk(ids, status).then(() => {
             refreshData("success", "Updated");
         }).catch((error) => {
             headerMessage("error", error.response.data.error);
@@ -205,6 +221,7 @@ export default function History() {
     // handle delete bulk function -- NO NEED OF CHANGING
     const handleUpdateStatusBulk = (selectedKeys, status) => {
         if (selectedKeys === 'all') { // if all items are selected
+            console.log(data);
             updateStatusBulk(data.map(item => item.id), status);
         } else {
             updateStatusBulk(
@@ -229,6 +246,7 @@ export default function History() {
     // handle delete bulk function -- NO NEED OF CHANGING
     const handleDeleteBulk = (selectedKeys) => {
         if (selectedKeys === 'all') { // if all items are selected
+            console.log(data);
             deleteBulk(data.map(item => item.id));
         } else {
             deleteBulk(
@@ -246,10 +264,10 @@ export default function History() {
             headerMessage(type, message);
 
         // fetch data count from API // TODO: Change the following function
-        getWebPagesCount(searchColumn, searchFieldValue).then((response) => setPagesCount(response));
+        GetAlertCount(searchColumn, searchFieldValue,webId).then((response) => setPagesCount(response));
 
         // fetch data from API // TODO: Change the following function
-        getWebPages(rowsPerPage, currentPage, searchColumn, searchFieldValue)
+        GetAllAlert(rowsPerPage, currentPage, searchColumn, searchFieldValue,webId)
             .then(response => setData(response === null ? [] : response.length === 0 ? [] : response))
             .catch(error => console.error(error));
 
@@ -259,10 +277,10 @@ export default function History() {
     const fetchTableData = (useCallback((page, key, val) => {
 
         // fetch data count from API // TODO: Change the following function
-        getWebPagesCount(key, val).then((response) => setPagesCount(response));
+        GetAlertCount(key, val,webId).then((response) => setPagesCount(response));
 
         // fetch data from API // TODO: Change the following function
-        getWebPages(rowsPerPage, page, key, val)
+        GetAllAlert(rowsPerPage, page, key, val,webId)
             .then(response => setData(response === null ? [] : response.length === 0 ? [] : response))
             .catch(error => console.error(error));
 
@@ -293,10 +311,10 @@ export default function History() {
     // status change function
     const statusChange = (statusArray) => {
         // get data count // TODO: Change the following function
-        getPagesByStatusCount(statusArray, searchColumn, searchFieldValue).then((response) => setPagesCount(response));
+        GetAlertByStatusCount(statusArray, searchColumn, searchFieldValue).then((response) => setPagesCount(response));
 
         // get data // TODO: Change the following function
-        getPagesByStatus(rowsPerPage, currentPage, statusArray, searchColumn, searchFieldValue).then(response => setData(response === null ? [] : response.length === 0 ? [] : response))
+        GetAlertByStatus(rowsPerPage, currentPage, statusArray, searchColumn, searchFieldValue).then(response => setData(response === null ? [] : response.length === 0 ? [] : response))
     }
 
 
