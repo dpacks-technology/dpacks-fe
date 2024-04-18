@@ -7,13 +7,14 @@ import {Button, useDisclosure} from "@nextui-org/react";
 import {message} from "antd";
 import Model from "@/app/components/Model";
 import {usePathname} from "next/navigation";
-import AddToBlockList from './forms/webpages/BlockList/AddToBlockList';
+import AddToBlockList from '@/app/components/forms/Visitor/BlockList/AddToBlockList';
 import AddRatelimitForm from "@/app/components/forms/endpoint/AddEndpointRatelimitForm";
 import AddApiSubscriberForm from "@/app/components/forms/apisubscriber/AddApiSubscriberForm";
 import AddTemplateForm from "@/app/components/forms/marketplace/AddTemplateForm";
 import AddAutoRespondsForm from "@/app/components/forms/webchats/AddAutomatedMessageForm";
 import AddWebpageForm from "@/app/components/forms/sites/AddSiteForm";
 import {UserDashboardNavigation} from "@/app/data/UserDashboardNavigation";
+import AddAdminForm from "@/app/components/forms/admins/AddAdminForm";
 
 const LeftNavigation2 = () => {
 
@@ -57,6 +58,8 @@ const LeftNavigation2 = () => {
                 return <AddTemplateForm notificationMessage={notificationMessage}/>;
             case "chat/automatedMessage":
                 return <AddAutoRespondsForm notificationMessage={notificationMessage}/>;
+            case "users/manage-admins":
+                return <AddAdminForm notificationMessage={notificationMessage}/>;
             case "api/subscribers":
                 return <AddApiSubscriberForm notificationMessage={notificationMessage}/>;
             default:

@@ -11,7 +11,7 @@ export default function Textarea({ ...props }) {
                 <label className={"text-xs text-light dark:text-dark"}>{props.label}</label>
             }
 
-            <TextArea rows={4} {...props} maxLength={6}
+            <TextArea rows={4} {...props}
                 className={"mt-2" + (props.className ? " " + props.className : "")}
                 {...props}
             />
