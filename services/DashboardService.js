@@ -12,7 +12,7 @@ const DashboardService = axios.create({
 export const GetData = async (count, page, key, val,userId) => {
     try {
         
-        const response = await DashboardService.get(`http://localhost:4000/api/pros/Access/AccessLists/${count}/${page}/${userId}?key=${key}&val=${val}`);
+        const response = await DashboardService.get(`http://localhost:4000/api/pros/Access/AccessLists/${count}/${page}?key=${key}&val=${val}`);
         return response.data;
     } catch (error) {
         throw error;
@@ -22,7 +22,7 @@ export const GetData = async (count, page, key, val,userId) => {
 // get all webpages count // TODO: Change this function accordingly
 export const GetDataCount = async (key, val,userId) => {
     try {
-        const response = await DashboardService.get(`http://localhost:4000/api/pros/Access/AccessList/count/${userId}?key=${key}&val=${val}`);
+        const response = await DashboardService.get(`http://localhost:4000/api/pros/Access/AccessList/count?key=${key}&val=${val}`);
         return response.data;
     } catch (error) {
         throw error;
