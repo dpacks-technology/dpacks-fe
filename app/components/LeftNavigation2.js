@@ -10,6 +10,7 @@ import AddApiSubscriberForm from "@/app/components/forms/apisubscriber/AddApiSub
 import AddTemplateForm from "@/app/components/forms/marketplace/AddTemplateForm";
 import AddAutoRespondsForm from "@/app/components/forms/webchats/AddAutomatedMessageForm";
 import AddWebpageForm from "@/app/components/forms/sites/AddSiteForm";
+import AddAdminForm from "@/app/components/forms/admins/AddAdminForm";
 
 const LeftNavigation2 = () => {
 
@@ -54,6 +55,8 @@ const LeftNavigation2 = () => {
                 return <AddTemplateForm notificationMessage={notificationMessage}/>;
             case "chat/automatedMessage":
                 return <AddAutoRespondsForm notificationMessage={notificationMessage}/>;
+            case "users/manage-admins":
+                return <AddAdminForm notificationMessage={notificationMessage}/>;
             case "api/subscribers":
                 return <AddApiSubscriberForm notificationMessage={notificationMessage}/>;
             default:
