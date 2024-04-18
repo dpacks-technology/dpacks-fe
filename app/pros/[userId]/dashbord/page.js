@@ -4,17 +4,23 @@
 import Table from "@/app/components/Table";
 import React, {useCallback, useEffect} from "react";
 import {
-    getPagesByDatetime,
-    getPagesByDatetimeCount,
-    getWebPages,
-    getWebPagesCount,
+    GetDataByDatetime,
+    GetDataByDatetimeCount,
+    GetData,
+    GetDataCount,
 } from "@/services/DashboardService";
 import {useDisclosure} from "@nextui-org/react";
 import EditWebpageForm from "@/app/components/forms/webpages/EditWebpageForm";
 import {message} from "antd";
+import { useParams } from "next/navigation";
+
 
 // Webpages component
 export default function Dashboard() {
+
+    const {userId} = useParams();
+
+
 
     // ----------------------- DEFAULT COLUMNS -------------------------
     // default columns // TODO: Change the following functions
@@ -45,7 +51,6 @@ export default function Dashboard() {
     // columns // TODO: Change the following columns according the to yours
     const columns = [
         {name: "ID", uid: "id", sortable: true, type: "text"},
-        {name: "WEBSITE NAME", uid: "website_name", sortable: true, type: "text"},
         {name: "URL", uid: "website_url", type: "copy"},
         {name: "ACCESSED DATE", uid: "access_date_time", sortable: false, type: "datetime"},
         {name: "ACTIONS", uid: "menu", sortable: false, type: "menu"},
@@ -54,7 +59,7 @@ export default function Dashboard() {
 
     // initially visible columns // TODO: Change the following columns according the to yours
     const init_cols = [
-        "website_name",
+        "id",
         "website_url",
         "access_date_time",
         "status",
@@ -246,10 +251,10 @@ export default function Dashboard() {
             headerMessage(type, message);
 
         // fetch data count from API // TODO: Change the following function
-        getWebPagesCount(searchColumn, searchFieldValue).then((response) => setPagesCount(response));
+        GetDataCount(searchColumn, searchFieldValue).then((response) => setPagesCount(response));
 
         // fetch data from API // TODO: Change the following function
-        getWebPages(rowsPerPage, currentPage, searchColumn, searchFieldValue)
+        GetData(rowsPerPage, currentPage, searchColumn, searchFieldValue)
             .then(response => setData(response === null ? [] : response.length === 0 ? [] : response))
             .catch(error => console.error(error));
 
@@ -259,10 +264,10 @@ export default function Dashboard() {
     const fetchTableData = (useCallback((page, key, val) => {
 
         // fetch data count from API // TODO: Change the following function
-        getWebPagesCount(key, val).then((response) => setPagesCount(response));
+        GetDataCount(key, val,userId).then((response) => setPagesCount(response));
 
         // fetch data from API // TODO: Change the following function
-        getWebPages(rowsPerPage, page, key, val)
+        GetData(rowsPerPage, page, key, val,userId)
             .then(response => setData(response === null ? [] : response.length === 0 ? [] : response))
             .catch(error => console.error(error));
 
@@ -281,10 +286,10 @@ export default function Dashboard() {
             fetchTableData(currentPage, searchColumn, searchFieldValue);
         } else {
             // get data count // TODO: Change the following function
-            getPagesByDatetimeCount(start, end, searchColumn, searchFieldValue).then((response) => setPagesCount(response));
+            GetDataByDatetimeCount(start, end, searchColumn, searchFieldValue,userId).then((response) => setPagesCount(response));
 
             // get data // TODO: Change the following function
-            getPagesByDatetime(rowsPerPage, currentPage, start, end, searchColumn, searchFieldValue).then(response => setData(response === null ? [] : response.length === 0 ? [] : response))
+            GetDataByDatetime(rowsPerPage, currentPage, start, end, searchColumn, searchFieldValue,userId).then(response => setData(response === null ? [] : response.length === 0 ? [] : response))
         }
     }
 

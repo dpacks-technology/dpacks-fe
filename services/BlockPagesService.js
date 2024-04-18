@@ -1,9 +1,11 @@
 import axios from 'axios';
 import Keys from "@/Keys";
+import {AuthHeaders} from "@/util/AuthHeader";
 
 // Create an axios instance -- NO NEED TO CHANGE THIS
 const BloackPageService = axios.create({
-    baseURL: Keys.USER_SERVICE_API_URL
+    baseURL: Keys.USER_SERVICE_API_URL,
+    headers: AuthHeaders
 });
 
 

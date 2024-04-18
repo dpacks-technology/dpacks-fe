@@ -54,7 +54,7 @@ const EditWebpageForm = ({...props}) => {
 
     // get webpage by id
     useEffect(() => {
-        // get webpage by id from backend function
+        // get webpage by id from backend function // TODO: change the function
         getPageById(props.id).then((response) => {
             setName(response.name); // set name
         }).then(() => {
