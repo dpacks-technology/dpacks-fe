@@ -4,12 +4,14 @@ import FAQ from './FAQ';
 import ChatWithAdmin from './ChatWithAdmin';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { useParams } from "next/navigation";
+
 import {faArrowLeft} from "@fortawesome/free-solid-svg-icons";
 
 const Chat = () => {
-    const [isOpen, setIsOpen] = useState(true);
+
     const [selectedOption, setSelectedOption] = useState(null);
     const { webId } = useParams();
+    console.log("webId in Chat component:", webId);
 
     const headerText = selectedOption? (
         selectedOption === 'faq'? 'FAQ' : 'Chat with admin'
@@ -20,19 +22,30 @@ const Chat = () => {
         setSelectedOption(null);
     };
 
-    const handleClose = () => {
-        setIsOpen(false);
-    };
+
 
     return (
         <>
-            {isOpen && (
-
+                <div
+                    className="chat-window"
+                    style={{
+                        position: 'fixed',
+                        top: 0,
+                        left: 0,
+                        width: '100vw',
+                        height: '100vh',
+                        backgroundColor: '#fff',
+                        border: 'none',
+                        borderRadius: 0,
+                        boxShadow: 'none',
+                        zIndex: 100,
+                    }}
+                >
                     <div
                         className="chat-header"
                         style={{
                             display: 'flex',
-
+                            justifyContent: 'space-between',
                             alignItems: 'center',
                             padding: '10px',
                             backgroundColor: '#004a77',
@@ -69,17 +82,21 @@ const Chat = () => {
                                     fontWeight: 'bold',
                                     transition: 'color 0.3s ease',
                                 }}
-                                onClick={handleClose}
+
                             >
                                 X
                             </button>
                         )}
-
+                    </div>
                     {!selectedOption && (
                         <div
                             className="chat-options"
                             style={{
-                                padding: '20px',
+                                position: 'absolute',
+                                top: '50%',
+                                left: '50%',
+                                transform: 'translate(-50%, -50%)',
+                                textAlign: 'center',
                                 display: 'flex',
                                 flexDirection: 'column',
                                 alignItems: 'center',
@@ -94,6 +111,9 @@ const Chat = () => {
                                     borderRadius: '4px',
                                     cursor: 'pointer',
                                     transition: 'background-color 0.3s ease',
+                                    marginBottom: '50px',
+                                    width: '200px',
+
                                 }}
                                 onClick={() => setSelectedOption('faq')}
                             >
@@ -108,6 +128,7 @@ const Chat = () => {
                                     borderRadius: '4px',
                                     cursor: 'pointer',
                                     transition: 'background-color 0.3s ease',
+                                    width: '200px',
                                 }}
                                 onClick={() => setSelectedOption('chat')}
                             >
@@ -118,7 +139,7 @@ const Chat = () => {
                     {selectedOption === 'faq' && <FAQ />}
                     {selectedOption === 'chat' && <ChatWithAdmin webId={webId} />}
                 </div>
-            )}
+
         </>
     );
 
