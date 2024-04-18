@@ -14,7 +14,7 @@ export default function Input({...props}) {
                 {...props}
             />
             {props.error &&
-                <span className={"mt-2 text-danger text-xs"}>{props.error}</span>
+                <span className={"mt-2 text-danger text-xs"}>{props.error} <br /> </span>
             }
         </>
     );
