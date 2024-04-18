@@ -7,11 +7,8 @@ import Model from "@/app/components/Model";
 import {usePathname} from "next/navigation";
 import AddRatelimitForm from "@/app/components/forms/endpoint/AddEndpointRatelimitForm";
 import AddApiSubscriberForm from "@/app/components/forms/apisubscriber/AddApiSubscriberForm";
-
-
 import AddAutoRespondsForm from "@/app/components/forms/webchats/AddAutomatedMessageForm";
 import AddWebpageForm from "@/app/components/forms/sites/AddSiteForm";
-import PersonolizedC from './forms/Profile/personolizedContent';
 
 const LeftNavigation2 = () => {
 
