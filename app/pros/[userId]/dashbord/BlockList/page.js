@@ -14,9 +14,14 @@ import {
 import {useDisclosure} from "@nextui-org/react";
 import EditWebpageForm from "@/app/components/forms/webpages/EditWebpageForm";
 import {message} from "antd";
+import { useParams } from "next/navigation";
 
 // Webpages component
 export default function History() {
+
+    // ----------------------- PARAMS -------------------------
+    // params
+    const { userId } = useParams();
 
     // ----------------------- DEFAULT COLUMNS -------------------------
     // default columns // TODO: Change the following functions
@@ -47,7 +52,6 @@ export default function History() {
     // columns // TODO: Change the following columns according the to yours
     const columns = [
         {name: "ID", uid: "id", sortable: true, type: "text"},
-        {name: "NAME", uid: "name", sortable: true, type: "text"},
         {name: "URL", uid: "url", sortable: true, type: "text"},
         {name: "LAST ACCESS ON", uid: "last_access_date", sortable: false, type: "datetime"},
         {name: "STATUS", uid: "status", sortable: false, type: "status"},
@@ -56,7 +60,6 @@ export default function History() {
 
     // initially visible columns // TODO: Change the following columns according the to yours
     const init_cols = [
-        "name",
         "url",
         "last_access_date",
         "status",
@@ -259,10 +262,10 @@ export default function History() {
     const fetchTableData = (useCallback((page, key, val) => {
 
         // fetch data count from API // TODO: Change the following function
-        getWebPagesCount(key, val).then((response) => setPagesCount(response));
+        getWebPagesCount(key, val,userId).then((response) => setPagesCount(response));
 
         // fetch data from API // TODO: Change the following function
-        getWebPages(rowsPerPage, page, key, val)
+        getWebPages(rowsPerPage, page, key, val,userId)
             .then(response => setData(response === null ? [] : response.length === 0 ? [] : response))
             .catch(error => console.error(error));
 
