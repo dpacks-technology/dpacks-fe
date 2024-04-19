@@ -5,11 +5,14 @@ import { UserDashboardNavigation } from "@/app/data/UserDashboardNavigation";
 import Link from "next/link";
 import { PContentNavigation } from '../data/PContentNavigation';
 import { usePathname } from 'next/navigation';
+import { AdminDashboardNavigation } from '../data/AdminDashboardNavigation';
 
 const LeftNavigation1 = () => {
     // get url pathname
     const fullPathname = usePathname();
     const path = fullPathname.split("/")[1];
+
+    console.log(path);
 
     let navigationData;
 
@@ -17,6 +20,8 @@ const LeftNavigation1 = () => {
         navigationData = UserDashboardNavigation;
     } else if (path === "pros") {
         navigationData = PContentNavigation;
+    }else if (path === "admin") {
+        navigationData = AdminDashboardNavigation;
     }
     return (<nav className="bg-secondaryDark w-16 h-full fixed top-0 pt-3 left-0 ">
 

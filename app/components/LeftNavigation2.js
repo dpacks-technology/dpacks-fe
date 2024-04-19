@@ -15,6 +15,8 @@ import { UserDashboardNavigation } from "@/app/data/UserDashboardNavigation";
 import AddAdminForm from "@/app/components/forms/admins/AddAdminForm";
 import AddWebpageForm from "@/app/components/forms/webpages/AddWebpageForm";
 import { PContentNavigation } from '../data/PContentNavigation';
+import { AdminDashboardNavigation } from '../data/AdminDashboardNavigation';
+import AddToBlockList from './forms/Visitor/BlockList/AddToBlockList';
 
 const LeftNavigation2 = () => {
 
@@ -38,6 +40,7 @@ const LeftNavigation2 = () => {
     if (fullPathname.split("/")[1] === "admin") {
         pathname = [fullPathname.split("/")[2], fullPathname.split("/")[3]].join("/")
         mainPath = fullPathname.split("/")[2]
+
     } else {
         pathname = [fullPathname.split("/")[3], fullPathname.split("/")[4]].join("/")
         mainPath = fullPathname.split("/")[3]
@@ -62,8 +65,8 @@ const LeftNavigation2 = () => {
                 return <AddAdminForm notificationMessage={notificationMessage} />;
             case "api/subscribers":
                 return <AddApiSubscriberForm notificationMessage={notificationMessage} />;
-            // case "visitor/block-list":
-            //     return <AddToBlockList notificationMessage={notificationMessage}/>;
+            case "dashbord/BlockList":
+                return <AddToBlockList notificationMessage={notificationMessage} />;
             default:
                 return null;
         }
@@ -76,6 +79,10 @@ const LeftNavigation2 = () => {
         }
         else if (fullPathname.split("/")[1] == "pros") {
             const navigationItem = PContentNavigation.find(item => item.url.split('/')[1] === fullPathname.split("/")[1]);
+            navigationItem.children && setSubNavigationItems(navigationItem.children);
+        }
+        else if(fullPathname.split("/")[1] == "admin") {
+            const navigationItem = AdminDashboardNavigation.find(item => item.url.split('/')[1] === fullPathname.split("/")[1]);
             navigationItem.children && setSubNavigationItems(navigationItem.children);
         }
     }, [mainPath]);
