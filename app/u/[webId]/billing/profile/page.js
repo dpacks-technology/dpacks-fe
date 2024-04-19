@@ -2,9 +2,9 @@ import SubscriptionPlans from "@/app/components/SubscriptionPlans";
 import AddBillingProfileForm from "@/app/components/forms/Billing/AddBillingProfileForm";
 import EditBillingProfileForm from "@/app/components/forms/Billing/EditBillingProfileForm";
 
-export default function Billing() {
+export default function Billing({ params }) {
     return (
-        <AddBillingProfileForm/>
+        <AddBillingProfileForm webid={params.webId} />
         // <EditBillingProfileForm id={user_id}/>
         // <SubscriptionPlans/>
     );
