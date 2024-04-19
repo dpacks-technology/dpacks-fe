@@ -4,10 +4,12 @@ import {Button} from "@nextui-org/react";
 import Input from "@/app/components/Input";
 import React, {useEffect} from "react";
 import {EditBillingProfile, GetBillingProfileById} from "@/services/BillingService";
-import {Form, message} from "antd";
+import {Checkbox, Form, message} from "antd";
 import schema from "@/app/validaitions/BillingProfileEditValidation";
 import FormItem from "antd/es/form/FormItem";
 import {useState} from "react";
+import {Select, SelectItem} from "@nextui-org/react";
+import items from "@/app/data/country";
 
 const EditBillingProfileForm = ({...props}) => {
 
@@ -27,14 +29,14 @@ const EditBillingProfileForm = ({...props}) => {
     const [Month, setMonth] = useState("");
     const [Year, setYear] = useState("");
     const [CVV, setCVV] = useState("");
-    const [Terms, setTerms] = useState(false);
+    //const [termsChecked, setTermsChecked] = useState(false); // State for managing checkbox checked status
 
     //backend  validation error message
     const [messageApi, contextHolder] = message.useMessage(); // message api
 
     const paymentMethods = [
-        { id: "card", name: "Credit/Debit Card" },
-        { id: "bank_transfer", name: "Bank Transfer" }
+        { id: "credit", name: " Credit" },
+        { id: "debit", name: "Debit" }
     ];
 
     const Message = (type, message) => { // message function
@@ -62,7 +64,7 @@ const EditBillingProfileForm = ({...props}) => {
                 month: parseInt(Month),
                 year: parseInt(Year),
                 cvv: parseInt(CVV),
-                Terms: Terms,
+               // terms: termsChecked,
             };
 
             await schema.validate(data, {abortEarly: false});
@@ -99,11 +101,15 @@ const EditBillingProfileForm = ({...props}) => {
             setMonth(response.month);
             setYear(response.year);
             setCVV(response.cvv);
-            setTerms(response.terms);
+            //setTermsChecked(response.terms);
 
         }).catch(() => {
         });
     }, []);
+
+    // const handleTermsChange = (e) => {
+    //     setTermsChecked(e.target.checked); // Update the state with the checkbox checked status
+    // };
 
     return (
         <>
@@ -111,12 +117,14 @@ const EditBillingProfileForm = ({...props}) => {
             <Form>
                 {/* Billing Details */}
                 <div>
-                    <h2>Billing Details</h2>
 
-                    <div className="flex flex-wrap gap-4">
+                    <h1 style={{fontSize: '32px', fontWeight: 'bold'}}>Billing Details</h1>
+                    <br></br>
+
+                    <div className="flex flex-wrap gap-8">
 
 
-                        <FormItem>
+                    <FormItem>
                             <Input
                                 label={"Company Name :"}
                                 type="text"
@@ -164,33 +172,6 @@ const EditBillingProfileForm = ({...props}) => {
                             />
                         </FormItem>
 
-                        <FormItem>
-                            <Input
-                                label={"Country:"}
-                                type="text"
-                                placeholder="Country"
-                                value={Country}
-                                onChange={(e) => setCountry(e.target.value)}
-                                status={error.Country ? "error" : ""}
-                                error={error.Country}
-                            />
-                        </FormItem>
-
-                        {/*<FormItem>*/}
-                        {/*    <label htmlFor="country">Country</label>*/}
-                        {/*    <select*/}
-                        {/*        id="country"*/}
-                        {/*        value={country}*/}
-                        {/*        onChange={(e) => setCountry(e.target.value)}*/}
-                        {/*    >*/}
-                        {/*        <option value="">Select Country</option>*/}
-                        {/*        {countries.map((country) => (*/}
-                        {/*            <option key={country.code} value={country.code}>*/}
-                        {/*                {country.name}*/}
-                        {/*            </option>*/}
-                        {/*        ))}*/}
-                        {/*    </select>*/}
-                        {/*</FormItem>*/}
 
                         <FormItem>
                             <Input
@@ -204,29 +185,52 @@ const EditBillingProfileForm = ({...props}) => {
                             />
                         </FormItem>
 
+                        <FormItem>
+                            <label htmlFor="country" style={{fontSize: '20px'}}> Country </label>
+                            <br/>
+
+                            <Select
+                                label=" Country"
+                                fontSize="32px"
+                                className="w-40"
+                                value={Country}
+                                onChange={(e) => setCountry(e.target.value)}
+                            >
+                                {items.map((item) => (
+                                    <SelectItem key={item.value} value={item.value}>
+                                        {item.label}
+                                    </SelectItem>
+                                ))}
+
+                            </Select>
+                        </FormItem>
+
 
                     </div>
                 </div>
 
                 {/* Payment Details */}
                 <div>
-                    <h2>Card Details</h2><br/>
 
+                    <h1 style={{fontSize: '32px', fontWeight: 'bold'}}>Card Details</h1>
+                    <br></br>
                     <FormItem>
-                        <label htmlFor="paymentMethod">Payment Method</label>
-                        <select
-                            id="paymentMethod"
+                        <label htmlFor="paymentMethod" style={{fontSize: '20px'}}>Payment Method</label>
+                        <br/>
+                        <Select
+                            label="Payment Method"
+                            className="w-40"
                             value={PaymentMethod}
                             onChange={(e) => setPaymentMethod(e.target.value)}
                         >
-                            <option value="">Select Payment Method</option>
                             {paymentMethods.map((method) => (
-                                <option key={method.id} value={method.id}>
+                                <SelectItem key={method.id} value={method.id}>
                                     {method.name}
-                                </option>
+                                </SelectItem>
                             ))}
-                        </select>
+                        </Select>
                     </FormItem>
+
 
                     <FormItem>
                         <Input
@@ -302,30 +306,15 @@ const EditBillingProfileForm = ({...props}) => {
 
                         {/*<FormItem>*/}
                         {/*    <Checkbox*/}
-                        {/*        label={"I agree to the terms and conditions"}*/}
-                        {/*        checked={Terms}*/}
-                        {/*        onChange={(e) => setTerms(e.target.checked)}*/}
-                        {/*        status={error.Terms ? "error" : ""}*/}
-                        {/*        error={error.Terms}*/}
-                        {/*    />*/}
+                        {/*        defaultChecked={termsChecked} // Set initial checked status*/}
+                        {/*        onChange={handleTermsChange} // Handle checkbox change*/}
+                        {/*    > I Agree to the Terms and Conditions*/}
+                        {/*    </Checkbox>*/}
                         {/*</FormItem>*/}
-
-                        <FormItem>
-                            <Input
-                                label={"Terms"}
-                                type="text"
-                                placeholder="Terms"
-                                value={Terms}
-                                onChange={(e) => setTerms(e.target.value)}
-                                status={error.Terms ? "error" : ""}
-                                error={error.Terms}
-                            />
-                        </FormItem>
-
-
 
 
                     </div>
+
                 </div>
 
                 {/* Buttons */}
@@ -346,7 +335,6 @@ const EditBillingProfileForm = ({...props}) => {
                     }}>
                         {saving ? "Saving..." : "Save"}
                     </Button>
-
 
 
                 </div>
