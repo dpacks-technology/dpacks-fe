@@ -76,6 +76,7 @@ export default function BillingProfile() {
 
     // initially visible columns //
     const init_cols = [
+        "id",
         "plan_name",
         "status",
         "country",
@@ -113,7 +114,7 @@ export default function BillingProfile() {
     // action buttons //
     const actionButtons = [
         {name: "View", text: "View", icon: "", type: "default", function: viewButton},
-      //  {name: "Edit", text: "Edit", icon: "", type: "primary", function: editButton},
+        {name: "Edit", text: "Edit", icon: "", type: "primary", function: editButton},
        // {name: "Delete", text: "Delete", icon: "", type: "danger", function: deleteButton},
     ];
 
@@ -181,15 +182,16 @@ export default function BillingProfile() {
     const statusOptions = [
         {
             name: "Pending", // status name
+
             uid: 0, // status id (the value in the database)
-            type: "", // status type (color) ["", primary, secondary, danger, warning, success]
+            type: "success", // status type (color) ["", primary, secondary, danger, warning, success]
             button: true, // if you want to show a button to change the status
             currentStatus: [1,2], // button showing status, ex: if currently status is 1, then the button will be shown | can use [1,2,...] for multiple statuses
             function: updateStatusButton, // function to change the status
 
             // icon
             icon: <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5}
-                       stroke="currentColor" className="w-5 h-5">
+                       stroke="green" className="w-5 h-5">
                 <path strokeLinecap="round" strokeLinejoin="round"
                       d="m9.75 9.75 4.5 4.5m0-4.5-4.5 4.5M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z"/>
             </svg>
@@ -212,14 +214,14 @@ export default function BillingProfile() {
         {
             name: "Rejected", // status name
             uid: 2, // status id (the value in the database)
-            type: "", // status type (color) ["", primary, secondary, danger, warning, success]
+            type: "danger", // status type (color) ["", primary, secondary, danger, warning, success]
             button: true, // if you want to show a button to change the status
             currentStatus: [0,1], // button showing status, ex: if currently status is 1, then the button will be shown | can use [1,2,...] for multiple statuses
             function: updateStatusButton, // function to change the status
 
             // icon
             icon: <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5}
-                       stroke="currentColor" className="w-5 h-5">
+                       stroke="red" className="w-5 h-5">
                 <path strokeLinecap="round" strokeLinejoin="round"
                       d="m9.75 9.75 4.5 4.5m0-4.5-4.5 4.5M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z"/>
             </svg>
