@@ -67,7 +67,7 @@ export default function Dashboard() {
 
                 {/* product tabs */}
                 <div className={"grid grid-cols-3 gap-4 rounded-3xl pt-12 pb-12"}>
-                    <Link href={`/u`}>
+                    <Link href={`/pros/dashbord`}>
                         <div className={"dashboard-tab-1 p-4 rounded-3xl grid justify-center h-24 con-mid"}>
                             <div className="grid grid-cols-2 w-full">
                                 <div className={"con-mid w-1/2"}>
