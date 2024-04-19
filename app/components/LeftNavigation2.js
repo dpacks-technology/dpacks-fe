@@ -41,7 +41,12 @@ const LeftNavigation2 = () => {
         pathname = [fullPathname.split("/")[2], fullPathname.split("/")[3]].join("/")
         mainPath = fullPathname.split("/")[2]
 
-    } else {
+    } 
+    else if (fullPathname.split("/")[1] === "pros"){
+        pathname = [fullPathname.split("/")[2], fullPathname.split("/")[3]].join("/")
+        mainPath = fullPathname.split("/")[2]
+    }
+    else {
         pathname = [fullPathname.split("/")[3], fullPathname.split("/")[4]].join("/")
         mainPath = fullPathname.split("/")[3]
     }
