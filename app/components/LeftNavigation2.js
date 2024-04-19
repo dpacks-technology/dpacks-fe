@@ -11,6 +11,7 @@ import AddRatelimitForm from "@/app/components/forms/endpoint/AddEndpointRatelim
 import AddApiSubscriberForm from "@/app/components/forms/apisubscriber/AddApiSubscriberForm";
 import AddTemplateForm from "@/app/components/forms/marketplace/AddTemplateForm";
 import AddAutoRespondsForm from "@/app/components/forms/webchats/AddAutomatedMessageForm";
+import CreateAlertForm from './forms/webpages/CreateAlertForm';
 import { UserDashboardNavigation } from "@/app/data/UserDashboardNavigation";
 import AddAdminForm from "@/app/components/forms/admins/AddAdminForm";
 import AddWebpageForm from "@/app/components/forms/webpages/AddWebpageForm";
@@ -60,6 +61,8 @@ const LeftNavigation2 = () => {
         switch (pathname) {
             case "web/webpages":
                 return <AddWebpageForm notificationMessage={notificationMessage} />;
+            case "analytics/alert":
+                return <CreateAlertForm notificationMessage={notificationMessage} />;
             case "api/endpoints":
                 return <AddRatelimitForm notificationMessage={notificationMessage} />;
             case "marketplace/template":
@@ -91,6 +94,7 @@ const LeftNavigation2 = () => {
             navigationItem.children && setSubNavigationItems(navigationItem.children);
         }
     }, [mainPath]);
+
 
     return (
         <>
