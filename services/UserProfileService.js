@@ -9,9 +9,9 @@ const UserProfileService = axios.create({
 });
 
 // get all webpages // TODO: Change this function accordingly
-export const GetUserData = async (UId) => {
+export const GetUserData = async () => {
     try {
-        const response = await UserProfileService.get(`http://localhost:4000/api/pros/Users/GetData/${UId}`);
+        const response = await UserProfileService.get(`http://localhost:4000/api/pros/Users/GetData`);
         return response.data;
     } catch (error) {
         throw error;
@@ -19,10 +19,10 @@ export const GetUserData = async (UId) => {
 };
 
 // get all webpages by status and datetime count // TODO: Change this function accordingly
-export const UpdateUser = async (UId,data) => {
+export const UpdateUser = async (data) => {
     try {
         console.log(data);
-        const response = await UserProfileService.put(`http://localhost:4000/api/pros/Users/Update/${UId}`,data);
+        const response = await UserProfileService.put(`http://localhost:4000/api/pros/Users/Update`,data);
         return response.data;
     } catch (error) {
         throw error;
