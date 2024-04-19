@@ -12,7 +12,7 @@ export const PContentNavigation =
             url: "/pros/dashbord",
             children: [
 
-                // analytics -> overview
+                // Analytics -> overview
                 {
                     name: "AccessLog",
                     icon: <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
@@ -22,7 +22,7 @@ export const PContentNavigation =
                     </svg>,
                     url: "/pros/dashbord",
                 },
-                // analytics -> alerts
+                // Analytics -> alerts
                 {
                     name: "BlockList",
                     icon: <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"

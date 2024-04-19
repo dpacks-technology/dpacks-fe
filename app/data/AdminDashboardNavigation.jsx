@@ -12,7 +12,7 @@ export const AdminDashboardNavigation =
             url: "/admin/users/manage-admins",
             children: [
 
-                // analytics -> overview
+                // Analytics -> overview
                 {
                     name: "Manage Admins",
                     icon: <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
@@ -22,7 +22,7 @@ export const AdminDashboardNavigation =
                     </svg>,
                     url: "/admin/users/manage-admins",
                 },
-                // analytics -> alerts
+                // Analytics -> alerts
                 {
                     name: "Manage Users",
                     icon: <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
@@ -44,7 +44,7 @@ export const AdminDashboardNavigation =
             url: "/admin/marketplace/pending-templates",
             children: [
 
-                // analytics -> overview
+                // Analytics -> overview
                 {
                     name: "Pending Templates",
                     icon: <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
@@ -66,7 +66,7 @@ export const AdminDashboardNavigation =
             url: "/admin/sites",
             children: [
 
-                // analytics -> overview
+                // Analytics -> overview
                 {
                     name: "Sites",
                     icon: <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
@@ -89,7 +89,7 @@ export const AdminDashboardNavigation =
                 url: "/admin/api/endpoints",
                 children: [
     
-                    // analytics -> overview
+                    // Analytics -> overview
                     {
                         name: "Endpoints",
                         icon: <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
