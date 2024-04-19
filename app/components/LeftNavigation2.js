@@ -52,7 +52,7 @@ const LeftNavigation2 = () => {
                 return <AddRatelimitForm notificationMessage={notificationMessage} />;
             case "chat/automatedMessage":
                 return <AddAutoRespondsForm notificationMessage={notificationMessage} />;
-            case "Analytics/Alert":
+            case "analytics/alert":
                 return <CreateAlertForm notificationMessage={notificationMessage} />;
 
 
