@@ -1,0 +1,38 @@
+.chatMessageHistory {
+    display: flex;
+    flex-direction: column;
+    height: 300px;
+    overflow-y: auto;
+}
+
+.messageContainer {
+    width: 100%;
+    margin-bottom: 10px;
+}
+
+.visitorMessage {
+    align-self: flex-end;
+}
+
+.websiteOwnerMessage {
+    align-self: flex-start;
+}
+
+.message {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    padding: 10px;
+    background-color: #f5f5f5;
+    border-radius: 10px;
+}
+
+.messageText {
+    font-size: 14px;
+}
+
+.messageTime {
+    font-size: 12px;
+    color: #888;
+    margin-top: 5px;
+}

@@ -2,8 +2,7 @@
 import React, { useState, useEffect } from "react";
 import ChatList from "./ChatList";
 import ChatMessageHistory from "./ChatMessageHistory";
-import ChatInput from "./ChatInput";
-import { GetMessagesByWebId, GetMessagesByVisitorId, AddMessage } from "/services/MessageService";
+import {GetMessagesByWebId, GetMessagesByVisitorId, GetLastMessage} from "/services/MessageService";
 import { useParams } from "next/navigation";
 import io from "socket.io-client"; // Import Socket.IO client
 
@@ -15,28 +14,37 @@ const Dashboard = () => {
     const [selectedChat, setSelectedChat] = useState(null);
     const [selectedChatId, setSelectedChatId] = useState(null);
 
-    const handleChatClick = async (visitorId) => {
-        setSelectedChatId(visitorId);
 
+    const handleChatClick = async (webId, visitorId) => {
         try {
-            const messages = await GetMessagesByVisitorId({ webId, visitorId });
-            setSelectedChat(messages);
+            const content = await GetMessagesByVisitorId({ webId, visitorId });
+            socket.emit('dataUpdateByVisitorId', (data) => {
+                setSelectedChat(data.content)
+            })
+            setSelectedChat(content);
+            setSelectedChatId(visitorId);
+
+            // Listen for real-time updates for the selected chat
+            socket.on(`dataUpdateByVisitorId_${visitorId}`, (data) => {
+                setSelectedChat((prevChat) => ({
+                    ...prevChat,
+                    messages: [...prevChat.messages, ...data.messages], // Update messages
+                }));
+            });
+
+            // Fetch the initial real-time data
+            const lastMessage = await GetLastMessage(webId, visitorId);
+            if (lastMessage) {
+                socket.emit("dataUpdateByVisitorId", { visitorId, messages: [lastMessage] });
+            }
         } catch (error) {
             console.error("Error fetching messages:", error);
         }
     };
 
-    const handleSendMessage = async (message) => {
-        if (!selectedChatId) return;
+            // Fetch the initial real-time data
 
-        try {
-            await AddMessage({ webId, visitorId: selectedChatId, visitorName, sender: "websiteOwner", message });
-            // Emit event to server to notify other clients about new message
-            socket.emit("newMessage", { webId, visitorId, message }); // New event
-        } catch (error) {
-            console.error("Error sending message:", error);
-        }
-    };
+
 
     useEffect(() => {
         const fetchChats = async () => {
@@ -52,21 +60,13 @@ const Dashboard = () => {
     }, [webId]);
 
     useEffect(() => {
-        socket.on("connect", () => {
-            console.log("Socket connected");
-        });
-
-        socket.on("dataUpdate", (data) => {
-            if (data.webId === webId) {
-                setSelectedChat((prevChat) => ({
-                    ...prevChat,
-                    messages: [...prevChat.messages, ...data.messages], // Update messages
-                }));
+        return () => {
+            // Clean up the event listener when the component unmounts
+            if (selectedChatId) {
+                socket.off(`dataUpdateByVisitorId_${selectedChatId}`);
             }
-        });
-
-        return () => socket.disconnect(); // Cleanup on unmount
-    }, [webId]);
+        };
+    }, [selectedChatId]);
 
     return (
         <div className="chat-dashboard" style={{ display: "grid", gridTemplateColumns: "1fr 3fr" }}>
@@ -81,8 +81,13 @@ const Dashboard = () => {
             <div className="chat-history-container">
                 {selectedChat && (
                     <>
-                        <ChatMessageHistory messages={selectedChat.messages} />
-                        <ChatInput onSendMessage={handleSendMessage} disabled={!selectedChatId} />
+                        <ChatMessageHistory
+
+                            content={selectedChat}
+                            visitorId={selectedChatId}
+                        />
+
+
                     </>
                 )}
             </div>

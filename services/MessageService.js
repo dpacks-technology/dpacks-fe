@@ -1,11 +1,15 @@
 import axios from "axios";
 import Keys from "@/Keys";
 import {AuthHeaders} from "@/util/AuthHeader";
+import io from 'socket.io-client'
+
+const socket = io(Keys.MESSAGE_SERVICE_API_URL)
 
 const messageService = axios.create({
     baseURL: Keys.MESSAGE_SERVICE_API_URL,
     headers: AuthHeaders
 });
+
 
 export const GetMessagesByWebId = async (webId) => {
     try {

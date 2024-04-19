@@ -47,18 +47,17 @@ const ChatList = ({ chats, onChatClick, webId, onSearch }) => {
 
         fetchLastMessages();
 
-        // Listen for 'newMessage' event from Socket.IO server
-        socket.on('newMessage', (data) => {
-            if (data.webId === webId) {
-                // Update lastMessages state with the new message
-                setLastMessages((prevLastMessages) => ({
-                    ...prevLastMessages,
-                    [data.visitorId]: data.message,
-                }));
-            }
-        });
+        // Listen for 'dataUpdate' event from Socket.IO server
 
     }, [chats, webId, socket]);
+    socket.on('dataUpdate', (data) => {
+        if (data.webId === webId) {
+            setLastMessages((prevLastMessages) => ({
+                ...prevLastMessages,
+                [data.messages[0].visitorId]: data.messages[0], // Update last message for specific visitor
+            }));
+        }
+    });
 
     // Cleanup on unmount
     return (

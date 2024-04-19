@@ -1,71 +1,50 @@
-import React, { useEffect, useState } from "react";
-import styled from "@emotion/styled";
-import moment from "moment";
-import { GetLastMessage } from "@/services/MessageService";
+import { useEffect, useState } from "react";
+import axios from "axios";
+import Keys from "@/Keys";
+import io from "socket.io-client";
 
-const MessageContainer = styled.div`
-    display: flex;
-    justify-content: ${(props) => (props.sender === 'website' ? 'flex-start' : 'flex-end')};
-    margin: 10px 0;
-`;
+const socket = io(Keys.MESSAGE_SERVICE_API_URL);
 
-const Message = styled.div`
-    padding: 10px;
-    border-radius: 5px;
-    background-color: ${(props) => (props.sender === 'website' ? '#eee' : '#007bff')};
-    color: ${(props) => (props.sender === 'website' ? '#000' : '#fff')};
-`;
-
-const LastMessage = styled.div`
-    flex: 1;
-    margin-left: 10px;
-    cursor: pointer;
-`;
-
-const TimeStamp = styled.div`
-    font-size: 12px;
-    margin-top: 5px;
-    color: #777;
-`;
-
-const ChatMessageHistory = ({ messages, onLastMessageClick }) => {
+const ChatMessageHistory = ({ messages, visitorId }) => {
     const [lastMessage, setLastMessage] = useState(null);
 
     useEffect(() => {
         const fetchLastMessage = async () => {
-            if (messages && messages.length > 0) { // Check if messages exist and has length
-                try {
-                    const lastMessageData = await GetLastMessage(messages[0].webId, messages[0].visitorId);
-                    setLastMessage(lastMessageData);
-                } catch (error) {
-                    console.error("Error fetching last message:", error);
-                }
+            try {
+                const response = await axios.get(
+                    `/getLastMessage?webId=${Keys.WEB_ID}&visitorId=${visitorId}`
+                );
+                setLastMessage(response.data);
+            } catch (error) {
+                console.error("Error fetching last message:", error);
             }
         };
 
-        fetchLastMessage();
-    }, [messages]);
+        if (visitorId) {
+            fetchLastMessage();
+        }
+    }, [visitorId]);
 
     return (
-        <div>
-            {messages && messages.length > 0 && ( // Only render messages if they exist and have length
-                messages.map((message) => (
-                    <MessageContainer key={message.timestamp} sender={message.sender}>
-                        <Message>{message.content}</Message>
-                    </MessageContainer>
-                ))
-            )}
+        <div className="chat-message-history">
+            {/* Render the last message */}
             {lastMessage && (
-                <LastMessage onClick={onLastMessageClick}>
-                    <MessageContainer sender={lastMessage.sender}>
-                        <Message>{lastMessage.content}</Message>
-                    </MessageContainer>
-                    <TimeStamp>{moment(lastMessage.time).fromNow()}</TimeStamp>
-                </LastMessage>
+                <div className="chat-message">
+                    <div className="message-sender">{lastMessage.sender}</div>
+                    <div className="message-content">{lastMessage.content}</div>
+                </div>
             )}
+
+            {/* Render the chat messages */}
+            {messages &&
+                messages.map((message, index) => (
+                    <div key={index} className="chat-message">
+                        <div className="message-sender">{message.sender}</div>
+                        <div className="message-content">{message.content}</div>
+                    </div>
+                ))}
         </div>
     );
 };
 
 export default ChatMessageHistory;
-

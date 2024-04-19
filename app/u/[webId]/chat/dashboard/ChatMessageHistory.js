@@ -1,69 +1,106 @@
-import React, { useEffect, useState } from "react";
-import styled from "@emotion/styled";
-import moment from "moment";
-import { GetLastMessage } from "@/services/MessageService";
+import React, { useState, useEffect } from "react";
+import {useParams} from "next/navigation";
+import {AddMessage, GetMessagesByVisitorId} from "@/services/MessageService";
+import io from 'socket.io-client'
+import Keys from '@/Keys'
+const socket = io(Keys.MESSAGE_SERVICE_API_URL)
 
-const MessageContainer = styled.div`
-    display: flex;
-    justify-content: ${(props) => (props.sender === 'website' ? 'flex-start' : 'flex-end')};
-    margin: 10px 0;
-`;
+const ChatMessageHistory = ({ content, visitorId }) => {
 
-const Message = styled.div`
-    padding: 10px;
-    border-radius: 5px;
-    background-color: ${(props) => (props.sender === 'website' ? '#eee' : '#007bff')};
-    color: ${(props) => (props.sender === 'website' ? '#000' : '#fff')};
-`;
+    const [message, setMessage] = useState('')
+    const [messages, setMessages] = useState([])
+    const { webId } = useParams()
 
-const LastMessage = styled.div`
-    flex: 1;
-    margin-left: 10px;
-    cursor: pointer;
-`;
+    const handleMessageChange = (event) => {
+        setMessage(event.target.value)
+    }
 
-const TimeStamp = styled.div`
-    font-size: 12px;
-    margin-top: 5px;
-    color: #777;
-`;
+    const sendMessage = async () => {
+        const data = {
+            visitorId: visitorId,
+            visitorName: '',
+            sender: 'visitor',
+            message: message,
+            time: new Date().toISOString(),
+        }
 
-const ChatMessageHistory = ({ messages, onLastMessageClick }) => {
-    const [lastMessage, setLastMessage] = useState(null);
+        const response = await AddMessage({ webId }, data)
 
-    useEffect(() => {
-        const fetchLastMessage = async () => {
-            if (messages && messages.length > 0) { // Check if messages exist and has length
-                try {
-                    const lastMessageData = await GetLastMessage(messages[0].webId, messages[0].visitorId);
-                    setLastMessage(lastMessageData);
-                } catch (error) {
-                    console.error("Error fetching last message:", error);
-                }
-            }
-        };
+        const messages = await GetMessagesByVisitorId({ webId, visitorId })
 
-        fetchLastMessage();
-    }, [messages]);
+        setMessages(messages)
+        console.log(messages);
+
+        socket.emit('newMessage', response)
+        setMessage('')
+    }
+
 
     return (
-        <div>
-            {messages && messages.length > 0 && ( // Only render messages if they exist and have length
-                messages.map((message) => (
-                    <MessageContainer key={message.timestamp} sender={message.sender}>
-                        <Message>{message.content}</Message>
-                    </MessageContainer>
-                ))
-            )}
-            {lastMessage && (
-                <LastMessage onClick={onLastMessageClick}>
-                    <MessageContainer sender={lastMessage.sender}>
-                        <Message>{lastMessage.content}</Message>
-                    </MessageContainer>
-                    <TimeStamp>{moment(lastMessage.time).fromNow()}</TimeStamp>
-                </LastMessage>
-            )}
-        </div>
+        <>
+            <div
+                style={{
+                    bottom: '0',
+                    left: '0',
+                    right: '0',
+                    padding: '10px',
+                    display: 'flex',
+                    justifyContent: 'space-between',
+                    alignItems: 'center',
+                    backgroundColor: '#fff',
+                    borderTop: '1px solid #ddd',
+                    boxShadow: '0 2px 4px rgba(0, 0, 0, 0.1)',
+                }}
+            >
+                <input
+                    value={message}
+                    onChange={handleMessageChange}
+                    placeholder="Type a message..."
+                    style={{
+                        flexGrow: 1,
+                        padding: '10px',
+                        borderRadius: '4px',
+                        border: '1px solid #ddd',
+                        marginRight: '10px',
+                    }}
+                />
+                <button style={{ color: '#004a77' }} onClick={sendMessage}>
+                    Send
+                </button>
+            </div>
+            <div style={{ height: '650px', overflowY: 'scroll' }}>
+                <div >
+                    {content.sort((a, b) => new Date(a.time) - new Date(b.time)).map((msg, index) => (
+                        <div key={index} style={{
+                            display: 'flex',
+                            flexDirection: msg.sender === 'visitor'? 'row-reverse' : 'row',
+                            alignItems: 'center',
+                            justifyContent: 'pace-between',
+                            marginTop: '10px'
+                        }}>
+                            <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
+                                <div style={{
+                                    backgroundColor: msg.sender === 'visitor'? '#4CAF50' : '#008CBA',
+                                    color: 'white',
+                                    padding: '5px 10px',
+                                    borderRadius: '10px',
+                                    // Add marginRight for the sender's messages and marginLeft for the admin's messages
+                                    marginRight: msg.sender === 'visitor'? '10px' : 0,
+                                    marginLeft: msg.sender === 'admin'? '10px' : 0,
+                                    alignSelf: 'flex-start'
+                                }}>
+                                    {msg.message}
+                                </div>
+                                <div style={{ fontSize: '12px', color: '#666', alignSelf: 'flex-start', marginTop: '5px' }}>
+                                    {new Date(msg.time).toLocaleString()}
+                                </div>
+                            </div>
+                        </div>
+                    ))}
+                </div>
+            </div>
+        </>
+
     );
 };
 

@@ -10,27 +10,31 @@ const ChatWithAdmin = () => {
     const [enteredEmail, setEnteredEmail] = useState(false)
     const [message, setMessage] = useState('')
     const [messages, setMessages] = useState([])
-
+    const visitorId = localStorage.getItem('visitorId')
     const { webId } = useParams()
 
     useEffect(() => {
-        socket.on('dataUpdate', (data) => {
-            if (data.webId === webId) {
-                setMessages(data.messages)
-            }
-        })
-
         socket.on('newMessage', (newMessage) => {
-            if (newMessage.webId === webId) {
-                setMessages((prevMessages) => [...prevMessages, newMessage])
-            }
-        })
+            // Always update messages regardless of webId
+            setMessages((prevMessages) => [...prevMessages, newMessage]);
+            console.log(newMessage);
+        });
 
-        return () => {
-            socket.off('dataUpdate')
-            socket.off('newMessage')
-        }
-    }, [webId])
+// Inside useEffect for 'dataUpdate'
+        socket.on('dataUpdate', (data) => {
+            // Always update messages regardless of webId
+            setMessages(data.messages);
+        });
+
+// Inside useEffect for 'dataUpdateByVisitorId'
+        socket.on('dataUpdateByVisitorId', (data) => {
+            // Always update messages regardless of webId
+            if (data.visitorId === visitorId) {
+                setMessages(data.messages);
+                console.log(data.messages);
+            }
+        });
+    },[])
 
     useEffect(() => {
         const storedVisitorId = localStorage.getItem('visitorId')
@@ -58,7 +62,7 @@ const ChatWithAdmin = () => {
         localStorage.setItem('visitorId', visitorId.toString())
 
         const messages = await GetMessagesByVisitorId({ webId, visitorId })
-        socket.on('dataUpdateByVisitorId', (data) => {
+        socket.emit('dataUpdateByVisitorId', (data) => {
             setMessages(data.messages)
         })
 
@@ -88,6 +92,7 @@ const ChatWithAdmin = () => {
         const messages = await GetMessagesByVisitorId({ webId, visitorId: localStorage.getItem('visitorId') })
 
         setMessages(messages)
+        console.log(messages);
 
         socket.emit('newMessage', response)
         setMessage('')
