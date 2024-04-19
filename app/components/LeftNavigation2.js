@@ -69,7 +69,6 @@ const LeftNavigation2 = () => {
     };
 
     useEffect(() => {
-        console.log("mainPath: ", mainPath);
         const navigationItem = UserDashboardNavigation.find(item => item.url.split('/')[1] === mainPath);
         navigationItem.children && setSubNavigationItems(navigationItem.children);
     }, [mainPath]);
@@ -104,7 +103,10 @@ const LeftNavigation2 = () => {
                         {subNavigationItems.length > 0 && subNavigationItems.map((item, index) => (
                             <li key={index}>
                                 <Link href={item.url ? item.url : "/u"}
-                                      className="flex items-center p-2 ml-2 pl-4 text-gray-900 rounded-lg dark:text-white hover:bg-gray-100 hover:rounded-3xl dark:hover:bg-gray-800 group">
+                                      className={`flex items-center p-2 ml-2 pl-4 text-gray-900 dark:text-white 
+                                      dark:hover:bg-gray-700 group hover:bg-gray-100 rounded-3xl
+                                      ${[item.url.split('/')[1], item.url.split('/')[2]].join('/') === pathname && " bg-gray-800"}
+                                      `}>
                                     {item.icon && item.icon}
                                     <p className="ms-3 text-sm font-normal">{item.name && item.name}</p>
                                 </Link>
