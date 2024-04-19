@@ -4,23 +4,24 @@
 import Table from "@/app/components/Table";
 import React, {useCallback, useEffect} from "react";
 import {
-    DeleteTransactionByID,
-    DeleteTransactionByIDBulk,
-    GetTransactionDateTime,
-    GetTransactionByDatetimeCount,
-    GetTransactionByStatus,
-    GetTransactionByStatusCount,
-    GetTransactions,
-    GetTransactionCount,
-    UpdateTransactionStatus,
-    UpdateTransactionStatusBulk
+    DeleteBillingProfileByID,
+    DeleteBillingProfileByIDBulk,
+    GetBillingProfileById,
+    GetBillingProfileByDatetimeCount,
+    GetBillingProfileByStatus,
+    GetBillingProfileByStatusCount,
+    GetBillingProfiles,
+    GetBillingProfileCount,
+    UpdateBillingProfileStatus,
+    UpdateBillingProfileStatusBulk, GetBillingProfileDateTime
 } from "@/services/BillingService";
+
 import {useDisclosure} from "@nextui-org/react";
-import EditWebpageForm from "@/app/components/forms/webpages/EditWebpageForm";
+import EditBillingProfileForm from "@/app/components/forms/Billing/EditBillingProfileForm";
 import {message} from "antd";
 
 // Webpages component
-export default function Transaction() {
+export default function BillingProfile() {
 
     // ----------------------- DEFAULT COLUMNS -------------------------
     // default columns //
@@ -51,12 +52,22 @@ export default function Transaction() {
     // columns //
     const columns = [
         {name: "ID", uid: "id", sortable: true, type: "text"},
-        {name: "PLAN NAME", uid: "plan_name", sortable: true, type: "text"},
+        {name: "COMPANY NAME", uid: "company_name", sortable: true, type: "text"},
+        {name: "STREET NO", uid: "street_no", sortable: true, type: "text"},
+        {name: "CITY", uid: "city", sortable: true, type: "text"},
+        {name: "POSTAL CODE", uid: "postal_code", sortable: true, type: "text"},
+        {name: "COUNTRY", uid: "country", sortable: true, type: "text"},
+        {name: "EMAIL", uid: "email", sortable: true, type: "text"},
+        {name: "GIVEN NAME", uid: "given_name", sortable: true, type: "text"},
+        {name: "MONTH", uid: "month", sortable: true, type: "text"},
+        {name: "YEAR", uid: "year", sortable: true, type: "text"},
+        {name: "CARD NUMBER", uid: "card_number", sortable: true, type: "integer"},
+        {name: "CVC", uid: "cvc", sortable: true, type: "integer"},
+        {name: "TERMS", uid: "terms", sortable: true, type: "text"},
+        {name: "PAYMENT METHOD", uid: "payment_method", sortable: true, type: "text"},
+        {name: "PAID ON", uid: "transaction_date", sortable: false, type: "datetime"},
         {name: "STATUS", uid: "status", sortable: false, type: "status"},
         {name: "CHANGE STATUS", uid: "statusButtons", sortable: false, type: "statusButtons"},
-        {name: "AMOUNT", uid: "amount", sortable: false, type: "float"},
-        {name: "PAID ON", uid: "transaction_date", sortable: false, type: "datetime"},
-        {name: "Email", uid: "email", sortable: false, type: "text"},
          // action buttons
 
 
@@ -65,11 +76,13 @@ export default function Transaction() {
 
     // initially visible columns //
     const init_cols = [
+        "id",
         "plan_name",
         "status",
-        "amount",
+        "country",
         "statusButtons",
         "transaction_date",
+        "payment_method",
         "email"
 
     ];
@@ -101,7 +114,7 @@ export default function Transaction() {
     // action buttons //
     const actionButtons = [
         {name: "View", text: "View", icon: "", type: "default", function: viewButton},
-      //  {name: "Edit", text: "Edit", icon: "", type: "primary", function: editButton},
+        {name: "Edit", text: "Edit", icon: "", type: "primary", function: editButton},
        // {name: "Delete", text: "Delete", icon: "", type: "danger", function: deleteButton},
     ];
 
@@ -127,7 +140,7 @@ export default function Transaction() {
     const deleteMenuButton = (id) => { // delete button function // TODO: Change the following function
 
         // delete function
-        deletePage(id).then(() => {
+        DeleteBillingProfileByID(id).then(() => {
             refreshData("success", "Deleted");
         }).catch((error) => {
             headerMessage("error", error.response.data.error);
@@ -157,7 +170,7 @@ export default function Transaction() {
     const updateStatusButton = (id, status) => {
 
             // update status function
-            UpdateTransactionStatus(id, status).then(() => {
+            UpdateBillingProfileStatus(id, status).then(() => {
                 refreshData("success", "Updated");
             }).catch((error) => {
                 headerMessage("error", error.response.data.error);
@@ -169,15 +182,16 @@ export default function Transaction() {
     const statusOptions = [
         {
             name: "Pending", // status name
+
             uid: 0, // status id (the value in the database)
-            type: "", // status type (color) ["", primary, secondary, danger, warning, success]
+            type: "success", // status type (color) ["", primary, secondary, danger, warning, success]
             button: true, // if you want to show a button to change the status
             currentStatus: [1,2], // button showing status, ex: if currently status is 1, then the button will be shown | can use [1,2,...] for multiple statuses
             function: updateStatusButton, // function to change the status
 
             // icon
             icon: <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5}
-                       stroke="currentColor" className="w-5 h-5">
+                       stroke="green" className="w-5 h-5">
                 <path strokeLinecap="round" strokeLinejoin="round"
                       d="m9.75 9.75 4.5 4.5m0-4.5-4.5 4.5M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z"/>
             </svg>
@@ -200,14 +214,14 @@ export default function Transaction() {
         {
             name: "Rejected", // status name
             uid: 2, // status id (the value in the database)
-            type: "", // status type (color) ["", primary, secondary, danger, warning, success]
+            type: "danger", // status type (color) ["", primary, secondary, danger, warning, success]
             button: true, // if you want to show a button to change the status
             currentStatus: [0,1], // button showing status, ex: if currently status is 1, then the button will be shown | can use [1,2,...] for multiple statuses
             function: updateStatusButton, // function to change the status
 
             // icon
             icon: <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5}
-                       stroke="currentColor" className="w-5 h-5">
+                       stroke="red" className="w-5 h-5">
                 <path strokeLinecap="round" strokeLinejoin="round"
                       d="m9.75 9.75 4.5 4.5m0-4.5-4.5 4.5M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z"/>
             </svg>
@@ -222,7 +236,7 @@ export default function Transaction() {
     const updateStatusBulk = (ids, status) => {
 
         // update status bulk function // TODO: Change the following function
-        UpdateTransactionStatusBulk(ids, status).then(() => {
+         UpdateBillingProfileStatusBulk(ids, status).then(() => {
             refreshData("success", "Updated");
         }).catch((error) => {
             headerMessage("error", error.response.data.error);
@@ -233,7 +247,7 @@ export default function Transaction() {
     // handle delete bulk function -- NO NEED OF CHANGING
     const handleUpdateStatusBulk = (selectedKeys, status) => {
         if (selectedKeys === 'all') { // if all items are selected
-            UpdateTransactionStatus(data.map(item => item.id), status);
+            UpdateBillingProfileStatus(data.map(item => item.id), status);
         } else {
             updateStatusBulk(
                 Array.from(selectedKeys).map((str) => parseInt(str, 10)),
@@ -246,7 +260,7 @@ export default function Transaction() {
     const deleteBulk = (ids) => {
 
         // delete bulk function // TODO: Change the following function
-        DeleteTransactionByID(ids).then(() => {
+         DeleteBillingProfileByID(ids).then(() => {
             refreshData("success", "Deleted");
         }).catch((error) => {
             headerMessage("error", error.response.data.error);
@@ -274,10 +288,10 @@ export default function Transaction() {
             headerMessage(type, message);
 
         // fetch data count from API // TODO: Change the following function
-        GetTransactionCount(searchColumn, searchFieldValue).then((response) => setPagesCount(response));
+        GetBillingProfileCount(searchColumn, searchFieldValue).then((response) => setPagesCount(response));
 
         // fetch data from API // TODO: Change the following function
-        GetTransactions(rowsPerPage, currentPage, searchColumn, searchFieldValue)
+        GetBillingProfiles(rowsPerPage, currentPage, searchColumn, searchFieldValue)
             .then(response => setData(response === null ? [] : response.length === 0 ? [] : response))
             .catch(error => console.error(error));
 
@@ -287,10 +301,10 @@ export default function Transaction() {
     const fetchTableData = (useCallback((page, key, val) => {
 
         // fetch data count from API // TODO: Change the following function
-        GetTransactionCount(key, val).then((response) => setPagesCount(response));
+        GetBillingProfileCount(key, val).then((response) => setPagesCount(response));
 
         // fetch data from API // TODO: Change the following function
-        GetTransactions(rowsPerPage, page, key, val)
+        GetBillingProfiles(rowsPerPage, page, key, val)
             .then(response => setData(response === null ? [] : response.length === 0 ? [] : response))
             .catch(error => console.error(error));
 
@@ -309,10 +323,10 @@ export default function Transaction() {
             fetchTableData(currentPage, searchColumn, searchFieldValue);
         } else {
             // get data count // TODO: Change the following function
-            GetTransactionByDatetimeCount(start, end, searchColumn, searchFieldValue).then((response) => setPagesCount(response));
+             GetBillingProfileByDatetimeCount(start, end, searchColumn, searchFieldValue).then((response) => setPagesCount(response));
 
             // get data // TODO: Change the following function
-            GetTransactionDateTime(rowsPerPage, currentPage, start, end, searchColumn, searchFieldValue).then(response => setData(response === null ? [] : response.length === 0 ? [] : response))
+            GetBillingProfileDateTime(rowsPerPage, currentPage, start, end, searchColumn, searchFieldValue).then(response => setData(response === null ? [] : response.length === 0 ? [] : response))
         }
     }
 
@@ -321,10 +335,10 @@ export default function Transaction() {
     // status change function
     const statusChange = (statusArray) => {
         // get data count // TODO: Change the following function
-        GetTransactionByStatusCount(statusArray, searchColumn, searchFieldValue).then((response) => setPagesCount(response));
+        GetBillingProfileByStatusCount(statusArray, searchColumn, searchFieldValue).then((response) => setPagesCount(response));
 
         // get data // TODO: Change the following function
-        GetTransactionByStatus(rowsPerPage, currentPage, statusArray, searchColumn, searchFieldValue).then(response => setData(response === null ? [] : response.length === 0 ? [] : response))
+        GetBillingProfileByStatus(rowsPerPage, currentPage, statusArray, searchColumn, searchFieldValue).then(response => setData(response === null ? [] : response.length === 0 ? [] : response))
     }
 
 
@@ -388,7 +402,7 @@ export default function Transaction() {
                 editMenuButton={editMenuButton}
                 editItemIsOpen={isOpen}
                 editItemOnOpenChange={onOpenChange}
-                editForm={<EditWebpageForm refreshData={refreshData}/>}
+                editForm={<EditBillingProfileForm refreshData={refreshData}/>}
 
                 // search, sorting and filtering
                 searchColumn={searchColumn}

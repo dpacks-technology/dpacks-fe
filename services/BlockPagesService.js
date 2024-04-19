@@ -1,10 +1,24 @@
 import axios from 'axios';
 import Keys from "@/Keys";
+import {AuthHeaders} from "@/util/AuthHeader";
 
 // Create an axios instance -- NO NEED TO CHANGE THIS
 const BloackPageService = axios.create({
-    baseURL: Keys.USER_SERVICE_API_URL
+    baseURL: Keys.USER_SERVICE_API_URL,
+    headers: AuthHeaders
 });
+
+
+// get all webpages by status and datetime count // TODO: Change this function accordingly
+export const AddToBlocklist = async (data) => {
+    try {
+        
+        const response = await BloackPageService.post(`http://localhost:4000/api/pros/Access/BlockList`, data);
+        return response.data;
+    } catch (error) {
+        throw error;
+    }
+}
 
 // get all webpages // TODO: Change this function accordingly
 export const getWebPages = async (count, page, key, val) => {
@@ -17,7 +31,7 @@ export const getWebPages = async (count, page, key, val) => {
 };
 
 // get all webpages count // TODO: Change this function accordingly
-export const getWebPagesCount = async (key, val) => {
+export const getWebPagesCount = async (key, val,userId) => {
     try {
         const response = await BloackPageService.get(`http://localhost:4000/api/pros/Access/BlockList/count?key=${key}&val=${val}`);
         return response.data;
@@ -81,4 +95,6 @@ export const updateWebpagesStatus = async (id, status) => {
         throw error;
     }
 }
+
+
 

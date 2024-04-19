@@ -144,8 +144,6 @@ export default function Webpages() {
         }).catch((error) => {
             headerMessage("error", error.response.data.error);
         });
-
-
     }
 
     // menu buttons // TODO: Change the following buttons
@@ -389,7 +387,7 @@ export default function Webpages() {
                 editItemIsOpen={isOpen}
                 editItemOnOpenChange={onOpenChange}
                 editForm={<EditAlertForm refreshData={refreshData}/>}
-
+                
                 // search, sorting and filtering
                 searchColumn={searchColumn}
                 sortColumn={sortColumn}
