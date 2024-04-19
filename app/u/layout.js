@@ -1,9 +1,14 @@
-import PanelLayout from "@/app/layouts/PanelLayout";
+"use client"
 
-export default function ULayout({ children }) {
+import DashboardNav from '../components/DashboardNav';
+import ProtectedRoute from "@/app/middlewares/authMiddleware";
+
+function ULayout({ children }) {
     return (
         <div>
-            <PanelLayout childrenBody={children}/>
+            {children}
         </div>
     );
 }
+
+export default ProtectedRoute(ULayout);

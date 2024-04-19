@@ -121,8 +121,6 @@ export default function Analytics() {
                 <h1 className="text text-3xl font-bold">Dashboard</h1>
             </div>
 
-
-
             {/* desgign h1 for header as website traffic */}
             <div className="grid grid-cols-2 grid-rows-2">
                 <div className="w-full overflow-auto h-96 ">
@@ -132,6 +130,7 @@ export default function Analytics() {
                     <ReactECharts
                         option={{
                             // Existing option configuration
+
                             xAxis: {
                                 type: 'category',
                                 data: ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun']
@@ -147,10 +146,7 @@ export default function Analytics() {
                     />
 
 
-
                 </div>
-
-
                 {/* chart about visitors source facebook,whatsapp,instagrame,direct visit in pie chart */}
                 <div className="w-full h-96 border-l-1">
 
@@ -170,17 +166,13 @@ export default function Analytics() {
 
 
                 </div>
-
-
                 {/*visitor country table*/}
                 <div className="w-full h-96 border-1 overflow-scroll">
                     <h1 className="text-2xl mt-5 font-bold text-center pb-6">User by Country</h1>
-
                     <Table dataSource={userCountByCountry} columns={columns}/>;
 
 
                 </div>
-
 
                 {/* visitor devices data horizonal grph */}
                 <div className="w-full h-96 border-1">
@@ -196,6 +188,7 @@ export default function Analytics() {
                                 type: 'category',
                                 data: visitorDeviceData.map(entry => entry.type)
                             }],
+
                             tooltip: {
                                 trigger: 'axis',
                                 axisPointer: {
@@ -208,8 +201,6 @@ export default function Analytics() {
                             }]
                         }}
                     />
-
-
 
                 </div>
 

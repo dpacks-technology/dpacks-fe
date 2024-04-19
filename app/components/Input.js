@@ -7,14 +7,14 @@ export default function Input({...props}) {
     return (
         <>
             {props.label &&
-                <label className={"text-xs text-light dark:text-dark"}>{props.label}</label>
+                <label className={"text-large text-light dark:text-dark"}>{props.label}</label>
             }
             <AntInput
                 className={"mt-2" + (props.className ? " " + props.className : "")}
                 {...props}
             />
             {props.error &&
-                <span className={"mt-2 text-danger text-xs"}>{props.error}</span>
+                <span className={"mt-2 text-danger text-xs"}>{props.error} <br /> </span>
             }
         </>
     );
