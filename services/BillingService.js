@@ -160,3 +160,40 @@ export const AddBillingProfile = async (data) => {
         throw error;
     }
 }
+
+export const CheckBillingProfileCount = async (id) => {
+    try {
+        const response = await billingService.get(`/api/billing/profile/check/${id}`);
+        return response.data;
+    } catch (error) {
+        throw error;
+    }
+}
+
+export const CheckSubscriptionCount = async (id) => {
+    try {
+        const response = await billingService.get(`/api/billing/subscription/check/${id}`);
+        return response.data;
+    } catch (error) {
+        throw error;
+    }
+}
+
+export const SubscribePlan = async (data) => {
+    console.log(data);
+    try {
+        const response = await billingService.post(`/api/billing/subscription`, data);
+        return response.data;
+    } catch (error) {
+        throw error;
+    }
+}
+
+export const GetSubscriptionPlans = async () => {
+    try {
+        const response = await billingService.get(`/api/subscription_plans/`);
+        return response.data;
+    } catch (error) {
+        throw error;
+    }
+}

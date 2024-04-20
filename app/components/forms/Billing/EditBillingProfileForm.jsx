@@ -69,7 +69,7 @@ const EditBillingProfileForm = ({...props}) => {
 
             await schema.validate(data, {abortEarly: false});
 
-            await EditBillingProfile(props.id, data).then(() => {
+            await EditBillingProfile(props.webid, data).then(() => {
                 props.refreshData("success", "Saved");
                 props.onClose();
             }).then((error) => {
@@ -86,7 +86,7 @@ const EditBillingProfileForm = ({...props}) => {
     // get transaction by id
     useEffect(() => {
         // get transaction by id from backend function
-        GetBillingProfileById(props.id).then((response) => {
+        GetBillingProfileById(props.webid).then((response) => {
             console.log(response)
             setCompanyName(response.company_name); // set name
             setStreetNo(response.street_no);
@@ -103,22 +103,23 @@ const EditBillingProfileForm = ({...props}) => {
             setCVV(response.cvv);
             //setTermsChecked(response.terms);
 
-        }).catch(() => {
+        }).catch((e) => {
+            console.log(e);
         });
-    }, []);
+    }, [props.webid]);
 
     // const handleTermsChange = (e) => {
     //     setTermsChecked(e.target.checked); // Update the state with the checkbox checked status
     // };
 
     return (
-        <>
+        <div className={"p-4"}>
             {contextHolder}
             <Form>
                 {/* Billing Details */}
                 <div>
 
-                    <h1 style={{fontSize: '32px', fontWeight: 'bold'}}>Billing Details</h1>
+                    <h1 style={{fontSize: '32px', fontWeight: 'bold'}}>Update Billing Details</h1>
                     <br></br>
 
                     <div className="flex flex-wrap gap-8">
@@ -320,11 +321,6 @@ const EditBillingProfileForm = ({...props}) => {
                 {/* Buttons */}
                 <div className={"mt-6 mb-3 flex gap-3 justify-end"}>
 
-                    {/* close button */}
-                    <Button color="danger" variant="flat" onPress={props.onClose}>
-                        Back
-                    </Button>
-
                     {/* save button */}
                     <Button
                         disabled={saving}
@@ -333,14 +329,14 @@ const EditBillingProfileForm = ({...props}) => {
                             setSaving(false);
                         });
                     }}>
-                        {saving ? "Saving..." : "Save"}
+                        {saving ? "Updating..." : "Update"}
                     </Button>
 
 
                 </div>
             </Form>
 
-        </>
+        </div>
     );
 
 

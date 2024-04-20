@@ -13,8 +13,8 @@ const schema = yup.object().shape({
     month: yup.number().integer().required({Month: 'Month is required'}),
     year: yup.number().integer().required({Year: 'Year is required'}),
     card_number: yup.number().integer().required({CardNumber: 'CardNumber is required'}),
-   // cvc: yup.number().integer().required({SecurityCode: 'CVC is required'}),
-    terms: yup.string().required({Terms: 'Expiry is required'}),
+    // terms checkbox validation
+    terms: yup.boolean().oneOf([true], {terms: 'Please accept terms and conditions'}),
 
 });
 

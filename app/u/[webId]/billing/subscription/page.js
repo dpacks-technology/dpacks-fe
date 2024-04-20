@@ -1,12 +1,10 @@
 "use client"
 
-import {useState} from "react";
+import {useEffect, useState} from "react";
 import SubscriptionPlans from "@/app/components/SubscriptionPlans";
-import Table from "@/app/components/Table";
+import {CheckSubscriptionCount} from "@/services/BillingService";
 
-
-import {useDisclosure} from "@nextui-org/react";
-export default function Subscription() {
+export default function Subscription({ params }) {
     // Dummy data for demonstration
     const currentPlan = "Standard ";
     const features = ["Advanced features", "Moderate Storage", "Email Support"];
@@ -14,6 +12,7 @@ export default function Subscription() {
 
     //function to change page status
     const [pageStatus, setPageStatus] = useState('view');
+    const [subscriptionExists, setSubscriptionExists] = useState(false);
 
     // Dummy data for payment details
     const paymentDetails = [
@@ -40,125 +39,133 @@ export default function Subscription() {
 
 
         // delete function
-        DeleteTransactionByID(id).then(() => {
-            refreshData("success", "Deleted");
-        }).catch((error) => {
-            headerMessage("error", error.response.data.error);
-        });
+        // DeleteTransactionByID(id).then(() => {
+        //     refreshData("success", "Deleted");
+        // }).catch((error) => {
+        //     headerMessage("error", error.response.data.error);
+        // });
 
     }
 
-    return (
-        <div
-            className={"bg-dark w-full"}
-            style={{
-            padding: '30px',
-            borderRadius: '10px',
-            margin: 'auto',
-            marginTop: '50px',
-            boxShadow: '0px 4px 8px rgba(0, 0, 0, 0.1)',
-            display: 'flex',
-            flexDirection: 'column',
-            alignItems: 'center'
-        }}>
-
-
-            {pageStatus === 'update' ?
-                <>
-                    <button onClick={() => {
-                        changeStatus('view')
-                    }} style={{
-                        padding: '5px 10px',
-                        borderRadius: '5px',
-                        background: 'blue',
-                        border: 'none',
-                        fontSize: '14px'
-                    }}>Back
-                    </button>
-                    <SubscriptionPlans/>
-                </>
-                :
-                <>
-                    <div style={{width: '100%', marginBottom: '20px'}}>
-                        <h2 style={{
-                            marginBottom: '20px',
-                            fontSize: '24px',
-                            display: 'flex',
-                            alignItems: 'center'
-                        }}>
-                            <span style={{marginRight: '10px'}}>Current Plan: {currentPlan}</span>
-
-                            <button onClick={() => {
-
-                                changeStatus('update')
-
-                            }} style={{
-                                padding: '5px 10px',
-                                borderRadius: '5px',
-                                background: 'blue',
-                                border: 'none',
-                                fontSize: '14px'
-                            }}>Update Plan
-                            </button>
-                        </h2>
-
-
-                        <ul style={{listStyleType: 'disc'}}>
-                            {features.map((feature, index) => (
-                                <li key={index}>{feature}</li>
-                            ))}
-                        </ul>
-                        <p style={{marginTop: '20px'}}>Total Per Month: {cost}</p>
-                    </div>
-
-                    <div style={{width: '100%', display: 'flex', justifyContent: 'space-between'}}>
-                        <div style={{
-                            width: 'calc(50% - 20px)',
-                            border: '2px solid blue',
-                            padding: '20px',
-                            borderRadius: '10px',
-                            marginBottom: '20px'
-                        }}>
-                            {/* Content for payment details */}
-                            <h3 style={{marginBottom: '10px'}}>Payment Details</h3>
-                            {paymentDetails.map((detail, index) => (
-                                <p key={index}>{detail.title}: {detail.value}</p>
-                            ))}
-                        </div>
-                        <div style={{
-                            width: 'calc(50% - 20px)',
-                            border: '2px solid blue',
-                            padding: '20px',
-                            borderRadius: '10px',
-                            marginBottom: '20px'
-                        }}>
-                            {/* Content for invoices */}
-                            <h3 style={{marginBottom: '10px'}}>Invoices</h3>
-                            {invoices.map(invoice => (
-                                <div key={invoice.id} style={{marginBottom: '10px'}}>
-                                    <p>Invoice ID: {invoice.id}</p>
-                                    <p>Date: {invoice.date}</p>
-                                    <p>Amount: {invoice.amount}</p>
-                                </div>
-                            ))}
-                        </div>
-                    </div>
-
-                    <div style={{width: '100%', display: 'flex', justifyContent: 'space-between'}}>
-
-                        <button style={{
-                            name:"Delete",
-                            padding: '10px 20px',
-                            borderRadius: '5px',
-                            background: 'red',
-                            border: 'none', function : deleteButton,
-                        }}>Unsubscribe Current Plan
-
-                        </button>
-                    </div>
-                </>
+    useEffect(() => {
+        CheckSubscriptionCount(params.webId).then(r => {
+            console.log(r);
+            if (r > 0) {
+                setSubscriptionExists(true);
             }
+        });
+    }, [params.webId]);
 
-        </div>
+    return (
+        !subscriptionExists ? <SubscriptionPlans web_id={params.webId} /> :
+            <div
+                className={"bg-dark w-full"}
+                style={{
+                    padding: '30px',
+                    borderRadius: '10px',
+                    margin: 'auto',
+                    boxShadow: '0px 4px 8px rgba(0, 0, 0, 0.1)',
+                    display: 'flex',
+                    flexDirection: 'column',
+                    alignItems: 'center'
+                }}>
+
+                {pageStatus === 'update' ?
+                    <>
+                        <button onClick={() => {
+                            changeStatus('view')
+                        }} style={{
+                            padding: '5px 10px',
+                            borderRadius: '5px',
+                            background: 'blue',
+                            border: 'none',
+                            fontSize: '14px'
+                        }}>Back
+                        </button>
+                        <SubscriptionPlans/>
+                    </>
+                    :
+                    <>
+                        <div style={{width: '100%', marginBottom: '20px'}}>
+                            <h2 style={{
+                                marginBottom: '20px',
+                                fontSize: '24px',
+                                display: 'flex',
+                                alignItems: 'center'
+                            }}>
+                                <span style={{marginRight: '10px'}}>Current Plan: {currentPlan}</span>
+
+                                <button onClick={() => {
+
+                                    changeStatus('update')
+
+                                }} style={{
+                                    padding: '5px 10px',
+                                    borderRadius: '5px',
+                                    background: 'blue',
+                                    border: 'none',
+                                    fontSize: '14px'
+                                }}>Update Plan
+                                </button>
+                            </h2>
+
+
+                            <ul style={{listStyleType: 'disc'}}>
+                                {features.map((feature, index) => (
+                                    <li key={index}>{feature}</li>
+                                ))}
+                            </ul>
+                            <p style={{marginTop: '20px'}}>Total Per Month: {cost}</p>
+                        </div>
+
+                        <div style={{width: '100%', display: 'flex', justifyContent: 'space-between'}}>
+                            <div style={{
+                                width: 'calc(50% - 20px)',
+                                border: '2px solid blue',
+                                padding: '20px',
+                                borderRadius: '10px',
+                                marginBottom: '20px'
+                            }}>
+                                {/* Content for payment details */}
+                                <h3 style={{marginBottom: '10px'}}>Payment Details</h3>
+                                {paymentDetails.map((detail, index) => (
+                                    <p key={index}>{detail.title}: {detail.value}</p>
+                                ))}
+                            </div>
+                            <div style={{
+                                width: 'calc(50% - 20px)',
+                                border: '2px solid blue',
+                                padding: '20px',
+                                borderRadius: '10px',
+                                marginBottom: '20px'
+                            }}>
+                                {/* Content for invoices */}
+                                <h3 style={{marginBottom: '10px'}}>Invoices</h3>
+                                {invoices.map(invoice => (
+                                    <div key={invoice.id} style={{marginBottom: '10px'}}>
+                                        <p>Invoice ID: {invoice.id}</p>
+                                        <p>Date: {invoice.date}</p>
+                                        <p>Amount: {invoice.amount}</p>
+                                    </div>
+                                ))}
+                            </div>
+                        </div>
+
+                        <div style={{width: '100%', display: 'flex', justifyContent: 'space-between'}}>
+
+                            <button style={{
+                                name: "Delete",
+                                padding: '10px 20px',
+                                borderRadius: '5px',
+                                background: 'red',
+                                border: 'none', function: deleteButton,
+                            }}>Unsubscribe Current Plan
+
+                            </button>
+                        </div>
+                    </>
+                }
+
+            </div>
     );
 }

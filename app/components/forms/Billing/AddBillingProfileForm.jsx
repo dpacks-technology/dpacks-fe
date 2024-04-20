@@ -9,15 +9,11 @@ import FormItem from "antd/es/form/FormItem";
 import {AddBillingProfile} from "@/services/BillingService";
 import items from "@/app/data/country";
 import {Select, SelectItem} from "@nextui-org/react";
-
-
-
-
+import {useRouter} from "next/navigation";
 
 const AddBillingProfileForm = ({...props}) => {
 
-
-
+    const router = useRouter(); // router
 
     // state
     const [saving, setSaving] = React.useState(false);
@@ -35,10 +31,7 @@ const AddBillingProfileForm = ({...props}) => {
     const [Month, setMonth] = useState("");
     const [Year, setYear] = useState("");
     const [CVV, setCVV] = useState("");
-    //const [termsChecked, setTermsChecked] = useState(true); // State for managing checkbox checked status
-
-
-
+    const [termsChecked, setTermsChecked] = useState(false); // State for managing checkbox checked status
 
 
     // const [isCompanyAvailable, setIsCompanyAvailable] = useState(false);
@@ -52,10 +45,6 @@ const AddBillingProfileForm = ({...props}) => {
         { id: "Credit", name: "Credit " },
         { id: "Debit", name: "Debit" }
     ];
-
-
-
-
 
     const Message = (type, message) => { // message function
         messageApi.open({
@@ -101,7 +90,8 @@ const AddBillingProfileForm = ({...props}) => {
 
             // add transaction // TODO: change the function
             await AddBillingProfile(data).then((response) => {
-                console.log(response)
+
+                router.push(`./subscription`); // redirect to the page
 
             }).then((error) => {
                 console.log(error)
@@ -125,8 +115,12 @@ const AddBillingProfileForm = ({...props}) => {
     //     setTermsChecked(e.target.checked); // Update the state with the checkbox checked status
     // };
 
+    function handleTermsChange() {
+        setTermsChecked(!termsChecked); // Update the state with the checkbox checked status
+    }
+
     return (
-        <>
+        <div className={"p-4"}>
             {contextHolder}
             <Form>
                 {/* Billing Details */}
@@ -317,24 +311,19 @@ const AddBillingProfileForm = ({...props}) => {
                             />
                         </FormItem>
 
-                        {/*<FormItem>*/}
-                        {/*<Checkbox*/}
-                        {/*    defaultChecked={termsChecked} // Set initial checked status*/}
-                        {/*    onChange={handleTermsChange} // Handle checkbox change*/}
-                        {/*> I Agree to the Terms and Conditions*/}
-                        {/*</Checkbox>*/}
-                        {/*</FormItem>*/}
+                        <FormItem>
+                        <Checkbox
+                            defaultChecked={termsChecked} // Set initial checked status
+                            onChange={handleTermsChange} // Handle checkbox change
+                        > I Agree to the Terms and Conditions
+                        </Checkbox>
+                        </FormItem>
 
                     </div>
                 </div>
 
                 {/* Buttons */}
                 <div className={"mt-6 mb-3 flex gap-3 justify-end"}>
-
-                    {/* close button */}
-                    <Button color="danger" variant="flat" onPress={props.onClose}>
-                        Back
-                    </Button>
 
                     {/* save button */}
                     <Button
@@ -344,14 +333,14 @@ const AddBillingProfileForm = ({...props}) => {
                             setSaving(false);
                         });
                     }}>
-                        {saving ? "Saving..." : "Purchase"}
+                        {saving ? "Saving..." : "Save"}
                     </Button>
 
 
                 </div>
             </Form>
 
-        </>
+        </div>
     );
 }
 
