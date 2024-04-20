@@ -90,7 +90,7 @@ const LeftNavigation2 = () => {
             navigationItem.children && setSubNavigationItems(navigationItem.children);
         }
         else if(fullPathname.split("/")[1] == "admin") {
-            const navigationItem = AdminDashboardNavigation.find(item => item.url.split('/')[1] === fullPathname.split("/")[1]);
+            const navigationItem = AdminDashboardNavigation.find(item => item.url.split('/')[1] === mainPath);
             navigationItem.children && setSubNavigationItems(navigationItem.children);
         }
     }, [mainPath]);

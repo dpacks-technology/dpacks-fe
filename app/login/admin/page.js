@@ -31,7 +31,7 @@ export default function LoginPage() {
         const token = localStorage.getItem('token');
         if (token) {
             setLoading(false);
-            router.push('/admin');
+            router.push('/admin/users/manage-admins');
         } else {
             setLoading(false);
         }
