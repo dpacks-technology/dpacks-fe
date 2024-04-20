@@ -20,20 +20,6 @@ export default function Subscription({params}) {
     //backend  validation error message
     const [message, setMessage] = useState({type: '', message: ''});
 
-
-    // function to get subscription details
-    useEffect(() => {
-        console.log("useEffect")
-        GetSubscriptionByID(params.webId).then((response) => {
-            setSubscription(response);
-
-        }).catch((error) => {
-            console.log(error);
-            setError(error);
-            setLoading(false);
-        });
-    }, []);
-
     //function to change page status
     const [pageStatus, setPageStatus] = useState('view');
     const [subscriptionExists, setSubscriptionExists] = useState(false);
@@ -57,12 +43,28 @@ export default function Subscription({params}) {
         }
     }
 
+    //function to unsubscribe current plan
+    const UnsubscribeCurrentPlan = () => {
+        DeleteSubscriptionByID(params.webId).then(() => {
+            window.location.reload();
+        }).catch((error) => {
+            console.log(error);
+        });
+    }
+
 
     useEffect(() => {
         CheckSubscriptionCount(params.webId).then(r => {
-            console.log(r);
             if (r > 0) {
                 setSubscriptionExists(true);
+
+                GetSubscriptionByID(params.webId).then((response) => {
+                    setSubscription(response);
+                }).catch((error) => {
+                    console.log(error);
+                    setError(error);
+                    setLoading(false);
+                });
             }
         });
     }, [params.webId]);
@@ -92,7 +94,7 @@ export default function Subscription({params}) {
                             fontSize: '14px'
                         }}>Back
                         </button>
-                        <SubscriptionPlans update={true} web_id={params.webId} />
+                        <SubscriptionPlans update={true} web_id={params.webId}/>
                     </>
                     :
                     <>
@@ -117,16 +119,12 @@ export default function Subscription({params}) {
 
                         <div style={{width: '100%', display: 'flex', justifyContent: 'space-between'}}>
 
-                            {/*<button style={{*/}
-                            {/*    name: "Delete",*/}
-                            {/*    padding: '10px 20px',*/}
-                            {/*    borderRadius: '5px',*/}
-                            {/*    background: 'red',*/}
-                            {/*    border: 'none', function: deleteButton,*/}
+                            <button
+                                style={{padding: '10px 20px', borderRadius: '5px', background: 'red', border: 'none'}}
+                                onClick={UnsubscribeCurrentPlan}>
+                                Unsubscribe Current Plan
+                            </button>
 
-                            {/*}}>Unsubscribe Current Plan*/}
-
-                            {/*</button>*/}
                         </div>
                     </>
 
