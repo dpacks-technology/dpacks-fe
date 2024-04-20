@@ -31,6 +31,29 @@ export const getWebPagesCount = async (key, val, siteId) => {
     }
 }
 
+// get all webpages // TODO: Change this function accordingly
+export const getElements = async (count, page, key, val, siteId, pageId) => {
+    try {
+        const response = await webpagesService.get(`/api/v1/data-packets/data/elements/${siteId}/${pageId}/${count}/${page}?key=${key}&val=${val}`);
+        console.log(response.data)
+        return response.data;
+    } catch (error) {
+        throw error;
+    }
+};
+
+
+// get all webpages count // TODO: Change this function accordingly
+export const getElementsCount = async (key, val, siteId, pageId) => {
+    try {
+        const response = await webpagesService.get(`/api/v1/data-packets/data/elements/count/${siteId}/${pageId}?key=${key}&val=${val}`);
+        console.log(response.data)
+        return response.data;
+    } catch (error) {
+        throw error;
+    }
+}
+
 // get all webpages by status // TODO: Change this function accordingly
 export const getPagesByStatus = async (count, page, status, key, val) => {
 

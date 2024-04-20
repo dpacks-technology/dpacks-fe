@@ -1,10 +1,11 @@
+
 'use client';
 // Importing modules
 import Table from "@/app/components/Table";
 import React, {useCallback, useEffect} from "react";
 import {
     deletePage,
-    deleteWebpagesBulk,
+    deleteWebpagesBulk, getElements, getElementsCount,
     getPagesByDatetime,
     getPagesByDatetimeCount,
     getPagesByStatus,
@@ -17,12 +18,11 @@ import {
 import {useDisclosure} from "@nextui-org/react";
 import EditWebpageForm from "@/app/components/forms/webpages/EditWebpageForm";
 import {message} from "antd";
-import {useRouter} from "next/navigation";
+import {Breadcrumbs, BreadcrumbItem} from "@nextui-org/react";
+import Link from "next/link";
 
 // Webpages component
 export default function Webpages({params}) {
-
-    const router = useRouter();
 
     // ----------------------- DEFAULT COLUMNS -------------------------
     // default columns // TODO: Change the following functions
@@ -68,25 +68,22 @@ export default function Webpages({params}) {
     // columns // TODO: Change the following columns according the to yours
     const columns = [
         // {name: "ID", uid: "id", sortable: true, type: "text"},
-        {name: "PAGE", uid: "page", sortable: true, type: "text"},
+        {name: "ELEMENT", uid: "element", sortable: true, type: "text"},
         {name: "CREATED", uid: "init_datetime", sortable: false, type: "datetime"},
         {name: "UPDATED", uid: "last_updated", sortable: false, type: "datetime"},
         {name: "SIZE (BYTES)", uid: "size", sortable: false, type: "text"},
-        {name: "ELEMENTS COUNT", uid: "elements_count", sortable: false, type: "text"},
-        {name: " ", uid: "buttons", sortable: false, type: "buttons"},
+        {name: "", uid: "buttons", sortable: false, type: "buttons"},
         // {name: "ACTIONS", uid: "menu", sortable: false, type: "menu"},
         // all usable types: text, twoText, datetime, label, status, statusButtons, buttons, menu, copy, icon, iconText, iconTwoText
     ];
 
     // initially visible columns // TODO: Change the following columns according the to yours
     const init_cols = [
-        "page",
-        "size",
-        "elements_count",
+        "element",
         "init_datetime",
         "last_updated",
+        "size",
         "buttons",
-        "menu"
     ];
 
     // ----------------------- BUTTONS -------------------------
@@ -100,8 +97,7 @@ export default function Webpages({params}) {
         // action button functions
     const viewButton = (id) => { // view button function // TODO: Change the following function
             // not used here
-            console.log("view: " + id);
-            router.push(`./${id}`)
+            // console.log("view: " + id);
         }
 
     const deleteButton = (id) => { // delete button function // TODO: Change the following function
@@ -269,10 +265,10 @@ export default function Webpages({params}) {
             headerMessage(type, message);
 
         // fetch data count from API // TODO: Change the following function
-        getWebPagesCount(searchColumn, searchFieldValue, params.webId).then((response) => setPagesCount(response));
+        getElementsCount(searchColumn, searchFieldValue, params.webId, params.page_id).then((response) => setPagesCount(response));
 
         // fetch data from API // TODO: Change the following function
-        getWebPages(rowsPerPage, currentPage, searchColumn, searchFieldValue, params.webId)
+        getElements(rowsPerPage, currentPage, searchColumn, searchFieldValue, params.webId, params.page_id)
             .then(response => setData(response === null ? [] : response.length === 0 ? [] : response))
             .catch(error => console.error(error));
 
@@ -282,10 +278,10 @@ export default function Webpages({params}) {
     const fetchTableData = (useCallback((page, key, val) => {
 
         // fetch data count from API // TODO: Change the following function
-        getWebPagesCount(key, val, params.webId).then((response) => setPagesCount(response));
+        getElementsCount(key, val, params.webId, params.page_id).then((response) => setPagesCount(response));
 
         // fetch data from API // TODO: Change the following function
-        getWebPages(rowsPerPage, page, key, val, params.webId)
+        getElements(rowsPerPage, page, key, val, params.webId, params.page_id)
             .then(response => setData(response === null ? [] : response.length === 0 ? [] : response))
             .catch(error => console.error(error));
 
@@ -361,6 +357,11 @@ export default function Webpages({params}) {
     return (
         <>
             {contextHolder}
+            <p className={"text-medium text-gray-200 mb-2"}>Web Elements</p>
+            <Breadcrumbs className={"mb-8"}>
+                <BreadcrumbItem><Link href={"./webpages"}>Web Pages</Link></BreadcrumbItem>
+                <BreadcrumbItem>{params.page_id}</BreadcrumbItem>
+            </Breadcrumbs>
             <Table
 
                 // data and columns
@@ -406,6 +407,7 @@ export default function Webpages({params}) {
 
                 // components
                 components={components}
+
             />
         </>
     )
