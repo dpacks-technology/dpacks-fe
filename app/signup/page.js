@@ -94,7 +94,7 @@ export default function SignUpPage() {
             // if(!isInvalidConfirmPassword) {
             //     const response = await axios.post(`http://localhost:4010/api/auth/signup`, data);
             //     if(response.status === 200) {
-            //         alert("User created successfully");
+            //         Alert("User created successfully");
             //         //redirect to login page
             //         router.push("/login");
             //
