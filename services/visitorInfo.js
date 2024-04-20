@@ -7,9 +7,9 @@ const   visitorinfoServices = axios.create({
 });
 
 // get all webpages // TODO: Change this function accordingly
-export const getWebPages = async (count, page, key, val) => {
+export const getWebPages = async (count, page, key, val,webId) => {
     try {
-        const response = await  visitorinfoServices.get(`/api/analytics/visitorsInfo/${count}/${page}?key=${key}&val=${val}`);
+        const response = await  visitorinfoServices.get(`/api/analytics/visitorsInfo/${count}/${page}/${webId}?key=${key}&val=${val}`);
         return response.data;
     } catch (error) {
         throw error;
@@ -17,9 +17,9 @@ export const getWebPages = async (count, page, key, val) => {
 };
 
 // get all webpages count // TODO: Change this function accordingly
-export const getWebPagesCount = async (key, val) => {
+export const getWebPagesCount = async (key, val,webId) => {
     try {
-        const response = await  visitorinfoServices.get(`/api/analytics/visitorInfo/count?key=${key}&val=${val}`);
+        const response = await  visitorinfoServices.get(`/api/analytics/visitorInfo/count/${webId}?key=${key}&val=${val}`);
         return response.data;
     } catch (error) {
         throw error;

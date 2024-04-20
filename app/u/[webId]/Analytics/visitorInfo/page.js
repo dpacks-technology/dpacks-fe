@@ -15,9 +15,15 @@ import {
 import {useDisclosure} from "@nextui-org/react";
 import EditWebpageForm from "@/app/components/forms/webpages/EditWebpageForm";
 import {message} from "antd";
+import { useParams } from "next/navigation";
+
 
 // Webpages component
 export default function AnalyticsWebpages() {
+
+    // ----------------------- PARAMS -------------------------
+    // params
+    const { webId } = useParams();
 
     // ----------------------- DEFAULT COLUMNS -------------------------
     // default columns // TODO: Change the following functions
@@ -263,10 +269,10 @@ export default function AnalyticsWebpages() {
     const fetchTableData = (useCallback((page, key, val) => {
 
         // fetch data count from API // TODO: Change the following function
-        getWebPagesCount(key, val).then((response) => setPagesCount(response));
+        getWebPagesCount(key, val,webId).then((response) => setPagesCount(response));
 
         // fetch data from API // TODO: Change the following function
-        getWebPages(rowsPerPage, page, key, val)
+        getWebPages(rowsPerPage, page, key, val,webId)
             .then(response => setData(response === null ? [] : response.length === 0 ? [] : response))
             .catch(error => console.error(error));
 
