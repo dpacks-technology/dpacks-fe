@@ -24,8 +24,8 @@ export default function Subscription({params}) {
     // function to get subscription details
     useEffect(() => {
         console.log("useEffect")
-        GetSubscriptionByID(2).then((response) => {
-            console.log(response);
+        GetSubscriptionByID(params.webId).then((response) => {
+            setSubscription(response);
 
         }).catch((error) => {
             console.log(error);
@@ -74,8 +74,10 @@ export default function Subscription({params}) {
             <div style={{width: '100%', padding: '20px', border: '1px solid #ccc', borderRadius: '10px'}}>
 
 
-                <h2>Plan Name: {PlanName}</h2>
-                <h2>Amount: {Amount}</h2>
+                <h1 className={"text-md mb-2"}>Current Plan</h1>
+                <h2 className={"text-xl"}>{subscription.plan_name}</h2>
+                <h2 className={"text-sm mb-4"}>{subscription.features}</h2>
+                <h2 className={"mb-8"}>{subscription.monthly_price}/mo</h2>
 
 
                 {pageStatus === 'update' ?
@@ -90,7 +92,7 @@ export default function Subscription({params}) {
                             fontSize: '14px'
                         }}>Back
                         </button>
-                        <SubscriptionPlans/>
+                        <SubscriptionPlans update={true} web_id={params.webId} />
                     </>
                     :
                     <>

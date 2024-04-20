@@ -172,7 +172,7 @@ export const CheckBillingProfileCount = async (id) => {
 
 export const CheckSubscriptionCount = async (id) => {
     try {
-        const response = await billingService.get(`/api/billing/subscription/check/${id}`);
+        const response = await billingService.get(`/api/subscription/check/${id}`);
         return response.data;
     } catch (error) {
         throw error;
@@ -180,9 +180,17 @@ export const CheckSubscriptionCount = async (id) => {
 }
 
 export const SubscribePlan = async (data) => {
-    console.log(data);
     try {
-        const response = await billingService.post(`/api/billing/subscription`, data);
+        const response = await billingService.post(`/api/subscription/`, data);
+        return response.data;
+    } catch (error) {
+        throw error;
+    }
+}
+
+export const UpdateSubscribePlan = async (data) => {
+    try {
+        const response = await billingService.put(`/api/subscription/`, data);
         return response.data;
     } catch (error) {
         throw error;

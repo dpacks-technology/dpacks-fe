@@ -10,7 +10,7 @@ const subscriptionService = axios.create({
 // get all subscription  // TODO: Change this function accordingly
 export const GetSubscriptionByID = async (id) => {
     try {
-        const response = await subscriptionService.get(`api/web/subscription/${id}`);
+        const response = await subscriptionService.get(`api/subscription/${id}`);
         return response.data;
     } catch (error) {
         throw error;
@@ -21,7 +21,7 @@ export const GetSubscriptionByID = async (id) => {
 
 export const DeleteSubscriptionByID = async (id) => {
     try {
-        const response = await subscriptionService.delete(`api/web/subscription/${id}`);
+        const response = await subscriptionService.delete(`api/subscription/${id}`);
         return response.data;
     } catch (error) {
         throw error;

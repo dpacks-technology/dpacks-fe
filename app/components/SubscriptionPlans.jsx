@@ -1,31 +1,7 @@
 // Billing.js
 "use client"
 import React, {useEffect, useState} from "react";
-import {GetSubscriptionPlans, SubscribePlan} from "@/services/BillingService";
-
-// const plans = [
-//     {
-//         id: 1,
-//         name: 'Free',
-//         monthlyPrice: '$0',
-//         annualPrice: '$0',
-//         features: ['Basic features', 'Limited storage', 'No support'],
-//     },
-//     {
-//         id: 2,
-//         name: 'Standard',
-//         monthlyPrice: '$9.99',
-//         annualPrice: '$99.99',
-//         features: ['Advanced features', 'Moderate storage', 'Email support'],
-//     },
-//     {
-//         id: 3,
-//         name: 'Premium',
-//         monthlyPrice: '$19.99',
-//         annualPrice: '$199.99',
-//         features: ['All features', 'Unlimited storage', 'Priority support'],
-//     },
-// ];
+import {GetSubscriptionPlans, SubscribePlan, UpdateSubscribePlan} from "@/services/BillingService";
 
 export default function SubscriptionPlans({...props}) {
     const [billingInterval, setBillingInterval] = useState('monthly');
@@ -33,14 +9,21 @@ export default function SubscriptionPlans({...props}) {
     const [plans, setPlans] = useState([]);
 
     const subscribePlan = (id) => {
-        SubscribePlan({project_id: props.web_id, plan_id: id}).then(() => {
-            window.location.reload();
-        });
+
+        if (props.update) {
+            UpdateSubscribePlan({project_id: props.web_id, plan_id: id}).then(() => {
+                window.location.reload();
+            });
+        } else {
+            SubscribePlan({project_id: props.web_id, plan_id: id}).then(() => {
+                window.location.reload();
+            });
+        }
+
     }
 
     useEffect(() => {
         GetSubscriptionPlans().then(r => {
-            console.log(r);
             setPlans(r);
         });
     }, []);
