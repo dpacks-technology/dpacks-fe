@@ -104,15 +104,9 @@ export default function Webpages({params}) {
             router.push(`./${id}`)
         }
 
-    const deleteButton = (id) => { // delete button function // TODO: Change the following function
-        // not used here
-        // console.log("delete: " + id);
-    }
-
     // action buttons // TODO: Change the following buttons
     const actionButtons = [
         {name: "View", text: "View", icon: "", type: "default", function: viewButton},
-        {name: "Delete", text: "Delete", icon: "", type: "danger", function: deleteButton},
     ];
 
 
@@ -406,6 +400,9 @@ export default function Webpages({params}) {
 
                 // components
                 components={components}
+
+                // selection mode
+                selectionMode="none"
             />
         </>
     )

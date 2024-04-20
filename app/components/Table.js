@@ -490,7 +490,7 @@ export default function Table({data, columns, init_cols, ...props}) {
                     }}
                     className={"dark:dark"}
                     selectedKeys={selectedKeys}
-                    selectionMode="multiple"
+                    selectionMode={props.selectionMode && props.selectionMode || "multiple"}
                     onSelectionChange={setSelectedKeys}
                     sortDescriptor={sortDescriptor}
                     onSortChange={setSortDescriptor}

@@ -54,69 +54,10 @@ export const getElementsCount = async (key, val, siteId, pageId) => {
     }
 }
 
-// get all webpages by status // TODO: Change this function accordingly
-export const getPagesByStatus = async (count, page, status, key, val) => {
-
-    // convert status array to string with commas
-    let statusString = status.join(',');
-
-    console.log(statusString);
-
+// get all webpages by status and datetime count // TODO: Change this function accordingly
+export const deleteElement = async (siteId, pageId, element) => {
     try {
-        const response = await webpagesService.get(`/api/web/webpages/status/${count}/${page}?status=${statusString}&key=${key}&val=${val}`);
-        console.log(response.data);
-        return response.data;
-    } catch (error) {
-        throw error;
-    }
-}
-
-// get all webpages by status count // TODO: Change this function accordingly
-export const getPagesByStatusCount = async (status, key, val) => {
-
-    // convert status array to string with commas
-    let statusString = status.join(',');
-
-    console.log(statusString);
-
-    try {
-        const response = await webpagesService.get(`/api/web/webpages/status/count?status=${statusString}&key=${key}&val=${val}`);
-        console.log(response.data);
-        return response.data;
-    } catch (error) {
-        throw error;
-    }
-}
-
-// get all webpages by datetime // TODO: Change this function accordingly
-export const getPagesByDatetime = async (count, page, start, end, key, val) => {
-
-    console.log(start);
-
-    try {
-        const response = await webpagesService.get(`/api/web/webpages/datetime/${count}/${page}?start=${start}&end=${end}&key=${key}&val=${val}`);
-        console.log(response.data);
-        return response.data;
-    } catch (error) {
-        throw error;
-    }
-}
-
-// get all webpages by datetime count // TODO: Change this function accordingly
-export const getPagesByDatetimeCount = async (start, end, key, val) => {
-    try {
-        const response = await webpagesService.get(`/api/web/webpages/datetime/count?start=${start}&end=${end}&key=${key}&val=${val}`);
-        console.log(response.data);
-        return response.data;
-    } catch (error) {
-        throw error;
-    }
-}
-
-// get all webpages by status and datetime // TODO: Change this function accordingly
-export const editPages = async (id, data) => {
-    try {
-        const response = await webpagesService.put(`/api/web/webpages/${id}`, data);
+        const response = await webpagesService.delete(`/api/v1/data-packets/data/element/${siteId}/${pageId}/${element}`);
         return response.data;
     } catch (error) {
         throw error;
@@ -124,63 +65,11 @@ export const editPages = async (id, data) => {
 }
 
 // get all webpages by status and datetime count // TODO: Change this function accordingly
-export const getPageById = async (id) => {
-    try {
-        const response = await webpagesService.get(`/api/web/webpage/${id}`);
-        return response.data;
-    } catch (error) {
-        throw error;
-    }
-}
-
-// get all webpages by status and datetime count // TODO: Change this function accordingly
-export const deletePage = async (id) => {
-    try {
-        const response = await webpagesService.delete(`/api/web/webpages/${id}`);
-        return response.data;
-    } catch (error) {
-        throw error;
-    }
-}
-
-// get all webpages by status and datetime count // TODO: Change this function accordingly
-export const deleteWebpagesBulk = async (ids) => {
+export const deleteElementsBulk = async (siteId, pageId, ids) => {
     let idsString = ids.join(',');
 
     try {
-        const response = await webpagesService.delete(`/api/web/webpages/bulk/${idsString}`);
-        return response.data;
-    } catch (error) {
-        throw error;
-    }
-}
-
-// get all webpages by status and datetime count // TODO: Change this function accordingly
-export const updateWebpagesStatusBulk = async (ids, status) => {
-    let idsString = ids.join(',');
-
-    try {
-        const response = await webpagesService.put(`/api/web/webpages/status/bulk/${idsString}`, {status: status});
-        return response.data;
-    } catch (error) {
-        throw error;
-    }
-}
-
-// get all webpages by status and datetime count // TODO: Change this function accordingly
-export const updateWebpagesStatus = async (id, status) => {
-    try {
-        const response = await webpagesService.put(`/api/web/webpages/status/${id}`, {status: status});
-        return response.data;
-    } catch (error) {
-        throw error;
-    }
-}
-
-// get all webpages by status and datetime count // TODO: Change this function accordingly
-export const AddWebpage = async (data) => {
-    try {
-        const response = await webpagesService.post(`/api/web/webpage`, data);
+        const response = await webpagesService.delete(`/api/v1/data-packets/data/element/bulk/${siteId}/${pageId}/${idsString}`);
         return response.data;
     } catch (error) {
         throw error;

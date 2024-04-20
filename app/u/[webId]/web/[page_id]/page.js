@@ -1,28 +1,23 @@
-
 'use client';
 // Importing modules
 import Table from "@/app/components/Table";
 import React, {useCallback, useEffect} from "react";
 import {
-    deletePage,
-    deleteWebpagesBulk, getElements, getElementsCount,
-    getPagesByDatetime,
-    getPagesByDatetimeCount,
-    getPagesByStatus,
-    getPagesByStatusCount,
-    getWebPages,
-    getWebPagesCount,
-    updateWebpagesStatus,
-    updateWebpagesStatusBulk
+    deleteElement,
+    deleteElementsBulk,
+    getElements,
+    getElementsCount,
 } from "@/services/DataPacketsService";
-import {useDisclosure} from "@nextui-org/react";
+import {BreadcrumbItem, Breadcrumbs, useDisclosure} from "@nextui-org/react";
 import EditWebpageForm from "@/app/components/forms/webpages/EditWebpageForm";
 import {message} from "antd";
-import {Breadcrumbs, BreadcrumbItem} from "@nextui-org/react";
 import Link from "next/link";
+import Keys from "@/Keys";
 
 // Webpages component
 export default function Webpages({params}) {
+
+    const storage_bucket_url = Keys.STORAGE_BUCKET_URL;
 
     // ----------------------- DEFAULT COLUMNS -------------------------
     // default columns // TODO: Change the following functions
@@ -96,13 +91,14 @@ export default function Webpages({params}) {
      ***/
         // action button functions
     const viewButton = (id) => { // view button function // TODO: Change the following function
-            // not used here
-            // console.log("view: " + id);
+            let packet_url = storage_bucket_url + "/" + params.webId + "_" + params.page_id + "_" + id + ".json";
+            window.open(packet_url, '_blank').focus();
         }
 
     const deleteButton = (id) => { // delete button function // TODO: Change the following function
-        // not used here
-        // console.log("delete: " + id);
+        deleteElement(params.webId, params.page_id, id).then(() => {
+            refreshData("success", "Deleted");
+        });
     }
 
     // action buttons // TODO: Change the following buttons
@@ -235,14 +231,12 @@ export default function Webpages({params}) {
 
     // delete bulk
     const deleteBulk = (ids) => {
-
         // delete bulk function // TODO: Change the following function
-        deleteWebpagesBulk(ids).then(() => {
+        deleteElementsBulk(params.webId, params.page_id, ids).then(() => {
             refreshData("success", "Deleted");
         }).catch((error) => {
             headerMessage("error", error.response.data.error);
         });
-
     }
 
     // handle delete bulk function -- NO NEED OF CHANGING
@@ -251,7 +245,7 @@ export default function Webpages({params}) {
             deleteBulk(data.map(item => item.id));
         } else {
             deleteBulk(
-                Array.from(selectedKeys).map((str) => parseInt(str, 10))
+                Array.from(selectedKeys).map((str) => str)
             );
         }
     }
