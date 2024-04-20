@@ -115,16 +115,16 @@ export default function Subscription({params}) {
 
                         <div style={{width: '100%', display: 'flex', justifyContent: 'space-between'}}>
 
-                            <button style={{
-                                name: "Delete",
-                                padding: '10px 20px',
-                                borderRadius: '5px',
-                                background: 'red',
-                                border: 'none', function: deleteButton,
+                            {/*<button style={{*/}
+                            {/*    name: "Delete",*/}
+                            {/*    padding: '10px 20px',*/}
+                            {/*    borderRadius: '5px',*/}
+                            {/*    background: 'red',*/}
+                            {/*    border: 'none', function: deleteButton,*/}
 
-                            }}>Unsubscribe Current Plan
+                            {/*}}>Unsubscribe Current Plan*/}
 
-                            </button>
+                            {/*</button>*/}
                         </div>
                     </>
 
