@@ -407,7 +407,7 @@ export default function Table({data, columns, init_cols, ...props}) {
                                 </div>
                             </div>
                         }
-                        <div className="flex gap-3 w-4/12">
+                        <div className={`flex gap-3${props.components && props.components.date_range && ' w-4/12'}`}>
                             {props.components && props.components.date_range &&
                                 <RangePicker onChange={handleDateRangeValueChange} value={[rangeStart, rangeEnd]}/>}
                             {props.components && props.components.export &&

@@ -27,7 +27,7 @@ export default function Webpages({params}) {
     // ----------------------- DEFAULT COLUMNS -------------------------
     // default columns // TODO: Change the following functions
     const dateColumn = "last_updated" // default date column
-    const sortColumn = {column: "page", direction: "ascending"} // default sort column
+    const sortColumn = {column: "element", direction: "ascending"} // default sort column
 
     // ----------------------- MESSAGE ------------------------- (NO NEED OF CHANGING)
     // message
@@ -60,7 +60,7 @@ export default function Webpages({params}) {
         today: false, // today component
         yesterday: false, // yesterday component
         search: true, // search component
-        date_range: true, // date range component
+        date_range: false, // date range component
         export: true, // export component
     }
 
