@@ -4,14 +4,15 @@ import {AuthHeaders} from "@/util/AuthHeader";
 
 // Create an axios instance -- NO NEED TO CHANGE THIS
 const webpagesService = axios.create({
-    baseURL: Keys.USER_SERVICE_API_URL,
+    baseURL: Keys.DATA_PACKETS_SERVICE_API_URL,
     headers: AuthHeaders
 });
 
 // get all webpages // TODO: Change this function accordingly
-export const getWebPages = async (count, page, key, val) => {
+export const getWebPages = async (count, page, key, val, siteId) => {
     try {
-        const response = await webpagesService.get(`/api/web/webpages/${count}/${page}?key=${key}&val=${val}`);
+        const response = await webpagesService.get(`/api/v1/data-packets/data/pages/${siteId}/${count}/${page}?key=${key}&val=${val}`);
+        console.log(response.data)
         return response.data;
     } catch (error) {
         throw error;
@@ -20,9 +21,9 @@ export const getWebPages = async (count, page, key, val) => {
 
 
 // get all webpages count // TODO: Change this function accordingly
-export const getWebPagesCount = async (key, val) => {
+export const getWebPagesCount = async (key, val, siteId) => {
     try {
-        const response = await webpagesService.get(`/api/web/webpages/count?key=${key}&val=${val}`);
+        const response = await webpagesService.get(`/api/v1/data-packets/data/pages/count/${siteId}?key=${key}&val=${val}`);
         console.log(response.data)
         return response.data;
     } catch (error) {

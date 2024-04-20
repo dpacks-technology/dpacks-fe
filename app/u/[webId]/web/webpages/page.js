@@ -14,13 +14,13 @@ import {
     getWebPagesCount,
     updateWebpagesStatus,
     updateWebpagesStatusBulk
-} from "@/services/WebpagesService";
+} from "@/services/DataPacketsService";
 import {useDisclosure} from "@nextui-org/react";
 import EditWebpageForm from "@/app/components/forms/webpages/EditWebpageForm";
 import {message} from "antd";
 
 // Webpages component
-export default function Webpages() {
+export default function Webpages({params}) {
 
     // ----------------------- DEFAULT COLUMNS -------------------------
     // default columns // TODO: Change the following functions
@@ -50,23 +50,25 @@ export default function Webpages() {
     // ----------------------- COLUMNS -------------------------
     // columns // TODO: Change the following columns according the to yours
     const columns = [
-        {name: "ID", uid: "id", sortable: true, type: "text"},
-        {name: "NAME", uid: "name", sortable: true, type: "text"},
-        {name: "PATH", uid: "path", sortable: true, type: "text"},
-        {name: "CREATED ON", uid: "date_created", sortable: false, type: "datetime"},
-        {name: "STATUS", uid: "status", sortable: false, type: "status"},
-        {name: "CHANGE STATUS", uid: "statusButtons", sortable: false, type: "statusButtons"},
-        {name: "ACTIONS", uid: "menu", sortable: false, type: "menu"},
+        // {name: "ID", uid: "id", sortable: true, type: "text"},
+        {name: "PAGE", uid: "page", sortable: true, type: "text"},
+        {name: "CREATED", uid: "init_datetime", sortable: false, type: "datetime"},
+        {name: "UPDATED", uid: "last_updated", sortable: false, type: "datetime"},
+        {name: "SIZE (BYTES)", uid: "size", sortable: true, type: "text"},
+        {name: "ELEMENTS COUNT", uid: "elements_count", sortable: false, type: "text"},
+        {name: " ", uid: "buttons", sortable: false, type: "buttons"},
+        // {name: "ACTIONS", uid: "menu", sortable: false, type: "menu"},
         // all usable types: text, twoText, datetime, label, status, statusButtons, buttons, menu, copy, icon, iconText, iconTwoText
     ];
 
     // initially visible columns // TODO: Change the following columns according the to yours
     const init_cols = [
-        "name",
-        "path",
-        "date_created",
-        "status",
-        "statusButtons",
+        "page",
+        "size",
+        "elements_count",
+        "init_datetime",
+        "last_updated",
+        "buttons",
         "menu"
     ];
 
@@ -84,11 +86,6 @@ export default function Webpages() {
             // console.log("view: " + id);
         }
 
-    const editButton = (id) => { // edit button function // TODO: Change the following function
-        // not used here
-        // console.log("edit: " + id);
-    }
-
     const deleteButton = (id) => { // delete button function // TODO: Change the following function
         // not used here
         // console.log("delete: " + id);
@@ -97,7 +94,6 @@ export default function Webpages() {
     // action buttons // TODO: Change the following buttons
     const actionButtons = [
         {name: "View", text: "View", icon: "", type: "default", function: viewButton},
-        {name: "Edit", text: "Edit", icon: "", type: "primary", function: editButton},
         {name: "Delete", text: "Delete", icon: "", type: "danger", function: deleteButton},
     ];
 
@@ -255,10 +251,10 @@ export default function Webpages() {
             headerMessage(type, message);
 
         // fetch data count from API // TODO: Change the following function
-        getWebPagesCount(searchColumn, searchFieldValue).then((response) => setPagesCount(response));
+        getWebPagesCount(searchColumn, searchFieldValue, params.webId).then((response) => setPagesCount(response));
 
         // fetch data from API // TODO: Change the following function
-        getWebPages(rowsPerPage, currentPage, searchColumn, searchFieldValue)
+        getWebPages(rowsPerPage, currentPage, searchColumn, searchFieldValue, params.webId)
             .then(response => setData(response === null ? [] : response.length === 0 ? [] : response))
             .catch(error => console.error(error));
 
@@ -268,10 +264,10 @@ export default function Webpages() {
     const fetchTableData = (useCallback((page, key, val) => {
 
         // fetch data count from API // TODO: Change the following function
-        getWebPagesCount(key, val).then((response) => setPagesCount(response));
+        getWebPagesCount(key, val, params.webId).then((response) => setPagesCount(response));
 
         // fetch data from API // TODO: Change the following function
-        getWebPages(rowsPerPage, page, key, val)
+        getWebPages(rowsPerPage, page, key, val, params.webId)
             .then(response => setData(response === null ? [] : response.length === 0 ? [] : response))
             .catch(error => console.error(error));
 
