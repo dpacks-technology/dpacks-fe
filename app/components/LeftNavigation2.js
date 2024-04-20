@@ -59,7 +59,7 @@ const LeftNavigation2 = () => {
     // TODO: Add more components for add form
     const getComponentByPath = (pathname, notificationMessage) => {
         switch (pathname) {
-            case "web/webpages":
+            case "web/packets":
                 return <AddWebpageForm notificationMessage={notificationMessage} />;
             case "analytics/alert":
                 return <CreateAlertForm notificationMessage={notificationMessage} />;
