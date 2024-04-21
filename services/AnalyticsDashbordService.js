@@ -8,7 +8,7 @@ const webpagesService = axios.create({
 
 export const getTraffic = async (id,data) => {
     try {
-        const response = await webpagesService.get(`/api/analytical_alerts/sessions/${id}`,data);
+        const response = await webpagesService.get(`/api/analytics/sessions/${id}`,data);
         console.log((response.data))
         return response.data;
     } catch (error) {
@@ -19,7 +19,7 @@ export const getTraffic = async (id,data) => {
 
 export const visitorSource = async (id,data) => {
     try {
-        const response = await webpagesService.get(`/api/analytical_alerts/source/${id}`,data);
+        const response = await webpagesService.get(`/api/analytics/source/${id}`,data);
         console.log((response.data))
         return response.data;
     } catch (error) {
@@ -29,7 +29,7 @@ export const visitorSource = async (id,data) => {
 }
 export const visitorCountry = async (id,data) => {
     try {
-        const response = await webpagesService.get(`/api/analytical_alerts/country/${id}`,data);
+        const response = await webpagesService.get(`/api/analytics/country/${id}`,data);
         console.log((response.data))
         return response.data;
     } catch (error) {
@@ -40,7 +40,7 @@ export const visitorCountry = async (id,data) => {
 
 export const visitorDevice = async (id,data) => {
     try {
-        const response = await webpagesService.get(`/api/analytical_alerts/devices/${id}`,data);
+        const response = await webpagesService.get(`/api/analytics/devices/${id}`,data);
         console.log((response.data))
         return response.data;
     } catch (error) {
