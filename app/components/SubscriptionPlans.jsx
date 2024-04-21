@@ -1,12 +1,26 @@
-// Billing.js
 "use client"
 import React, {useEffect, useState} from "react";
-import {GetSubscriptionPlans, SubscribePlan, UpdateSubscribePlan} from "@/services/BillingService";
+import {
+    GetSubscriptionPlans,
+    SubscribePlan,
+    UpdateSubscribePlan,
+    GetBillingProfileById,
+    CheckSubscriptionCount, CheckBillingProfileCount
+} from "@/services/BillingService";
+import AddBillingProfileForm from "@/app/components/forms/Billing/AddBillingProfileForm";
+import {GetSubscriptionByID} from "@/services/SubscriptionServices";
+import {useRouter} from "next/navigation";
 
-export default function SubscriptionPlans({...props}) {
+export default function SubscriptionPlans({params, ...props}) {
+
+    const router = useRouter();
+
+    const [billingProfile, setBillingProfile] = useState({});
     const [billingInterval, setBillingInterval] = useState('monthly');
     const intervals = ['monthly', 'yearly'];
     const [plans, setPlans] = useState([]);
+    const [billingProfileExists, setBillingProfileExists] = useState(false);
+    const [subscriptionExists, setSubscriptionExists] = useState(false);
 
     const subscribePlan = (id) => {
 
@@ -22,33 +36,48 @@ export default function SubscriptionPlans({...props}) {
 
     }
 
+
+
     useEffect(() => {
         GetSubscriptionPlans().then(r => {
             setPlans(r);
         });
     }, []);
 
+    useEffect(() => {
+        CheckBillingProfileCount(props.web_id).then(r => {
+            console.log(r);
+            if (r > 0) {
+                setSubscriptionExists(true);
+            }
+        });
+    }, []);
+
     return (
         <>
-            <div className="sm:flex sm:flex-col sm:align-center w-full">
-                <div
-                    className="relative self-center mt-6 bg-gray-950 rounded-lg p-0.5 flex sm:mt-8 border border-zinc-800">
-                    {intervals.map(interval => (
-                        <button
-                            key={interval}
-                            onClick={() => setBillingInterval(interval)}
-                            type="button"
-                            className={`${
-                                billingInterval === interval
-                                    ? 'relative w-1/2 bg-zinc-700 border-zinc-800 shadow-sm text-white'
-                                    : 'ml-0.5 relative w-1/2 border border-transparent text-zinc-400'
-                            } rounded-md m-1 py-2 text-sm font-medium whitespace-nowrap focus:outline-none focus:ring-2 focus:ring-pink-500 focus:ring-opacity-50 focus:z-10 sm:w-auto sm:px-8`}
-                        >
-                            {`${interval.charAt(0).toUpperCase()}${interval.slice(1)} billing`}
-                        </button>
-                    ))}
+            {billingProfileExists && (
+                <div className="sm:flex sm:flex-col sm:align-center w-full">
+                    <div
+                        className="relative self-center mt-6 bg-gray-950 rounded-lg p-0.5 flex sm:mt-8 border border-zinc-800">
+                        {intervals.map(interval => (
+                            <button
+                                key={interval}
+                                onClick={() => setBillingInterval(interval)}
+                                type="button"
+                                className={`${
+                                    billingInterval === interval
+                                        ? 'relative w-1/2 bg-zinc-700 border-zinc-800 shadow-sm text-white'
+                                        : 'ml-0.5 relative w-1/2 border border-transparent text-zinc-400'
+                                } rounded-md m-1 py-2 text-sm font-medium whitespace-nowrap focus:outline-none focus:ring-2 focus:ring-pink-500 focus:ring-opacity-50 focus:z-10 sm:w-auto sm:px-8`}
+                            >
+                                {`${interval.charAt(0).toUpperCase()}${interval.slice(1)} billing`}
+                            </button>
+                        ))}
+                    </div>
                 </div>
-            </div>
+            )}
+
+
             <div className="flex space-x-4 justify-center w-full">
                 {plans.length > 0 && plans.map((plan, index) => (
                     <div key={index} className="bg-gray-950 bg-opacity-60 rounded-lg w-1/4 p-6 ml-4 mt-8"
@@ -59,15 +88,32 @@ export default function SubscriptionPlans({...props}) {
                         <ul className="text-white">
                             <li>{plan.features}</li>
                         </ul>
-                        <button onClick={() => {
-                            subscribePlan(plan.plan_id)
-                        }} className="bg-white text-black py-2 px-4 mt-4 rounded-lg">Subscribe</button>
+
+                        {subscriptionExists ?
+                            <button onClick={() => {
+                                subscribePlan(plan.plan_id)
+                            }} className="bg-white text-black py-2 px-4 mt-4 rounded-lg">Subscribe</button> : ""
+
+                        }
                     </div>
                 ))}
             </div>
+
+
+
+            {!subscriptionExists ?
+
+                <div className="w-full flex justify-center mt-4">
+                    <button style={{padding: '10px 20px', borderRadius: '5px', background: 'blue', border: 'none'}}
+                            onClick={() => router.push("./profile")}>Fill Billing Profile
+                    </button>
+
+
+
+                </div> : ""
+
+            }
+
         </>
     );
 }
-
-
-
