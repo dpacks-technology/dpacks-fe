@@ -3,7 +3,7 @@
 import {Button} from "@nextui-org/react";
 import Input from "@/app/components/Input";
 import React from "react";
-import {Form, message} from "antd";
+import {Form, message, Select} from "antd";
 import schema from "@/app/validaitions/SiteAddValidation";
 import FormItem from "antd/es/form/FormItem";
 import { useRouter } from 'next/navigation'
@@ -20,7 +20,6 @@ const AddWebProjectForm = ({...props}) => {
     const [name, setName] = React.useState("");
     const [domain, setDomain] = React.useState("");
     const [description, setDescription] = React.useState("");
-    const [category, setCategory] = React.useState("");
 
     // backend validation error message
     const [messageApi, contextHolder] = message.useMessage(); // message api
@@ -40,7 +39,7 @@ const AddWebProjectForm = ({...props}) => {
 
         try {
             // data // TODO: add/change fields
-            const data = {name, domain, description, category};
+            const data = {name, domain, description};
 
             // validate
             await schema.validate(data, {abortEarly: false});
@@ -100,16 +99,6 @@ const AddWebProjectForm = ({...props}) => {
                             onChange={(e) => setDescription(e.target.value)}
                             status={error.description ? "error" : ""}
                             error={error.description}
-                        />
-                    </FormItem>
-                    <FormItem>
-                        <Input
-                            label={"Category"}
-                            type="text" placeholder="Category"
-                            value={category}
-                            onChange={(e) => setCategory(e.target.value)}
-                            status={error.category ? "error" : ""}
-                            error={error.category}
                         />
                     </FormItem>
                 </div>

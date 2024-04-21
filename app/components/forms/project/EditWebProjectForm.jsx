@@ -4,7 +4,6 @@ import React, {useEffect} from "react";
 import {Form, message} from "antd";
 import schema from "@/app/validaitions/SiteEditValidation";
 import FormItem from "antd/es/form/FormItem";
-import Link from "next/link";
 import {useRouter} from 'next/navigation'
 import {EditSiteService, GetSiteByIdService} from "@/services/SitesService";
 
@@ -19,7 +18,6 @@ const EditWebProjectForm = ({...props}) => {
     const [name, setName] = React.useState("");
     const [domain, setDomain] = React.useState("");
     const [description, setDescription] = React.useState("");
-    const [category, setCategory] = React.useState("");
 
     // backend validation error message
     const [messageApi, contextHolder] = message.useMessage(); // message api
@@ -38,7 +36,7 @@ const EditWebProjectForm = ({...props}) => {
 
         try {
             // data // TODO: add/change fields
-            const data = {name: name, description: description, category: category};
+            const data = {name: name, description: description};
 
             // validate
             await schema.validate(data, {abortEarly: false});
@@ -69,7 +67,6 @@ const EditWebProjectForm = ({...props}) => {
             setName(response.name);
             setDomain(response.domain);
             setDescription(response.description);
-            setCategory(response.category);
         }).catch((error) => {
             Message("error", error.response.data.error);
         });
@@ -102,16 +99,6 @@ const EditWebProjectForm = ({...props}) => {
                             onChange={(e) => setDescription(e.target.value)}
                             status={error.description ? "error" : ""}
                             error={error.description}
-                        />
-                    </FormItem>
-                    <FormItem>
-                        <Input
-                            label={"Category"}
-                            type="text" placeholder="Category"
-                            value={category}
-                            onChange={(e) => setCategory(e.target.value)}
-                            status={error.category ? "error" : ""}
-                            error={error.category}
                         />
                     </FormItem>
                 </div>
