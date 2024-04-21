@@ -4,13 +4,16 @@ import React, { useState } from "react";
 //import React from "react";
 import CardBox from "@/app/components/Card";
 import {downloadById, getActiveTemplates, getSumAndCount} from "@/services/MarketplaceService";
-import {Pagination, useDisclosure} from "@nextui-org/react";
+import {Button, Pagination, useDisclosure} from "@nextui-org/react";
 import {Drawer} from 'antd';
 import Model from "@/app/components/Model";
 import AddRatingsForm from "@/app/components/forms/marketplace/AddRatings";
+import {useRouter} from "next/navigation";
 
-
+//MarketplaceListing function to display the templates in the marketplace
 export default function MarketplaceListing() {
+
+    const router = useRouter();
 
     const [data, setData] = React.useState([]);
     //const [sumAndCount, setSumAndCount] = useState({ total_ratings: 0, rating_count: 0 });
@@ -18,18 +21,22 @@ export default function MarketplaceListing() {
     const [drawerData, setDrawerData] = useState([])
     const {isOpen, onOpen, onOpenChange} = useDisclosure();
     const [currentTemplate, setCurrentTemplate] = useState(null);
+    const [currentPage, setCurrentPage] = useState(1);
 
-
-    React.useEffect(() => {
-        getActiveTemplates(5, 1).then((response) => {
+    const fetchData = (page) => {
+        getActiveTemplates(6, page).then((response) => {
             console.log(response);
             setData(response);
         });
-    }, []);
-
-    function testFunction() {
-        console.log("Test");
     }
+
+    React.useEffect(() => {
+        fetchData(currentPage);
+    }, [currentPage]);
+
+    // function testFunction() {
+    //     console.log("Test");
+    // }
 
     const downloadFunction = (id) => { // view button function // TODO: Change the following function
         // not used here
@@ -82,6 +89,22 @@ export default function MarketplaceListing() {
             } title={"Rate Template"} button={"Submit"} isOpen={isOpen} onOpenChange={onOpenChange}/>
             <div className={"p-6 pt-4"}>
                 <h1 className={"mb-6"}>Templates</h1>
+
+                <div className={"flex justify-end gap-4"}>
+                    <Button color="secondary" variant="flat" onClick={() => {
+                        router.push("./submit-template")
+                    }}>
+                        Add New Template
+                    </Button>
+                    <Button color="primary" variant="flat" onClick={() => {
+                        router.push("./user-submitted-temp")
+                    }}>
+                        My Templates
+                    </Button>
+                </div>
+                <br/>
+
+
                 <div className={"grid grid-cols-3 gap-6"}>
                     {data && data.length > 0 && data.map((item, index) => (
                         console.log(item.price),
@@ -90,8 +113,8 @@ export default function MarketplaceListing() {
                             key={index}
                             title={item.name}
                             secondary={item.category}
-                            image="https://avatars.githubusercontent.com/u/86160567?s=200&v=4"
-                            //image={item.thmbnlfile}
+                            //image="https://avatars.githubusercontent.com/u/86160567?s=200&v=4"
+                            image={`https://storage.googleapis.com/dpacks-templates.appspot.com/${item.thmbnlfile}`}
                             title2 = {item.price}
                             //secondary2={`Average Rating: ${calculateAverageRating(item.total_ratings, item.rating_count).toFixed(2)}`}
                             description={item.description}
@@ -115,7 +138,7 @@ export default function MarketplaceListing() {
                     ))}
                 </div>
                 <div className="mx-auto mt-6" style={{display: "table"}}>
-                    <Pagination total={10} initialPage={1}/>
+                    <Pagination total={10} initialPage={1} onChange={(page) => setCurrentPage(page)}/>
                 </div>
                 <Drawer title="Developer's Message: " onClose={onClose} open={open} className="overflow-y-auto max-h-60">
                     {drawerData && (
