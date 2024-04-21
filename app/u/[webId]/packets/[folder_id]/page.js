@@ -14,6 +14,7 @@ import {
     getPinnedPackets,
     getPinnedPacketsCount
 } from "@/services/PinnedDataPacketsService";
+import EditPinnedDataPacketForm from "@/app/components/forms/PinnedDataPackets/EditPinnedDataPackets";
 
 // Webpages component
 export default function PinnedPackets({params}) {
@@ -68,8 +69,8 @@ export default function PinnedPackets({params}) {
         {name: "CREATED", uid: "init_datetime", sortable: false, type: "datetime"},
         {name: "UPDATED", uid: "last_updated", sortable: false, type: "datetime"},
         {name: "SIZE (BYTES)", uid: "size", sortable: false, type: "text"},
-        {name: "", uid: "buttons", sortable: false, type: "buttons"},
-        // {name: "ACTIONS", uid: "menu", sortable: false, type: "menu"},
+        // {name: "", uid: "buttons", sortable: false, type: "buttons"},
+        {name: "", uid: "menu", sortable: false, type: "menu"},
         // all usable types: text, twoText, datetime, label, status, statusButtons, buttons, menu, copy, icon, iconText, iconTwoText
     ];
 
@@ -80,6 +81,7 @@ export default function PinnedPackets({params}) {
         "last_updated",
         "size",
         "buttons",
+        "menu"
     ];
 
     // ----------------------- BUTTONS -------------------------
@@ -92,7 +94,7 @@ export default function PinnedPackets({params}) {
      ***/
         // action button functions
     const viewButton = (id) => { // view button function // TODO: Change the following function
-            let packet_url = storage_bucket_url + "/" + params.webId + "_" + params.folder_id + "_" + id + ".json";
+            let packet_url = storage_bucket_url + "/" + params.webId + "/" + params.folder_id + "/" + id;
             window.open(packet_url, '_blank').focus();
         }
 
@@ -104,6 +106,7 @@ export default function PinnedPackets({params}) {
 
     // action buttons // TODO: Change the following buttons
     const actionButtons = [
+        {name: "Update", text: "Update", icon: "", type: "secondary", function: onOpen},
         {name: "View", text: "View", icon: "", type: "default", function: viewButton},
         {name: "Delete", text: "Delete", icon: "", type: "danger", function: deleteButton},
     ];
@@ -118,8 +121,8 @@ export default function PinnedPackets({params}) {
      ***/
         // menu button functions
     const viewMenuButton = (id) => { // view button function // TODO: Change the following function
-            // not used here
-            // console.log("view: " + id);
+            let packet_url = storage_bucket_url + "/" + params.webId + "/" + params.folder_id + "/" + id;
+            window.open(packet_url, '_blank').focus();
         }
 
     const editMenuButton = (id) => { // edit button function // TODO: Change the following function
@@ -129,11 +132,8 @@ export default function PinnedPackets({params}) {
 
     const deleteMenuButton = (id) => { // delete button function // TODO: Change the following function
 
-        // delete function
-        deletePage(id).then(() => {
+        deletePinnedPacket(params.webId, params.folder_id, id).then(() => {
             refreshData("success", "Deleted");
-        }).catch((error) => {
-            headerMessage("error", error.response.data.error);
         });
 
     }
@@ -141,7 +141,7 @@ export default function PinnedPackets({params}) {
     // menu buttons // TODO: Change the following buttons
     const menuButtons = [
         {name: "View", text: "View", function: viewMenuButton},
-        {name: "Edit", text: "Edit", function: onOpen}, // edit function set to open model (onOpen function)
+        {name: "Update", text: "Update", function: onOpen}, // edit function set to open model (onOpen function)
         {name: "Delete", text: "Delete", function: deleteMenuButton},
     ];
 
@@ -349,7 +349,7 @@ export default function PinnedPackets({params}) {
                 editMenuButton={editMenuButton}
                 editItemIsOpen={isOpen}
                 editItemOnOpenChange={onOpenChange}
-                editForm={<EditWebpageForm refreshData={refreshData}/>}
+                editForm={<EditPinnedDataPacketForm folder_id={params.folder_id} web_id={params.webId} refreshData={refreshData}/>}
 
                 // search, sorting and filtering
                 searchColumn={searchColumn}

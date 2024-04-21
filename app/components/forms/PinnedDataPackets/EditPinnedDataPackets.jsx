@@ -4,15 +4,14 @@ import React from "react";
 import {Form, message} from "antd";
 import schema from "@/app/validaitions/AddPinnedDataPacketValidation";
 import FormItem from "antd/es/form/FormItem";
-import {AddWebpage} from "@/services/WebpagesService";
-import {addPinnedFolders} from "@/services/PinnedDataPacketsService";
+import {updatePinnedDataPacket} from "@/services/PinnedDataPacketsService";
 
-const AddPinnedDataPacketForm = ({...props}) => {
+const EditPinnedDataPacketForm = ({...props}) => {
 
     // state
     const [saving, setSaving] = React.useState(false);
     const [error, setError] = React.useState({});
-    const [name, setName] = React.useState("");
+    const [name, setName] = React.useState(props.id);
     const [folder, setFolder] = React.useState(props.folder_id);
     const [packetData, setPacketData] = React.useState("");
 
@@ -27,7 +26,7 @@ const AddPinnedDataPacketForm = ({...props}) => {
 
 
     // add webpage function
-    const addWebpage = async () => {
+    const updateWebpage = async () => {
 
         // set saving
         setSaving(true);
@@ -40,9 +39,10 @@ const AddPinnedDataPacketForm = ({...props}) => {
             await schema.validate(data, {abortEarly: false});
 
             // add webpage // TODO: change the function
-            await addPinnedFolders(data, props.web_id).then((response) => {
-                props.notificationMessage("success", "Record added"); // refresh data with success message
-                props.onClose(); // close modal
+            await updatePinnedDataPacket(data, props.web_id).then((response) => {
+                Message("success", "Packet Updated") // backend validation error
+                // props.notificationMessage("success", "Record added"); // refresh data with success message
+                // props.onClose(); // close modal
             }).then((error) => {
                 Message("error", error.response.data.error) // backend validation error
             });
@@ -62,31 +62,41 @@ const AddPinnedDataPacketForm = ({...props}) => {
             <Form>
                 <div>
                     {/* TODO: Change the form */}
-                    <FormItem>
-                        <Input
-                            label={"Folder"}
-                            type="text" placeholder="Data packet folder"
-                            value={props.folder_id ? props.folder_id : folder}
-                            disabled={props.folder_id}
-                            onChange={(e) => setFolder(e.target.value)}
-                            status={error.folder ? "error" : ""}
-                            error={error.folder}
-                        />
-                    </FormItem>
-                    <FormItem>
-                        <Input
-                            label={"Name"}
-                            type="text" placeholder="Data packet name"
-                            value={name}
-                            onChange={(e) => setName(e.target.value)}
-                            status={error.name ? "error" : ""}
-                            error={error.name}
-                        />
-                    </FormItem>
+
+                    <div className={"hidden"}>
+                        <FormItem>
+                            <Input
+                                label={"Folder"}
+                                type="text" placeholder="Data packet folder"
+                                value={props.folder_id ? props.folder_id : folder}
+                                disabled={props.folder_id}
+                                onChange={(e) => setFolder(e.target.value)}
+                                status={error.folder ? "error" : ""}
+                                error={error.folder}
+                            />
+                        </FormItem>
+                        <FormItem>
+                            <Input
+                                label={"Name"}
+                                type="text" placeholder="Data packet name"
+                                value={props.id ? props.id : name}
+                                disabled={props.id}
+                                onChange={(e) => setName(e.target.value)}
+                                status={error.name ? "error" : ""}
+                                error={error.name}
+                            />
+                        </FormItem>
+                    </div>
+
+                    <div className={"mb-4"}>
+                        <p className={"text-gray-400 text-sm"}>Folder: {props.folder_id}</p>
+                        <p className={"text-gray-400 text-sm"}>Name: {props.id}</p>
+                    </div>
+
                     <FormItem>
                         <Input
                             label={"Data"}
-                            type="text" placeholder="Enter your data"
+                            type="text" placeholder="Enter your new data"
                             value={packetData}
                             onChange={(e) => setPacketData(e.target.value)}
                             status={error.data ? "error" : ""}
@@ -106,11 +116,11 @@ const AddPinnedDataPacketForm = ({...props}) => {
                     <Button
                         disabled={saving}
                         color="primary" variant="flat" onPress={() => {
-                        addWebpage().then(() => {
+                        updateWebpage().then(() => {
                             setSaving(false);
                         });
                     }}>
-                        {saving ? "Saving..." : "Save"}
+                        {saving ? "Updating..." : "Update"}
                     </Button>
 
                 </div>
@@ -119,4 +129,4 @@ const AddPinnedDataPacketForm = ({...props}) => {
     );
 }
 
-export default AddPinnedDataPacketForm;
+export default EditPinnedDataPacketForm;

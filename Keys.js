@@ -5,7 +5,7 @@ const Key = {
     AUTH_SERVICE_API_URL: 'http://34.47.130.27:4010',
     DATA_PACKETS_SERVICE_API_URL: 'http://localhost:4000',
 
-    STORAGE_BUCKET_URL: 'https://storage.googleapis.com/dpacks-3e038.appspot.com',
+    STORAGE_BUCKET_URL: 'http://localhost:4000/api/v1/data-packets/fetch',
 }
 
 module.exports = Key

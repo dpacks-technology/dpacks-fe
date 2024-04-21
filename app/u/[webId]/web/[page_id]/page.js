@@ -92,7 +92,7 @@ export default function Webpages({params}) {
      ***/
         // action button functions
     const viewButton = (id) => { // view button function // TODO: Change the following function
-            let packet_url = storage_bucket_url + "/" + params.webId + "_" + params.page_id + "_" + id + ".json";
+            let packet_url = storage_bucket_url + "/" + params.webId + "/" + params.page_id + "/" + id;
             window.open(packet_url, '_blank').focus();
         }
 

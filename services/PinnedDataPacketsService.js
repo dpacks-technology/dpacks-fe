@@ -18,6 +18,16 @@ export const addPinnedFolders = async (data, siteId) => {
 
 }
 
+export const updatePinnedDataPacket = async (data, siteId) => {
+    try {
+        const response = await webpagesService.put(`/api/v1/data-packets/pinned/${siteId}`, data);
+        return response.data;
+    } catch (error) {
+        throw error;
+    }
+
+}
+
 // get all webpages // TODO: Change this function accordingly
 export const getPinnedFolders = async (count, page, key, val, siteId) => {
     try {
