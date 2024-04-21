@@ -17,6 +17,7 @@ const Dashboard = () => {
     const [selectedChatId, setSelectedChatId] = useState(null);
 
     useEffect(() => {
+        
         const handleNewMessage = (data) => {
             if (data.message.sender !== 'websiteOwner' && data.webId === webId) {
                 setChats((prevChats) => {
@@ -85,9 +86,9 @@ const Dashboard = () => {
         fetchChats();
     }, [webId]);
     useEffect(() => {
-        socket.on("dataUpdate", (data) => {
+        socket.on("dataUpdate", ({ webId, data }) => {
             if (data.webId === webId) {
-                setChats((prevChats) => [...prevChats, data.messages[0]]);
+                setChats(data);
             }
         });
 
@@ -96,14 +97,8 @@ const Dashboard = () => {
         };
     }, [webId, socket]);
 
-    useEffect(() => {
-        return () => {
-            // Clean up the event listener when the component unmounts
-            if (selectedChatId) {
-                socket.off(`dataUpdateByVisitorId_${selectedChatId}`);
-            }
-        };
-    }, [selectedChatId]);
+
+
 
     return (
         <div className="chat-dashboard" style={{ display: "grid", gridTemplateColumns: "1fr 3fr" }}>

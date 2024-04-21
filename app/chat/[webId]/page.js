@@ -20,11 +20,17 @@ const ChatWithAdmin = () => {
     const validateEmail = (email) => {
         // Regular expression for email validation
         const regex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-        return regex.test(email);
+        if (regex.test(email)) {
+            setValidEmail(true);
+            return true;
+        } else {
+            setValidEmail(false);
+            return false;
+        }
     };
-
     const handleVisitorEmailChange = (event) => {
         setVisitorEmail(event.target.value);
+        validateEmail(event.target.value);
     };
 
     const handleVisitorEmailSubmit = async () => {
@@ -38,11 +44,13 @@ const ChatWithAdmin = () => {
 
             setMessages(messages);
             setEnteredEmail(true);
-            setValidEmail(true); // Set validEmail state to true
         } else {
-            alert('Please enter a valid email address.'); // Show alert for invalid email
+            // Display error message under email input field
+            setEmailError('Please enter a valid email address.');
         }
     };
+
+    const [emailError, setEmailError] = useState('');
 
     useEffect(() => {
         const handleNewMessage = (newMessage) => {
@@ -55,7 +63,8 @@ const ChatWithAdmin = () => {
         return () => {
             socket.off('newMessage', handleNewMessage);
         };
-    }, []);
+    }, [socket]);
+
 
     useEffect(() => {
         socket.on('dataUpdate', (data) => {
@@ -141,6 +150,7 @@ const ChatWithAdmin = () => {
                 <div style={{ position: 'fixed', top: '50%', left: '50%', transform: 'translate(-50%, -50%)', textAlign: 'center', display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
                     <input value={visitorEmail} onChange={handleVisitorEmailChange} placeholder="Enter your email..." style={{ fontSize: '14px', padding: '10px 20px', borderRadius: '4px', border: '1px solid #ddd', marginBottom: '10px', width: '200px' }} />
                     <button style={{ backgroundColor: '#004a77', border: '1px solid #ddd', padding: '10px 20px', fontSize: '14px', borderRadius: '4px', cursor: 'pointer', transition: 'background-color 0.3s ease', width: '200px' }} onClick={handleVisitorEmailSubmit}>Submit</button>
+                    {emailError && <div style={{ color: 'red', marginTop: '5px' }}>{emailError}</div>}
                 </div>
             )}
             <div style={{ height: '650px', overflowY: 'scroll' }}>

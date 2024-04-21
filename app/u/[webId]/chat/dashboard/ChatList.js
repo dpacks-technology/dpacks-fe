@@ -28,7 +28,7 @@ const ChatListItem = styled.div`
     }
 `;
 
-const ChatList = ({ chats, onChatClick, webId, onSearch }) => {
+const ChatList = ({ chats, onChatClick, webId }) => {
     const [lastMessages, setLastMessages] = useState({});
     const socket = useSocket(Keys.MESSAGE_SERVICE_API_URL)// Replace with your server URL
 
@@ -39,6 +39,7 @@ const ChatList = ({ chats, onChatClick, webId, onSearch }) => {
             for (const chat of chats) {
                 try {
                     lastMessagesData[chat.visitorId] = await GetLastMessage(webId, chat.visitorId);
+
                 } catch (error) {
                     console.error(`Error fetching last message for visitor ${chat.visitorId}:`, error);
                 }
@@ -59,6 +60,7 @@ const ChatList = ({ chats, onChatClick, webId, onSearch }) => {
             }));
         }
     });
+
 
 
     // Cleanup on unmount
