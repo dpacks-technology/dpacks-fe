@@ -3,8 +3,9 @@ import Input from "@/app/components/Input";
 import React, {useEffect} from "react";
 import {editAutoResponds, getAutoRespondsById} from "@/services/AutoRespondService";
 import {Form, message} from "antd";
-import schema from "@/app/validaitions/AutomatedMessageAddValidation";
+import schema from "@/app/validaitions/AutomatedMessageEditValidation";
 import FormItem from "antd/es/form/FormItem";
+import {useParams} from "next/navigation";
 
 const EditAutomatedMessageForm = ({...props}) => {
 
@@ -13,6 +14,7 @@ const EditAutomatedMessageForm = ({...props}) => {
     const [error, setError] = React.useState({});
     const [messageValue, setMessageValue] = React.useState("");
     const [trigger, setTrigger] = React.useState("");
+    const { webId } = useParams()
 
     // backend validation error message
     const [messageApi, contextHolder] = message.useMessage(); // message api
@@ -35,7 +37,7 @@ const EditAutomatedMessageForm = ({...props}) => {
             await schema.validate(data, { abortEarly: false });
 
             // edit webpage
-            await editAutoResponds(props.id, data);
+            await editAutoResponds(props.id, data,webId);
             props.refreshData("success", "Saved"); // refresh data with success message
             setSaving(false);
             props.onClose(); // close modal
@@ -55,7 +57,7 @@ const EditAutomatedMessageForm = ({...props}) => {
     // get webpage by id
     useEffect(() => {
         // get webpage by id from backend function
-        getAutoRespondsById(props.id).then((response) => {
+        getAutoRespondsById(props.id,webId).then((response) => {
             setMessageValue(response.message);
             setTrigger(response.trigger)// set name
         });
@@ -70,8 +72,8 @@ const EditAutomatedMessageForm = ({...props}) => {
                     <Input
                         status={error.message ? "error" : ""}
                         error={error.message}
-                        label={"Name"}
-                        type="text" placeholder="Webpage name"
+                        label={"Message"}
+                        type="text" placeholder="Message"
                         value={messageValue}
                         onChange={(e) => setMessageValue(e.target.value)}
                     />
@@ -79,8 +81,8 @@ const EditAutomatedMessageForm = ({...props}) => {
                         <Input
                             status={error.trigger ? "error" : ""}
                             error={error.trigger}
-                            label={"Name"}
-                            type="text" placeholder="Webpage name"
+                            label={"Trigger"}
+                            type="text" placeholder="Trigger"
                             value={trigger}
                             onChange={(e) => setTrigger(e.target.value)}
                         />

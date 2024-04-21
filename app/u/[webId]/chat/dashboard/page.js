@@ -4,16 +4,57 @@ import ChatList from "./ChatList";
 import ChatMessageHistory from "./ChatMessageHistory";
 import {GetMessagesByWebId, GetMessagesByVisitorId, GetLastMessage} from "/services/MessageService";
 import { useParams } from "next/navigation";
-import io from "socket.io-client"; // Import Socket.IO client
-
-const socket = io("http://localhost:4006"); // Replace with your server URL
-
+import io from 'socket.io-client'
+import Keys from '@/Keys'
+const socket = io(Keys.MESSAGE_SERVICE_API_URL)
 const Dashboard = () => {
     const { webId } = useParams();
     const [chats, setChats] = useState([]);
     const [selectedChat, setSelectedChat] = useState(null);
     const [selectedChatId, setSelectedChatId] = useState(null);
 
+    useEffect(() => {
+        const handleNewMessage = (data) => {
+            if (data.message.sender !== 'websiteOwner' && data.webId === webId) {
+                setChats((prevChats) => {
+                    const updatedChats = [...prevChats];
+                    const chatIndex = updatedChats.findIndex((chat) => chat.visitorId === data.message.visitorId);
+
+                    if (chatIndex !== -1) {
+                        updatedChats[chatIndex].lastMessage = data.message;
+                    } else {
+                        updatedChats.push({ visitorId: data.message.visitorId, lastMessage: data.message });
+                    }
+
+                    return updatedChats;
+                });
+            }
+        };
+
+        socket.on('newMessage', handleNewMessage);
+
+        socket.on('dataUpdateByVisitorId', (data) => {
+            if (data.webId === webId) {
+                setChats((prevChats) => {
+                    const updatedChats = [...prevChats];
+                    const chatIndex = updatedChats.findIndex((chat) => chat.visitorId === data.visitorId);
+
+                    if (chatIndex !== -1) {
+                        updatedChats[chatIndex].lastMessage = data.message;
+                    } else {
+                        updatedChats.push({ visitorId: data.visitorId, lastMessage: data.message });
+                    }
+
+                    return updatedChats;
+                });
+            }
+        });
+
+        return () => {
+            socket.off('newMessage', handleNewMessage);
+            socket.off('dataUpdateByVisitorId');
+        };
+    }, [webId, socket]);
 
     const handleChatClick = async (webId, visitorId) => {
         try {
@@ -58,6 +99,17 @@ const Dashboard = () => {
 
         fetchChats();
     }, [webId]);
+    useEffect(() => {
+        socket.on("dataUpdate", (data) => {
+            if (data.webId === webId) {
+                setChats((prevChats) => [...prevChats, data.messages[0]]);
+            }
+        });
+
+        return () => {
+            socket.off("dataUpdate");
+        };
+    }, [webId, socket]);
 
     useEffect(() => {
         return () => {

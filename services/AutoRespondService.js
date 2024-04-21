@@ -9,20 +9,19 @@ const webpagesService = axios.create({
 });
 
 // get all webpages // TODO: Change this function accordingly
-export const GetAutoResponds = async (count, page, key, val) => {
+export const GetAutoResponds = async (count, page, key, val, webId) => {
     try {
-        const response = await webpagesService.get(`/api/chat/auto_respond/${count}/${page}?key=${key}&val=${val}`);
+        const response = await webpagesService.get(`/api/chat/auto_respond/${count}/${page}/${webId}?key=${key}&val=${val}`);
         return response.data;
     } catch (error) {
         throw error;
     }
 };
 
-
 // get all webpages count // TODO: Change this function accordingly
-export const getAutoRespondsCount = async (key, val) => {
+export const getAutoRespondsCount = async (key, val,webId) => {
     try {
-        const response = await webpagesService.get(`/api/chat/auto_respond/count?key=${key}&val=${val}`);
+        const response = await webpagesService.get(`/api/chat/auto_respond/count/${webId}?key=${key}&val=${val}`);
         return response.data;
     } catch (error) {
         throw error;
@@ -30,7 +29,7 @@ export const getAutoRespondsCount = async (key, val) => {
 }
 
 // get all webpages by status // TODO: Change this function accordingly
-export const getAutoRespondsByStatus = async (count, page, status, key, val) => {
+export const getAutoRespondsByStatus = async (count, page, status, key, val,webId) => {
 
     // convert status array to string with commas
     let statusString = status.join(',');
@@ -38,7 +37,7 @@ export const getAutoRespondsByStatus = async (count, page, status, key, val) => 
     console.log(statusString);
 
     try {
-        const response = await webpagesService.get(`/api/chat/auto_respond/status/${count}/${page}?status=${statusString}&key=${key}&val=${val}`);
+        const response = await webpagesService.get(`/api/chat/auto_respond/status/${count}/${page}/${webId}?status=${statusString}&key=${key}&val=${val}`);
         console.log(response.data);
         return response.data;
     } catch (error) {
@@ -47,7 +46,7 @@ export const getAutoRespondsByStatus = async (count, page, status, key, val) => 
 }
 
 // get all webpages by status count // TODO: Change this function accordingly
-export const getAutoRespondsByStatusCount = async (status, key, val) => {
+export const getAutoRespondsByStatusCount = async (status, key, val,webId) => {
 
     // convert status array to string with commas
     let statusString = status.join(',');
@@ -55,7 +54,7 @@ export const getAutoRespondsByStatusCount = async (status, key, val) => {
     console.log(statusString);
 
     try {
-        const response = await webpagesService.get(`/api/chat/auto_respond/status/count?status=${statusString}&key=${key}&val=${val}`);
+        const response = await webpagesService.get(`/api/chat/auto_respond/status/count/${webId}?status=${statusString}&key=${key}&val=${val}`);
         console.log(response.data);
         return response.data;
     } catch (error) {
@@ -64,12 +63,12 @@ export const getAutoRespondsByStatusCount = async (status, key, val) => {
 }
 
 // get all webpages by datetime // TODO: Change this function accordingly
-export const getAutoRespondsByDatetime = async (count, page, start, end, key, val) => {
+export const getAutoRespondsByDatetime = async (count, page, start, end, key, val,webId) => {
 
     console.log(start);
 
     try {
-        const response = await webpagesService.get(`/api/chat/auto_respond/datetime/${count}/${page}?start=${start}&end=${end}&key=${key}&val=${val}`);
+        const response = await webpagesService.get(`/api/chat/auto_respond/datetime/${count}/${page}/${webId}?start=${start}&end=${end}&key=${key}&val=${val}`);
         console.log(response.data);
         return response.data;
     } catch (error) {
@@ -78,9 +77,9 @@ export const getAutoRespondsByDatetime = async (count, page, start, end, key, va
 }
 
 // get all webpages by datetime count // TODO: Change this function accordingly
-export const getAutoRespondsByDatetimeCount = async (start, end, key, val) => {
+export const getAutoRespondsByDatetimeCount = async (start, end, key, val,webId) => {
     try {
-        const response = await webpagesService.get(`/api/chat/auto_respond/datetime/count?start=${start}&end=${end}&key=${key}&val=${val}`);
+        const response = await webpagesService.get(`/api/chat/auto_respond/datetime/count/${webId}??start=${start}&end=${end}&key=${key}&val=${val}`);
         console.log(response.data);
         return response.data;
     } catch (error) {
@@ -89,9 +88,9 @@ export const getAutoRespondsByDatetimeCount = async (start, end, key, val) => {
 }
 
 // get all webpages by status and datetime // TODO: Change this function accordingly
-export const editAutoResponds = async (id, data) => {
+export const editAutoResponds = async (id, data,webId) => {
     try {
-        const response = await webpagesService.put(`/api/chat/auto_respond/${id}`, data);
+        const response = await webpagesService.put(`/api/chat/auto_respond/${id}/${webId}`, data);
         return response.data;
     } catch (error) {
         throw error;
@@ -99,9 +98,9 @@ export const editAutoResponds = async (id, data) => {
 }
 
 // get all webpages by status and datetime count // TODO: Change this function accordingly
-export const getAutoRespondsById = async (id) => {
+export const getAutoRespondsById = async (id,webId) => {
     try {
-        const response = await webpagesService.get(`/api/chat/auto_respond/id/${id}`);
+        const response = await webpagesService.get(`/api/chat/auto_respond/id/${id}/${webId}`);
         return response.data;
     } catch (error) {
         throw error;
@@ -109,9 +108,9 @@ export const getAutoRespondsById = async (id) => {
 }
 
 // get all webpages by status and datetime count // TODO: Change this function accordingly
-export const deleteAutoResponds = async (id) => {
+export const deleteAutoResponds = async (id,webId) => {
     try {
-        const response = await webpagesService.delete(`/api/chat/auto_respond/${id}`);
+        const response = await webpagesService.delete(`/api/chat/auto_respond/${id}/${webId}`);
         return response.data;
     } catch (error) {
         throw error;
@@ -119,11 +118,11 @@ export const deleteAutoResponds = async (id) => {
 }
 
 // get all webpages by status and datetime count // TODO: Change this function accordingly
-export const deleteAutoRespondsBulk = async (ids) => {
+export const deleteAutoRespondsBulk = async (ids,webId) => {
     let idsString = ids.join(',');
 
     try {
-        const response = await webpagesService.delete(`/api/chat/auto_respond/bulk/${idsString}`);
+        const response = await webpagesService.delete(`/api/chat/auto_respond/bulk/${idsString}/${webId}`);
         return response.data;
     } catch (error) {
         throw error;
@@ -131,11 +130,11 @@ export const deleteAutoRespondsBulk = async (ids) => {
 }
 
 // get all webpages by status and datetime count // TODO: Change this function accordingly
-export const updateAutoRespondsStatusBulk = async (ids, status) => {
+export const updateAutoRespondsStatusBulk = async (ids, status,webId) => {
     let idsString = ids.join(',');
 
     try {
-        const response = await webpagesService.put(`/api/chat/auto_respond/status/bulk/${idsString}`, {status: status});
+        const response = await webpagesService.put(`/api/chat/auto_respond/status/bulk/${idsString}/${webId}`, {status: status});
         return response.data;
     } catch (error) {
         throw error;
@@ -143,9 +142,9 @@ export const updateAutoRespondsStatusBulk = async (ids, status) => {
 }
 
 // get all webpages by status and datetime count // TODO: Change this function accordingly
-export const updateAutoRespondsStatus = async (id, status) => {
+export const updateAutoRespondsStatus = async (id, status,webId) => {
     try {
-        const response = await webpagesService.put(`/api/chat/auto_respond/status/${id}`, {status: status});
+        const response = await webpagesService.put(`/api/chat/auto_respond/status/${id}/${webId}`, {status: status});
         return response.data;
     } catch (error) {
         throw error;
@@ -153,9 +152,9 @@ export const updateAutoRespondsStatus = async (id, status) => {
 }
 
 // get all webpages by status and datetime count // TODO: Change this function accordingly
-export const addAutoRespond = async (data) => {
+export const addAutoRespond = async (data,webId) => {
     try {
-        const response = await webpagesService.post(`/api/chat/auto_respond`, data);
+        const response = await webpagesService.post(`/api/chat/auto_respond/${webId}`, data);
         return response.data;
     } catch (error) {
         throw error;

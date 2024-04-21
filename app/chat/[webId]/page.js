@@ -1,148 +1,157 @@
 'use client';
-import React, { useState } from 'react';
-import FAQ from './FAQ';
-import ChatWithAdmin from './ChatWithAdmin';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { useParams } from "next/navigation";
+import React, { useEffect, useState } from 'react';
+import { useParams } from 'next/navigation';
+import { AddMessage, GetMessagesByVisitorId } from '@/services/MessageService';
+import io from 'socket.io-client';
+import Keys from '@/Keys';
+const socket = io(Keys.MESSAGE_SERVICE_API_URL);
 
-import {faArrowLeft} from "@fortawesome/free-solid-svg-icons";
-
-const Chat = () => {
-
-    const [selectedOption, setSelectedOption] = useState(null);
+const ChatWithAdmin = () => {
+    const [visitorEmail, setVisitorEmail] = useState('');
+    const [enteredEmail, setEnteredEmail] = useState(false);
+    const [message, setMessage] = useState('');
+    const [messages, setMessages] = useState([]);
+    const [validEmail, setValidEmail] = useState(false); // State to track email validity
+    const visitorId = localStorage.getItem('visitorId');
     const { webId } = useParams();
-    console.log("webId in Chat component:", webId);
 
-    const headerText = selectedOption? (
-        selectedOption === 'faq'? 'FAQ' : 'Chat with admin'
-    ) : 'Chat';
-
-
-    const handleGoBack = () => {
-        setSelectedOption(null);
+    const validateEmail = (email) => {
+        // Regular expression for email validation
+        const regex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+        return regex.test(email);
     };
 
+    const handleVisitorEmailChange = (event) => {
+        setVisitorEmail(event.target.value);
+    };
 
+    const handleVisitorEmailSubmit = async () => {
+        if (validateEmail(visitorEmail)) {
+            // If email is valid, proceed
+            const visitorId = generateVisitorId();
+            localStorage.setItem('visitorId', visitorId.toString());
 
+            const messages = await GetMessagesByVisitorId({ webId, visitorId });
+            socket.emit('dataUpdate', { messages });
+
+            setMessages(messages);
+            setEnteredEmail(true);
+            setValidEmail(true); // Set validEmail state to true
+        } else {
+            alert('Please enter a valid email address.'); // Show alert for invalid email
+        }
+    };
+
+    useEffect(() => {
+        const handleNewMessage = (newMessage) => {
+            // Replace the existing messages with the new messages
+            setMessages(newMessage.messages);
+        };
+
+        socket.on('newMessage', handleNewMessage);
+
+        return () => {
+            socket.off('newMessage', handleNewMessage);
+        };
+    }, [socket]);
+
+    useEffect(() => {
+        socket.on('dataUpdate', (data) => {
+            // Always update messages regardless of webId
+            setMessages(data.messages);
+        });
+
+        return () => {
+            socket.off('dataUpdate');
+        };
+    }, [socket, visitorId]);
+
+    useEffect(() => {
+        if (webId) {
+            socket.emit('fetchMessages', webId);
+        }
+
+        const storedVisitorId = localStorage.getItem('visitorId');
+        if (storedVisitorId) {
+            handleVisitorEmailSubmit();
+        }
+    }, [webId]);
+
+    useEffect(() => {
+        const handleTabClose = () => {
+            localStorage.removeItem('visitorId');
+        };
+        window.addEventListener('beforeunload', handleTabClose);
+        return () => {
+            window.removeEventListener('beforeunload', handleTabClose);
+        };
+    }, []);
+
+    const generateVisitorId = () => {
+        return Math.floor(Math.random() * 1000000);
+    };
+
+    const handleMessageChange = (event) => {
+        setMessage(event.target.value);
+    };
+
+    const sendMessage = async () => {
+        const data = {
+            visitorId: localStorage.getItem('visitorId'),
+            visitorName: visitorEmail,
+            sender: 'visitor',
+            message: message,
+            time: new Date().toISOString(),
+        };
+
+        const response = await AddMessage({ webId }, data);
+
+        const updatedMessages = await GetMessagesByVisitorId({ webId, visitorId: localStorage.getItem('visitorId') });
+
+        socket.emit('newMessage', { webId, message: [response] });
+
+        setMessages(updatedMessages);
+        setMessage('');
+    };
+
+    // Define headerText based on whether an email is entered
+    const headerText = enteredEmail ? 'Chat' : 'Enter Your Email';
+
+    // Sort messages based on their timestamps and map through them
     return (
-        <>
-                <div
-                    className="chat-window"
-                    style={{
-                        position: 'fixed',
-                        top: 0,
-                        left: 0,
-                        width: '100vw',
-                        height: '100vh',
-                        backgroundColor: '#fff',
-                        border: 'none',
-                        borderRadius: 0,
-                        boxShadow: 'none',
-                        zIndex: 100,
-                    }}
-                >
-                    <div
-                        className="chat-header"
-                        style={{
-                            display: 'flex',
-                            justifyContent: 'space-between',
-                            alignItems: 'center',
-                            padding: '10px',
-                            backgroundColor: '#004a77',
-                            borderBottom: '1px solid #ddd',
-                            borderRadius: '4px 4px 0 0',
-                        }}
-                    >
-                        <h2 style={{ margin: '0', fontSize: '16px', fontWeight: 'bold', color: 'black' }}>
-                            {headerText}
-                        </h2>
-                        {selectedOption ? (
-                            <button
-                                style={{
-                                    backgroundColor: 'transparent',
-                                    border: 'none',
-                                    cursor: 'pointer',
-                                    color: 'black',
-                                    fontSize: '16px',
-                                    fontWeight: 'bold',
-                                    transition: 'color 0.3s ease',
-                                }}
-                                onClick={handleGoBack}
-                            >
-                                <FontAwesomeIcon icon={faArrowLeft} /> Back
-                            </button>
-                        ) : (
-                            <button
-                                style={{
-                                    backgroundColor: 'transparent',
-                                    border: 'none',
-                                    cursor: 'pointer',
-                                    color: 'black',
-                                    fontSize: '16px',
-                                    fontWeight: 'bold',
-                                    transition: 'color 0.3s ease',
-                                }}
-
-                            >
-                                X
-                            </button>
-                        )}
-                    </div>
-                    {!selectedOption && (
-                        <div
-                            className="chat-options"
-                            style={{
-                                position: 'absolute',
-                                top: '50%',
-                                left: '50%',
-                                transform: 'translate(-50%, -50%)',
-                                textAlign: 'center',
-                                display: 'flex',
-                                flexDirection: 'column',
-                                alignItems: 'center',
-                            }}
-                        >
-                            <button
-                                style={{
-                                    backgroundColor: '#004a77',
-                                    border: '1px solid #ddd',
-                                    padding: '10px 20px',
-                                    fontSize: '14px',
-                                    borderRadius: '4px',
-                                    cursor: 'pointer',
-                                    transition: 'background-color 0.3s ease',
-                                    marginBottom: '50px',
-                                    width: '200px',
-
-                                }}
-                                onClick={() => setSelectedOption('faq')}
-                            >
-                                FAQ
-                            </button>
-                            <button
-                                style={{
-                                    backgroundColor: '#004a77',
-                                    border: '1px solid #ddd',
-                                    padding: '10px 20px',
-                                    fontSize: '14px',
-                                    borderRadius: '4px',
-                                    cursor: 'pointer',
-                                    transition: 'background-color 0.3s ease',
-                                    width: '200px',
-                                }}
-                                onClick={() => setSelectedOption('chat')}
-                            >
-                                Chat with admin
-                            </button>
-                        </div>
-                    )}
-                    {selectedOption === 'faq' && <FAQ />}
-                    {selectedOption === 'chat' && <ChatWithAdmin webId={webId} />}
+        <div className="chat-window" style={{ position: 'fixed', top: 0, left: 0, width: '100vw', height: '100vh', backgroundColor: '#fff', border: 'none', borderRadius: 0, boxShadow: 'none', zIndex: 100 }}>
+            <div className="chat-header" style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', padding: '10px', backgroundColor: '#004a77', borderBottom: '1px solid #ddd', borderRadius: '4px 4px 0 0' }}>
+                <h2 style={{ margin: '0', fontSize: '16px', fontWeight: 'bold', color: 'black' }}>{headerText}</h2>
+            </div>
+            {enteredEmail ? (
+                <div style={{ position: 'fixed', bottom: '0', left: '0', right: '0', padding: '10px', display: 'flex', justifyContent: 'space-between', alignItems: 'center', backgroundColor: '#fff', borderTop: '1px solid #ddd', boxShadow: '0 2px 4px rgba(0, 0, 0, 0.1)' }}>
+                    <input value={message} onChange={handleMessageChange} placeholder="Type a message..." style={{ flexGrow: 1, padding: '10px', borderRadius: '4px', border: '1px solid #ddd', marginRight: '10px' }} />
+                    <button style={{ color: '#004a77' }} onClick={sendMessage}>Send</button>
                 </div>
-
-        </>
+            ) : (
+                <div style={{ position: 'fixed', top: '50%', left: '50%', transform: 'translate(-50%, -50%)', textAlign: 'center', display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
+                    <input value={visitorEmail} onChange={handleVisitorEmailChange} placeholder="Enter your email..." style={{ fontSize: '14px', padding: '10px 20px', borderRadius: '4px', border: '1px solid #ddd', marginBottom: '10px', width: '200px' }} />
+                    <button style={{ backgroundColor: '#004a77', border: '1px solid #ddd', padding: '10px 20px', fontSize: '14px', borderRadius: '4px', cursor: 'pointer', transition: 'background-color 0.3s ease', width: '200px' }} onClick={handleVisitorEmailSubmit}>Submit</button>
+                </div>
+            )}
+            <div style={{ height: '650px', overflowY: 'scroll' }}>
+                <div>
+                    {messages.sort((a, b) => new Date(a.time) - new Date(b.time)).map((msg, index) => (
+                        <div key={index} style={{ display: 'flex', flexDirection: msg.sender === 'visitor' ? 'row-reverse' : 'row', alignItems: 'center', justifyContent: 'pace-between', marginTop: '10px' }}>
+                            <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
+                                <div style={{ backgroundColor: msg.sender === 'visitor' ? '#4CAF50' : '#008CBA', color: 'white', padding: '5px 10px', borderRadius: '10px', marginRight: msg.sender === 'visitor' ? '10px' : 0, marginLeft: msg.sender === 'admin' ? '10px' : 0, alignSelf: 'flex-start' }}>
+                                    {msg.message}
+                                </div>
+                                <div style={{ fontSize: '12px', color: '#666', alignSelf: 'flex-start', marginTop: '5px' }}>
+                                    {new Date(msg.time).toLocaleString()}
+                                </div>
+                            </div>
+                        </div>
+                    ))}
+                </div>
+            </div>
+        </div>
     );
-
 };
 
-export default Chat;
+export default ChatWithAdmin;
