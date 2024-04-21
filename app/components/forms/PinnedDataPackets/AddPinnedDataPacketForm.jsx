@@ -13,7 +13,7 @@ const AddPinnedDataPacketForm = ({...props}) => {
     const [saving, setSaving] = React.useState(false);
     const [error, setError] = React.useState({});
     const [name, setName] = React.useState("");
-    const [folder, setFolder] = React.useState("");
+    const [folder, setFolder] = React.useState(props.folder_id);
     const [packetData, setPacketData] = React.useState("");
 
     // backend validation error message
@@ -66,7 +66,8 @@ const AddPinnedDataPacketForm = ({...props}) => {
                         <Input
                             label={"Folder"}
                             type="text" placeholder="Data packet folder"
-                            value={folder}
+                            value={props.folder_id ? props.folder_id : folder}
+                            disabled={props.folder_id}
                             onChange={(e) => setFolder(e.target.value)}
                             status={error.folder ? "error" : ""}
                             error={error.folder}

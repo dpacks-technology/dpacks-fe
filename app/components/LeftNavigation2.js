@@ -60,11 +60,14 @@ const LeftNavigation2 = ({params}) => {
 
     // TODO: Add more components for add form
     const getComponentByPath = (pathname, notificationMessage) => {
+
+        if (fullPathname.split("/")[3] === "packets") {
+            return <AddPinnedDataPacketForm notificationMessage={notificationMessage} folder_id={fullPathname.split("/")[4]} web_id={fullPathname.split("/")[2]} />;
+        }
+
         switch (pathname) {
             case "web/packets":
                 return <AddPinnedDataPacketForm notificationMessage={notificationMessage} web_id={fullPathname.split("/")[2]} />;
-            // case "web/packets":
-            //     return <AddPinnedDataPacketForm notificationMessage={notificationMessage} />;
             case "analytics/alert":
                 return <CreateAlertForm notificationMessage={notificationMessage} />;
             case "api/endpoints":
@@ -111,7 +114,9 @@ const LeftNavigation2 = ({params}) => {
         <>
             {contextHolder}
             <Model modelForm={getComponentByPath(pathname, notificationMessage)} title={
-                pathname === "web/packets" ? "Add Pinned Data Packet" : ""
+                pathname === "web/packets" ? "Add Pinned Data Packet" :
+                    fullPathname.split("/")[3] === "packets" ? "Add Pinned Data Packet" :
+                    ""
             } button={"Add"}
                 isOpen={isOpen} onOpenChange={onOpenChange} />
 
