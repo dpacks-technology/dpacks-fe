@@ -18,11 +18,13 @@ import AddWebpageForm from "@/app/components/forms/webpages/AddWebpageForm";
 import { PContentNavigation } from '../data/PContentNavigation';
 import { AdminDashboardNavigation } from '../data/AdminDashboardNavigation';
 import AddToBlockList from './forms/Visitor/BlockList/AddToBlockList';
+import AddPinnedDataPacketForm from "@/app/components/forms/PinnedDataPackets/AddPinnedDataPacketForm";
 
-const LeftNavigation2 = () => {
+const LeftNavigation2 = ({params}) => {
 
     const { isOpen, onOpen, onOpenChange } = useDisclosure();
     const [subNavigationItems, setSubNavigationItems] = useState([]); // sub navigation items
+    const [formTitle, setFormTitle] = useState(""); // form title
 
     // backend validation error message
     const [messageApi, contextHolder] = message.useMessage(); // message api
@@ -60,7 +62,9 @@ const LeftNavigation2 = () => {
     const getComponentByPath = (pathname, notificationMessage) => {
         switch (pathname) {
             case "web/packets":
-                return <AddWebpageForm notificationMessage={notificationMessage} />;
+                return <AddPinnedDataPacketForm notificationMessage={notificationMessage} web_id={fullPathname.split("/")[2]} />;
+            // case "web/packets":
+            //     return <AddPinnedDataPacketForm notificationMessage={notificationMessage} />;
             case "analytics/alert":
                 return <CreateAlertForm notificationMessage={notificationMessage} />;
             case "api/endpoints":
@@ -81,16 +85,23 @@ const LeftNavigation2 = () => {
     };
 
     useEffect(() => {
-        if (fullPathname.split("/")[1] == "u") {
+        if (fullPathname.split("/")[1] === "u") {
             const navigationItem = UserDashboardNavigation.find(item => item.url.split('/')[1] === mainPath);
+
+            if (mainPath === "packets")
+                setSubNavigationItems(UserDashboardNavigation.find(item => item.url.split('/')[1] === "web").children);
+
+            navigationItem &&
             navigationItem.children && setSubNavigationItems(navigationItem.children);
         }
-        else if (fullPathname.split("/")[1] == "pros") {
+        else if (fullPathname.split("/")[1] === "pros") {
             const navigationItem = PContentNavigation.find(item => item.url.split('/')[1] === fullPathname.split("/")[1]);
+            navigationItem &&
             navigationItem.children && setSubNavigationItems(navigationItem.children);
         }
-        else if(fullPathname.split("/")[1] == "admin") {
+        else if(fullPathname.split("/")[1] === "admin") {
             const navigationItem = AdminDashboardNavigation.find(item => item.url.split('/')[1] === fullPathname.split("/")[1]);
+            navigationItem &&
             navigationItem.children && setSubNavigationItems(navigationItem.children);
         }
     }, [mainPath]);
@@ -99,7 +110,9 @@ const LeftNavigation2 = () => {
     return (
         <>
             {contextHolder}
-            <Model modelForm={getComponentByPath(pathname, notificationMessage)} title={"Add webpage"} button={"Add"}
+            <Model modelForm={getComponentByPath(pathname, notificationMessage)} title={
+                pathname === "web/packets" ? "Add Pinned Data Packet" : ""
+            } button={"Add"}
                 isOpen={isOpen} onOpenChange={onOpenChange} />
 
             <nav className="w-48 h-full fixed top-0 left-16">
