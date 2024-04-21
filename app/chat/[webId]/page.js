@@ -2,11 +2,13 @@
 import React, { useEffect, useState } from 'react';
 import { useParams } from 'next/navigation';
 import { AddMessage, GetMessagesByVisitorId } from '@/services/MessageService';
-import io from 'socket.io-client';
+
 import Keys from '@/Keys';
-const socket = io(Keys.MESSAGE_SERVICE_API_URL);
+import useSocket from "socket.io-client";
+
 
 const ChatWithAdmin = () => {
+    const socket = useSocket(Keys.MESSAGE_SERVICE_API_URL)
     const [visitorEmail, setVisitorEmail] = useState('');
     const [enteredEmail, setEnteredEmail] = useState(false);
     const [message, setMessage] = useState('');
@@ -44,8 +46,8 @@ const ChatWithAdmin = () => {
 
     useEffect(() => {
         const handleNewMessage = (newMessage) => {
-            // Replace the existing messages with the new messages
-            setMessages(newMessage.messages);
+            // Merge the new message with the existing messages
+            setMessages((prevMessages) => [...prevMessages, ...newMessage.messages]);
         };
 
         socket.on('newMessage', handleNewMessage);
@@ -53,7 +55,7 @@ const ChatWithAdmin = () => {
         return () => {
             socket.off('newMessage', handleNewMessage);
         };
-    }, [socket]);
+    }, []);
 
     useEffect(() => {
         socket.on('dataUpdate', (data) => {
@@ -64,7 +66,7 @@ const ChatWithAdmin = () => {
         return () => {
             socket.off('dataUpdate');
         };
-    }, [socket, visitorId]);
+    }, [visitorId]);
 
     useEffect(() => {
         if (webId) {
@@ -104,15 +106,22 @@ const ChatWithAdmin = () => {
             time: new Date().toISOString(),
         };
 
+        // Emit the new message to the client immediately
+        socket.emit('newMessage', { webId, message: [data] });
+
+        // Add the new message to Firestore
         const response = await AddMessage({ webId }, data);
 
+        // Get the updated list of messages from Firestore
         const updatedMessages = await GetMessagesByVisitorId({ webId, visitorId: localStorage.getItem('visitorId') });
 
-        socket.emit('newMessage', { webId, message: [response] });
+        // Emit the updated list of messages to the client
+        socket.emit('dataUpdate', { webId, messages: updatedMessages });
 
         setMessages(updatedMessages);
         setMessage('');
     };
+
 
     // Define headerText based on whether an email is entered
     const headerText = enteredEmail ? 'Chat' : 'Enter Your Email';

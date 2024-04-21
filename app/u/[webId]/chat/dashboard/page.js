@@ -4,10 +4,13 @@ import ChatList from "./ChatList";
 import ChatMessageHistory from "./ChatMessageHistory";
 import {GetMessagesByWebId, GetMessagesByVisitorId, GetLastMessage} from "/services/MessageService";
 import { useParams } from "next/navigation";
-import io from 'socket.io-client'
+import useSocket from "socket.io-client"; // Import Socket.IO client
 import Keys from '@/Keys'
-const socket = io(Keys.MESSAGE_SERVICE_API_URL)
+
+ // Replace with your server URL
+
 const Dashboard = () => {
+    const socket = useSocket(Keys.MESSAGE_SERVICE_API_URL)
     const { webId } = useParams();
     const [chats, setChats] = useState([]);
     const [selectedChat, setSelectedChat] = useState(null);
@@ -33,26 +36,8 @@ const Dashboard = () => {
 
         socket.on('newMessage', handleNewMessage);
 
-        socket.on('dataUpdateByVisitorId', (data) => {
-            if (data.webId === webId) {
-                setChats((prevChats) => {
-                    const updatedChats = [...prevChats];
-                    const chatIndex = updatedChats.findIndex((chat) => chat.visitorId === data.visitorId);
-
-                    if (chatIndex !== -1) {
-                        updatedChats[chatIndex].lastMessage = data.message;
-                    } else {
-                        updatedChats.push({ visitorId: data.visitorId, lastMessage: data.message });
-                    }
-
-                    return updatedChats;
-                });
-            }
-        });
-
         return () => {
             socket.off('newMessage', handleNewMessage);
-            socket.off('dataUpdateByVisitorId');
         };
     }, [webId, socket]);
 
@@ -83,7 +68,7 @@ const Dashboard = () => {
         }
     };
 
-            // Fetch the initial real-time data
+    // Fetch the initial real-time data
 
 
 

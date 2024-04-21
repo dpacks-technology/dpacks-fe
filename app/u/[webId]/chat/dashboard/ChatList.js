@@ -1,9 +1,9 @@
-
 import React, { useEffect, useState } from "react";
 import styled from "@emotion/styled";
 
 import { GetLastMessage } from "@/services/MessageService";
-import useSocket from 'socket.io-client'; // Import useSocket hook
+import useSocket from 'socket.io-client'
+import Keys from '@/Keys'
 
 const VisitorName = ({ visitorName }) => (
     <div fontWeight="bold" mr={10}>
@@ -30,59 +30,42 @@ const ChatListItem = styled.div`
 
 const ChatList = ({ chats, onChatClick, webId, onSearch }) => {
     const [lastMessages, setLastMessages] = useState({});
-    const [sortedChats, setSortedChats] = useState([]);
-    const socket = useSocket("http://localhost:4006"); // Replace with your server URL
+    const socket = useSocket(Keys.MESSAGE_SERVICE_API_URL)// Replace with your server URL
 
+    // Fetch last messages on component mount and listen for updates
     useEffect(() => {
         const fetchLastMessages = async () => {
             const lastMessagesData = {};
             for (const chat of chats) {
                 try {
-                    const lastMessage = await GetLastMessage(webId, chat.visitorId);
-                    lastMessagesData[chat.visitorId] = lastMessage;
+                    lastMessagesData[chat.visitorId] = await GetLastMessage(webId, chat.visitorId);
                 } catch (error) {
                     console.error(`Error fetching last message for visitor ${chat.visitorId}:`, error);
                 }
             }
             setLastMessages(lastMessagesData);
-            // Sort chats based on last message timestamps
-            const sortedChats = chats.sort((a, b) => {
-                const aLastMessage = lastMessagesData[a.visitorId];
-                const bLastMessage = lastMessagesData[b.visitorId];
-                return bLastMessage.time - aLastMessage.time;
-            });
-            setSortedChats(sortedChats);
         };
 
         fetchLastMessages();
 
         // Listen for 'dataUpdate' event from Socket.IO server
-        socket.on('dataUpdate', (data) => {
-            if (data.webId === webId) {
-                setLastMessages((prevLastMessages) => ({
-                    ...prevLastMessages,
-                    [data.messages[0].visitorId]: data.messages[0], // Update last message for specific visitor
-                }));
-                // Re-sort chats when new message arrives
-                const sortedChats = chats.sort((a, b) => {
-                    const aLastMessage = lastMessagesData[a.visitorId];
-                    const bLastMessage = lastMessagesData[b.visitorId];
-                    return bLastMessage.time - aLastMessage.time;
-                });
-                setSortedChats(sortedChats);
-            }
-        });
 
-        // Cleanup on unmount
-        return () => {
-            socket.off('dataUpdate');
-        };
     }, [chats, webId, socket]);
+    socket.on('dataUpdate', (data) => {
+        if (data.webId === webId) {
+            setLastMessages((prevLastMessages) => ({
+                ...prevLastMessages,
+                [data.messages[0].visitorId]: data.messages[0], // Update last message for specific visitor
+            }));
+        }
+    });
 
+
+    // Cleanup on unmount
     return (
         <div>
 
-            {sortedChats.map((chat) => (
+            {chats.map((chat) => (
                 <ChatListItem
                     key={chat.visitorId} // Added unique key for each list item
                     id={chat.visitorId}

@@ -1,11 +1,12 @@
 import React, { useState, useEffect } from "react";
 import { useParams } from "next/navigation";
 import { AddMessage, GetMessagesByVisitorId } from "@/services/MessageService";
-import io from 'socket.io-client'
+import useSocket from 'socket.io-client'
 import Keys from '@/Keys'
-const socket = io(Keys.MESSAGE_SERVICE_API_URL)
+
 
 const ChatMessageHistory = ({content, visitorId }) => {
+    const socket = useSocket(Keys.MESSAGE_SERVICE_API_URL)
     const [message, setMessage] = useState('')
     const [messages, setMessages] = useState([])
     const { webId } = useParams()
