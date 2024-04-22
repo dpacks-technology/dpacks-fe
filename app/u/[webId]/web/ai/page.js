@@ -73,7 +73,7 @@ export default function Webpages({params}) {
         {name: "UPDATED", uid: "last_updated", sortable: false, type: "datetime"},
         {name: "SIZE (BYTES)", uid: "size", sortable: false, type: "text"},
         {name: "ELEMENTS COUNT", uid: "elements_count", sortable: false, type: "text"},
-        {name: "", uid: "buttons", sortable: false, type: "buttons"},
+        {name: " ", uid: "buttons", sortable: false, type: "buttons"},
         // {name: "ACTIONS", uid: "menu", sortable: false, type: "menu"},
         // all usable types: text, twoText, datetime, label, status, statusButtons, buttons, menu, copy, icon, iconText, iconTwoText
     ];
@@ -171,6 +171,36 @@ export default function Webpages({params}) {
 
     // status options // TODO: Change the following options
     const statusOptions = [
+        {
+            name: "Offline", // status name
+            uid: 0, // status id (the value in the database)
+            type: "", // status type (color) ["", primary, secondary, danger, warning, success]
+            button: true, // if you want to show a button to change the status
+            currentStatus: [1], // button showing status, ex: if currently status is 1, then the button will be shown | can use [1,2,...] for multiple statuses
+            function: updateStatusButton, // function to change the status
+
+            // icon
+            icon: <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5}
+                       stroke="currentColor" className="w-5 h-5">
+                <path strokeLinecap="round" strokeLinejoin="round"
+                      d="m9.75 9.75 4.5 4.5m0-4.5-4.5 4.5M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z"/>
+            </svg>
+        },
+        {
+            name: "Active", // status name
+            uid: 1, // status id (the value in the database)
+            type: "primary", // status type (color) [danger, warning, success, primary]
+            button: true, // if you want to show a button to change the status
+            currentStatus: [0], // button showing status, ex: if currently status is 1, then the button will be shown | can use [1,2,...] for multiple statuses
+            function: updateStatusButton, // function to change the status
+
+            // icon
+            icon: <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5}
+                       stroke="currentColor" className="w-5 h-5">
+                <path strokeLinecap="round" strokeLinejoin="round"
+                      d="M9 12.75 11.25 15 15 9.75M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z"/>
+            </svg>
+        }
 
         // ...add more status options (if needed)
 
@@ -233,12 +263,12 @@ export default function Webpages({params}) {
             headerMessage(type, message);
 
         // fetch data count from API // TODO: Change the following function
-        getWebPagesCount(searchColumn, searchFieldValue, params.webId).then((response) => setPagesCount(response));
+        // getWebPagesCount(searchColumn, searchFieldValue, params.webId).then((response) => setPagesCount(response));
 
         // fetch data from API // TODO: Change the following function
-        getWebPages(rowsPerPage, currentPage, searchColumn, searchFieldValue, params.webId)
-            .then(response => setData(response === null ? [] : response.length === 0 ? [] : response))
-            .catch(error => console.error(error));
+        // getWebPages(rowsPerPage, currentPage, searchColumn, searchFieldValue, params.webId)
+        //     .then(response => setData(response === null ? [] : response.length === 0 ? [] : response))
+        //     .catch(error => console.error(error));
 
     }
 
@@ -246,12 +276,12 @@ export default function Webpages({params}) {
     const fetchTableData = (useCallback((page, key, val) => {
 
         // fetch data count from API // TODO: Change the following function
-        getWebPagesCount(key, val, params.webId).then((response) => setPagesCount(response));
+        // getWebPagesCount(key, val, params.webId).then((response) => setPagesCount(response));
 
         // fetch data from API // TODO: Change the following function
-        getWebPages(rowsPerPage, page, key, val, params.webId)
-            .then(response => setData(response === null ? [] : response.length === 0 ? [] : response))
-            .catch(error => console.error(error));
+        // getWebPages(rowsPerPage, page, key, val, params.webId)
+        //     .then(response => setData(response === null ? [] : response.length === 0 ? [] : response))
+        //     .catch(error => console.error(error));
 
     }, [rowsPerPage]));
 

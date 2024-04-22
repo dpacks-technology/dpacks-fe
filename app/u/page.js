@@ -147,7 +147,7 @@ export default function Dashboard() {
 
                         {sites && sites.length > 0 && sites.map((site, index) => (
                             <div key={index} className={"project-tab p-4 rounded-3xl w-full"}>
-                                <Link href={`/u/${site.id}/web/webpages`} className={"h-30"}>
+                                <Link href={`/u/${site.id}/web/packets`} className={"h-30"}>
                                     <div className={"pl-3 pt-2 pr-3"}>
 
                                         <h1 className={"text-md"}>{site.name}</h1>

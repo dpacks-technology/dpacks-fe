@@ -23,6 +23,7 @@ export const getWebPages = async (count, page, key, val) => {
 export const getWebPagesCount = async (key, val) => {
     try {
         const response = await webpagesService.get(`/api/web/webpages/count?key=${key}&val=${val}`);
+        console.log(response.data)
         return response.data;
     } catch (error) {
         throw error;
