@@ -37,6 +37,7 @@ const EditWebpageForm = ({...props}) => {
 
             // edit webpage // TODO: change the function
             await editPages(props.id, data).then(() => {
+                Message("error", "test")
                 props.refreshData("success", "Saved"); // refresh data with success message
                 props.onClose(); // close modal
             }).then((error) => {
