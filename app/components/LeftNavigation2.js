@@ -102,8 +102,8 @@ const LeftNavigation2 = ({params}) => {
             navigationItem &&
             navigationItem.children && setSubNavigationItems(navigationItem.children);
         }
-        else if(fullPathname.split("/")[1] === "admin") {
-            const navigationItem = AdminDashboardNavigation.find(item => item.url.split('/')[1] === fullPathname.split("/")[1]);
+        else if(fullPathname.split("/")[1] == "admin") {
+            const navigationItem = AdminDashboardNavigation.find(item => item.url.split('/')[1] === mainPath);
             navigationItem &&
             navigationItem.children && setSubNavigationItems(navigationItem.children);
         }
