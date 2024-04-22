@@ -2,6 +2,12 @@
 // Importing modules
 import Table from "@/app/components/Table";
 import React, {useCallback, useEffect} from "react";
+
+import {
+    getWebPages,
+    getWebPagesCount,
+} from "@/services/DataPacketsService";
+
 import {
     deletePage,
     deleteWebpagesBulk,
@@ -9,11 +15,10 @@ import {
     getPagesByDatetimeCount,
     getPagesByStatus,
     getPagesByStatusCount,
-    getWebPages,
-    getWebPagesCount,
     updateWebpagesStatus,
     updateWebpagesStatusBulk
-} from "@/services/DataPacketsService";
+} from "@/services/WebpagesService";
+
 import {useDisclosure} from "@nextui-org/react";
 import EditWebpageForm from "@/app/components/forms/webpages/EditWebpageForm";
 import {message} from "antd";

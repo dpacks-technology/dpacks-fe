@@ -88,7 +88,7 @@ export default function LoginPage() {
     }, []);
 
     // loading screen
-    if (localStorage.getItem('token')) {
+    if (typeof window !== 'undefined' && window.localStorage.getItem('token')) {
         return <LoadingScreen/>
     } else {
         return (
