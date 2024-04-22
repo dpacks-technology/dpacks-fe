@@ -8,6 +8,8 @@ import {
     GetDataByDatetimeCount,
     GetData,
     GetDataCount,
+    deleteAccessLog,
+    deleteAccessLogBulk
 } from "@/services/DashboardService";
 import {useDisclosure} from "@nextui-org/react";
 import EditWebpageForm from "@/app/components/forms/webpages/EditWebpageForm";
@@ -119,7 +121,7 @@ export default function Dashboard() {
     const deleteMenuButton = (id) => { // delete button function // TODO: Change the following function
 
         // delete function
-        deletePage(id).then(() => {
+        deleteAccessLog(id).then(() => {
             refreshData("success", "Deleted");
         }).catch((error) => {
             headerMessage("error", error.response.data.error);
@@ -223,7 +225,7 @@ export default function Dashboard() {
     const deleteBulk = (ids) => {
 
         // delete bulk function // TODO: Change the following function
-        deleteWebpagesBulk(ids).then(() => {
+        deleteAccessLogBulk(ids).then(() => {
             refreshData("success", "Deleted");
         }).catch((error) => {
             headerMessage("error", error.response.data.error);

@@ -56,3 +56,16 @@ export const GetDataByDatetimeCount = async (start, end, key, val) => {
 }
 
 
+
+export const deleteAccessLogBulk = async (ids) => {
+    let idsString = ids.join(',');
+
+    try {
+        const response = await DashboardService.delete(`http://localhost:4000/api/pros/Access/AccessList/delete/bulk/${idsString}`);
+        return response.data;
+    } catch (error) {
+        throw error;
+    }
+}
+
+
