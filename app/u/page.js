@@ -4,11 +4,11 @@ import Link from "next/link";
 import React, {useEffect, useState} from "react";
 import {DeleteSiteService, GetSitesService} from "@/services/SitesService";
 import {Button, useDisclosure} from "@nextui-org/react";
+import {message} from "antd";
 import {useRouter} from "next/navigation";
 import DashboardNav from "@/app/components/DashboardNav";
 import DashboardFooter from "@/app/layouts/DashboardFooter";
 import Model from "@/app/components/Model";
-import AddRatingsForm from "@/app/components/forms/marketplace/AddRatings";
 import AddWebProjectForm from "@/app/components/forms/project/AddWebProjectForm";
 import EditWebProjectForm from "@/app/components/forms/project/EditWebProjectForm";
 
@@ -19,6 +19,15 @@ export default function Dashboard() {
     const [open, setOpen] = useState(false);
     const {isOpen, onOpen, onOpenChange} = useDisclosure();
     const router = useRouter();
+
+    // backend validation error message
+    const [messageApi, contextHolder] = message.useMessage(); // message api
+    const Message = (type, message) => { // message function
+        messageApi.open({
+            type: type,
+            content: message,
+        });
+    };
 
     const handleOpenAddProject = async () => {
         await setWebId("");
@@ -33,10 +42,14 @@ export default function Dashboard() {
     const DeleteSite = (id) => {
         // delete site
         DeleteSiteService(id).then(async () => {
+            await Message("success", "Web project deleted");
+
             // get sites from getSitesService
             await GetSitesService().then((response) => {
                 setSites(response);
             });
+        }).catch((error) => {
+            Message("error", "Error deleting web project");
         });
     }
 
@@ -47,13 +60,24 @@ export default function Dashboard() {
         });
     }, []);
 
+    async function handleInstallationCopyScript(id) {
+        await navigator.clipboard.writeText(`
+            <!-- DPacks Header -->
+            <script>const dpacks_key = "${id}";</script>
+            <script src="https://cdn.jsdelivr.net/npm/jquery@3.6.0/dist/jquery.min.js"></script>
+            <script src="https://cdn.jsdelivr.net/npm/axios@0.27.2/dist/axios.min.js"></script>
+            <script async id="dpacks_script" src="https://cdn.jsdelivr.net/gh/dpacks-technology/dpacks-connector-js/0.2-alpha.js"></script>
+            <!-- DPacks Header -->`);
+    }
+
     return (
         <>
+            {contextHolder}
             <DashboardNav/>
 
             <Model modelForm={
                 webId === "" ?
-                <AddWebProjectForm/> : <EditWebProjectForm webId={webId}/>
+                    <AddWebProjectForm/> : <EditWebProjectForm webId={webId}/>
             } title={webId === "" ? "Add Web Project" : "Edit Web Page"} isOpen={isOpen} onOpenChange={onOpenChange}/>
 
             <div className={"pr-48 pl-48 pt-36 pb-20"}>
@@ -123,20 +147,22 @@ export default function Dashboard() {
                     <div className={"grid grid-cols-3 gap-4 pb-6"}>
 
                         {/*<Link href={"/u/add"}>*/}
-                            <div className={"h-32 add-project-tab p-4 rounded-3xl grid justify-center con-mid cursor-pointer"} onClick={handleOpenAddProject}>
-                                <div className="grid grid-cols-2 w-full">
-                                    <div className={"con-mid"}>
-                                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
-                                             strokeWidth={1.5} stroke="currentColor" className="w-6 h-6">
-                                            <path strokeLinecap="round" strokeLinejoin="round"
-                                                  d="M12 4.5v15m7.5-7.5h-15"/>
-                                        </svg>
-                                    </div>
-                                    <div className={"con-mid w-3/4"}>
-                                        Add Project
-                                    </div>
+                        <div
+                            className={"h-32 add-project-tab p-4 rounded-3xl grid justify-center con-mid cursor-pointer"}
+                            onClick={handleOpenAddProject}>
+                            <div className="grid grid-cols-2 w-full">
+                                <div className={"con-mid"}>
+                                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
+                                         strokeWidth={1.5} stroke="currentColor" className="w-6 h-6">
+                                        <path strokeLinecap="round" strokeLinejoin="round"
+                                              d="M12 4.5v15m7.5-7.5h-15"/>
+                                    </svg>
+                                </div>
+                                <div className={"con-mid w-3/4"}>
+                                    Add Project
                                 </div>
                             </div>
+                        </div>
                         {/*</Link>*/}
 
                         {/*<Link href={"/u/add"}>*/}
@@ -174,7 +200,9 @@ export default function Dashboard() {
                                                 }
                                                 onClick={() => {
                                                     // copy script
-                                                    navigator.clipboard.writeText("test");
+                                                    handleInstallationCopyScript(site.id).then(() => {
+                                                        Message("success", "Script copied, Paste inside `head` tags at your webpages");
+                                                    });
                                                 }}>
                                                 Copy Script
                                             </Button>
