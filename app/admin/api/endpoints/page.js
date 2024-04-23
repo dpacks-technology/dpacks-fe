@@ -42,6 +42,20 @@ export default function Webpages() {
     const {isOpen, onOpen, onOpenChange} = useDisclosure();
     const [searchColumn, setSearchColumn] = React.useState(sortColumn.column); // default search column
 
+    const components = {
+        status: true, // status component
+        columns: true, // columns component
+        refresh: true, // refresh component
+        bulk_actions: true, // bulk actions component
+        all: true, // all components
+        today: true, // today component
+        yesterday: true, // yesterday component
+        search: true, // search component
+        date_range: true, // date range component
+        export: true, // export component
+    }
+
+
     // ----------------------- COLUMNS -------------------------
     // columns // TODO: Change the following columns according the to yours
     const columns = [
@@ -378,6 +392,9 @@ export default function Webpages() {
                 dataCount={pagesCount}
                 rowsPerPage={rowsPerPage}
                 changeRowsPerPage={changeRowsPerPage}
+
+                // components
+                components={components}
 
             />
         </>
