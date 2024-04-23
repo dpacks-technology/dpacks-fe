@@ -107,7 +107,7 @@ export default function Dashboard() {
                             </div>
                         </div>
                     </Link>
-                    <Link href={`/admin/users/manage-admin`}>
+                    <Link href={`/u/api`}>
                         <div className={"dashboard-tab-2 p-4 rounded-3xl grid justify-center h-24 con-mid"}>
                             <div className="grid grid-cols-2 w-full">
                                 <div className={"con-mid w-1/2"}>
