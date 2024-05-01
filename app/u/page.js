@@ -11,6 +11,7 @@ import DashboardFooter from "@/app/layouts/DashboardFooter";
 import Model from "@/app/components/Model";
 import AddWebProjectForm from "@/app/components/forms/project/AddWebProjectForm";
 import EditWebProjectForm from "@/app/components/forms/project/EditWebProjectForm";
+import Keys from "@/Keys";
 
 export default function Dashboard() {
 
@@ -66,7 +67,7 @@ export default function Dashboard() {
             <script>const dpacks_key = "${id}";</script>
             <script src="https://cdn.jsdelivr.net/npm/jquery@3.6.0/dist/jquery.min.js"></script>
             <script src="https://cdn.jsdelivr.net/npm/axios@0.27.2/dist/axios.min.js"></script>
-            <script async id="dpacks_script" src="https://cdn.jsdelivr.net/gh/dpacks-technology/dpacks-connector-js/0.2-alpha.js"></script>
+            <script async id="dpacks_script" src="${Keys.CONNECTOR_URL}"></script>
             <!-- DPacks Header -->`);
     }
 
@@ -208,6 +209,22 @@ export default function Dashboard() {
                                             </Button>
                                         </div>
                                         <div>
+                                            <Button
+                                                isIconOnly
+                                                className={"z-40"}
+                                                size="sm"
+                                                color="" variant="light"
+                                                startContent={
+                                                    <svg xmlns="http://www.w3.org/2000/svg" fill="none"
+                                                         viewBox="0 0 24 24"
+                                                         strokeWidth={1.2} stroke="currentColor" className="w-5 h-5">
+                                                            <path strokeLinecap="round" strokeLinejoin="round" d="M13.19 8.688a4.5 4.5 0 0 1 1.242 7.244l-4.5 4.5a4.5 4.5 0 0 1-6.364-6.364l1.757-1.757m13.35-.622 1.757-1.757a4.5 4.5 0 0 0-6.364-6.364l-4.5 4.5a4.5 4.5 0 0 0 1.242 7.244" />
+                                                    </svg>
+                                                }
+                                                onClick={() => {
+                                                    let packet_url = `https://${site.domain}`;
+                                                    window.open(packet_url, '_blank').focus();
+                                                }}/>
                                             <Button
                                                 isIconOnly
                                                 className={"z-40"}
