@@ -68,7 +68,7 @@ const LeftNavigation2 = ({params}) => {
         switch (pathname) {
             case "web/packets":
                 return <AddPinnedDataPacketForm notificationMessage={notificationMessage} web_id={fullPathname.split("/")[2]} />;
-            case "analytics/alert":
+            case "Analytics/alert":
                 return <CreateAlertForm notificationMessage={notificationMessage} />;
             case "api/endpoints":
                 return <AddRatelimitForm notificationMessage={notificationMessage} />;

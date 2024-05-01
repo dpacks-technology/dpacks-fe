@@ -8,6 +8,8 @@ import {
     GetDataByDatetimeCount,
     GetData,
     GetDataCount,
+    deleteAccessLog,
+    deleteAccessLogBulk
 } from "@/services/DashboardService";
 import {useDisclosure} from "@nextui-org/react";
 import EditWebpageForm from "@/app/components/forms/webpages/EditWebpageForm";
@@ -46,6 +48,21 @@ export default function Dashboard() {
     const [pagesCount, setPagesCount] = React.useState(0);
     const {isOpen, onOpen, onOpenChange} = useDisclosure();
     const [searchColumn, setSearchColumn] = React.useState(sortColumn.column); // default search column
+
+    // ----------------------- COMPONENTS -------------------------
+    // components // TODO: Change the following components
+    const components = {
+        status: false, // status component
+        columns: true, // columns component
+        refresh: true, // refresh component
+        bulk_actions: true, // bulk actions component
+        all: false, // all components
+        today: false, // today component
+        yesterday: false, // yesterday component
+        search: true, // search component
+        date_range: false, // date range component
+        export: true, // export component
+    }
 
     // ----------------------- COLUMNS -------------------------
     // columns // TODO: Change the following columns according the to yours
@@ -119,7 +136,7 @@ export default function Dashboard() {
     const deleteMenuButton = (id) => { // delete button function // TODO: Change the following function
 
         // delete function
-        deletePage(id).then(() => {
+        deleteAccessLog(id).then(() => {
             refreshData("success", "Deleted");
         }).catch((error) => {
             headerMessage("error", error.response.data.error);
@@ -223,7 +240,7 @@ export default function Dashboard() {
     const deleteBulk = (ids) => {
 
         // delete bulk function // TODO: Change the following function
-        deleteWebpagesBulk(ids).then(() => {
+        deleteAccessLogBulk(ids).then(() => {
             refreshData("success", "Deleted");
         }).catch((error) => {
             headerMessage("error", error.response.data.error);
@@ -379,6 +396,8 @@ export default function Dashboard() {
                 handleUpdateStatusBulk={handleUpdateStatusBulk}
                 handleDeleteBulk={handleDeleteBulk}
 
+                // components
+                components={components}
                 // pagination
                 setPage={setPage}
                 currentPage={currentPage}
