@@ -160,3 +160,11 @@ export const addAutoRespond = async (data,webId) => {
         throw error;
     }
 }
+export const GetAutoRespondsByWebID = async ( webId) => {
+    try {
+        const response = await webpagesService.get(`/api/chat/auto_respond/get/${webId}`);
+        return response.data;
+    } catch (error) {
+        throw error;
+    }
+};

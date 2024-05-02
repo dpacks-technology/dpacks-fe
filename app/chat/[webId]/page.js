@@ -1,21 +1,24 @@
 'use client';
-import React, { useEffect, useState } from 'react';
-import { useParams } from 'next/navigation';
-import { AddMessage, GetMessagesByVisitorId } from '@/services/MessageService';
+import React, {useEffect, useState} from 'react';
+import {useParams} from 'next/navigation';
+import {AddMessage, GetMessagesByVisitorId} from '@/services/MessageService';
 
 import Keys from '@/Keys';
-import useSocket from "socket.io-client";
 
+import useSocket from "socket.io-client";
+import {debounce} from 'lodash'; // Import debounce from lodash
 
 const ChatWithAdmin = () => {
-    const socket = useSocket(Keys.MESSAGE_SERVICE_API_URL)
+
     const [visitorEmail, setVisitorEmail] = useState('');
     const [enteredEmail, setEnteredEmail] = useState(false);
     const [message, setMessage] = useState('');
     const [messages, setMessages] = useState([]);
     const [validEmail, setValidEmail] = useState(false); // State to track email validity
-    const visitorId = localStorage.getItem('visitorId');
     const { webId } = useParams();
+    const socket = useSocket(Keys.MESSAGE_SERVICE_API_URL);
+
+
 
     const validateEmail = (email) => {
         // Regular expression for email validation
@@ -33,17 +36,29 @@ const ChatWithAdmin = () => {
         validateEmail(event.target.value);
     };
 
+    useEffect(() => {
+        const timer = setTimeout(() => {
+            const fetchMessages = async () => {
+                const lastMessages = await GetMessagesByVisitorId({ webId, visitorId: localStorage.getItem('visitorId') });
+                setMessages(lastMessages);
+            };
+            fetchMessages(); // Fetch messages after delay
+        }, 10000); // Adjust delay time as needed
+
+        // Clear the timer on component unmount
+        return () => clearTimeout(timer);
+
+    }, [webId, socket]); //
+
+
     const handleVisitorEmailSubmit = async () => {
         if (validateEmail(visitorEmail)) {
             // If email is valid, proceed
             const visitorId = generateVisitorId();
             localStorage.setItem('visitorId', visitorId.toString());
-
-            const messages = await GetMessagesByVisitorId({ webId, visitorId });
-            socket.emit('dataUpdate', { messages });
-
-            setMessages(messages);
             setEnteredEmail(true);
+
+
         } else {
             // Display error message under email input field
             setEmailError('Please enter a valid email address.');
@@ -51,42 +66,6 @@ const ChatWithAdmin = () => {
     };
 
     const [emailError, setEmailError] = useState('');
-
-    useEffect(() => {
-        const handleNewMessage = (newMessage) => {
-            // Merge the new message with the existing messages
-            setMessages((prevMessages) => [...prevMessages, ...newMessage.messages]);
-        };
-
-        socket.on('newMessage', handleNewMessage);
-
-        return () => {
-            socket.off('newMessage', handleNewMessage);
-        };
-    }, [socket]);
-
-
-    useEffect(() => {
-        socket.on('dataUpdate', (data) => {
-            // Always update messages regardless of webId
-            setMessages(data.messages);
-        });
-
-        return () => {
-            socket.off('dataUpdate');
-        };
-    }, [visitorId]);
-
-    useEffect(() => {
-        if (webId) {
-            socket.emit('fetchMessages', webId);
-        }
-
-        const storedVisitorId = localStorage.getItem('visitorId');
-        if (storedVisitorId) {
-            handleVisitorEmailSubmit();
-        }
-    }, [webId]);
 
     useEffect(() => {
         const handleTabClose = () => {
@@ -106,6 +85,8 @@ const ChatWithAdmin = () => {
         setMessage(event.target.value);
     };
 
+
+
     const sendMessage = async () => {
         const data = {
             visitorId: localStorage.getItem('visitorId'),
@@ -115,17 +96,11 @@ const ChatWithAdmin = () => {
             time: new Date().toISOString(),
         };
 
-        // Emit the new message to the client immediately
-        socket.emit('newMessage', { webId, message: [data] });
-
         // Add the new message to Firestore
         const response = await AddMessage({ webId }, data);
 
         // Get the updated list of messages from Firestore
         const updatedMessages = await GetMessagesByVisitorId({ webId, visitorId: localStorage.getItem('visitorId') });
-
-        // Emit the updated list of messages to the client
-        socket.emit('dataUpdate', { webId, messages: updatedMessages });
 
         setMessages(updatedMessages);
         setMessage('');
@@ -134,6 +109,7 @@ const ChatWithAdmin = () => {
 
     // Define headerText based on whether an email is entered
     const headerText = enteredEmail ? 'Chat' : 'Enter Your Email';
+
 
     // Sort messages based on their timestamps and map through them
     return (

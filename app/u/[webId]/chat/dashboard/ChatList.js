@@ -34,6 +34,7 @@ const ChatList = ({ chats, onChatClick, webId }) => {
 
     // Fetch last messages on component mount and listen for updates
     useEffect(() => {
+        const timer = setTimeout(() => {
         const fetchLastMessages = async () => {
             const lastMessagesData = {};
             for (const chat of chats) {
@@ -48,18 +49,15 @@ const ChatList = ({ chats, onChatClick, webId }) => {
         };
 
         fetchLastMessages();
+        }, 10000); // Adjust delay time as needed
+
+        // Clear the timer on component unmount
+        return () => clearTimeout(timer);
 
         // Listen for 'dataUpdate' event from Socket.IO server
 
-    }, [chats, webId, socket]);
-    socket.on('dataUpdate', (data) => {
-        if (data.webId === webId) {
-            setLastMessages((prevLastMessages) => ({
-                ...prevLastMessages,
-                [data.messages[0].visitorId]: data.messages[0], // Update last message for specific visitor
-            }));
-        }
-    });
+    }, [chats, webId,socket]);
+
 
 
 

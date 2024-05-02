@@ -1,59 +1,54 @@
+
 import React, { useState, useEffect } from "react";
 import { useParams } from "next/navigation";
 import { AddMessage, GetMessagesByVisitorId } from "@/services/MessageService";
 import useSocket from 'socket.io-client'
 import Keys from '@/Keys'
+import AutoRespondsList from "@/app/u/[webId]/chat/new/page";
 
 
 const ChatMessageHistory = ({content, visitorId }) => {
     const socket = useSocket(Keys.MESSAGE_SERVICE_API_URL)
     const [message, setMessage] = useState('')
-    const [messages, setMessages] = useState([])
+    const [messages, setMessages] = useState([content])
+    const [isAutoRespondsOpen, setIsAutoRespondsOpen] = useState(false)
     const { webId } = useParams()
 
 
-    useEffect(() => {
-        socket.on('newMessage', (newMessage) => {
-            // Always update messages regardless of webId
-            setMessages((prevMessages) => [...prevMessages, newMessage]);
-            console.log(newMessage);
-        });
 
-        socket.on('dataUpdate', (data) => {
-            // Always update messages regardless of webId
-            setMessages(data.messages);
-        });
-
-        socket.on('dataUpdateByVisitorId', (data) => {
-            // Always update messages regardless of webId
-            if (data.visitorId === visitorId) {
-                setMessages(data.messages);
-                console.log(data.messages);
-            }
-        });
-        return () => {
-            // Clean up the event listeners on component unmount
-            socket.off('newMessage');
-            socket.off('dataUpdate');
-            socket.off('dataUpdateByVisitorId');
-        };
-    }, [socket, visitorId]);
 
     const handleMessageChange = (event) => {
         setMessage(event.target.value)
     }
+    useEffect(() => {
+        const timer = setTimeout(() => {
+        const fetchMessages = async () => {
+            const lastMessages = await GetMessagesByVisitorId({ webId, visitorId: visitorId });
+            setMessages(lastMessages);
+        };
+
+        fetchMessages();
+    }, 10000); // Adjust delay time as needed
+
+    // Clear the timer on component unmount
+    return () => clearTimeout(timer);
+
+        // Listen for 'dataUpdate' event from Socket.IO server
+
+    }, [webId, socket, visitorId]);
 
     const sendMessage = async () => {
+        const visitorName = content.find(msg => msg.visitorId === visitorId)?.visitorName;
         const data = {
             visitorId: visitorId,
-            visitorName: '',
+            visitorName: visitorName,
             sender: 'websiteOwner',
             message: message,
             time: new Date().toISOString(),
         }
 
-        const response = await AddMessage({ webId }, data)
-        const messages = await GetMessagesByVisitorId({ webId, visitorId })
+        const response = await AddMessage({ webId }, data);
+        const messages = await GetMessagesByVisitorId({ webId, visitorId });
 
         // Update the messages state with the new message
         setMessages(messages)
@@ -63,6 +58,15 @@ const ChatMessageHistory = ({content, visitorId }) => {
 
         setMessage('')
     }
+    const toggleAutoRespondsList = () => {
+        setIsAutoRespondsOpen(!isAutoRespondsOpen);
+    };
+
+    const handleAutoRespondClick = (message) => {
+        setMessage(message);
+        setIsAutoRespondsOpen(false);
+    };
+
 
 
     return (
@@ -70,7 +74,7 @@ const ChatMessageHistory = ({content, visitorId }) => {
 
             <div style={{height: '550px', overflowY: 'scroll'}}>
                 <div>
-                    {content.sort((a, b) => new Date(a.time) - new Date(b.time)).map((msg, index) => (
+                    {messages.sort((a, b) => new Date(a.time) - new Date(b.time)).map((msg, index) => (
                         <div key={index} style={{
                             display: 'flex',
                             flexDirection: msg.sender === 'websiteOwner' ? 'row-reverse' : 'row',
@@ -134,10 +138,20 @@ const ChatMessageHistory = ({content, visitorId }) => {
                 <button style={{color: '#004a77'}} onClick={sendMessage}>
                     Send
                 </button>
+                <button onClick={toggleAutoRespondsList} style={{color: '#004a77', marginLeft: '10px'}}>
+                    Auto-responses
+                </button>
             </div>
+            {isAutoRespondsOpen && (
+                <div style={{position: 'absolute', top: '100%', left: '0', right: '0', zIndex: 1}}>
+                    <AutoRespondsList onMessageClick={handleAutoRespondClick} webId={webId}/>
+                </div>
+            )}
+
         </>
 
-    );
+    )
+        ;
 };
 
 export default ChatMessageHistory;
