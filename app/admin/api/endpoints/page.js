@@ -281,7 +281,7 @@ export default function Webpages() {
     // useEffect to fetch data -- NO NEED OF CHANGING
     useEffect(() => {
         fetchTableData(currentPage, searchColumn, searchFieldValue);
-    }, [currentPage, fetchTableData, rowsPerPage]);
+    }, [currentPage, fetchTableData, rowsPerPage, searchColumn, searchFieldValue]);
 
 
     // ----------------------- DATE RANGE FUNCTIONS -------------------------
