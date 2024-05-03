@@ -69,12 +69,10 @@ const ChatList = ({ chats, onChatClick, webId }) => {
         return () => clearTimeout(timer);
     }, [chats, webId, socket]);
 
-    // Handle search input change
     const handleSearchInputChange = (event) => {
         setSearchInput(event.target.value);
     };
 
-    // Filter chats based on search input
     const filteredChats = sortedChats.filter((chat) =>
         chat.visitorName.toLowerCase().includes(searchInput.toLowerCase())
     );

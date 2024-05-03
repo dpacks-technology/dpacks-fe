@@ -4,9 +4,10 @@ import ChatList from "./ChatList";
 import ChatMessageHistory from "./ChatMessageHistory";
 import {GetMessagesByWebId, GetMessagesByVisitorId} from "/services/MessageService";
 import { useParams } from "next/navigation";
-import useSocket from "socket.io-client";
+import useSocket from "socket.io-client"; // Import Socket.IO client
 import Keys from '@/Keys'
 
+// Replace with your server URL
 
 const Dashboard = () => {
     const socket = useSocket(Keys.MESSAGE_SERVICE_API_URL)
@@ -15,7 +16,10 @@ const Dashboard = () => {
     const [selectedChat, setSelectedChat] = useState(null);
     const [selectedChatId, setSelectedChatId] = useState(null);
 
-    // Fetch chat visitorId and content on chat click
+
+
+
+
     const handleChatClick = async (webId, visitorId) => {
         try {
             const content = await GetMessagesByVisitorId({ webId, visitorId });
@@ -29,7 +33,7 @@ const Dashboard = () => {
         }
     };
 
-    //get all messages in website
+
     useEffect(() => {
         const timer = setTimeout(() => {
         const fetchChats = async () => {
@@ -42,7 +46,7 @@ const Dashboard = () => {
             }
         };
         fetchChats();
-        }, 1000);
+        }, 1000); // Adjust delay time as needed
 
         // Clear the timer on component unmount
         return () => clearTimeout(timer);
@@ -61,10 +65,14 @@ const Dashboard = () => {
             <div className="chat-history-container">
                 {selectedChat && (
                     <>
-                          <ChatMessageHistory
+                        <ChatMessageHistory
+
                             content={selectedChat}
                             visitorId={selectedChatId}
+
                         />
+
+
                     </>
                 )}
             </div>
