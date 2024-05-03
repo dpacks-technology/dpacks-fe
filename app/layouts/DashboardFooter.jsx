@@ -16,7 +16,7 @@ export default function DashboardFooter() {
     return (
         <div className={"w-full p-6 pr-12 pl-12 dark:bg-secondaryDark"}>
             <div className={"flex justify-between items-start"}>
-                <p style={{fontSize: "11px"}} className={"mb-2"}>
+                <p style={{fontSize: "11px", color: "#fff"}} className={"mb-2"}>
                     &copy; {new Date().getFullYear()} DPacks. All rights reserved.
                 </p>
                 <p style={{fontSize: "10px"}} className={"dark:text-darkTernary"}>
