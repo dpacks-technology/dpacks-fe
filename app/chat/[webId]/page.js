@@ -96,6 +96,7 @@ const ChatWithAdmin = () => {
             time: new Date().toISOString(),
         };
 
+
         // Add the new message to Firestore
         const response = await AddMessage({ webId }, data);
 

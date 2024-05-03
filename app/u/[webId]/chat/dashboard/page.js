@@ -46,7 +46,7 @@ const Dashboard = () => {
             }
         };
         fetchChats();
-        }, 10000); // Adjust delay time as needed
+        }, 1000); // Adjust delay time as needed
 
         // Clear the timer on component unmount
         return () => clearTimeout(timer);

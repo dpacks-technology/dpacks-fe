@@ -28,7 +28,7 @@ const AutoRespondsList = ({ onMessageClick, webId }) => {
     }, [webId]);
 
     if (isLoading) {
-        return <p>Loading auto-responds...</p>;
+        return <p style={{ color: 'black' }}>Loading auto-responds...</p>;
     }
 
     if (error) {
@@ -36,14 +36,14 @@ const AutoRespondsList = ({ onMessageClick, webId }) => {
     }
 
     if (!autoResponds.length) {
-        return <p>No auto-responds found.</p>;
+        return <p style={{ color: 'black' }}>No auto-responds found.</p>;
     }
 
     return (
         <ul>
             {autoResponds.map((autoRespond) => (
                 <li key={autoRespond.id} onClick={() => onMessageClick(autoRespond.message)}>
-                    <p>Message: {autoRespond.message}</p>
+                    <p style={{ color: 'black' }}>Message: {autoRespond.message}</p>
                 </li>
             ))}
         </ul>

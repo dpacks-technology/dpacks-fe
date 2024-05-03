@@ -5,14 +5,18 @@ import { AddMessage, GetMessagesByVisitorId } from "@/services/MessageService";
 import useSocket from 'socket.io-client'
 import Keys from '@/Keys'
 import AutoRespondsList from "@/app/u/[webId]/chat/new/page";
+import {faCommentAlt, faNoteSticky, faPaperPlane, faSpinner} from "@fortawesome/free-solid-svg-icons";
+import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
 
 
 const ChatMessageHistory = ({content, visitorId }) => {
     const socket = useSocket(Keys.MESSAGE_SERVICE_API_URL)
     const [message, setMessage] = useState('')
-    const [messages, setMessages] = useState([content])
+    const [messages, setMessages] = useState([])
     const [isAutoRespondsOpen, setIsAutoRespondsOpen] = useState(false)
     const { webId } = useParams()
+    const [isLoading, setIsLoading] = useState(true)
+
 
 
 
@@ -25,10 +29,12 @@ const ChatMessageHistory = ({content, visitorId }) => {
         const fetchMessages = async () => {
             const lastMessages = await GetMessagesByVisitorId({ webId, visitorId: visitorId });
             setMessages(lastMessages);
+            setMessages(lastMessages);
+            setIsLoading(false); // Set loading state to false
         };
 
         fetchMessages();
-    }, 10000); // Adjust delay time as needed
+    }, 1000); // Adjust delay time as needed
 
     // Clear the timer on component unmount
     return () => clearTimeout(timer);
@@ -71,8 +77,33 @@ const ChatMessageHistory = ({content, visitorId }) => {
 
     return (
         <>
-
             <div style={{height: '550px', overflowY: 'scroll'}}>
+                <div style={{
+                    position: 'sticky',
+                    top: '0',
+                    zIndex: 1,
+                    backgroundColor: '#004a77',
+                    padding: '10px',
+                    display: 'flex',
+                    justifyContent: 'space-between',
+                    alignItems: 'center',
+                    borderTop: '1px solid #ddd',
+                    borderBottom: '1px solid #ddd',
+                    borderLeft: '1px solid #ddd',
+                    borderRight: '1px solid #ddd',
+                    boxShadow: '0 2px 4px rgba(0.1, 0.1, 0.1, 0.1)',
+                }}>
+                    <div style={{color: 'white', fontSize: '17px'}}>
+                        {content.find(msg => msg.visitorId === visitorId)?.visitorName}
+                    </div>
+                </div>
+                {isLoading? (
+                    <div style={{ textAlign: 'center', padding: '20px' }}>
+                        <FontAwesomeIcon icon={faSpinner} size="2x" spin />
+                        Loading messages...
+                    </div>
+                ) : (
+
                 <div>
                     {messages.sort((a, b) => new Date(a.time) - new Date(b.time)).map((msg, index) => (
                         <div key={index} style={{
@@ -84,7 +115,7 @@ const ChatMessageHistory = ({content, visitorId }) => {
                         }}>
                             <div style={{display: 'flex', flexDirection: 'column', alignItems: 'center'}}>
                                 <div style={{
-                                    backgroundColor: msg.sender === 'websiteOwner' ? '#4CAF50' : '#008CBA',
+                                    backgroundColor: msg.sender === 'websiteOwner' ? '#004a77' : '#7b8186',
                                     color: 'white',
                                     padding: '5px 10px',
                                     borderRadius: '10px',
@@ -96,7 +127,8 @@ const ChatMessageHistory = ({content, visitorId }) => {
                                     {msg.message}
                                 </div>
                                 <div style={{
-                                    fontSize: '12px',
+                                    fontSize: '15px',
+                                    fontcolor: '#0f100f',
                                     color: '#666',
                                     alignSelf: 'flex-start',
                                     marginTop: '5px'
@@ -107,6 +139,7 @@ const ChatMessageHistory = ({content, visitorId }) => {
                         </div>
                     ))}
                 </div>
+            )}
             </div>
             <div
                 style={{
@@ -118,7 +151,7 @@ const ChatMessageHistory = ({content, visitorId }) => {
                     display: 'flex',
                     justifyContent: 'space-between',
                     alignItems: 'center',
-                    backgroundColor: '#fff',
+                    backgroundColor: '#004a77',
                     borderTop: '1px solid #ddd',
                     boxShadow: '0 2px 4px rgba(0, 0, 0, 0.1)',
                 }}
@@ -130,20 +163,33 @@ const ChatMessageHistory = ({content, visitorId }) => {
                     style={{
                         flexGrow: 1,
                         padding: '10px',
+                        backgroundColor: '#004a77',
                         borderRadius: '4px',
                         border: '1px solid #ddd',
                         marginRight: '10px',
                     }}
                 />
-                <button style={{color: '#004a77'}} onClick={sendMessage}>
-                    Send
-                </button>
-                <button onClick={toggleAutoRespondsList} style={{color: '#004a77', marginLeft: '10px'}}>
-                    Auto-responses
-                </button>
+                <div onClick={sendMessage} style={{marginRight: '20px'}}><FontAwesomeIcon icon={faPaperPlane} size="1x" color="white"/></div>
+                <div onClick={toggleAutoRespondsList}  style={{marginRight: '20px'}}><FontAwesomeIcon icon={faNoteSticky} size="1x" color="white"/>
+                </div>
+
             </div>
             {isAutoRespondsOpen && (
-                <div style={{position: 'absolute', top: '100%', left: '0', right: '0', zIndex: 1}}>
+                <div style={{
+                    position: 'sticky',
+                    top: '0',
+                    backgroundColor: '#ffffff',
+                    padding: '10px',
+                    display: 'flex',
+                    justifyContent: 'space-between',
+                    alignItems: 'center',
+                    bottom: '60px', // adjust the bottom position to align with the input bar
+                    left: '50px',
+                    right: '0',
+                    zIndex: 1,
+                    borderRadius: '10px',
+                    boxShadow: '0 2px 4px rgba(0, 0, 0, 0.1)',
+                }}>
                     <AutoRespondsList onMessageClick={handleAutoRespondClick} webId={webId}/>
                 </div>
             )}
