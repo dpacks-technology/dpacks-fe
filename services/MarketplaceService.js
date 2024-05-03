@@ -245,12 +245,19 @@ export const getBySearchListingPage = (page, count) => {
         .catch(error => { throw error; });
 }
 
-// get sum and count
-// export const getSumAndCount = async () => {
-//     try {
-//         const response = await marketplaceService.get(`/api/marketplace/templates/sumcount`);
-//         return response.data;
-//     } catch (error) {
-//         throw error;
-//     }
-// }
+// get templates by category
+export const getByCategory = async (page, count, data) => {
+    try {
+        // Convert the selected categories array to a comma-separated string
+        const categoriesString = data;
+
+        // Include the selected categories in the API request
+        const response = await marketplaceService.get(`/api/marketplace/templates/filter/${count}/${page}/${categoriesString}`);
+
+        return response.data;
+    } catch (error) {
+        throw error;
+    }
+}
+
+

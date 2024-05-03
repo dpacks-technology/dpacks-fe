@@ -3,11 +3,13 @@
 import React, { useState } from "react";
 //import React from "react";
 import CardBox from "@/app/components/Card";
-import {downloadById, getActiveTemplates, getSumAndCount} from "@/services/MarketplaceService";
-import {Button, Pagination, useDisclosure} from "@nextui-org/react";
+import {downloadById, getActiveTemplates, getByCategory} from "@/services/MarketplaceService";
+import {Button, Pagination, useDisclosure, Select, SelectItem} from "@nextui-org/react";
+import items from "@/app/data/template_categories";
 import {Drawer} from 'antd';
 import Model from "@/app/components/Model";
 import AddRatingsForm from "@/app/components/forms/marketplace/AddRatings";
+import TemplateFilterForm from "@/app/components/forms/marketplace/TemplatesFilter";
 import {useRouter} from "next/navigation";
 
 //MarketplaceListing function to display the templates in the marketplace
@@ -16,12 +18,14 @@ export default function MarketplaceListing() {
     const router = useRouter();
 
     const [data, setData] = React.useState([]);
-    //const [sumAndCount, setSumAndCount] = useState({ total_ratings: 0, rating_count: 0 });
     const [open, setOpen] = useState(false);
     const [drawerData, setDrawerData] = useState([])
     const {isOpen, onOpen, onOpenChange} = useDisclosure();
     const [currentTemplate, setCurrentTemplate] = useState(null);
     const [currentPage, setCurrentPage] = useState(1);
+    //use state to get the category of the template
+    const [category, setCategory] = useState("");
+    const [selectedCategory, setSelectedCategory] = useState("Travel");
 
     const fetchData = (page) => {
         getActiveTemplates(6, page).then((response) => {
@@ -37,6 +41,19 @@ export default function MarketplaceListing() {
     // function testFunction() {
     //     console.log("Test");
     // }
+
+    const handleCategorySelect = (category) => {
+        setSelectedCategory(category);
+        console.log(category.target.value);
+        getByCategory(currentPage, 6, category.target.value)
+            .then((response) => {
+                console.log(response);
+                setData(response);
+            })
+            .catch((error) => {
+                console.log(error);
+            });
+    };
 
     const downloadFunction = (id) => { // view button function // TODO: Change the following function
         // not used here
@@ -68,7 +85,6 @@ export default function MarketplaceListing() {
         });
     }
 
-
     const showDrawer = (item) => {
         setOpen(true);
         setDrawerData(item);
@@ -77,15 +93,10 @@ export default function MarketplaceListing() {
         setOpen(false);
     };
 
-    // const calculateAverageRating = (totalRatings, ratingCount) => {
-    //     if (ratingCount === 0) return 0;
-    //     return totalRatings / ratingCount;
-    // };
-
     return (
         <>
             <Model modelForm={
-                <AddRatingsForm id={currentTemplate}/>
+                <AddRatingsForm id={currentTemplate} templateId={currentTemplate}/>
             } title={"Rate Template"} button={"Submit"} isOpen={isOpen} onOpenChange={onOpenChange}/>
             <div className={"p-6 pt-4"}>
                 <h1 className={"mb-6"}>Templates</h1>
@@ -96,11 +107,25 @@ export default function MarketplaceListing() {
                     }}>
                         Add New Template
                     </Button>
-                    <Button color="primary" variant="flat" onClick={() => {
+                    <Button color="success" variant="flat" onClick={() => {
                         router.push("./user-submitted-temp")
                     }}>
                         My Templates
                     </Button>
+                    <Select
+                        label="Filter by Category"
+                        fontSize="32px"
+                        className="w-40"
+                        value={category}
+                        onChange={handleCategorySelect}
+                    >
+                        {items.map((item) => (
+                            <SelectItem key={item.value} value={item.value}>
+                                {item.label}
+                            </SelectItem>
+                        ))}
+
+                    </Select>
                 </div>
                 <br/>
 
@@ -116,7 +141,7 @@ export default function MarketplaceListing() {
                             //image="https://avatars.githubusercontent.com/u/86160567?s=200&v=4"
                             image={`https://storage.googleapis.com/dpacks-templates.appspot.com/${item.thmbnlfile}`}
                             title2 = {item.price}
-                            //secondary2={`Average Rating: ${calculateAverageRating(item.total_ratings, item.rating_count).toFixed(2)}`}
+                            secondary2={item.rate}
                             description={item.description}
                             buttons={[
                                 { name: "Details", color: "primary", onClick: () => showDrawer(item) },
@@ -130,7 +155,7 @@ export default function MarketplaceListing() {
 
                                 {name: "Rate", color: "warning", onClick: () => {
                                         setCurrentTemplate(item.id);
-                                        onOpen();
+                                        onOpen(item.id);
                                     }}]}
 
                             className="col-span-1 w-full"
