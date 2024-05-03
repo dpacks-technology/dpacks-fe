@@ -6,7 +6,7 @@ import {AddMessage, GetMessagesByVisitorId} from '@/services/MessageService';
 import Keys from '@/Keys';
 
 import useSocket from "socket.io-client";
-import {debounce} from 'lodash'; // Import debounce from lodash
+
 
 const ChatWithAdmin = () => {
 
@@ -43,7 +43,7 @@ const ChatWithAdmin = () => {
                 setMessages(lastMessages);
             };
             fetchMessages(); // Fetch messages after delay
-        }, 10000); // Adjust delay time as needed
+        }, 1000); // Adjust delay time as needed
 
         // Clear the timer on component unmount
         return () => clearTimeout(timer);
@@ -51,6 +51,7 @@ const ChatWithAdmin = () => {
     }, [webId, socket]); //
 
 
+    // Handle visitor email submission
     const handleVisitorEmailSubmit = async () => {
         if (validateEmail(visitorEmail)) {
             // If email is valid, proceed
@@ -65,8 +66,10 @@ const ChatWithAdmin = () => {
         }
     };
 
+    // State to track email error message
     const [emailError, setEmailError] = useState('');
 
+   // Remove visitorId from localStorage on tab close
     useEffect(() => {
         const handleTabClose = () => {
             localStorage.removeItem('visitorId');
@@ -77,16 +80,17 @@ const ChatWithAdmin = () => {
         };
     }, []);
 
+    // Generate a random visitorId
     const generateVisitorId = () => {
         return Math.floor(Math.random() * 1000000);
     };
 
+    // Handle message input change
     const handleMessageChange = (event) => {
         setMessage(event.target.value);
     };
 
-
-
+    // Send a message to the server
     const sendMessage = async () => {
         const data = {
             visitorId: localStorage.getItem('visitorId'),
@@ -97,7 +101,7 @@ const ChatWithAdmin = () => {
         };
 
 
-        // Add the new message to Firestore
+        // Add the autoRespontList message to Firestore
         const response = await AddMessage({ webId }, data);
 
         // Get the updated list of messages from Firestore

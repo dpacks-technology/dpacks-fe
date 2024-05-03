@@ -39,7 +39,7 @@ export default function MarketplaceListing() {
 
             const url = res.mainfile;
 
-            // Open the URL in a new tab
+            // Open the URL in a autoRespontList tab
             const newWindow = window.open(url, '_blank');
 
             // Initiate the file download

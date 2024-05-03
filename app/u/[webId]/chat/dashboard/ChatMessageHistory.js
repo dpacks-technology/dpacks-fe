@@ -1,29 +1,28 @@
-
 import React, { useState, useEffect } from "react";
 import { useParams } from "next/navigation";
 import { AddMessage, GetMessagesByVisitorId } from "@/services/MessageService";
 import useSocket from 'socket.io-client'
 import Keys from '@/Keys'
-import AutoRespondsList from "@/app/u/[webId]/chat/new/page";
-import {faCommentAlt, faNoteSticky, faPaperPlane, faSpinner} from "@fortawesome/free-solid-svg-icons";
+import AutoRespondsList from "@/app/u/[webId]/chat/autoRespontList/page";
+import { faNoteSticky, faPaperPlane, faSpinner} from "@fortawesome/free-solid-svg-icons";
 import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
 
 
 const ChatMessageHistory = ({content, visitorId }) => {
     const socket = useSocket(Keys.MESSAGE_SERVICE_API_URL)
-    const [message, setMessage] = useState('')
-    const [messages, setMessages] = useState([])
-    const [isAutoRespondsOpen, setIsAutoRespondsOpen] = useState(false)
+    const [message, setMessage] = useState('')// Set message state to an empty string
+    const [messages, setMessages] = useState([])// Set messages state to an empty array
+    const [isAutoRespondsOpen, setIsAutoRespondsOpen] = useState(false)// Set auto-responds list state to false
     const { webId } = useParams()
-    const [isLoading, setIsLoading] = useState(true)
+    const [isLoading, setIsLoading] = useState(true)// Set loading state to true
 
 
-
-
-
+    // Handle message input change
     const handleMessageChange = (event) => {
         setMessage(event.target.value)
     }
+
+    //fetch autoRespontList messages for given visitorId
     useEffect(() => {
         const timer = setTimeout(() => {
         const fetchMessages = async () => {
@@ -39,10 +38,9 @@ const ChatMessageHistory = ({content, visitorId }) => {
     // Clear the timer on component unmount
     return () => clearTimeout(timer);
 
-        // Listen for 'dataUpdate' event from Socket.IO server
-
     }, [webId, socket, visitorId]);
 
+    // Send a message to the server
     const sendMessage = async () => {
         const visitorName = content.find(msg => msg.visitorId === visitorId)?.visitorName;
         const data = {
@@ -56,7 +54,7 @@ const ChatMessageHistory = ({content, visitorId }) => {
         const response = await AddMessage({ webId }, data);
         const messages = await GetMessagesByVisitorId({ webId, visitorId });
 
-        // Update the messages state with the new message
+        // Update the messages state with the autoRespontList message
         setMessages(messages)
         console.log(messages);
         // Emit a 'newMessage' event to the server
@@ -64,10 +62,13 @@ const ChatMessageHistory = ({content, visitorId }) => {
 
         setMessage('')
     }
+
+    // Toggle the auto-responds list
     const toggleAutoRespondsList = () => {
         setIsAutoRespondsOpen(!isAutoRespondsOpen);
     };
 
+    // Handle auto-respond click
     const handleAutoRespondClick = (message) => {
         setMessage(message);
         setIsAutoRespondsOpen(false);
@@ -93,6 +94,7 @@ const ChatMessageHistory = ({content, visitorId }) => {
                     borderRight: '1px solid #ddd',
                     boxShadow: '0 2px 4px rgba(0.1, 0.1, 0.1, 0.1)',
                 }}>
+
                     <div style={{color: 'white', fontSize: '17px'}}>
                         {content.find(msg => msg.visitorId === visitorId)?.visitorName}
                     </div>
@@ -193,11 +195,8 @@ const ChatMessageHistory = ({content, visitorId }) => {
                     <AutoRespondsList onMessageClick={handleAutoRespondClick} webId={webId}/>
                 </div>
             )}
-
         </>
-
-    )
-        ;
+    );
 };
 
 export default ChatMessageHistory;
