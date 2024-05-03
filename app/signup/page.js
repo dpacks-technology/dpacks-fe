@@ -10,6 +10,7 @@ import {form2,form1,form3, form4} from "@/app/validaitions/signupValidation";
 import { useRouter} from "next/navigation";
 import {SignupService} from "@/services/SignupService";
 import schema from "@/app/validaitions/LoginValidation";
+import Image from "next/image";
 
 export default function SignUpPage() {
     const [error, setError] = useState("");
@@ -141,7 +142,7 @@ export default function SignUpPage() {
                             <div className={"w-full text-left"}>
                                 <div className={"md:grid grid-cols-1 md:gap-24"}>
                                     <div>
-                                        <img src={"/images/logos/dpacks-logo-white.png"}
+                                        <Image src={"/images/logos/dpacks-logo-white.png"}
                                              className={"w-1/2 sm:w-1/2 md:w-3/4 lg:w-full xl:w-4/5"} alt={"DPacks Logo"}/>
                                         <h1 className={"dark:text-dark mt-3 text-md sm:text-lg mb-3 sm:mb-0"}>Sign in</h1>
                                     </div>

@@ -37,7 +37,7 @@ export default function PanelLayout({ childrenBody }) {
                                 </svg>
                             </button>
                             <Link href="/u" className="flex ms-2 z-50">
-                                <img src={logoSrc} className="w-32 " alt="Dpacks Logo" />
+                                <Image src={logoSrc} className="w-32 " alt="Dpacks Logo" />
                             </Link>
                         </div>
                         <SearchBar className={"content-start"} />
@@ -48,7 +48,7 @@ export default function PanelLayout({ childrenBody }) {
                                         className="flex text-sm bg-gray-800 rounded-full focus:ring-4 focus:ring-gray-300 dark:focus:ring-gray-600"
                                         aria-expanded="false" data-dropdown-toggle="dropdown-user">
                                         <span className="sr-only">Open user menu</span>
-                                        <img className="w-8 h-8 rounded-full"
+                                        <Image className="w-8 h-8 rounded-full"
                                             src="/images/profile-picture/profile.svg"
                                             alt="user photo" />
                                     </button>
