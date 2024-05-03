@@ -12,8 +12,7 @@ const BloackPageService = axios.create({
 // get all webpages by status and datetime count // TODO: Change this function accordingly
 export const AddToBlocklist = async (data) => {
     try {
-        //print to console data
-        console.log(data);
+        
         const response = await BloackPageService.post(`http://localhost:4000/api/pros/Access/BlockList`, data);
         return response.data;
     } catch (error) {
@@ -32,7 +31,7 @@ export const getWebPages = async (count, page, key, val) => {
 };
 
 // get all webpages count // TODO: Change this function accordingly
-export const getWebPagesCount = async (key, val) => {
+export const getWebPagesCount = async (key, val,userId) => {
     try {
         const response = await BloackPageService.get(`http://localhost:4000/api/pros/Access/BlockList/count?key=${key}&val=${val}`);
         return response.data;

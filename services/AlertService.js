@@ -12,7 +12,8 @@ const AlertService = axios.create({
 // get all webpages by status and datetime count // TODO: Change this function accordingly
 export const CreateNewAlert = async (data) => {
     try {
-        const response = await AlertService.post(`/api/analytical_alerts/Alert`, data);
+        console.log(data);
+        const response = await AlertService.post(`/api/analytics/Alert`, data);
         return response.data;
     } catch (error) {
         throw error;
@@ -23,7 +24,7 @@ export const CreateNewAlert = async (data) => {
 export const GetAllAlert = async (count, page, key, val, webId) => {
     try {
          console.log("test")
-        const response = await AlertService.get(`/api/analytical_alerts/Alerts/${count}/${page}/${webId}?key=${key}&val=${val}`);
+        const response = await AlertService.get(`/api/analytics/Alerts/${count}/${page}/${webId}?key=${key}&val=${val}`);
         console.log(response.data);
         return response.data;
     } catch (error) {
@@ -34,7 +35,7 @@ export const GetAllAlert = async (count, page, key, val, webId) => {
 // get all webpages count // TODO: Change this function accordingly
 export const GetAlertCount = async (key, val,webId) => {
     try {
-        const response = await AlertService.get(`/api/analytical_alerts/Alert/count/${webId}?key=${key}&val=${val}`);
+        const response = await AlertService.get(`/api/analytics/Alert/count/${webId}?key=${key}&val=${val}`);
         return response.data;
     } catch (error) {
         throw error;
@@ -44,7 +45,7 @@ export const GetAlertCount = async (key, val,webId) => {
 // get all webpages by status and datetime count // TODO: Change this function accordingly
 export const GetAlertbyId = async (id) => {
     try {
-        const response = await AlertService.get(`/api/analytical_alerts/Alert/${id}`);
+        const response = await AlertService.get(`/api/analytics/Alert/${id}`);
         return response.data;
     } catch (error) {
         throw error;
@@ -61,7 +62,7 @@ export const GetAlertByStatus = async (count, page, status, key, val) => {
     console.log(statusString);
 
     try {
-        const response = await AlertService.get(`/api/analytical_alerts/Alert/status/${count}/${page}?status=${statusString}&key=${key}&val=${val}`);
+        const response = await AlertService.get(`/api/analytics/Alert/status/${count}/${page}?status=${statusString}&key=${key}&val=${val}`);
         console.log(response.data);
         return response.data;
     } catch (error) {
@@ -78,7 +79,7 @@ export const GetAlertByStatusCount = async (status, key, val) => {
     console.log(statusString);
 
     try {
-        const response = await AlertService.get(`/api/analytical_alerts/Alert/status/count?status=${statusString}&key=${key}&val=${val}`);
+        const response = await AlertService.get(`/api/analytics/Alert/status/count?status=${statusString}&key=${key}&val=${val}`);
         console.log(response.data);
         return response.data;
     } catch (error) {
@@ -91,7 +92,8 @@ export const GetAlertByStatusCount = async (status, key, val) => {
 // get all webpages by status and datetime // TODO: Change this function accordingly
 export const EditAlertPage = async (id, data) => {
     try {
-        const response = await AlertService.put(`/api/analytical_alerts/Alert/${id}`, data);
+        console.log(data);
+        const response = await AlertService.put(`/api/analytics/Alert/${id}`, data);
         return response.data;
     } catch (error) {
         throw error;
@@ -102,7 +104,7 @@ export const EditAlertPage = async (id, data) => {
 // get all webpages by status and datetime count // TODO: Change this function accordingly
 export const DeleteAlertByID = async (id) => {
     try {
-        const response = await AlertService.delete(`/api/analytical_alerts/Alert/${id}`);
+        const response = await AlertService.delete(`/api/analytics/Alert/${id}`);
         return response.data;
     } catch (error) {
         throw error;
@@ -114,7 +116,7 @@ export const DeleteAlertByIDBulk = async (ids) => {
     let idsString = ids.join(',');
 
     try {
-        const response = await AlertService.delete(`/api/analytical_alerts/Alert/bulk/${idsString}`);
+        const response = await AlertService.delete(`/api/analytics/Alert/bulk/${idsString}`);
         return response.data;
     } catch (error) {
         throw error;
@@ -126,7 +128,7 @@ export const UpdateAlerttatusBulk = async (ids, status) => {
     let idsString = ids.join(',');
 
     try {
-        const response = await AlertService.put(`/api/analytical_alerts/Alert/status/bulk/${idsString}`, {status: status});
+        const response = await AlertService.put(`/api/analytics/Alert/status/bulk/${idsString}`, {status: status});
         return response.data;
     } catch (error) {
         throw error;
@@ -136,7 +138,7 @@ export const UpdateAlerttatusBulk = async (ids, status) => {
 // get all webpages by status and datetime count // TODO: Change this function accordingly
 export const UpdateAlerttatus = async (id, status) => {
     try {
-        const response = await AlertService.put(`/api/analytical_alerts/Alert/status/${id}`, {status: status});
+        const response = await AlertService.put(`/api/analytics/Alert/status/${id}`, {status: status});
         return response.data;
     } catch (error) {
         throw error;

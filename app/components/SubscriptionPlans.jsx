@@ -1,31 +1,32 @@
 // Billing.js
 "use client"
-import React, {useState} from "react";
+import React, {useEffect, useState} from "react";
+import {GetSubscriptionPlans, SubscribePlan, UpdateSubscribePlan} from "@/services/BillingService";
 
-const plans = [
-    {
-        name: 'Free',
-        monthlyPrice: '$0',
-        annualPrice: '$0',
-        features: ['Basic features', 'Limited storage', 'No support'],
-    },
-    {
-        name: 'Standard',
-        monthlyPrice: '$9.99',
-        annualPrice: '$99.99',
-        features: ['Advanced features', 'Moderate storage', 'Email support'],
-    },
-    {
-        name: 'Premium',
-        monthlyPrice: '$19.99',
-        annualPrice: '$199.99',
-        features: ['All features', 'Unlimited storage', 'Priority support'],
-    },
-];
-
-export default function SubscriptionPlans() {
+export default function SubscriptionPlans({...props}) {
     const [billingInterval, setBillingInterval] = useState('monthly');
     const intervals = ['monthly', 'yearly'];
+    const [plans, setPlans] = useState([]);
+
+    const subscribePlan = (id) => {
+
+        if (props.update) {
+            UpdateSubscribePlan({project_id: props.web_id, plan_id: id}).then(() => {
+                window.location.reload();
+            });
+        } else {
+            SubscribePlan({project_id: props.web_id, plan_id: id}).then(() => {
+                window.location.reload();
+            });
+        }
+
+    }
+
+    useEffect(() => {
+        GetSubscriptionPlans().then(r => {
+            setPlans(r);
+        });
+    }, []);
 
     return (
         <>
@@ -52,15 +53,15 @@ export default function SubscriptionPlans() {
                 {plans.length > 0 && plans.map((plan, index) => (
                     <div key={index} className="bg-gray-950 bg-opacity-60 rounded-lg w-1/4 p-6 ml-4 mt-8"
                          style={{height: '300px'}}>
-                        <h2 className={"uppercase"}>{plan.name}</h2>
-                        <p className="text-lg mt-10 mb-8" style={{fontSize: '3rem'}}>{billingInterval === "monthly" ? plan.monthlyPrice : plan.annualPrice}</p>
+                        <h2 className={"uppercase"}>{plan.plan_name}</h2>
+                        <p className="text-lg mt-10 mb-8" style={{fontSize: '3rem'}}>{billingInterval === "monthly" ? plan.monthly_price : plan.annual_price}</p>
 
                         <ul className="text-white">
-                            {plan.features.length > 0 && plan.features.map((feature, index) => (
-                                <li key={index}>{feature}</li>
-                            ))}
+                            <li>{plan.features}</li>
                         </ul>
-                        <button className="bg-white text-black py-2 px-4 mt-4 rounded-lg">Subscribe</button>
+                        <button onClick={() => {
+                            subscribePlan(plan.plan_id)
+                        }} className="bg-white text-black py-2 px-4 mt-4 rounded-lg">Subscribe</button>
                     </div>
                 ))}
             </div>

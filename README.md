@@ -1,11 +1,24 @@
-## The Official Frontend of the Dpacks Platform
+# DPacks Platform - Frontend
+This is the frontend of the DPacks platform. It is a web application that allows users to interact with the DPacks platform. It is built using React.js and Material-UI.
 
-First, run the development server:
+## Installation (Server - Docker)
+1. Clone the repository
+2. Run `docker build -t dpacks-frontend .` to build the Docker image
+3. Run `docker run -d -p 3000:3000 dpacks-frontend` to start the Docker container
+4. Open `http://localhost:3000` in your browser
 
-```bash
-npm run dev
-```
+## Installation (Local)
+1. Clone the repository
+2. Run `npm install` to install the dependencies
+3. Run `npm start` to start the development server
+4. Open `http://localhost:3000` in your browser
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+## Technologies
+- Next.js
+- Tailwind CSS
+- Axios
+- Next UI
+- Ant Design
 
-You can start editing the page by modifying `app/page.js`. The page auto-updates as you edit the file.
+## Copyright
+© 2024 DPacks Platform. All rights reserved.
