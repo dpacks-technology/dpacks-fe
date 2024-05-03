@@ -5,6 +5,7 @@ import Link from "next/link";
 import useDarkMode from "@/app/hooks/useDarkMode";
 import SettingsButton from "@/app/components/SettingsButton";
 import {useEffect, useState} from "react";
+import Image from "next/image";
 
 export default function DashboardNav() {
 
@@ -39,7 +40,7 @@ export default function DashboardNav() {
             <div className={`w-full bg-dark p-4 pr-12 pl-12 fixed z-50 ${scrolled ? " shadow-xl" : ""}`}>
                 <div className={"flex justify-between"}>
                     <Link href="/u" className="flex z-50 items-center">
-                        <img src={logoSrc} className="w-28" alt="Dpacks Logo"/>
+                        <Image src={logoSrc} className="w-28" alt="Dpacks Logo"/>
                     </Link>
                     <div className={"flex items-center gap-2"}>
                         <SettingsButton/>
