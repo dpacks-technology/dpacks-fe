@@ -1,56 +1,72 @@
 "use client"
-import React from 'react';
+
+import React, {useEffect, useState} from 'react';
 import { PieChart, Pie, Cell } from 'recharts';
+import {GetStorageByID} from "@/services/StorageService";
+import {blue, yellow} from "@mui/material/colors";
 
-const getRandomData = () => {
-    // Generate random values for remaining and current storage (between 0 and 100)
-    const remainingStorage = Math.floor(Math.random() * 101);
-    const currentStorage = 100 - remainingStorage;
-    return [
-        { name: 'Remaining Storage', value: remainingStorage },
-        { name: 'Current Storage', value: currentStorage },
-    ];
-};
 
-const getRandomColor = () => {
-    // Generate random color in hexadecimal format
-    return '#' + Math.floor(Math.random() * 16777215).toString(16);
-};
 
-const StorageOverview = () => {
-    const data = getRandomData();
-    const COLORS = [getRandomColor(), getRandomColor()];
+// Generate initial data for the pie chart
+export default function StorageMeter({params}) {
+    const [storage, setStorage] = useState([
+        {name: 'Remaining Storage', value: 0, color: ' purple'},
+        {name: 'Used Storage', value: 0, color: 'blue'}
+    ]);
+    const [size, setSize] = useState(0);
 
-    return (
-        <div style={{ textAlign: 'center', width: '100%', height: '100%', display: 'flex', justifyContent: 'center', alignItems: 'center', flexDirection: 'column' }}>
-            <div>
-                <h1 style={{ fontSize: '2em', marginBottom: '20px' }}>Storage Overview</h1>
-                <PieChart width={600} height={400}>
-                    <Pie
-                        data={data}
-                        cx={300}
-                        cy={200}
-                        labelLine={false}
-                        outerRadius={150}
-                        fill="#8884d8"
-                        dataKey="value"
-                    >
-                        {data.map((entry, index) => (
-                            <Cell key={`cell-${index}`} fill={COLORS[index]} />
-                        ))}
-                    </Pie>
-                </PieChart>
-                <div style={{ fontSize: '1.2em', marginTop: '20px' }}>
-                    <div>
-                        <span style={{ color: COLORS[0], fontWeight: 'bold' }}>Remaining Storage:</span> {data[0].value}%
-                    </div>
-                    <div>
-                        <span style={{ color: COLORS[1], fontWeight: 'bold' }}>Current Storage:</span> {data[1].value}%
+    //Set remaining storage
+
+    useEffect(() => {
+        GetStorageByID(params.webId).then((response) => {
+            console.log(response)
+            setStorage([
+                {name: 'Remaining Storage', value: 5000 , color: ' purple'},
+                {name: 'Used Storage', value: response.size, color: 'blue'}
+            ]);
+            setSize(response.size);
+        }).catch((error) => {
+            console.log(error);
+        });
+    }, []);
+
+
+
+
+
+
+        return (
+            <div style={{
+                textAlign: 'center',
+                width: '100%',
+                height: '100%',
+                display: 'flex',
+                justifyContent: 'center',
+                alignItems: 'center',
+                flexDirection: 'column'
+            }}>
+                <div>
+                    <h1 style={{fontSize: '2em', marginBottom: '20px'}}>Storage Overview</h1>
+                    <h1> Remaining Storage as of Today  <br/> TOTAL : 15GB   </h1>
+
+                    <PieChart width={600} height={400}>
+                        <Pie data={storage} cx={300} cy={200} dataKey="value">
+
+                            {storage.map((entry, index) => (
+                                <Cell key={`cell-${index}`} fill={entry.color}/>
+                            ))}
+                        </Pie>
+                    </PieChart>
+                    <div style={{fontSize: '1.2em', marginTop: '20px'}}>
+                        <div>
+                            {storage[0].value - storage[1].value} bytes <span
+                            style={{fontWeight: 'bold'}}> Remaining</span>
+                        </div>
+                        <div>
+                            {storage[1].value} bytes <span style={{fontWeight: 'bold'}}> Used  </span>
+                        </div>
                     </div>
                 </div>
             </div>
-        </div>
-    );
-};
-
-export default StorageOverview;
+        );
+}

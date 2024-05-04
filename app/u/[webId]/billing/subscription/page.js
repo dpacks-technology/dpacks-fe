@@ -1,12 +1,13 @@
 "use client"
 
-import {useEffect, useState} from "react";
+import React, {useEffect, useState} from "react";
 import SubscriptionPlans from "@/app/components/SubscriptionPlans";
 import {CheckSubscriptionCount} from "@/services/BillingService";
 import {DeleteSubscriptionByID, GetSubscriptionByID} from "@/services/SubscriptionServices";
+import {useRouter} from "next/navigation";
 
 export default function Subscription({params}) {
-    // Dummy data for demonstration
+    const router = useRouter();
 
 
     //function to get subscription details
@@ -74,7 +75,7 @@ export default function Subscription({params}) {
 
         <div className="relative h-screen">
             {!subscriptionExists ? (
-                <SubscriptionPlans web_id={params.webId} />
+                <SubscriptionPlans web_id={params.webId}/>
             ) : (
 
                 <div className="w-full p-4 border border-gray-300 rounded-lg">
@@ -85,6 +86,7 @@ export default function Subscription({params}) {
                     >
                         Update Plan
                     </button>
+
                     <h1 className="text-2xl font-bold mb-4">Current Plan</h1>
                     <table className="w-full mb-6">
                         <tbody>
@@ -110,7 +112,7 @@ export default function Subscription({params}) {
                             >
                                 Back
                             </button>
-                            <SubscriptionPlans update={true} web_id={params.webId} />
+                            <SubscriptionPlans update={true} web_id={params.webId}/>
                         </>
                     ) : (
                         <button
@@ -120,9 +122,12 @@ export default function Subscription({params}) {
                             Unsubscribe Current Plan
                         </button>
                     )}
+
+
                 </div>
             )}
         </div>
+
     );
 
 }
