@@ -13,6 +13,8 @@ const schema = yup.object().shape({
     //category: yup.string().required({category: 'Category is required'}),
     dmessage: yup.string()
         .min(10, {dmessage: 'Message must be at least 10 characters'}).max(300, {dmessage: 'Message cannot exceed 300 characters'}),
+    status: yup.number()
+        .test('status', {status:'Cannot save when status is 1'}, value => value !== 1),
 
 });
 

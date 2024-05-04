@@ -57,7 +57,7 @@ export default function ReviewTemplates() {
         {name: "CATEGORY", uid: "category", sortable: true, type: "text"},
         {name: "CREATED ON", uid: "submitteddate", sortable: false, type: "datetime"},
         {name: "MAIN FILE", uid: "mainfile", sortable: false, type: "buttons"},
-        //{name: "THUMBNAIL", uid: "thmbnlfile", sortable: false, type: "buttons"},
+        {name: "USERID", uid: "userid", sortable: false, type: "text"},
         {name: "MESSAGE", uid: "dmessage", sortable: false, type: "text"},
         {name: "PRICE", uid: "price", sortable: false, type: "text"},
         {name: "STATUS", uid: "status", sortable: false, type: "status"},
@@ -366,50 +366,54 @@ export default function ReviewTemplates() {
     return (
         <>
             {contextHolder}
-            <Table
+            <div className="h-screen flex items-center justify-center">
+                <div className="w-full bg-secondaryDark p-4 rounded-lg shadow-md m-4">
+                    <Table
+                        // data and columns
+                        data={data}
+                        columns={columns}
+                        init_cols={init_cols}
 
-                // data and columns
-                data={data}
-                columns={columns}
-                init_cols={init_cols}
+                        // fetch data functions
+                        fetchTableData={fetchTableData}
 
-                // fetch data functions
-                fetchTableData={fetchTableData}
+                        // action buttons
+                        actionButtons={actionButtons}
+                        statusOptions={statusOptions}
+                        menuButtons={menuButtons}
 
-                // action buttons
-                actionButtons={actionButtons}
-                statusOptions={statusOptions}
-                menuButtons={menuButtons}
+                        // status change
+                        statusChange={statusChange}
 
-                // status change
-                statusChange={statusChange}
+                        // edit model and functions
+                        editMenuButton={editMenuButton}
+                        editItemIsOpen={isOpen}
+                        editItemOnOpenChange={onOpenChange}
+                        editForm={<EditTemplatesDetailsForm refreshData={refreshData}/>}
 
-                // edit model and functions
-                editMenuButton={editMenuButton}
-                editItemIsOpen={isOpen}
-                editItemOnOpenChange={onOpenChange}
-                editForm={<EditTemplatesDetailsForm refreshData={refreshData}/>}
+                        // search, sorting and filtering
+                        searchColumn={searchColumn}
+                        sortColumn={sortColumn}
+                        dateColumn={dateColumn}
+                        onTimeRangeChange={onTimeRangeChange}
+                        searchFieldValue={[searchFieldValue, setSearchFieldValue]}
+                        changeSorting={changeSorting}
 
-                // search, sorting and filtering
-                searchColumn={searchColumn}
-                sortColumn={sortColumn}
-                dateColumn={dateColumn}
-                onTimeRangeChange={onTimeRangeChange}
-                searchFieldValue={[searchFieldValue, setSearchFieldValue]}
-                changeSorting={changeSorting}
+                        // bulk actions
+                        handleUpdateStatusBulk={handleUpdateStatusBulk}
+                        handleDeleteBulk={handleDeleteBulk}
 
-                // bulk actions
-                handleUpdateStatusBulk={handleUpdateStatusBulk}
-                handleDeleteBulk={handleDeleteBulk}
+                        // pagination
+                        setPage={setPage}
+                        currentPage={currentPage}
+                        dataCount={pagesCount}
+                        rowsPerPage={rowsPerPage}
+                        changeRowsPerPage={changeRowsPerPage}
+                    />
+                </div>
+            </div>
 
-                // pagination
-                setPage={setPage}
-                currentPage={currentPage}
-                dataCount={pagesCount}
-                rowsPerPage={rowsPerPage}
-                changeRowsPerPage={changeRowsPerPage}
 
-            />
         </>
     )
 }

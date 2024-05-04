@@ -17,6 +17,7 @@ const EditTemplateDetailsForm = ({...props}) => {
     const [description, setDescription] = React.useState("");
     const [category, setCategory] = React.useState("");
     const [dmessage, setDMessage] = React.useState("");
+    const [status, setStatus] = React.useState(null);
 
     // backend validation error message
     const [messageApi, contextHolder] = message.useMessage(); // message api
@@ -40,6 +41,7 @@ const EditTemplateDetailsForm = ({...props}) => {
                 description: description,
                 category: category,
                 dmessage: dmessage,
+                status: status
             }
 
 
@@ -71,6 +73,7 @@ const EditTemplateDetailsForm = ({...props}) => {
             setDescription(response.description);
             setCategory(response.category);
             setDMessage(response.dmessage);
+            setStatus(response.status);
         }).then(() => {
         });
     }, []);

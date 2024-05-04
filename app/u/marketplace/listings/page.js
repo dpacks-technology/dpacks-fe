@@ -9,7 +9,6 @@ import items from "@/app/data/template_categories";
 import {Drawer} from 'antd';
 import Model from "@/app/components/Model";
 import AddRatingsForm from "@/app/components/forms/marketplace/AddRatings";
-import TemplateFilterForm from "@/app/components/forms/marketplace/TemplatesFilter";
 import {useRouter} from "next/navigation";
 
 //MarketplaceListing function to display the templates in the marketplace
@@ -99,22 +98,12 @@ export default function MarketplaceListing() {
                 <AddRatingsForm id={currentTemplate} templateId={currentTemplate}/>
             } title={"Rate Template"} button={"Submit"} isOpen={isOpen} onOpenChange={onOpenChange}/>
             <div className={"p-6 pt-4"}>
-                <h1 className={"mb-6"}>Templates</h1>
-
-                <div className={"flex justify-end gap-4"}>
-                    <Button color="secondary" variant="flat" onClick={() => {
-                        router.push("./submit-template")
-                    }}>
-                        Add New Template
-                    </Button>
-                    <Button color="success" variant="flat" onClick={() => {
-                        router.push("./user-submitted-temp")
-                    }}>
-                        My Templates
-                    </Button>
+                <h1 className={"mb-6"} style={{fontSize: "2em"}}>Templates Library</h1>
+                <div className="flex justify-start">
                     <Select
                         label="Filter by Category"
                         fontSize="32px"
+                        color="success"
                         className="w-40"
                         value={category}
                         onChange={handleCategorySelect}
@@ -124,8 +113,35 @@ export default function MarketplaceListing() {
                                 {item.label}
                             </SelectItem>
                         ))}
-
                     </Select>
+                </div>
+
+                <div className={"flex justify-end gap-4"}>
+                    <Button color="secondary" variant="flat" onClick={() => {
+                        router.push("./submit-template")
+                    }}>
+                        Add New Template
+                    </Button>
+                    <Button color="primary" variant="flat" onClick={() => {
+                        router.push("./user-submitted-temp")
+                    }}>
+                        My Templates
+                    </Button>
+                    {/*<Select*/}
+                    {/*    label="Filter by Category"*/}
+                    {/*    fontSize="32px"*/}
+                    {/*    color="success"*/}
+                    {/*    className="w-40"*/}
+                    {/*    value={category}*/}
+                    {/*    onChange={handleCategorySelect}*/}
+                    {/*>*/}
+                    {/*    {items.map((item) => (*/}
+                    {/*        <SelectItem key={item.value} value={item.value}>*/}
+                    {/*            {item.label}*/}
+                    {/*        </SelectItem>*/}
+                    {/*    ))}*/}
+
+                    {/*</Select>*/}
                 </div>
                 <br/>
 
@@ -134,38 +150,42 @@ export default function MarketplaceListing() {
                     {data && data.length > 0 && data.map((item, index) => (
                         console.log(item.price),
                             console.log("Is download disabled?", item.price > 0),
-                        <CardBox
-                            key={index}
-                            title={item.name}
-                            secondary={item.category}
-                            //image="https://avatars.githubusercontent.com/u/86160567?s=200&v=4"
-                            image={`https://storage.googleapis.com/dpacks-templates.appspot.com/${item.thmbnlfile}`}
-                            title2 = {item.price}
-                            secondary2={item.rate}
-                            description={item.description}
-                            buttons={[
-                                { name: "Details", color: "primary", onClick: () => showDrawer(item) },
-                                {name: "Download", color: "danger", onClick: () => {
-                                        if (item.price > 0) {
-                                            //return <AddTemplateForm />;
-                                        } else {
-                                            downloadFunction(item.id);
+                            <CardBox
+                                key={index}
+                                title={item.name}
+                                secondary={item.category}
+                                image={`https://storage.googleapis.com/dpacks-templates.appspot.com/${item.thmbnlfile}`}
+                                title2={item.price}
+                                secondary2={item.rate}
+                                description={item.description}
+                                buttons={[
+                                    {name: "Details", color: "primary", onClick: () => showDrawer(item)},
+                                    {
+                                        name: "Download", color: "danger", onClick: () => {
+                                            if (item.price > 0) {
+                                                //return payment options
+                                            } else {
+                                                downloadFunction(item.id);
+                                            }
+                                        }, disabled: item.price > 0
+                                    },
+
+                                    {
+                                        name: "Rate", color: "warning", onClick: () => {
+                                            setCurrentTemplate(item.id);
+                                            onOpen(item.id);
                                         }
-                                    }, disabled: item.price > 0},
+                                    }]}
 
-                                {name: "Rate", color: "warning", onClick: () => {
-                                        setCurrentTemplate(item.id);
-                                        onOpen(item.id);
-                                    }}]}
-
-                            className="col-span-1 w-full"
-                        />
+                                className="col-span-1 w-full"
+                            />
                     ))}
                 </div>
                 <div className="mx-auto mt-6" style={{display: "table"}}>
                     <Pagination total={10} initialPage={1} onChange={(page) => setCurrentPage(page)}/>
                 </div>
-                <Drawer title="Developer's Message: " onClose={onClose} open={open} className="overflow-y-auto max-h-60">
+                <Drawer title="Developer's Message: " onClose={onClose} open={open}
+                        className="overflow-y-auto max-h-60">
                     {drawerData && (
                         <div>
                             <p>{drawerData.dmessage}</p>
