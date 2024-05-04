@@ -6,9 +6,9 @@ import {
     getTotalApiSubscribersCount,
     getTotalMarketPlaceUsersCount,
     getTotalUserCount,
-    getTotalWebsitesCount
+    getTotalWebsitesCount, siteSpecificStorage, UsedStorage
 } from "@/services/AdminDashboardService";
-import {getAdminsCount} from "@/services/AdminManagementService";
+import ReactECharts from "echarts-for-react";
 
 export default function AdminDashboard() {
     const [totUsersHeader, setTotUsersHeader] = useState("Total Users");
@@ -22,7 +22,42 @@ export default function AdminDashboard() {
     const [selectedItem1, setSelectedItem1] = useState("");
     const [selectedItem2, setSelectedItem2] = useState("");
     const [selectedItem3, setSelectedItem3] = useState("");
-    const [selectedItem4, setSelectedItem4] = useState("");
+    const [totalUsedStorage, setTotalUsedStorage] = useState(0);
+    const [totalStorage, setTotalStorage] = useState(500);
+    const [siteSpecificStorageData, setSiteSpecificStorageData] = useState([]);
+
+    // useeffect to fetch data from the API every time the page is loaded
+    useEffect(() => {
+        fetchTotalUsedStorage();
+        fetchSiteStorage();
+    }, []);
+
+    // Pie chart data
+    const pieData = [
+        {value: totalUsedStorage, name: 'Total Used Space'},
+        {value: totalStorage - totalUsedStorage, name: 'Free Space'},
+    ];
+
+
+    // Fetching data from the API and setting the state
+    const fetchTotalUsedStorage = () => {
+        UsedStorage().then((data) => {
+            setTotalUsedStorage(data);
+        }).catch((error) => {
+            console.error("Error fetching total used data:", error);
+        });
+    };
+
+    const fetchSiteStorage = () => {
+        siteSpecificStorage().then((data) => {
+            setSiteSpecificStorageData(data.map(entry => ({
+                data: entry.site_sum,
+                type: entry.site_name
+            })));
+        }).catch((error) => {
+            console.error("Error fetching site specific  data:", error);
+        });
+    };
 
     const items = [
         {
@@ -72,22 +107,26 @@ export default function AdminDashboard() {
 
 
     return (
+        <div>
+            <h1 className="text-3xl font-bold mb-5">Dashboard</h1>
             <div className="flex flex-row gap-4 justify-around">
-                <Card  style={{ width: 300 }}>
-                    <div className="bg-accentDark">
+                <Card style={{width: 300}}>
+                    <div>
                         <Dropdown>
                             <DropdownTrigger>
                                 <Button
-                                    variant="bordered">
+                                    variant="flat"
+                                    color="primary"
+                                    className="text-white, w-full"
+                                >
                                     Add
                                 </Button>
                             </DropdownTrigger>
                             <DropdownMenu aria-label="Dynamic Actions" items={items}>
                                 {(item) => (
                                     <DropdownItem
-                                        key = {item.key}
-                                        color={item.key === "totUsers" ? "danger" : "default"}
-                                        className={item.key === "delete" ? "text-danger" : ""}
+                                        key={item.key}
+                                        color={"primary"}
                                         onClick={() => cardOneHandleItemClick(item.key)}
                                     >
                                         {item.label}
@@ -97,28 +136,31 @@ export default function AdminDashboard() {
                         </Dropdown>
                     </div>
                     {items.map((item) => (
-                    <div key={item.key} className="bg-amber-800">
-                        {selectedItem1 === item.key ? (
-                            <>
-                                <h2>{item.label}</h2>
-                                <p>
-                                    {item.key === "totUsers" && totUsers}
-                                    {item.key === "totSites" && totSites}
-                                    {item.key === "totApiSubscribers" && totApiSubscribers}
-                                    {item.key === "totMarketPlaceUsers" && totMarketPlaceUsers}
-                                </p>
-                            </>
-                        ) : null}
-                    </div>
+                        <div key={item.key}>
+                            {selectedItem1 === item.key ? (
+                                <>
+                                    <h1 className="text-2xl font-bold text-center mt-2">{item.label}</h1>
+                                    <p className=" text-5xl font-bold text-center mt-2">
+                                        {item.key === "totUsers" && totUsers}
+                                        {item.key === "totSites" && totSites}
+                                        {item.key === "totApiSubscribers" && totApiSubscribers}
+                                        {item.key === "totMarketPlaceUsers" && totMarketPlaceUsers}
+                                    </p>
+                                </>
+                            ) : null}
+                        </div>
                     ))}
                 </Card>
 
-                <Card style={{ width: 300 }}>
-                    <div className="bg-accentDark">
+                <Card style={{width: 300}}>
+                    <div>
                         <Dropdown>
                             <DropdownTrigger>
                                 <Button
-                                    variant="bordered">
+                                    variant="flat"
+                                    color="primary"
+                                    className="text-white, w-full"
+                                >
                                     Add
                                 </Button>
                             </DropdownTrigger>
@@ -138,27 +180,30 @@ export default function AdminDashboard() {
                     </div>
                     {items.map((item) => (
 
-                    <div key={item.key} className="bg-amber-300">
-                        {selectedItem2 === item.key ? (
-                            <>
-                                <h2>{item.label}</h2>
-                                <p>
-                                    {item.key === "totUsers" && totUsers}
-                                    {item.key === "totSites" && totSites}
-                                    {item.key === "totApiSubscribers" && totApiSubscribers}
-                                    {item.key === "totMarketPlaceUsers" && totMarketPlaceUsers}
-                                </p>
-                            </>
-                        ) : null}
-                    </div>
+                        <div key={item.key}>
+                            {selectedItem2 === item.key ? (
+                                <>
+                                    <h1 className="text-2xl font-bold text-center mt-2">{item.label}</h1>
+                                    <p className=" text-5xl font-bold text-center mt-2">
+                                        {item.key === "totUsers" && totUsers}
+                                        {item.key === "totSites" && totSites}
+                                        {item.key === "totApiSubscribers" && totApiSubscribers}
+                                        {item.key === "totMarketPlaceUsers" && totMarketPlaceUsers}
+                                    </p>
+                                </>
+                            ) : null}
+                        </div>
                     ))}
                 </Card>
                 <Card style={{width: 300}}>
-                    <div className="bg-accentDark">
+                    <div>
                         <Dropdown>
                             <DropdownTrigger>
                                 <Button
-                                    variant="bordered">
+                                    variant="flat"
+                                    color="primary"
+                                    className="text-white, w-full"
+                                >
                                     Add
                                 </Button>
                             </DropdownTrigger>
@@ -177,22 +222,71 @@ export default function AdminDashboard() {
                         </Dropdown>
                     </div>
                     {items.map((item) => (
-                    <div key={item.key} className="bg-amber-800">
-                        {selectedItem3 === item.key ? (
-                            <>
-                                <h2>{item.label}</h2>
-                                <p>
-                                    {item.key === "totUsers" && totUsers}
-                                    {item.key === "totSites" && totSites}
-                                    {item.key === "totApiSubscribers" && totApiSubscribers}
-                                    {item.key === "totMarketPlaceUsers" && totMarketPlaceUsers}
-                                </p>
-                            </>
-                        ) : null}
-                    </div>
+                        <div key={item.key}>
+                            {selectedItem3 === item.key ? (
+                                <>
+                                    <h1 className="text-2xl font-bold text-center mt-2">{item.label}</h1>
+                                    <p className=" text-5xl font-bold text-center mt-2">
+                                        {item.key === "totUsers" && totUsers}
+                                        {item.key === "totSites" && totSites}
+                                        {item.key === "totApiSubscribers" && totApiSubscribers}
+                                        {item.key === "totMarketPlaceUsers" && totMarketPlaceUsers}
+                                    </p>
+                                </>
+                            ) : null}
+                        </div>
                     ))}
                 </Card>
+            </div>
+
+            <h1 className="text-3xl font-bold mb-5 mt-5">Storage Meters</h1>
+            <div className="grid grid-cols-2 gap-3 mt-5">
+                <div className="w-full h-96">
+
+                    <h1 className="text-2xl mt-5 font-bold text-center">Overall Storage</h1>
+                    <ReactECharts
+                        option={{
+                            tooltip: {},
+                            series: [{
+                                name: 'Storage',
+                                type: 'pie',
+                                data: pieData
+                            }]
+                        }}
+                    />
+                </div>
+
+                <div className="w-full h-96">
+                    <h1 className="text-2xl mt-5 font-bold text-center">Site Specific Storage</h1>
+
+                    <ReactECharts
+                        className="p-5"
+                        option={{
+                            xAxis: {
+                                type: 'value'
+                            },
+                            yAxis: [{
+                                type: 'category',
+                                data: siteSpecificStorageData.map(entry => entry.type)
+                            }],
+
+                            tooltip: {
+                                trigger: 'axis',
+                                axisPointer: {
+                                    type: 'shadow'
+                                }
+                            },
+                            series: [{
+                                data: siteSpecificStorageData.map(entry => entry.data),
+                                type: 'bar'
+                            }]
+                        }}
+                    />
+
+                </div>
 
             </div>
+        </div>
+
     );
 }

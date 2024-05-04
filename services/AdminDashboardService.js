@@ -52,3 +52,25 @@ export const getTotalMarketPlaceUsersCount = async () => {
         throw error;
     }
 };
+
+export const UsedStorage = async () => {
+    try {
+        const response = await adminDashboardService.get('/api/admin_dashboard/sites/totalStorage');
+        console.log((response.data))
+        return response.data;
+    } catch (error) {
+        throw error;
+    }
+
+}
+
+export const siteSpecificStorage = async () => {
+    try {
+        const response = await adminDashboardService.get('/api/admin_dashboard/sites/storage');
+        console.log((response.data))
+        return response.data;
+    } catch (error) {
+        throw error;
+    }
+
+}
