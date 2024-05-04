@@ -1,23 +1,19 @@
-'use client'
+'use client';
 
-import {Button} from "@nextui-org/react";
+import {Button, CheckboxGroup, Checkbox} from "@nextui-org/react";
 import React from "react";
 import {Form, message} from "antd";
 import schema from "@/app/validaitions/TemplateAddValidation";
 import FormItem from "antd/es/form/FormItem";
-import { Rate } from 'antd';
-import {AddRating} from "@/services/MarketplaceService";
-import Input from "@/app/components/Input";
+import {getActiveTemplates, getByCategory} from "@/services/MarketplaceService";
 
-const AddRatingsForm = ({id, templateId, ...props}) => {
+
+const TemplateFilterForm = (...props) => {
 
     // state
     const [saving, setSaving] = React.useState(false);
     const [error, setError] = React.useState({});
-    const [rating, setRating] = React.useState("");
-    const [selectedTemplateId, setSelectedTemplateId] = React.useState("");
-
-
+    const [selected, setSelected] = React.useState([""]);
 
     // backend validation error message
     const [messageApi, contextHolder] = message.useMessage(); // message api
@@ -28,27 +24,23 @@ const AddRatingsForm = ({id, templateId, ...props}) => {
         });
     };
 
-
     // add webpage function
-    const addRating = async () => {
+    const addFilter = async () => {
         // set saving
         setSaving(true);
 
-        console.log(rating);
-
         try {
             // data // TODO: add/change fields
-            const data = {rating: parseInt(rating),  id: parseInt(templateId)};
-
+            const data = {selectedCities: selected};
 
             // validate
             //await schema.validate(data, { abortEarly: false });
 
             // add webpage // TODO: change the function
-            await AddRating(data).then((response) => {
+            await getByCategory(data).then((response) => {
                 props.notificationMessage("success", "Record added"); // refresh data with success message
                 props.onClose(); // close modal
-            }).then((error) => {
+            }).catch((error) => {
                 Message("error", error.response.data.error) // backend validation error
             });
 
@@ -57,9 +49,10 @@ const AddRatingsForm = ({id, templateId, ...props}) => {
             let errorsObject = {}
             validationError.errors && validationError.errors.map(obj => errorsObject[Object.keys(obj)[0]] = Object.values(obj)[0]);
             setError(errorsObject);
+        } finally {
+            setSaving(false);
         }
     };
-
 
     return (
         <>
@@ -68,7 +61,19 @@ const AddRatingsForm = ({id, templateId, ...props}) => {
                 <div>
                     {/* TODO: Change the form */}
                     <FormItem>
-                        <Rate defaultValue={0} onChange={(value) => setRating(value)} />
+                        <div className="flex flex-col gap-3">
+                            <CheckboxGroup
+                                label="Select cities"
+                                color="warning"
+                                value={selected}
+                                onValueChange={setSelected}
+                            >
+                                <Checkbox value="Travel">Travel</Checkbox>
+                                <Checkbox value="Education">Education</Checkbox>
+                                <Checkbox value="Food">Food</Checkbox>
+                            </CheckboxGroup>
+                            <p className="text-default-500 text-small">Selected: {selected.join(" ")}</p>
+                        </div>
                     </FormItem>
                 </div>
 
@@ -82,11 +87,7 @@ const AddRatingsForm = ({id, templateId, ...props}) => {
                     {/* save button */}
                     <Button
                         disabled={saving}
-                        color="primary" variant="flat" onPress={() => {
-                        addRating().then(() => {
-                            setSaving(false);
-                        });
-                    }}>
+                        color="primary" variant="flat" onPress={addFilter}>
                         {saving ? "Saving..." : "Save"}
                     </Button>
 
@@ -96,4 +97,4 @@ const AddRatingsForm = ({id, templateId, ...props}) => {
     );
 }
 
-export default AddRatingsForm;
+export default TemplateFilterForm;

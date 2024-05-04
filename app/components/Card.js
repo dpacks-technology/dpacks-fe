@@ -23,7 +23,7 @@ export default function CardBox({...props}) {
 
     return (
         <Card {...props}
-              className={"text-light bg-light dark:text-dark dark:bg-dark shadow-none overflow-hidden " + (props.className || "")}>
+              className={"text-light bg-light dark:text-dark dark:bg-secondaryDark shadow-none overflow-hidden " + (props.className || "")}>
 
             {props.image &&
                 <div className={"grid justify-center items-center w-full"}
@@ -52,7 +52,7 @@ export default function CardBox({...props}) {
                 </div>
                 {props.description &&
                     <div className={"p-3 pt-4 pb-0"}>
-                        <CardBody className={"p-5 bg-secondaryLight dark:bg-secondaryDark rounded-2xl"}>
+                        <CardBody className={"p-5 bg-secondaryLight dark:bg-black rounded-2xl"}>
                             <p className="flex-wrap text-sm">{props.description}</p>
                         </CardBody>
                     </div>
