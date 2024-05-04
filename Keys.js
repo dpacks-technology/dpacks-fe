@@ -1,7 +1,13 @@
 const Key = {
-    USER_SERVICE_API_URL: 'http://localhost:4001',
-    ADMIN_SERVICE_API_URL: 'http://localhost:4001',
+
+    // USER_SERVICE_API_URL: 'http://localhost:4001',
+    // ADMIN_SERVICE_API_URL: 'http://localhost:4001',
+
+    USER_SERVICE_API_URL: 'https://user.dpacks.net',
+    ADMIN_SERVICE_API_URL: 'https://user.dpacks.net',
+
     MESSAGE_SERVICE_API_URL: 'http://localhost:4006',
+
     AUTH_SERVICE_API_URL: 'https://auth.dpacks.net',
     DATA_PACKETS_SERVICE_API_URL: 'https://web.dpacks.net',
 
