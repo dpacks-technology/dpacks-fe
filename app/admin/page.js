@@ -1,7 +1,14 @@
 "use client"
 import {Card} from 'antd';
 import {Dropdown, DropdownTrigger, DropdownMenu, DropdownItem, Button} from "@nextui-org/react";
-import {useState} from "react";
+import {useCallback, useEffect, useState} from "react";
+import {
+    getTotalApiSubscribersCount,
+    getTotalMarketPlaceUsersCount,
+    getTotalUserCount,
+    getTotalWebsitesCount
+} from "@/services/AdminDashboardService";
+import {getAdminsCount} from "@/services/AdminManagementService";
 
 export default function AdminDashboard() {
     const [totUsersHeader, setTotUsersHeader] = useState("Total Users");
@@ -46,6 +53,23 @@ export default function AdminDashboard() {
     const cardThreeHandleItemClick = (key) => {
         setSelectedItem3(key);
     };
+
+    const fetchTotalCounts = useCallback(async () => {
+        try {
+            // Fetch total user count from API
+            getTotalUserCount().then((response) => setTotUsers(response));
+            getTotalWebsitesCount().then((response) => setTotSites(response));
+            getTotalApiSubscribersCount().then((response) => setTotApiSubscribers(response));
+            getTotalMarketPlaceUsersCount().then((response) => setTotMarketPlaceUsers(response));
+        } catch (error) {
+            console.error(error);
+        }
+    }, []);
+
+    useEffect(() => {
+        fetchTotalCounts().then(r => console.log(r));
+        },[fetchTotalCounts]);
+
 
     return (
             <div className="flex flex-row gap-4 justify-around">
