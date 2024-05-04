@@ -79,3 +79,13 @@ body {
     color: rgb(210, 210, 210);
     font-size: 0.9rem;
 }
+
+.panel-view {
+    width: calc(100% - 367px);
+}
+
+@media screen and (max-width: 768px) {
+    .panel-view {
+        width: 91.5%;
+    }
+}
