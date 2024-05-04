@@ -63,7 +63,7 @@ export default function Home() {
                             zIndex: 1
                         }}
                     >
-                        The Future of<br/>WWW
+                        The Future of<br/>Web
                     </h1>
 
                     <p
