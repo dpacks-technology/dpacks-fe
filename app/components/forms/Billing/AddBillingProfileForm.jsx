@@ -31,11 +31,9 @@ const AddBillingProfileForm = ({...props}) => {
     const [Month, setMonth] = useState("");
     const [Year, setYear] = useState("");
     const [CVV, setCVV] = useState("");
-    const [termsChecked, setTermsChecked] = useState(false); // State for managing checkbox checked status
+    const [termsChecked, setTermsChecked] = useState(true); // State for managing checkbox checked status
 
 
-    // const [isCompanyAvailable, setIsCompanyAvailable] = useState(false);
-    // backend validation error message
 
     const [messageApi, contextHolder] = message.useMessage(); // message api
 
@@ -77,7 +75,6 @@ const AddBillingProfileForm = ({...props}) => {
                 month: parseInt(Month),
                 year: parseInt(Year),
                 cvv: parseInt (CVV),
-               // terms: termsChecked,
                 card_number: parseInt(CardNo),
 
             };
@@ -100,8 +97,7 @@ const AddBillingProfileForm = ({...props}) => {
 
         } catch (validationError) {
 
-            //console.log(validationError.errors)
-            // set error
+
 
             let errorsObject = {}
             validationError.errors && validationError.errors.map(obj => errorsObject[Object.keys(obj)[0]] = Object.values(obj)[0]);
@@ -111,9 +107,7 @@ const AddBillingProfileForm = ({...props}) => {
 
     }
 
-    // const handleTermsChange = (e) => {
-    //     setTermsChecked(e.target.checked); // Update the state with the checkbox checked status
-    // };
+
 
     function handleTermsChange() {
         setTermsChecked(!termsChecked); // Update the state with the checkbox checked status
@@ -246,8 +240,8 @@ const AddBillingProfileForm = ({...props}) => {
                             placeholder="Card Number"
                             value={CardNo}
                             onChange={(e) => setCardNo(e.target.value)}
-                            status={error.CardNo ? "error" : ""}
-                            error={error.CardNo}
+                            status={error.card_number ? "error" : ""}
+                            error={error.card_number}
                         />
                     </FormItem>
 
@@ -306,8 +300,8 @@ const AddBillingProfileForm = ({...props}) => {
                                 placeholder="CVV"
                                 value={CVV}
                                 onChange={(e) => setCVV(e.target.value)}
-                                status={error.CVV ? "error" : ""}
-                                error={error.CVV}
+                                status={error.cvv ? "error" : ""}
+                                error={error.cvv}
                             />
                         </FormItem>
 
