@@ -94,7 +94,7 @@ export default function SignUpPage() {
             // if(!isInvalidConfirmPassword) {
             //     const response = await axios.post(`http://localhost:4010/api/auth/signup`, data);
             //     if(response.status === 200) {
-            //         alert("User created successfully");
+            //         Alert("User created successfully");
             //         //redirect to login page
             //         router.push("/login");
             //
@@ -150,7 +150,7 @@ export default function SignUpPage() {
                                             © {new Date().getFullYear()} DPacks. All rights reserved.
                                         </p>
                                         <p style={{fontSize: "9px"}} className={"dark:text-darkSecondary"}>
-                                            Static data management and global distribution technology.
+                                            Web enhancing and static data management technology.
                                         </p>
                                     </div>
                                 </div>

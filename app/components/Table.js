@@ -25,7 +25,7 @@ import {ChevronDownIcon} from "./icons/ChevronDownIcon";
 import {capitalize} from "./utils/Capitalize";
 import {VerticalDotsIcon} from "@/app/components/icons/VerticalDotsIcon";
 import Model from "@/app/components/Model";
-import {mkConfig, download, generateCsv} from "export-to-csv";
+import {download, generateCsv, mkConfig} from "export-to-csv";
 
 const {RangePicker} = DatePicker;
 
@@ -46,7 +46,7 @@ export default function Table({data, columns, init_cols, ...props}) {
 
 
     // csv config
-    const csvConfig = mkConfig({ useKeysAsHeaders: true });
+    const csvConfig = mkConfig({useKeysAsHeaders: true});
 
     // export data
     const exportData = () => {
@@ -251,138 +251,167 @@ export default function Table({data, columns, init_cols, ...props}) {
     }
 
 
-
     // top content
     const topContent = React.useMemo(() => {
 
         return (
             <>
-                <Model editItemId={editItemId} modelForm={props.editForm} title={"Edit Details"} button={"Edit"} buttonFunction={props.editMenuButton} isOpen={props.editItemIsOpen} onOpenChange={props.editItemOnOpenChange}/>
+                <Model editItemId={editItemId} modelForm={props.editForm} title={"Edit Details"} button={"Edit"}
+                       buttonFunction={props.editMenuButton} isOpen={props.editItemIsOpen}
+                       onOpenChange={props.editItemOnOpenChange}/>
                 <div className="flex flex-col gap-4">
                     <div className="flex justify-between gap-3 items-end">
                         <div className="flex gap-3">
 
                             {/* status */}
-                            <Dropdown className={"z-10"}>
-                                <DropdownTrigger className="hidden sm:flex">
-                                    <Button endContent={<ChevronDownIcon className="text-small"/>} variant="flat">
-                                        Status
-                                    </Button>
-                                </DropdownTrigger>
-                                <DropdownMenu
-                                    disallowEmptySelection
-                                    aria-label="Table Columns"
-                                    closeOnSelect={false}
-                                    selectedKeys={statusFilter}
-                                    selectionMode="single"
-                                    onSelectionChange={setStatusFilter}
-                                >
-                                    <DropdownItem key={"all"} className="capitalize">
-                                        All
-                                    </DropdownItem>
-                                    {props.statusOptions && props.statusOptions.map((status) => (
-                                        <DropdownItem key={status.uid} className="capitalize">
-                                            {capitalize(status.name)}
+                            {props.components && props.components.status &&
+                                <Dropdown className={"z-10"}>
+                                    <DropdownTrigger className="hidden sm:flex">
+                                        <Button endContent={<ChevronDownIcon className="text-small"/>} variant="flat">
+                                            Status
+                                        </Button>
+                                    </DropdownTrigger>
+                                    <DropdownMenu
+                                        disallowEmptySelection
+                                        aria-label="Table Columns"
+                                        closeOnSelect={false}
+                                        selectedKeys={statusFilter}
+                                        selectionMode="single"
+                                        onSelectionChange={setStatusFilter}
+                                    >
+                                        <DropdownItem key={"all"} className="capitalize">
+                                            All
                                         </DropdownItem>
-                                    ))}
-                                </DropdownMenu>
-                            </Dropdown>
+                                        {props.statusOptions && props.statusOptions.map((status) => (
+                                            <DropdownItem key={status.uid} className="capitalize">
+                                                {capitalize(status.name)}
+                                            </DropdownItem>
+                                        ))}
+                                    </DropdownMenu>
+                                </Dropdown>
+                            }
 
                             {/* columns */}
-                            <Dropdown>
-                                <DropdownTrigger className="hidden sm:flex">
-                                    <Button endContent={<ChevronDownIcon className="text-small"/>} variant="flat">
-                                        Columns
-                                    </Button>
-                                </DropdownTrigger>
-                                <DropdownMenu
-                                    disallowEmptySelection
-                                    aria-label="Table Columns"
-                                    closeOnSelect={false}
-                                    selectedKeys={visibleColumns}
-                                    selectionMode="multiple"
-                                    onSelectionChange={setVisibleColumns}
-                                >
-                                    {columns.map((column) => (
-                                        <DropdownItem key={column.uid} className="capitalize">
-                                            {capitalize(column.name)}
-                                        </DropdownItem>
-                                    ))}
-                                </DropdownMenu>
-                            </Dropdown>
+                            {props.components && props.components.columns &&
+                                <Dropdown>
+                                    <DropdownTrigger className="hidden sm:flex">
+                                        <Button endContent={<ChevronDownIcon className="text-small"/>} variant="flat">
+                                            Columns
+                                        </Button>
+                                    </DropdownTrigger>
+                                    <DropdownMenu
+                                        disallowEmptySelection
+                                        aria-label="Table Columns"
+                                        closeOnSelect={false}
+                                        selectedKeys={visibleColumns}
+                                        selectionMode="multiple"
+                                        onSelectionChange={setVisibleColumns}
+                                    >
+                                        {columns.map((column) => (
+                                            column.name !== "" &&
+                                            <DropdownItem key={column.uid} className="capitalize">
+                                                {capitalize(column.name)}
+                                            </DropdownItem>
+                                        ))}
+                                    </DropdownMenu>
+                                </Dropdown>
+                            }
 
                             {/* refresh */}
-                            <Button variant={"ghost"}
-                                    onClick={() => props.fetchTableData(page, props.searchColumn, props.searchFieldValue[0])}>Refresh</Button>
+                            {props.components && props.components.refresh &&
+                                <Button variant={"ghost"}
+                                        onClick={() => props.fetchTableData(page, props.searchColumn, props.searchFieldValue[0])}>Refresh</Button>
+                            }
                         </div>
 
                         {/* bulk actions */}
-                        <div className="flex gap-3">
-                            {selectedKeys.size > 0 || selectedKeys === "all" ?
-                                <>
-                                    {/* update status */}
-                                    {(props.statusOptions && props.statusOptions.length > 0) && props.statusOptions.map((statusButton, index) => (
-                                        statusButton.button &&
-                                        <Button key={index} color={statusButton.type} size="sm" variant={"flat"}
-                                                title={statusButton.name} isIconOnly
+                        {props.components && props.components.bulk_actions &&
+                            <div className="flex gap-3">
+                                {selectedKeys.size > 0 || selectedKeys === "all" ?
+                                    <>
+                                        {/* update status */}
+                                        {(props.statusOptions && props.statusOptions.length > 0) && props.statusOptions.map((statusButton, index) => (
+                                            statusButton.button &&
+                                            <Button key={index} color={statusButton.type} size="sm" variant={"flat"}
+                                                    title={statusButton.name} isIconOnly
+                                                    onClick={() => {
+                                                        props.handleUpdateStatusBulk(selectedKeys, statusButton.uid);
+                                                    }}>{statusButton.icon}
+                                            </Button>
+                                        ))}
+
+                                        {/* remove */}
+                                        <Button color="danger" variant={"light"} size="sm" title={"Remove"} isIconOnly
                                                 onClick={() => {
-                                                    props.handleUpdateStatusBulk(selectedKeys, statusButton.uid);
-                                                }}>{statusButton.icon}
+                                                    props.handleDeleteBulk(selectedKeys, 0);
+                                                }}>
+                                            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
+                                                 strokeWidth={1.5} stroke="currentColor" className="w-5 h-5">
+                                                <path strokeLinecap="round" strokeLinejoin="round"
+                                                      d="m14.74 9-.346 9m-4.788 0L9.26 9m9.968-3.21c.342.052.682.107 1.022.166m-1.022-.165L18.16 19.673a2.25 2.25 0 0 1-2.244 2.077H8.084a2.25 2.25 0 0 1-2.244-2.077L4.772 5.79m14.456 0a48.108 48.108 0 0 0-3.478-.397m-12 .562c.34-.059.68-.114 1.022-.165m0 0a48.11 48.11 0 0 1 3.478-.397m7.5 0v-.916c0-1.18-.91-2.164-2.09-2.201a51.964 51.964 0 0 0-3.32 0c-1.18.037-2.09 1.022-2.09 2.201v.916m7.5 0a48.667 48.667 0 0 0-7.5 0"/>
+                                            </svg>
+
                                         </Button>
-                                    ))}
-
-                                    {/* remove */}
-                                    <Button color="danger" variant={"light"} size="sm" title={"Remove"} isIconOnly
-                                            onClick={() => {
-                                                props.handleDeleteBulk(selectedKeys, 0);
-                                            }}>
-                                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
-                                             strokeWidth={1.5} stroke="currentColor" className="w-5 h-5">
-                                            <path strokeLinecap="round" strokeLinejoin="round"
-                                                  d="m14.74 9-.346 9m-4.788 0L9.26 9m9.968-3.21c.342.052.682.107 1.022.166m-1.022-.165L18.16 19.673a2.25 2.25 0 0 1-2.244 2.077H8.084a2.25 2.25 0 0 1-2.244-2.077L4.772 5.79m14.456 0a48.108 48.108 0 0 0-3.478-.397m-12 .562c.34-.059.68-.114 1.022-.165m0 0a48.11 48.11 0 0 1 3.478-.397m7.5 0v-.916c0-1.18-.91-2.164-2.09-2.201a51.964 51.964 0 0 0-3.32 0c-1.18.037-2.09 1.022-2.09 2.201v.916m7.5 0a48.667 48.667 0 0 0-7.5 0"/>
-                                        </svg>
-
-                                    </Button>
-                                </> : null
-                            }
-                            <Button onClick={() => {props.onTimeRangeChange(null, null); setRangeStart(null); setRangeEnd(null);}}>All</Button>
-                            <Button
-                                onClick={() => {props.onTimeRangeChange(new Date(new Date().setHours(0, 0, 0, 0)).toISOString().replace('T', ' ').replace('Z', ''), new Date(new Date().setHours(23, 59, 59, 999)).toISOString().replace('T', ' ').replace('Z', '')); setRangeStart(null); setRangeEnd(null);}}>Today</Button>
-                            <Button
-                                onClick={() => {props.onTimeRangeChange(new Date(new Date(new Date().setDate(new Date().getDate() - 1)).setHours(0, 0, 0, 0)).toISOString().replace('T', ' ').replace('Z', ''), new Date(new Date(new Date().setDate(new Date().getDate() - 1)).setHours(23, 59, 59, 999)).toISOString().replace('T', ' ').replace('Z', '')); setRangeStart(null); setRangeEnd(null);}}>Yesterday</Button>
-                        </div>
+                                    </> : null
+                                }
+                                {props.components && props.components.all &&
+                                    <Button onClick={() => {
+                                        props.onTimeRangeChange(null, null);
+                                        setRangeStart(null);
+                                        setRangeEnd(null);
+                                    }}>All</Button>}
+                                {props.components && props.components.today &&
+                                    <Button
+                                        onClick={() => {
+                                            props.onTimeRangeChange(new Date(new Date().setHours(0, 0, 0, 0)).toISOString().replace('T', ' ').replace('Z', ''), new Date(new Date().setHours(23, 59, 59, 999)).toISOString().replace('T', ' ').replace('Z', ''));
+                                            setRangeStart(null);
+                                            setRangeEnd(null);
+                                        }}>Today</Button>}
+                                {props.components && props.components.yesterday &&
+                                    <Button
+                                        onClick={() => {
+                                            props.onTimeRangeChange(new Date(new Date(new Date().setDate(new Date().getDate() - 1)).setHours(0, 0, 0, 0)).toISOString().replace('T', ' ').replace('Z', ''), new Date(new Date(new Date().setDate(new Date().getDate() - 1)).setHours(23, 59, 59, 999)).toISOString().replace('T', ' ').replace('Z', ''));
+                                            setRangeStart(null);
+                                            setRangeEnd(null);
+                                        }}>Yesterday</Button>}
+                            </div>
+                        }
                     </div>
                 </div>
                 <div className="flex flex-col gap-4">
                     <div className="flex justify-between gap-3 items-end">
-                        <div className={"w-full sm:max-w-[44%]"}>
-                            <Input
-                                isClearable
-                                className="w-full sm:max-w-[65%] inline-block"
-                                placeholder={`Search by ${props.searchColumn.replace(/([a-z])([A-Z])/g, '$1 $2').replace(/\b\w/g, char => char.toLowerCase())}...`}
-                                startContent={<SearchIcon/>}
-                                variant={"faded"}
-                                onClear={() => onClear()}
-                                value={props.searchFieldValue[0]}
-                                onValueChange={props.searchFieldValue[1]}
-                                classNames={{
-                                    inputWrapper: "bg-dark border-none h-6 rounded-lg"
-                                }}
-                            />
-                            <div className={"inline-block ml-2"}>
-                                <Button color="primary" variant={"flat"} onPress={triggerSearch} className={"h-10"}>
-                                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
-                                         strokeWidth={1.5} stroke="currentColor" className="w-5 h-5">
-                                        <path strokeLinecap="round" strokeLinejoin="round"
-                                              d="m21 21-5.197-5.197m0 0A7.5 7.5 0 1 0 5.196 5.196a7.5 7.5 0 0 0 10.607 10.607Z"/>
-                                    </svg>
-                                    Search
-                                </Button>
+                        {props.components && props.components.search &&
+                            <div className={"w-full sm:max-w-[44%]"}>
+                                <Input
+                                    isClearable
+                                    className="w-3/5 md:w-full sm:max-w-[65%] inline-block"
+                                    placeholder={`Search by ${props.searchColumn.replace(/([a-z])([A-Z])/g, '$1 $2').replace(/\b\w/g, char => char.toLowerCase())}...`}
+                                    startContent={<SearchIcon/>}
+                                    variant={"faded"}
+                                    onClear={() => onClear()}
+                                    value={props.searchFieldValue[0]}
+                                    onValueChange={props.searchFieldValue[1]}
+                                    classNames={{
+                                        inputWrapper: "bg-dark border-none h-6 rounded-lg"
+                                    }}
+                                />
+                                <div className={"inline-block ml-1"}>
+                                    <Button color="primary" variant={"flat"} onPress={triggerSearch} className={"w-1/5 md:w-full h-10"}>
+                                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
+                                             strokeWidth={1.5} stroke="currentColor" className="w-5 h-5">
+                                            <path strokeLinecap="round" strokeLinejoin="round"
+                                                  d="m21 21-5.197-5.197m0 0A7.5 7.5 0 1 0 5.196 5.196a7.5 7.5 0 0 0 10.607 10.607Z"/>
+                                        </svg>
+                                        Search
+                                    </Button>
+                                </div>
                             </div>
-                        </div>
-                        <div className="flex gap-3 w-4/12">
-                            <RangePicker onChange={handleDateRangeValueChange} value={[rangeStart, rangeEnd]} />
-                            <Button className={"md:block hidden"} onClick={exportData}>Export</Button>
+                        }
+                        <div className={`flex gap-3${props.components && props.components.date_range && ' w-4/12'}`}>
+                            {props.components && props.components.date_range &&
+                                <RangePicker onChange={handleDateRangeValueChange} value={[rangeStart, rangeEnd]}/>}
+                            {props.components && props.components.export &&
+                                <Button className={"md:block hidden"} onClick={exportData}>Export</Button>}
                         </div>
                     </div>
                     <div className="flex justify-between items-center">
@@ -448,53 +477,53 @@ export default function Table({data, columns, init_cols, ...props}) {
             {contextHolder} {/* notification message */}
 
             {/* Table */}
-            <NextUITable
-                aria-label="Table"
-                isHeaderSticky
-                topContent={topContent}
-                topContentPlacement="outside"
-                bottomContent={bottomContent}
-                bottomContentPlacement="outside"
-                classNames={{
-                    wrapper: "max-h-[382px]",
-                    sortIcon: "hidden",
-                }}
-                className={"dark:dark"}
-                selectedKeys={selectedKeys}
-                selectionMode="multiple"
-                onSelectionChange={setSelectedKeys}
-                sortDescriptor={sortDescriptor}
-                onSortChange={setSortDescriptor}
-            >
-                {/* Table header */}
-                <TableHeader columns={headerColumns}>
+                <NextUITable
+                    aria-label="Table"
+                    isHeaderSticky
+                    topContent={topContent}
+                    topContentPlacement="outside"
+                    bottomContent={bottomContent}
+                    bottomContentPlacement="outside"
+                    classNames={{
+                        wrapper: "max-h-[382px]",
+                        sortIcon: "hidden",
+                    }}
+                    className={"dark:dark"}
+                    selectedKeys={selectedKeys}
+                    selectionMode={props.selectionMode && props.selectionMode || "multiple"}
+                    onSelectionChange={setSelectedKeys}
+                    sortDescriptor={sortDescriptor}
+                    onSortChange={setSortDescriptor}
+                >
+                    {/* Table header */}
+                    <TableHeader columns={headerColumns}>
 
-                    {/* Table column */}
-                    {(column) => (
-                        <TableColumn
-                            key={column.uid}
-                            align={column.uid === "actions" ? "center" : "start"}
-                            allowsSorting={column.sortable}
-                        >
-                            {column.name}
-                        </TableColumn>
-                    )}
+                        {/* Table column */}
+                        {(column) => (
+                            <TableColumn
+                                key={column.uid}
+                                align={column.uid === "actions" ? "center" : "start"}
+                                allowsSorting={column.sortable}
+                            >
+                                {column.name}
+                            </TableColumn>
+                        )}
 
-                </TableHeader>
+                    </TableHeader>
 
-                {/* Table body */}
-                <TableBody emptyContent={"No data found"} items={data}>
+                    {/* Table body */}
+                    <TableBody emptyContent={"No data found"} items={data}>
 
-                    {/* Table row */}
-                    {(item) => (
-                        <TableRow key={item.id}>
-                            {(columnKey) => <TableCell>{renderCell(item, columnKey)}</TableCell>}
-                        </TableRow>
-                    )}
+                        {/* Table row */}
+                        {(item) => (
+                            <TableRow key={item.id}>
+                                {(columnKey) => <TableCell>{renderCell(item, columnKey)}</TableCell>}
+                            </TableRow>
+                        )}
 
-                </TableBody>
+                    </TableBody>
 
-            </NextUITable>
+                </NextUITable>
         </>
     );
 }

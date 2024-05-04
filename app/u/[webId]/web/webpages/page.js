@@ -1,8 +1,13 @@
-
 'use client';
 // Importing modules
 import Table from "@/app/components/Table";
 import React, {useCallback, useEffect} from "react";
+
+import {
+    getWebPages,
+    getWebPagesCount,
+} from "@/services/DataPacketsService";
+
 import {
     deletePage,
     deleteWebpagesBulk,
@@ -10,22 +15,24 @@ import {
     getPagesByDatetimeCount,
     getPagesByStatus,
     getPagesByStatusCount,
-    getWebPages,
-    getWebPagesCount,
     updateWebpagesStatus,
     updateWebpagesStatusBulk
 } from "@/services/WebpagesService";
+
 import {useDisclosure} from "@nextui-org/react";
 import EditWebpageForm from "@/app/components/forms/webpages/EditWebpageForm";
 import {message} from "antd";
+import {useRouter} from "next/navigation";
 
 // Webpages component
-export default function Webpages() {
+export default function Webpages({params}) {
+
+    const router = useRouter();
 
     // ----------------------- DEFAULT COLUMNS -------------------------
     // default columns // TODO: Change the following functions
-    const dateColumn = "datetime" // default date column
-    const sortColumn = {column: "id", direction: "ascending"} // default sort column
+    const dateColumn = "last_updated" // default date column
+    const sortColumn = {column: "page", direction: "ascending"} // default sort column
 
     // ----------------------- MESSAGE ------------------------- (NO NEED OF CHANGING)
     // message
@@ -47,26 +54,43 @@ export default function Webpages() {
     const {isOpen, onOpen, onOpenChange} = useDisclosure();
     const [searchColumn, setSearchColumn] = React.useState(sortColumn.column); // default search column
 
+    // ----------------------- COMPONENTS -------------------------
+    // components // TODO: Change the following components
+    const components = {
+        status: false, // status component
+        columns: true, // columns component
+        refresh: true, // refresh component
+        bulk_actions: true, // bulk actions component
+        all: false, // all components
+        today: false, // today component
+        yesterday: false, // yesterday component
+        search: true, // search component
+        date_range: false, // date range component
+        export: true, // export component
+    }
+
     // ----------------------- COLUMNS -------------------------
     // columns // TODO: Change the following columns according the to yours
     const columns = [
-        {name: "ID", uid: "id", sortable: true, type: "text"},
-        {name: "NAME", uid: "name", sortable: true, type: "text"},
-        {name: "PATH", uid: "path", sortable: true, type: "text"},
-        {name: "CREATED ON", uid: "date_created", sortable: false, type: "datetime"},
-        {name: "STATUS", uid: "status", sortable: false, type: "status"},
-        {name: "CHANGE STATUS", uid: "statusButtons", sortable: false, type: "statusButtons"},
-        {name: "ACTIONS", uid: "menu", sortable: false, type: "menu"},
+        // {name: "ID", uid: "id", sortable: true, type: "text"},
+        {name: "PAGE", uid: "page", sortable: true, type: "text"},
+        {name: "CREATED", uid: "init_datetime", sortable: false, type: "datetime"},
+        {name: "UPDATED", uid: "last_updated", sortable: false, type: "datetime"},
+        {name: "SIZE (BYTES)", uid: "size", sortable: false, type: "text"},
+        {name: "ELEMENTS COUNT", uid: "elements_count", sortable: false, type: "text"},
+        {name: "", uid: "buttons", sortable: false, type: "buttons"},
+        // {name: "ACTIONS", uid: "menu", sortable: false, type: "menu"},
         // all usable types: text, twoText, datetime, label, status, statusButtons, buttons, menu, copy, icon, iconText, iconTwoText
     ];
 
     // initially visible columns // TODO: Change the following columns according the to yours
     const init_cols = [
-        "name",
-        "path",
-        "date_created",
-        "status",
-        "statusButtons",
+        "page",
+        "size",
+        "elements_count",
+        "init_datetime",
+        "last_updated",
+        "buttons",
         "menu"
     ];
 
@@ -81,24 +105,13 @@ export default function Webpages() {
         // action button functions
     const viewButton = (id) => { // view button function // TODO: Change the following function
             // not used here
-            // console.log("view: " + id);
+            console.log("view: " + id);
+            router.push(`./${id}`)
         }
-
-    const editButton = (id) => { // edit button function // TODO: Change the following function
-        // not used here
-        // console.log("edit: " + id);
-    }
-
-    const deleteButton = (id) => { // delete button function // TODO: Change the following function
-        // not used here
-        // console.log("delete: " + id);
-    }
 
     // action buttons // TODO: Change the following buttons
     const actionButtons = [
         {name: "View", text: "View", icon: "", type: "default", function: viewButton},
-        {name: "Edit", text: "Edit", icon: "", type: "primary", function: editButton},
-        {name: "Delete", text: "Delete", icon: "", type: "danger", function: deleteButton},
     ];
 
 
@@ -163,36 +176,6 @@ export default function Webpages() {
 
     // status options // TODO: Change the following options
     const statusOptions = [
-        {
-            name: "Offline", // status name
-            uid: 0, // status id (the value in the database)
-            type: "", // status type (color) ["", primary, secondary, danger, warning, success]
-            button: true, // if you want to show a button to change the status
-            currentStatus: [1], // button showing status, ex: if currently status is 1, then the button will be shown | can use [1,2,...] for multiple statuses
-            function: updateStatusButton, // function to change the status
-
-            // icon
-            icon: <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5}
-                       stroke="currentColor" className="w-5 h-5">
-                <path strokeLinecap="round" strokeLinejoin="round"
-                      d="m9.75 9.75 4.5 4.5m0-4.5-4.5 4.5M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z"/>
-            </svg>
-        },
-        {
-            name: "Active", // status name
-            uid: 1, // status id (the value in the database)
-            type: "primary", // status type (color) [danger, warning, success, primary]
-            button: true, // if you want to show a button to change the status
-            currentStatus: [0], // button showing status, ex: if currently status is 1, then the button will be shown | can use [1,2,...] for multiple statuses
-            function: updateStatusButton, // function to change the status
-
-            // icon
-            icon: <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5}
-                       stroke="currentColor" className="w-5 h-5">
-                <path strokeLinecap="round" strokeLinejoin="round"
-                      d="M9 12.75 11.25 15 15 9.75M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z"/>
-            </svg>
-        }
 
         // ...add more status options (if needed)
 
@@ -255,10 +238,10 @@ export default function Webpages() {
             headerMessage(type, message);
 
         // fetch data count from API // TODO: Change the following function
-        getWebPagesCount(searchColumn, searchFieldValue).then((response) => setPagesCount(response));
+        getWebPagesCount(searchColumn, searchFieldValue, params.webId).then((response) => setPagesCount(response));
 
         // fetch data from API // TODO: Change the following function
-        getWebPages(rowsPerPage, currentPage, searchColumn, searchFieldValue)
+        getWebPages(rowsPerPage, currentPage, searchColumn, searchFieldValue, params.webId)
             .then(response => setData(response === null ? [] : response.length === 0 ? [] : response))
             .catch(error => console.error(error));
 
@@ -268,10 +251,10 @@ export default function Webpages() {
     const fetchTableData = (useCallback((page, key, val) => {
 
         // fetch data count from API // TODO: Change the following function
-        getWebPagesCount(key, val).then((response) => setPagesCount(response));
+        getWebPagesCount(key, val, params.webId).then((response) => setPagesCount(response));
 
         // fetch data from API // TODO: Change the following function
-        getWebPages(rowsPerPage, page, key, val)
+        getWebPages(rowsPerPage, page, key, val, params.webId)
             .then(response => setData(response === null ? [] : response.length === 0 ? [] : response))
             .catch(error => console.error(error));
 
@@ -390,6 +373,11 @@ export default function Webpages() {
                 rowsPerPage={rowsPerPage}
                 changeRowsPerPage={changeRowsPerPage}
 
+                // components
+                components={components}
+
+                // selection mode
+                selectionMode="none"
             />
         </>
     )
