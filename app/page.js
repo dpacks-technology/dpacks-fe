@@ -10,7 +10,11 @@ import React from "react";
 
 export default function Home() {
     return (
-        <main className={`${styles.main}`}>
+        <main className={`${styles.main}`}
+            style={{
+                paddingTop: "50px"
+            }}
+        >
             <Navigation/>
             <div className={"back-container"}>
 
@@ -49,7 +53,7 @@ export default function Home() {
             <div className={"grid grid-cols-2 gap-4 w-full z-40"}
                  style={{
                      zIndex: 0,
-                     height: "76vh"
+                     height: "80vh"
                  }}
             >
                 <div className={"con-mid"} style={{
