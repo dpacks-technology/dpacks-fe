@@ -857,7 +857,7 @@ a {
     background-color: #18181b;
     color: #fff;
     width: 100vw;
-    padding: 20px 160px;
+    /*padding: 20px 160px;*/
     border-top-right-radius: 300px;
     border-top-left-radius: 300px;
     z-index: 1;
@@ -868,8 +868,9 @@ a {
     background-color: #18181b;
     color: #fff;
     width: 100vw;
-    padding-right: 160px;
-    padding-left: 160px;
+    margin-top: -2px;
+    /*padding-right: 160px;*/
+    /*padding-left: 160px;*/
     z-index: 1;
 }
 

@@ -10,12 +10,12 @@ import React from "react";
 
 export default function Home() {
     return (
-        <main className={`${styles.main}`}
+        <main className={`${styles.main} pr-8 pl-8 md:pr-24 md:pl-24`}
             style={{
                 paddingTop: "50px"
             }}
         >
-            <Navigation/>
+            <Navigation />
             <div className={"back-container"}>
 
                 {/*  gradient elements  */}
@@ -39,18 +39,18 @@ export default function Home() {
 
             </div>
 
-            <div className={styles.description}>
-                <div>
-                    <a
-                        href="/"
-                        target="_blank"
-                        rel="noopener noreferrer"
-                    >
-                    </a>
-                </div>
-            </div>
+            {/*<div className={styles.description}>*/}
+            {/*    <div>*/}
+            {/*        <a*/}
+            {/*            href="/"*/}
+            {/*            target="_blank"*/}
+            {/*            rel="noopener noreferrer"*/}
+            {/*        >*/}
+            {/*        </a>*/}
+            {/*    </div>*/}
+            {/*</div>*/}
 
-            <div className={"grid grid-cols-2 gap-4 w-full z-40"}
+            <div className={"grid grid-cols-1 md:grid-cols-2 gap-4 w-full z-40 pt-12 md:pt-0"}
                  style={{
                      zIndex: 0,
                      height: "80vh"
@@ -80,12 +80,14 @@ export default function Home() {
                     </p>
 
                 </div>
-                <div className={"con-mid"}>
-                    <div className={`launchpad ${styles.center}`}>
-                        <div className={"wave ai-wave-1-1"}/>
-                        <div className={"wave ai-wave-1-2"}/>
-                        <div className={"wave ai-wave-2"}/>
-                        <div className={"wave ai-wave-3"}/>
+                <div className={"con-mid"}
+                    style={{maxWidth: "100vw", overflow: "hidden"}}
+                >
+                    <div className={`launchpad ${styles.center} overflow-hidden`}>
+                        <div className={"wave ai-wave-1-1 hidden md:block"}/>
+                        <div className={"wave ai-wave-1-2 hidden md:block"}/>
+                        <div className={"wave ai-wave-2 hidden md:block"}/>
+                        <div className={"wave ai-wave-3 hidden md:block"}/>
                         <div className={`${styles.center}`}>
                             <Image src="/images/logos/dpacks-icon-black-120.png"
                                    className={"fade-in main-img-overwrites wave ai-wave-2-2"}
@@ -100,12 +102,12 @@ export default function Home() {
             </div>
 
             {/* section 2 */}
-            <div className={"section-2"}>
-                <div className={"container pt-36 mb-4"} style={{lineHeight: "1"}}>
-                    <h1 style={{fontSize: "36px"}}>
+            <div className={"section-2 mt-12 md:mt-0 pt-36 pb-16 pl-8 pr-8 md:pl-48 md:pr-48"}>
+                <div className={"container mb-0"} style={{lineHeight: "1"}}>
+                    <h1 className={"p-3 md:p-0"} style={{fontSize: "36px"}}>
                         DPacks do care about web
                     </h1>
-                    <h1 style={{fontSize: "64px"}}>data</h1>
+                    <h1 className={"p-3 md:p-0"} style={{fontSize: "64px"}}>data</h1>
                 </div>
                 <div className={`diagram ${styles.grid}`}>
                     <div className={"con-mid"}>
@@ -136,7 +138,7 @@ export default function Home() {
             </div>
 
             {/* section 4 */}
-            <div className={"section-4 pt-24 pb-24"}>
+            <div className={"section-4 pt-4 md:pt-12 pb-14 pl-8 pr-8 md:pl-48 md:pr-48"}>
                 <div className={"container"} style={{lineHeight: "1"}}>
                     <h1 style={{fontSize: "36px"}}>
                         DPacks integrates
@@ -151,7 +153,7 @@ export default function Home() {
                 </p>
             </div>
 
-            <div className={"section-4 pt-12 pb-36"}>
+            <div className={"section-4 pt-24 pb-36 pl-8 pr-8 md:pl-48 md:pr-48"}>
                 <h1 style={{fontSize: "36px", textAlign: "center"}}>
                     DPacks enhances your web...
                 </h1>
@@ -162,7 +164,7 @@ export default function Home() {
                     width: "100vw",
                 }}
             >
-                <DashboardFooter/>
+                <DashboardFooter />
             </div>
         </main>
     );
