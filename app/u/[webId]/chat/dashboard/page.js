@@ -2,71 +2,51 @@
 import React, { useState, useEffect } from "react";
 import ChatList from "./ChatList";
 import ChatMessageHistory from "./ChatMessageHistory";
-import ChatInput from "./ChatInput";
-import { GetMessagesByWebId, GetMessagesByVisitorId, AddMessage } from "/services/MessageService";
+import {GetMessagesByWebId, GetMessagesByVisitorId} from "/services/MessageService";
 import { useParams } from "next/navigation";
-import io from "socket.io-client"; // Import Socket.IO client
+import useSocket from "socket.io-client";
+import Keys from '@/Keys'
 
-const socket = io("http://localhost:4006"); // Replace with your server URL
 
 const Dashboard = () => {
+    const socket = useSocket(Keys.MESSAGE_SERVICE_API_URL)
     const { webId } = useParams();
     const [chats, setChats] = useState([]);
     const [selectedChat, setSelectedChat] = useState(null);
     const [selectedChatId, setSelectedChatId] = useState(null);
 
-    const handleChatClick = async (visitorId) => {
-        setSelectedChatId(visitorId);
-
+    // Fetch chat visitorId and content on chat click
+    const handleChatClick = async (webId, visitorId) => {
         try {
-            const messages = await GetMessagesByVisitorId({ webId, visitorId });
-            setSelectedChat(messages);
+            const content = await GetMessagesByVisitorId({ webId, visitorId });
+
+            setSelectedChat(content);
+            setSelectedChatId(visitorId);
+
+
         } catch (error) {
             console.error("Error fetching messages:", error);
         }
     };
 
-    const handleSendMessage = async (message) => {
-        if (!selectedChatId) return;
-
-        try {
-            await AddMessage({ webId, visitorId: selectedChatId, visitorName, sender: "websiteOwner", message });
-            // Emit event to server to notify other clients about new message
-            socket.emit("newMessage", { webId, visitorId, message }); // New event
-        } catch (error) {
-            console.error("Error sending message:", error);
-        }
-    };
-
+    //get all messages in website
     useEffect(() => {
+        const timer = setTimeout(() => {
         const fetchChats = async () => {
             try {
                 const chatData = await GetMessagesByWebId(webId);
                 setChats(chatData);
+
             } catch (error) {
                 console.error("Error fetching chats:", error);
             }
         };
-
         fetchChats();
-    }, [webId]);
+        }, 1000);
 
-    useEffect(() => {
-        socket.on("connect", () => {
-            console.log("Socket connected");
-        });
-
-        socket.on("dataUpdate", (data) => {
-            if (data.webId === webId) {
-                setSelectedChat((prevChat) => ({
-                    ...prevChat,
-                    messages: [...prevChat.messages, ...data.messages], // Update messages
-                }));
-            }
-        });
-
-        return () => socket.disconnect(); // Cleanup on unmount
-    }, [webId]);
+        // Clear the timer on component unmount
+        return () => clearTimeout(timer);
+    }, [socket,webId]);
 
     return (
         <div className="chat-dashboard" style={{ display: "grid", gridTemplateColumns: "1fr 3fr" }}>
@@ -81,8 +61,10 @@ const Dashboard = () => {
             <div className="chat-history-container">
                 {selectedChat && (
                     <>
-                        <ChatMessageHistory messages={selectedChat.messages} />
-                        <ChatInput onSendMessage={handleSendMessage} disabled={!selectedChatId} />
+                          <ChatMessageHistory
+                            content={selectedChat}
+                            visitorId={selectedChatId}
+                        />
                     </>
                 )}
             </div>

@@ -20,6 +20,8 @@ import {useDisclosure} from "@nextui-org/react";
 
 import {message} from "antd";
 import EditAutomatedMessageForm from "@/app/components/forms/webchats/EditAutomatedMessageForm";
+import {useParams} from "next/navigation";
+
 
 // Webpages component
 export default function AutomatedMessage() {
@@ -48,6 +50,9 @@ export default function AutomatedMessage() {
     const [pagesCount, setPagesCount] = React.useState(0);
     const {isOpen, onOpen, onOpenChange} = useDisclosure();
     const [searchColumn, setSearchColumn] = React.useState(sortColumn.column); // default search column
+
+    const { webId } = useParams()
+
 
     // ----------------------- COLUMNS -------------------------
     // columns // TODO: Change the following columns according the to yours
@@ -125,7 +130,9 @@ export default function AutomatedMessage() {
     const deleteMenuButton = (id) => { // delete button function // TODO: Change the following function
 
         // delete function
-        deleteAutoResponds(id).then(() => {
+
+        deleteAutoResponds(id,webId).then(() => {
+
             refreshData("success", "Deleted");
         }).catch((error) => {
             headerMessage("error", error.response.data.error);
@@ -155,7 +162,9 @@ export default function AutomatedMessage() {
     const updateStatusButton = (id, status) => {
 
             // update status function
-            updateAutoRespondsStatus(id, status).then(() => {
+
+            updateAutoRespondsStatus(id, status,webId).then(() => {
+
                 refreshData("success", "Updated");
             }).catch((error) => {
                 headerMessage("error", error.response.data.error);
@@ -205,7 +214,9 @@ export default function AutomatedMessage() {
     const updateStatusBulk = (ids, status) => {
 
         // update status bulk function // TODO: Change the following function
-        updateAutoRespondsStatusBulk(ids, status).then(() => {
+
+        updateAutoRespondsStatusBulk(ids, status,webId).then(() => {
+
             refreshData("success", "Updated");
         }).catch((error) => {
             headerMessage("error", error.response.data.error);
@@ -216,7 +227,9 @@ export default function AutomatedMessage() {
     // handle delete bulk function -- NO NEED OF CHANGING
     const handleUpdateStatusBulk = (selectedKeys, status) => {
         if (selectedKeys === 'all') { // if all items are selected
-            updateStatusBulk(data.map(item => item.id), status);
+
+            updateStatusBulk(data.map(item => item.id), status,webId);
+
         } else {
             updateStatusBulk(
                 Array.from(selectedKeys).map((str) => parseInt(str, 10)),
@@ -229,7 +242,9 @@ export default function AutomatedMessage() {
     const deleteBulk = (ids) => {
 
         // delete bulk function // TODO: Change the following function
-        deleteAutoRespondsBulk(ids).then(() => {
+
+        deleteAutoRespondsBulk(ids,webId).then(() => {
+
             refreshData("success", "Deleted");
         }).catch((error) => {
             headerMessage("error", error.response.data.error);
@@ -257,10 +272,12 @@ export default function AutomatedMessage() {
             headerMessage(type, message);
 
         // fetch data count from API // TODO: Change the following function
-        getAutoRespondsCount(searchColumn, searchFieldValue).then((response) => setPagesCount(response));
+
+        getAutoRespondsCount(searchColumn, searchFieldValue,webId).then((response) => setPagesCount(response));
 
         // fetch data from API // TODO: Change the following function
-        GetAutoResponds(rowsPerPage, currentPage, searchColumn, searchFieldValue)
+        GetAutoResponds(rowsPerPage, currentPage, searchColumn, searchFieldValue,webId)
+
             .then(response => setData(response === null ? [] : response.length === 0 ? [] : response))
             .catch(error => console.error(error));
 
@@ -270,14 +287,15 @@ export default function AutomatedMessage() {
     const fetchTableData = (useCallback((page, key, val) => {
 
         // fetch data count from API // TODO: Change the following function
-        getAutoRespondsCount(key, val).then((response) => setPagesCount(response));
+
+        getAutoRespondsCount(key, val,webId).then((response) => setPagesCount(response));
 
         // fetch data from API // TODO: Change the following function
-        GetAutoResponds(rowsPerPage, page, key, val)
+        GetAutoResponds(rowsPerPage, page, key, val, webId)
             .then(response => setData(response === null ? [] : response.length === 0 ? [] : response))
             .catch(error => console.error(error));
+    }, [rowsPerPage, webId]));
 
-    }, [rowsPerPage]));
 
     // useEffect to fetch data -- NO NEED OF CHANGING
     useEffect(() => {
@@ -292,10 +310,12 @@ export default function AutomatedMessage() {
             fetchTableData(currentPage, searchColumn, searchFieldValue);
         } else {
             // get data count // TODO: Change the following function
-            getAutoRespondsByDatetimeCount(start, end, searchColumn, searchFieldValue).then((response) => setPagesCount(response));
+
+            getAutoRespondsByDatetimeCount(start, end, searchColumn, searchFieldValue,webId).then((response) => setPagesCount(response));
 
             // get data // TODO: Change the following function
-            getAutoRespondsByDatetime(rowsPerPage, currentPage, start, end, searchColumn, searchFieldValue).then(response => setData(response === null ? [] : response.length === 0 ? [] : response))
+            getAutoRespondsByDatetime(rowsPerPage, currentPage, start, end, searchColumn, searchFieldValue,webId).then(response => setData(response === null ? [] : response.length === 0 ? [] : response))
+
         }
     }
 
@@ -304,10 +324,12 @@ export default function AutomatedMessage() {
     // status change function
     const statusChange = (statusArray) => {
         // get data count // TODO: Change the following function
-        getAutoRespondsByStatusCount(statusArray, searchColumn, searchFieldValue).then((response) => setPagesCount(response));
+
+        getAutoRespondsByStatusCount(statusArray, searchColumn, searchFieldValue,webId).then((response) => setPagesCount(response));
 
         // get data // TODO: Change the following function
-        getAutoRespondsByStatus(rowsPerPage, currentPage, statusArray, searchColumn, searchFieldValue).then(response => setData(response === null ? [] : response.length === 0 ? [] : response))
+        getAutoRespondsByStatus(rowsPerPage, currentPage, statusArray, searchColumn, searchFieldValue,webId).then(response => setData(response === null ? [] : response.length === 0 ? [] : response))
+
     }
 
 
