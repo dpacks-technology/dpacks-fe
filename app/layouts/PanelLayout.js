@@ -8,6 +8,8 @@ import RightNavigation1 from "@/app/components/RightNavigation1";
 import {cloneElement, useState} from "react";
 import Link from "next/link";
 import Image from "next/image";
+import SignoutButton from "@/app/components/SignoutButton";
+import SettingsButton from "@/app/components/SettingsButton";
 
 export default function PanelLayout({ childrenBody }) {
 
@@ -36,22 +38,24 @@ export default function PanelLayout({ childrenBody }) {
                                         d="M2 4.75A.75.75 0 012.75 4h14.5a.75.75 0 010 1.5H2.75A.75.75 0 012 4.75zm0 10.5a.75.75 0 01.75-.75h7.5a.75.75 0 010 1.5h-7.5a.75.75 0 01-.75-.75zM2 10a.75.75 0 01.75-.75h14.5a.75.75 0 010 1.5H2.75A.75.75 0 012 10z" />
                                 </svg>
                             </button>
-                            <Link href="/u" className="flex ms-2 z-50">
+                            <Link href="/u" className="flex ms-4 z-50">
                                 <img src={logoSrc} className="w-32 " alt="Dpacks Logo" />
                             </Link>
                         </div>
                         <SearchBar className={"content-start"} />
                         <div className="flex items-center">
                             <div className="flex items-center ms-3">
-                                <div>
-                                    <button type="button"
-                                        className="flex text-sm bg-gray-800 rounded-full focus:ring-4 focus:ring-gray-300 dark:focus:ring-gray-600"
-                                        aria-expanded="false" data-dropdown-toggle="dropdown-user">
-                                        <span className="sr-only">Open user menu</span>
-                                        <img className="w-8 h-8 rounded-full"
-                                            src="/images/profile-picture/profile.svg"
-                                            alt="user photo" />
-                                    </button>
+                                <div className={"grid grid-cols-2 gap-2"}>
+                                    <SettingsButton />
+                                    <SignoutButton />
+                                    {/*<button type="button"*/}
+                                    {/*    className="flex text-sm bg-gray-800 rounded-full focus:ring-4 focus:ring-gray-300 dark:focus:ring-gray-600"*/}
+                                    {/*    aria-expanded="false" data-dropdown-toggle="dropdown-user">*/}
+                                    {/*    <span className="sr-only">Open user menu</span>*/}
+                                    {/*    <img className="w-8 h-8 rounded-full"*/}
+                                    {/*        src="/images/profile-picture/profile.svg"*/}
+                                    {/*        alt="user photo" />*/}
+                                    {/*</button>*/}
                                 </div>
                                 <div
                                     className="z-50 hidden my-4 text-base list-none bg-white divide-y divide-gray-100 rounded shadow dark:bg-gray-700 dark:divide-gray-600"
@@ -98,17 +102,17 @@ export default function PanelLayout({ childrenBody }) {
 
                 <div
                     className="p-4 mt-2 rounded-2xl bg-secondaryLight dark:bg-secondaryDark fixed overflow-scroll"
-                    style={{ width: "calc(100% - 367px)", height: "calc(100% - 100px)" }}>
+                    style={{ width: "calc(100% - 310px)", height: "calc(100% - 100px)" }}>
 
                     {childrenBody}
 
                 </div>
             </div>
-            <aside id="logo-sidebar"
-                className="fixed top-0 right-0 z-40 h-screen pt-20 transition-transform -translate-x-full bg-transparent border-r border-transparent sm:translate-x-0 dark:bg-transparent dark:border-transparent"
-                aria-label="Sidebar">
-                <RightNavigation1 />
-            </aside>
+            {/*<aside id="logo-sidebar"*/}
+            {/*    className="fixed top-0 right-0 z-40 h-screen pt-20 transition-transform -translate-x-full bg-transparent border-r border-transparent sm:translate-x-0 dark:bg-transparent dark:border-transparent"*/}
+            {/*    aria-label="Sidebar">*/}
+            {/*    <RightNavigation1 />*/}
+            {/*</aside>*/}
 
 
         </div>
