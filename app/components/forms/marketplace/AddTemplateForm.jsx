@@ -2,11 +2,16 @@
 
 import {Button} from "@nextui-org/react";
 import Input from "@/app/components/Input";
-import React from "react";
+import React, {useEffect, useState} from "react";
 import {Form, message} from "antd";
 import schema from "@/app/validaitions/TemplateAddValidation";
 import FormItem from "antd/es/form/FormItem";
 import {AddTemplate} from "@/services/MarketplaceService";
+import Dropzone from "@/app/components/Dropzone/Dropzone";
+import {Select, SelectItem} from "@nextui-org/react";
+import items from "@/app/data/template_categories";
+import DropzoneImage from "@/app/components/DropzoneImage/DropzoneImage";
+
 
 const AddTemplateForm = ({...props}) => {
 
@@ -20,6 +25,24 @@ const AddTemplateForm = ({...props}) => {
     const [thmbnlfile, setThumbnailFile] = React.useState("");
     const [dmessage, setDeveloperMessage] = React.useState("");
     const [price, setTemplatePrice] = React.useState("");
+    const [uploadPercentage, setUploadPercentage] = useState(0);
+    const[imageName, setImageName] = useState(null);
+
+    // set the image name random and timestamp
+    const [templateName, setTemplateName] = useState("");
+    const [templateThumbName, setTemplateThumbName] = useState("");
+    const [randomNumber, setRandomNumber] = useState('');
+
+
+    const handleImageName = async (data) => {
+        console.log(data);
+        setImageName(data);
+    }
+
+    const handleUploadPercentage = async (data) => {
+        console.log(data);
+        setUploadPercentage(data);
+    }
 
     // backend validation error message
     const [messageApi, contextHolder] = message.useMessage(); // message api
@@ -31,19 +54,23 @@ const AddTemplateForm = ({...props}) => {
     };
 
 
-    // add webpage function
+    // add template function
     const addTemplate = async () => {
+
         // set saving
         setSaving(true);
 
+        console.log(templateName)
+        console.log(templateThumbName)
+
         try {
             // data // TODO: add/change fields
-            const data = {name, description, category, mainfile, thmbnlfile, dmessage, price: parseFloat(price)};
+            const data = {name, description, category, mainfile: templateName, thmbnlfile: templateThumbName, dmessage, price: parseFloat(price)};
 
             // validate
             await schema.validate(data, { abortEarly: false });
 
-            // add webpage // TODO: change the function
+            // add template // TODO: change the function
             await AddTemplate(data).then((response) => {
                 props.notificationMessage("success", "Record added"); // refresh data with success message
                 props.onClose(); // close modal
@@ -58,6 +85,14 @@ const AddTemplateForm = ({...props}) => {
             setError(errorsObject);
         }
     };
+
+    function handleSetTemplateName(name) {
+        setTemplateName(name);
+    }
+
+    function handleSetTemplateThumbName(name) {
+        setTemplateThumbName(name);
+    }
 
 
     return (
@@ -87,34 +122,36 @@ const AddTemplateForm = ({...props}) => {
                         />
                     </FormItem>
                     <FormItem>
-                        <Input
-                            label={"Category"}
-                            type="text" placeholder="Enter Category: Business, E-commerce, Education, Food, Health etc.."
+                        <label htmlFor="category" style={{fontSize: '12px'}}> Category </label>
+                        <br/>
+
+                        <Select
+                            label="Category"
+                            fontSize="32px"
+                            className="w-40"
                             value={category}
                             onChange={(e) => setCategory(e.target.value)}
-                            status={error.category ? "error" : ""}
-                            error={error.category}
-                        />
+                        >
+                            {items.map((item) => (
+                                <SelectItem key={item.value} value={item.value}>
+                                    {item.label}
+                                </SelectItem>
+                            ))}
+
+                        </Select>
+
                     </FormItem>
                     <FormItem>
-                        <Input
-                            label={"Main File"}
-                            type="text" placeholder="Enter the link of your uploaded main file"
-                            value={mainfile}
-                            onChange={(e) => setMainFile(e.target.value)}
-                            status={error.mainfile ? "error" : ""}
-                            error={error.mainfile}
-                        />
+                        <p style={{fontSize: '12px'}}>Upload Template File (.zip formatm )</p>
+                        <Dropzone
+                            setTemplateName={handleSetTemplateName}
+                            uploadPercentageData={handleUploadPercentage} name={"template"} id={"template"}/>
                     </FormItem>
                     <FormItem>
-                        <Input
-                            label={"Thumbnail Image"}
-                            type="text" placeholder="Enter the link of your uploaded thumbnail image"
-                            value={thmbnlfile}
-                            onChange={(e) => setThumbnailFile(e.target.value)}
-                            status={error.thmbnlfile ? "error" : ""}
-                            error={error.thmbnlfile}
-                        />
+                        <p style={{fontSize: '12px'}}>Upload Template Thumbnail</p>
+                        <DropzoneImage
+                            SetTemplateThumbName={handleSetTemplateThumbName}
+                            uploadPercentageData={handleUploadPercentage} name={"thumbnail"} id={"thumbnail"}/>
                     </FormItem>
                     <FormItem>
                         <Input
@@ -128,7 +165,7 @@ const AddTemplateForm = ({...props}) => {
                     </FormItem>
                     <FormItem>
                         <Input
-                            label={"Price"}
+                            label={"Price in $"}
                             type="decimal" placeholder="Enter the price of the template if any"
                             value={price}
                             onChange={(e) => setTemplatePrice(e.target.value)}
