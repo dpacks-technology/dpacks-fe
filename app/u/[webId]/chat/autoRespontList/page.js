@@ -44,11 +44,13 @@ const AutoRespondsList = ({ onMessageClick, webId }) => {
 
     return (
         <ul>
-            {autoResponds.map((autoRespond) => (
-                <li key={autoRespond.id} onClick={() => onMessageClick(autoRespond.message)}>
-                    <p style={{ color: 'black' }}>Message: {autoRespond.message}</p>
-                </li>
-            ))}
+            {autoResponds
+                .filter((autoRespond) => autoRespond.status === 0)
+                .map((autoRespond) => (
+                    <li key={autoRespond.id} onClick={() => onMessageClick(autoRespond.message)}>
+                        <p style={{ color: 'black' }}>Message: {autoRespond.message}</p>
+                    </li>
+                ))}
         </ul>
     );
 };
