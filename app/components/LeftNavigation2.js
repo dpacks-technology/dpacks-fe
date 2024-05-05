@@ -19,6 +19,7 @@ import { PContentNavigation } from '../data/PContentNavigation';
 import { AdminDashboardNavigation } from '../data/AdminDashboardNavigation';
 import AddToBlockList from './forms/Visitor/BlockList/AddToBlockList';
 import AddPinnedDataPacketForm from "@/app/components/forms/PinnedDataPackets/AddPinnedDataPacketForm";
+import AddAIDataPackets from "@/app/components/forms/AIDataPackets/AddAIDataPackets";
 
 const LeftNavigation2 = ({params}) => {
 
@@ -65,9 +66,15 @@ const LeftNavigation2 = ({params}) => {
             return <AddPinnedDataPacketForm notificationMessage={notificationMessage} folder_id={fullPathname.split("/")[4]} web_id={fullPathname.split("/")[2]} />;
         }
 
+        if (fullPathname.split("/")[3] === "ai-packets") {
+            return <AddAIDataPackets notificationMessage={notificationMessage} folder_id={fullPathname.split("/")[4]} web_id={fullPathname.split("/")[2]} />;
+        }
+
         switch (pathname) {
             case "web/packets":
                 return <AddPinnedDataPacketForm notificationMessage={notificationMessage} web_id={fullPathname.split("/")[2]} />;
+            case "web/ai":
+                return <AddAIDataPackets notificationMessage={notificationMessage} web_id={fullPathname.split("/")[2]} />;
             case "Analytics/alert":
                 return <CreateAlertForm notificationMessage={notificationMessage} />;
             case "api/endpoints":
