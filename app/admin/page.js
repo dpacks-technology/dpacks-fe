@@ -23,7 +23,7 @@ export default function AdminDashboard() {
     const [selectedItem2, setSelectedItem2] = useState("");
     const [selectedItem3, setSelectedItem3] = useState("");
     const [totalUsedStorage, setTotalUsedStorage] = useState(0);
-    const [totalStorage, setTotalStorage] = useState(50000);// 50GB
+    const [totalStorage, setTotalStorage] = useState(500000);// 500GB
     const [totalStoragePerUser, setTotalStoragePerUser] = useState(2000);//2GB
 
 
@@ -100,7 +100,7 @@ export default function AdminDashboard() {
 
     return (
         <div>
-            <h1 className="text-2xl font-bold mb-5">Dashboard</h1>
+            <h1 className="text-2xl font-semibold mb-5">Dashboard</h1>
             <div className="flex flex-row gap-4 justify-around">
                 <Card style={{width: 300}}>
                     <div>
@@ -231,11 +231,11 @@ export default function AdminDashboard() {
                 </Card>
             </div>
 
-            <h1 className="text-2xl font-bold mb-5 mt-5">Storage Meters</h1>
+            <h1 className="text-2xl font-semibold mb-5 mt-5">Storage Meters</h1>
             <div className="grid grid-cols-2 gap-3 mt-5">
                 <div className="w-full h-96">
 
-                    <h1 className="text-2xl mt-5 font-bold text-center">Overall Storage</h1>
+                    <h1 className="text-xl mt-5 font-medium text-center">Overall Storage</h1>
                     <ReactECharts
                         option={{
                             tooltip: {},
@@ -249,7 +249,7 @@ export default function AdminDashboard() {
                 </div>
 
                 <div className="w-full h-96">
-                    <h1 className="text-2xl mt-5 font-bold text-center">Site Specific Storage</h1>
+                    <h1 className="text-xl mt-5 font-medium text-center">Site Specific Storage</h1>
 
                     <ReactECharts
                         className="p-5"
