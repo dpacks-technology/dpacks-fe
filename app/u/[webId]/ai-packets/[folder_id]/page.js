@@ -2,31 +2,27 @@
 // Importing modules
 import Table from "@/app/components/Table";
 import React, {useCallback, useEffect} from "react";
-import {
-    deletePage,
-    deleteWebpagesBulk,
-    getPagesByDatetime,
-    getPagesByDatetimeCount,
-    getPagesByStatus,
-    getPagesByStatusCount,
-    updateWebpagesStatus,
-    updateWebpagesStatusBulk
-} from "@/services/WebpagesService";
-import {useDisclosure} from "@nextui-org/react";
-import EditWebpageForm from "@/app/components/forms/webpages/EditWebpageForm";
+import {BreadcrumbItem, Breadcrumbs, useDisclosure} from "@nextui-org/react";
 import {message} from "antd";
-import {useRouter} from "next/navigation";
-import {getAIFolders, getAIFoldersCount} from "@/services/AIDataPacketsService";
+import Link from "next/link";
+import Keys from "@/Keys";
+import {updateWebpagesStatusBulk} from "@/services/WebpagesService";
+import {
+    deletePinedPacketsBulk,
+    deletePinnedPacket,
+} from "@/services/PinnedDataPacketsService";
+import EditAIDataPackets from "@/app/components/forms/AIDataPackets/EditAIDataPackets";
+import {getAIPackets, getAIPacketsCount} from "@/services/AIDataPacketsService";
 
 // Webpages component
-export default function PinnedFolders({params}) {
+export default function PinnedPackets({params}) {
 
-    const router = useRouter();
+    const storage_bucket_url = Keys.STORAGE_BUCKET_URL;
 
     // ----------------------- DEFAULT COLUMNS -------------------------
     // default columns // TODO: Change the following functions
     const dateColumn = "last_updated" // default date column
-    const sortColumn = {column: "page", direction: "ascending"} // default sort column
+    const sortColumn = {column: "element", direction: "ascending"} // default sort column
 
     // ----------------------- MESSAGE ------------------------- (NO NEED OF CHANGING)
     // message
@@ -67,23 +63,21 @@ export default function PinnedFolders({params}) {
     // columns // TODO: Change the following columns according the to yours
     const columns = [
         // {name: "ID", uid: "id", sortable: true, type: "text"},
-        {name: "PAGE", uid: "page", sortable: true, type: "text"},
+        {name: "ELEMENT", uid: "element", sortable: true, type: "text"},
         {name: "CREATED", uid: "init_datetime", sortable: false, type: "datetime"},
         {name: "UPDATED", uid: "last_updated", sortable: false, type: "datetime"},
         {name: "SIZE (BYTES)", uid: "size", sortable: false, type: "text"},
-        {name: "ELEMENTS COUNT", uid: "elements_count", sortable: false, type: "text"},
-        {name: "", uid: "buttons", sortable: false, type: "buttons"},
-        // {name: "ACTIONS", uid: "menu", sortable: false, type: "menu"},
+        // {name: "", uid: "buttons", sortable: false, type: "buttons"},
+        {name: "", uid: "menu", sortable: false, type: "menu"},
         // all usable types: text, twoText, datetime, label, status, statusButtons, buttons, menu, copy, icon, iconText, iconTwoText
     ];
 
     // initially visible columns // TODO: Change the following columns according the to yours
     const init_cols = [
-        "page",
-        "size",
-        "elements_count",
+        "element",
         "init_datetime",
         "last_updated",
+        "size",
         "buttons",
         "menu"
     ];
@@ -98,14 +92,21 @@ export default function PinnedFolders({params}) {
      ***/
         // action button functions
     const viewButton = (id) => { // view button function // TODO: Change the following function
-            // not used here
-            console.log("view: " + id);
-            router.push(`../ai-packets/${id}`)
+            let packet_url = storage_bucket_url + "/" + params.webId + "/" + params.folder_id + "/" + id;
+            window.open(packet_url, '_blank').focus();
         }
+
+    const deleteButton = (id) => { // delete button function // TODO: Change the following function
+        deletePinnedPacket(params.webId, params.folder_id, id).then(() => {
+            refreshData("success", "Deleted");
+        });
+    }
 
     // action buttons // TODO: Change the following buttons
     const actionButtons = [
+        {name: "Update", text: "Update", icon: "", type: "secondary", function: onOpen},
         {name: "View", text: "View", icon: "", type: "default", function: viewButton},
+        {name: "Delete", text: "Delete", icon: "", type: "danger", function: deleteButton},
     ];
 
 
@@ -118,8 +119,8 @@ export default function PinnedFolders({params}) {
      ***/
         // menu button functions
     const viewMenuButton = (id) => { // view button function // TODO: Change the following function
-            // not used here
-            // console.log("view: " + id);
+            let packet_url = storage_bucket_url + "/" + params.webId + "/" + params.folder_id + "/" + id;
+            window.open(packet_url, '_blank').focus();
         }
 
     const editMenuButton = (id) => { // edit button function // TODO: Change the following function
@@ -129,11 +130,8 @@ export default function PinnedFolders({params}) {
 
     const deleteMenuButton = (id) => { // delete button function // TODO: Change the following function
 
-        // delete function
-        deletePage(id).then(() => {
+        deletePinnedPacket(params.webId, params.folder_id, id).then(() => {
             refreshData("success", "Deleted");
-        }).catch((error) => {
-            headerMessage("error", error.response.data.error);
         });
 
     }
@@ -141,7 +139,7 @@ export default function PinnedFolders({params}) {
     // menu buttons // TODO: Change the following buttons
     const menuButtons = [
         {name: "View", text: "View", function: viewMenuButton},
-        {name: "Edit", text: "Edit", function: onOpen}, // edit function set to open model (onOpen function)
+        {name: "Update", text: "Update", function: onOpen}, // edit function set to open model (onOpen function)
         {name: "Delete", text: "Delete", function: deleteMenuButton},
     ];
 
@@ -202,14 +200,12 @@ export default function PinnedFolders({params}) {
 
     // delete bulk
     const deleteBulk = (ids) => {
-
         // delete bulk function // TODO: Change the following function
-        deleteWebpagesBulk(ids).then(() => {
+        deletePinedPacketsBulk(params.webId, params.folder_id, ids).then(() => {
             refreshData("success", "Deleted");
         }).catch((error) => {
             headerMessage("error", error.response.data.error);
         });
-
     }
 
     // handle delete bulk function -- NO NEED OF CHANGING
@@ -218,7 +214,7 @@ export default function PinnedFolders({params}) {
             deleteBulk(data.map(item => item.id));
         } else {
             deleteBulk(
-                Array.from(selectedKeys).map((str) => parseInt(str, 10))
+                Array.from(selectedKeys).map((str) => str)
             );
         }
     }
@@ -232,10 +228,10 @@ export default function PinnedFolders({params}) {
             headerMessage(type, message);
 
         // fetch data count from API // TODO: Change the following function
-        getAIFoldersCount(searchColumn, searchFieldValue, params.webId).then((response) => setPagesCount(response));
+        getAIPacketsCount(searchColumn, searchFieldValue, params.webId, params.folder_id).then((response) => setPagesCount(response));
 
         // fetch data from API // TODO: Change the following function
-        getAIFolders(rowsPerPage, currentPage, searchColumn, searchFieldValue, params.webId)
+        getAIPackets(rowsPerPage, currentPage, searchColumn, searchFieldValue, params.webId, params.folder_id)
             .then(response => setData(response === null ? [] : response.length === 0 ? [] : response))
             .catch(error => console.error(error));
 
@@ -245,10 +241,10 @@ export default function PinnedFolders({params}) {
     const fetchTableData = (useCallback((page, key, val) => {
 
         // fetch data count from API // TODO: Change the following function
-        getAIFoldersCount(key, val, params.webId).then((response) => setPagesCount(response));
+        getAIPacketsCount(key, val, params.webId, params.folder_id).then((response) => setPagesCount(response));
 
         // fetch data from API // TODO: Change the following function
-        getAIFolders(rowsPerPage, page, key, val, params.webId)
+        getAIPackets(rowsPerPage, page, key, val, params.webId, params.folder_id)
             .then(response => setData(response === null ? [] : response.length === 0 ? [] : response))
             .catch(error => console.error(error));
 
@@ -324,6 +320,11 @@ export default function PinnedFolders({params}) {
     return (
         <>
             {contextHolder}
+            <p className={"text-medium text-gray-200 mb-2"}>AI Data Packets</p>
+            <Breadcrumbs className={"mb-8"}>
+                <BreadcrumbItem><Link href={"../web/ai"}>Folders</Link></BreadcrumbItem>
+                <BreadcrumbItem>{params.folder_id}</BreadcrumbItem>
+            </Breadcrumbs>
             <Table
 
                 // data and columns
@@ -346,7 +347,7 @@ export default function PinnedFolders({params}) {
                 editMenuButton={editMenuButton}
                 editItemIsOpen={isOpen}
                 editItemOnOpenChange={onOpenChange}
-                editForm={<EditWebpageForm refreshData={refreshData}/>}
+                editForm={<EditAIDataPackets folder_id={params.folder_id} web_id={params.webId} refreshData={refreshData}/>}
 
                 // search, sorting and filtering
                 searchColumn={searchColumn}
@@ -370,8 +371,6 @@ export default function PinnedFolders({params}) {
                 // components
                 components={components}
 
-                // selection mode
-                selectionMode="none"
             />
         </>
     )

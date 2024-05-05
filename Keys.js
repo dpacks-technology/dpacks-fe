@@ -11,7 +11,8 @@ const Key = {
     AUTH_SERVICE_API_URL: 'https://auth.dpacks.net',
 
     // data packets service
-    DATA_PACKETS_SERVICE_API_URL: 'https://web.dpacks.net',
+    DATA_PACKETS_SERVICE_API_URL: 'http://localhost:4000',
+    // DATA_PACKETS_SERVICE_API_URL: 'https://web.dpacks.net',
 
     // storage bucket
     STORAGE_BUCKET_URL: 'https://web.dpacks.net/api/v1/data-packets/fetch',
