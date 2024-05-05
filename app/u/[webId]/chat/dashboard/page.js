@@ -14,7 +14,7 @@ const Dashboard = () => {
     const [chats, setChats] = useState([]);
     const [selectedChat, setSelectedChat] = useState(null);
     const [selectedChatId, setSelectedChatId] = useState(null);
-    const [isLoading, setIsLoading] = useState(true)// Set loading state to true
+
 
     // Fetch chat visitorId and content on chat click
     const handleChatClick = async (webId, visitorId) => {
@@ -23,7 +23,7 @@ const Dashboard = () => {
 
             setSelectedChat(content);
             setSelectedChatId(visitorId);
-            setIsLoading(false);
+            
 
 
         } catch (error) {

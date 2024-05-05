@@ -9,13 +9,13 @@ import { Rate } from 'antd';
 import {AddRating} from "@/services/MarketplaceService";
 import Input from "@/app/components/Input";
 
-const AddRatingsForm = ({id, templateId, ...props}) => {
+const AddRatingsForm = ({...props}) => {
 
     // state
     const [saving, setSaving] = React.useState(false);
     const [error, setError] = React.useState({});
     const [rating, setRating] = React.useState("");
-    const [selectedTemplateId, setSelectedTemplateId] = React.useState("");
+    const [id, setTemplateId] = React.useState("");
 
 
 
@@ -38,7 +38,7 @@ const AddRatingsForm = ({id, templateId, ...props}) => {
 
         try {
             // data // TODO: add/change fields
-            const data = {rating: parseInt(rating),  id: parseInt(templateId)};
+            const data = {rating: parseInt(rating),  id: parseInt(props.id)};
 
 
             // validate

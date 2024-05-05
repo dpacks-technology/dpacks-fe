@@ -29,7 +29,7 @@ const EditBillingProfileForm = ({...props}) => {
     const [Month, setMonth] = useState("");
     const [Year, setYear] = useState("");
     const [CVV, setCVV] = useState("");
-
+    //const [termsChecked, setTermsChecked] = useState(false); // State for managing checkbox checked status
 
     //backend  validation error message
     const [messageApi, contextHolder] = message.useMessage(); // message api
@@ -64,7 +64,7 @@ const EditBillingProfileForm = ({...props}) => {
                 month: parseInt(Month),
                 year: parseInt(Year),
                 cvv: parseInt(CVV),
-
+               // terms: termsChecked,
             };
 
             await schema.validate(data, {abortEarly: false});
@@ -101,7 +101,7 @@ const EditBillingProfileForm = ({...props}) => {
             setMonth(response.month);
             setYear(response.year);
             setCVV(response.cvv);
-
+            //setTermsChecked(response.terms);
 
         }).catch((e) => {
             console.log(e);
@@ -240,8 +240,8 @@ const EditBillingProfileForm = ({...props}) => {
                             placeholder="Card Number"
                             value={CardNo}
                             onChange={(e) => setCardNo(e.target.value)}
-                            status={error.card_number ? "error" : ""}
-                            error={error.card_number}
+                            status={error.CardNo ? "error" : ""}
+                            error={error.CardNo}
                         />
                     </FormItem>
 
@@ -276,8 +276,8 @@ const EditBillingProfileForm = ({...props}) => {
                                 placeholder="MM"
                                 value={Month}
                                 onChange={(e) => setMonth(e.target.value)}
-                                status={error.month ? "error" : ""}
-                                error={error.month}
+                                status={error.Month ? "error" : ""}
+                                error={error.Month}
                             />
                         </FormItem>
 
@@ -300,12 +300,18 @@ const EditBillingProfileForm = ({...props}) => {
                                 placeholder="CVV"
                                 value={CVV}
                                 onChange={(e) => setCVV(e.target.value)}
-                                status={error.cvv ? "error" : ""}
-                                error={error.cvv}
+                                status={error.CVV ? "error" : ""}
+                                error={error.CVV}
                             />
                         </FormItem>
 
-
+                        {/*<FormItem>*/}
+                        {/*    <Checkbox*/}
+                        {/*        defaultChecked={termsChecked} // Set initial checked status*/}
+                        {/*        onChange={handleTermsChange} // Handle checkbox change*/}
+                        {/*    > I Agree to the Terms and Conditions*/}
+                        {/*    </Checkbox>*/}
+                        {/*</FormItem>*/}
 
 
                     </div>
