@@ -64,13 +64,14 @@ export const UsedStorage = async () => {
 
 }
 
-export const siteSpecificStorage = async () => {
-    try {
-        const response = await adminDashboardService.get('/api/admin_dashboard/sites/storage');
-        console.log((response.data))
-        return response.data;
-    } catch (error) {
-        throw error;
-    }
-
-}
+//site spcific storage
+// export const siteSpecificStorage = async () => {
+//     try {
+//         const response = await adminDashboardService.get('/api/admin_dashboard/sites/storage');
+//         console.log((response.data))
+//         return response.data;
+//     } catch (error) {
+//         throw error;
+//     }
+//
+// }

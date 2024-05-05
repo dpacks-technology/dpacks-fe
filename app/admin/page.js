@@ -6,7 +6,7 @@ import {
     getTotalApiSubscribersCount,
     getTotalMarketPlaceUsersCount,
     getTotalUserCount,
-    getTotalWebsitesCount, siteSpecificStorage, UsedStorage
+    getTotalWebsitesCount, UsedStorage
 } from "@/services/AdminDashboardService";
 import ReactECharts from "echarts-for-react";
 
@@ -23,19 +23,20 @@ export default function AdminDashboard() {
     const [selectedItem2, setSelectedItem2] = useState("");
     const [selectedItem3, setSelectedItem3] = useState("");
     const [totalUsedStorage, setTotalUsedStorage] = useState(0);
-    const [totalStorage, setTotalStorage] = useState(500);
-    const [siteSpecificStorageData, setSiteSpecificStorageData] = useState([]);
+    const [totalStorage, setTotalStorage] = useState(50000);// 50GB
+    const [totalStoragePerUser, setTotalStoragePerUser] = useState(2000);//2GB
 
-    // useeffect to fetch data from the API every time the page is loaded
-    useEffect(() => {
-        fetchTotalUsedStorage();
-        fetchSiteStorage();
-    }, []);
+
 
     // Pie chart data
     const pieData = [
-        {value: totalUsedStorage, name: 'Total Used Space'},
-        {value: totalStorage - totalUsedStorage, name: 'Free Space'},
+        {value: totalStorage - (totalStoragePerUser * totUsers), name: 'Free Space(MB)'},
+        {value: (totalStoragePerUser * totUsers), name: 'Allocated Space(MB)'},
+    ];
+
+    const barData = [
+        {data: (totalStoragePerUser * totUsers), type: 'Allocated'},
+        {data: totalUsedStorage, type: 'Used'},
     ];
 
 
@@ -45,17 +46,6 @@ export default function AdminDashboard() {
             setTotalUsedStorage(data);
         }).catch((error) => {
             console.error("Error fetching total used data:", error);
-        });
-    };
-
-    const fetchSiteStorage = () => {
-        siteSpecificStorage().then((data) => {
-            setSiteSpecificStorageData(data.map(entry => ({
-                data: entry.site_sum,
-                type: entry.site_name
-            })));
-        }).catch((error) => {
-            console.error("Error fetching site specific  data:", error);
         });
     };
 
@@ -101,9 +91,11 @@ export default function AdminDashboard() {
         }
     }, []);
 
+    // useeffect to fetch data from the API every time the page is loaded
     useEffect(() => {
+        fetchTotalUsedStorage();
         fetchTotalCounts().then(r => console.log(r));
-        },[fetchTotalCounts]);
+    }, []);
 
 
     return (
@@ -267,7 +259,7 @@ export default function AdminDashboard() {
                             },
                             yAxis: [{
                                 type: 'category',
-                                data: siteSpecificStorageData.map(entry => entry.type)
+                                data: barData.map(entry => entry.type)
                             }],
 
                             tooltip: {
@@ -277,7 +269,7 @@ export default function AdminDashboard() {
                                 }
                             },
                             series: [{
-                                data: siteSpecificStorageData.map(entry => entry.data),
+                                data: barData.map(entry => entry.data),
                                 type: 'bar'
                             }]
                         }}
