@@ -85,7 +85,7 @@ const ChatList = ({ chats, onChatClick, webId }) => {
                 position: 'sticky',
                 top: '0',
                 zIndex: 1,
-                backgroundColor: '#004a77',
+                backgroundColor: '#0f100f',
                 padding: '10px',
                 display: 'flex',
                 justifyContent: 'space-between',
@@ -103,7 +103,7 @@ const ChatList = ({ chats, onChatClick, webId }) => {
                     value={searchInput}
                     onChange={handleSearchInputChange}
                     style={{
-                        backgroundColor: '#004a77',
+                        backgroundColor: '#0f100f',
                         padding: '0px 20px',
                         borderRadius: '4px',
                         border: '1px solid #ddd',

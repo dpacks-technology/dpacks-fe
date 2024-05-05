@@ -6,6 +6,8 @@ import {AddMessage, GetMessagesByVisitorId} from '@/services/MessageService';
 import Keys from '@/Keys';
 
 import useSocket from "socket.io-client";
+import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
+import {faPaperPlane} from "@fortawesome/free-solid-svg-icons";
 
 
 const ChatWithAdmin = () => {
@@ -120,15 +122,38 @@ const ChatWithAdmin = () => {
     return (
         <div className="chat-window" style={{ position: 'fixed', top: 0, left: 0, width: '100vw', height: '100vh', backgroundColor: '#fff', border: 'none', borderRadius: 0, boxShadow: 'none', zIndex: 100 }}>
             <div className="chat-header" style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', padding: '10px', backgroundColor: '#004a77', borderBottom: '1px solid #ddd', borderRadius: '4px 4px 0 0' }}>
-                <h2 style={{ margin: '0', fontSize: '16px', fontWeight: 'bold', color: 'black' }}>{headerText}</h2>
+                <h2 style={{ margin: '0', fontSize: '16px', fontWeight: 'bold', color: 'white' }}>{headerText}</h2>
             </div>
             {enteredEmail ? (
-                <div style={{ position: 'fixed', bottom: '0', left: '0', right: '0', padding: '10px', display: 'flex', justifyContent: 'space-between', alignItems: 'center', backgroundColor: '#fff', borderTop: '1px solid #ddd', boxShadow: '0 2px 4px rgba(0, 0, 0, 0.1)' }}>
-                    <input value={message} onChange={handleMessageChange} placeholder="Type a message..." style={{ flexGrow: 1, padding: '10px', borderRadius: '4px', border: '1px solid #ddd', marginRight: '10px' }} />
-                    <button style={{ color: '#004a77' }} onClick={sendMessage}>Send</button>
+                <div style={{
+                    position: 'fixed',
+                    bottom: '0',
+                    left: '0',
+                    right: '0',
+                    padding: '10px',
+                    display: 'flex',
+                    justifyContent: 'space-between',
+                    alignItems: 'center',
+                    backgroundColor: '#fff',
+                    borderTop: '1px solid #ddd',
+                    boxShadow: '0 2px 4px rgba(0, 0, 0, 0.1)'
+                }}>
+                    <input value={message} onChange={handleMessageChange} placeholder="Type a message..." style={{
+                        flexGrow: 1,
+                        padding: '10px',
+                        borderRadius: '4px',
+                        border: '1px solid #ddd',
+                        marginRight: '10px'
+                    }}/>
+                    <div onClick={sendMessage} style={{marginRight: '20px'}}><FontAwesomeIcon icon={faPaperPlane} size="1x" color="black"/>
+                    </div>
                 </div>
             ) : (
-                <div style={{ position: 'fixed', top: '50%', left: '50%', transform: 'translate(-50%, -50%)', textAlign: 'center', display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
+                <div style={{
+                    position: 'fixed',
+                    top: '50%',
+                    left: '50%',
+                    transform: 'translate(-50%, -50%)', textAlign: 'center', display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
                     <input value={visitorEmail} onChange={handleVisitorEmailChange} placeholder="Enter your email..." style={{ fontSize: '14px', padding: '10px 20px', borderRadius: '4px', border: '1px solid #ddd', marginBottom: '10px', width: '200px' }} />
                     <button style={{ backgroundColor: '#004a77', border: '1px solid #ddd', padding: '10px 20px', fontSize: '14px', borderRadius: '4px', cursor: 'pointer', transition: 'background-color 0.3s ease', width: '200px' }} onClick={handleVisitorEmailSubmit}>Submit</button>
                     {emailError && <div style={{ color: 'red', marginTop: '5px' }}>{emailError}</div>}
@@ -139,7 +164,7 @@ const ChatWithAdmin = () => {
                     {messages.sort((a, b) => new Date(a.time) - new Date(b.time)).map((msg, index) => (
                         <div key={index} style={{ display: 'flex', flexDirection: msg.sender === 'visitor' ? 'row-reverse' : 'row', alignItems: 'center', justifyContent: 'pace-between', marginTop: '10px' }}>
                             <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
-                                <div style={{ backgroundColor: msg.sender === 'visitor' ? '#4CAF50' : '#008CBA', color: 'white', padding: '5px 10px', borderRadius: '10px', marginRight: msg.sender === 'visitor' ? '10px' : 0, marginLeft: msg.sender === 'admin' ? '10px' : 0, alignSelf: 'flex-start' }}>
+                                <div style={{ backgroundColor: msg.sender === 'visitor' ? '#0c3073' : '#7b8186', color: 'white', padding: '5px 10px', borderRadius: '10px', marginRight: msg.sender === 'visitor' ? '10px' : 0, marginLeft: msg.sender === 'admin' ? '10px' : 0, alignSelf: 'flex-start' }}>
                                     {msg.message}
                                 </div>
                                 <div style={{ fontSize: '12px', color: '#666', alignSelf: 'flex-start', marginTop: '5px' }}>
