@@ -100,7 +100,7 @@ export default function AdminDashboard() {
 
     return (
         <div>
-            <h1 className="text-3xl font-bold mb-5">Dashboard</h1>
+            <h1 className="text-2xl font-bold mb-5">Dashboard</h1>
             <div className="flex flex-row gap-4 justify-around">
                 <Card style={{width: 300}}>
                     <div>
@@ -231,7 +231,7 @@ export default function AdminDashboard() {
                 </Card>
             </div>
 
-            <h1 className="text-3xl font-bold mb-5 mt-5">Storage Meters</h1>
+            <h1 className="text-2xl font-bold mb-5 mt-5">Storage Meters</h1>
             <div className="grid grid-cols-2 gap-3 mt-5">
                 <div className="w-full h-96">
 
