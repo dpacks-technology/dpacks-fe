@@ -7,7 +7,7 @@ import Keys from '@/Keys';
 
 import useSocket from "socket.io-client";
 import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
-import {faPaperPlane} from "@fortawesome/free-solid-svg-icons";
+import {faPaperPlane, faTimes} from "@fortawesome/free-solid-svg-icons";
 
 
 const ChatWithAdmin = () => {
@@ -20,6 +20,8 @@ const ChatWithAdmin = () => {
     const { webId } = useParams();
     const socket = useSocket(Keys.MESSAGE_SERVICE_API_URL);
     const [windowWidth, setWindowWidth] = useState(0);
+    const [showChat, setShowChat] = useState(true);
+
 
     useEffect(() => {
         const handleResize = () => {
@@ -144,6 +146,8 @@ const ChatWithAdmin = () => {
 
     // Sort messages based on their timestamps and map through them
     return (
+        <div>
+        {showChat && (
         <div className="chat-window" style={{
             position: 'fixed',
             top: 0,
@@ -162,12 +166,20 @@ const ChatWithAdmin = () => {
                 padding: '10px',
                 backgroundColor: '#004a77',
                 borderBottom: '1px solid #ddd',
-                borderRadius: '4px 4px 0 0' }}>
+                borderRadius: '4px 4px 0 0'
+            }}>
                 <h2 style={{
                     margin: '0',
                     fontSize: '16px',
                     fontWeight: 'bold',
-                    color: 'white' }}>{headerText}</h2>
+                    color: 'white'
+                }}>{headerText}</h2>
+                <div onClick={() => setShowChat(false)} style={{
+                    cursor: 'pointer',
+                    color: 'white'
+                }}>
+                    <FontAwesomeIcon icon={faTimes} size="1x"/>
+                </div>
             </div>
             {enteredEmail ? (
                 <div style={{
@@ -264,7 +276,9 @@ const ChatWithAdmin = () => {
                 </div>
             )}
         </div>
-    );
+    )}
+ </div>
+ );
 };
 
 export default ChatWithAdmin;
