@@ -112,6 +112,21 @@ export default function Webpages() {
         {name: "Delete", text: "Delete", icon: "", type: "danger", function: deleteButton},
     ];
 
+            // ----------------------- COMPONENTS -------------------------
+    // components // TODO: Change the following components
+    const components = {
+        status: false, // status component
+        columns: true, // columns component
+        refresh: true, // refresh component
+        bulk_actions: true, // bulk actions component
+        all: false, // all components
+        today: false, // today component
+        yesterday: false, // yesterday component
+        search: true, // search component
+        date_range: false, // date range component
+        export: true, // export component
+    }
+
 
     // 2. menu buttons (3 dots button)
     /***
@@ -365,6 +380,8 @@ export default function Webpages() {
         <>
             {contextHolder}
             <Table
+
+                components={components}
 
                 // data and columns
                 data={data}
