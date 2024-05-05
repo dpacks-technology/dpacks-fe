@@ -4,31 +4,31 @@
 import Table from "@/app/components/Table";
 import React, {useCallback, useEffect} from "react";
 import {
-    deleteTemplate,
-    deleteTemplateBulk,
-    getTemplateByDatetime,
-    getTemplatesByDatetimeCount,
-    getTemplatesByStatus,
-    getTemplatesByStatusCount,
-    getTemplates,
-    getTemplatesCount,
-    updateTemplatesStatus,
-    updateTemplatesStatusBulk,
-    downloadById
-} from "@/services/MarketplaceService";
+    DeleteBillingProfileByID,
+    DeleteBillingProfileByIDBulk,
+    GetBillingProfileById,
+    GetBillingProfileByDatetimeCount,
+    GetBillingProfileByStatus,
+    GetBillingProfileByStatusCount,
+    GetBillingProfiles,
+    GetBillingProfileCount,
+    UpdateBillingProfileStatus,
+    UpdateBillingProfileStatusBulk, GetBillingProfileDateTime
+} from "@/services/BillingService";
+
 import {useDisclosure} from "@nextui-org/react";
-//import EditWebpageForm from "@/app/components/forms/webpages/EditWebpageForm";
+import EditBillingProfileForm from "@/app/components/forms/Billing/EditBillingProfileForm";
 import {message} from "antd";
 
 // Webpages component
-export default function ReviewTemplates() {
+export default function BillingProfile() {
 
     // ----------------------- DEFAULT COLUMNS -------------------------
-    // default columns // TODO: Change the following functions
+    // default columns //
     const dateColumn = "datetime" // default date column
     const sortColumn = {column: "id", direction: "ascending"} // default sort column
 
-    // ----------------------- MESSAGE ------------------------- (NO NEED OF CHANGING)
+
     // message
     const [messageApi, contextHolder] = message.useMessage();
     const headerMessage = (type, message) => {
@@ -48,61 +48,45 @@ export default function ReviewTemplates() {
     const {isOpen, onOpen, onOpenChange} = useDisclosure();
     const [searchColumn, setSearchColumn] = React.useState(sortColumn.column); // default search column
 
-    // ----------------------- COMPONENTS -------------------------
-    // components // TODO: Change the following components
-    const components = {
-        status: false, // status component
-        columns: true, // columns component
-        refresh: true, // refresh component
-        bulk_actions: true, // bulk actions component
-        all: false, // all components
-        today: false, // today component
-        yesterday: false, // yesterday component
-        search: true, // search component
-        date_range: false, // date range component
-        export: true, // export component
-    }
-
     // ----------------------- COLUMNS -------------------------
-    // columns // TODO: Change the following columns according the to yours
+    // columns //
     const columns = [
         {name: "ID", uid: "id", sortable: true, type: "text"},
-        {name: "NAME", uid: "name", sortable: true, type: "text"},
-        {name: "DESCRIPTION", uid: "description", sortable: false, type: "text"},
-        {name: "CATEGORY", uid: "category", sortable: true, type: "text"},
-        {name: "CREATED ON", uid: "submitteddate", sortable: false, type: "datetime"},
-        {name: "MAIN FILE", uid: "mainfile", sortable: false, type: "buttons"},
-        {name: "THUMBNAIL", uid: "thmbnlfile", sortable: false, type: "buttons"},
-        {name: "DID", uid: "userid", sortable: false, type: "text"},
-        {name: "MESSAGE", uid: "dmessage", sortable: false, type: "text"},
-        {name: "PRICE", uid: "price", sortable: false, type: "text"},
+        {name: "COMPANY NAME", uid: "company_name", sortable: true, type: "text"},
+        {name: "STREET NO", uid: "street_no", sortable: true, type: "text"},
+        {name: "CITY", uid: "city", sortable: true, type: "text"},
+        {name: "POSTAL CODE", uid: "postal_code", sortable: true, type: "text"},
+        {name: "COUNTRY", uid: "country", sortable: true, type: "text"},
+        {name: "EMAIL", uid: "email", sortable: true, type: "text"},
+        {name: "GIVEN NAME", uid: "given_name", sortable: true, type: "text"},
+        {name: "MONTH", uid: "month", sortable: true, type: "text"},
+        {name: "YEAR", uid: "year", sortable: true, type: "text"},
+        {name: "CARD NUMBER", uid: "card_number", sortable: true, type: "integer"},
+        {name: "CVC", uid: "cvc", sortable: true, type: "integer"},
+        {name: "TERMS", uid: "terms", sortable: true, type: "text"},
+        {name: "PAYMENT METHOD", uid: "payment_method", sortable: true, type: "text"},
+        {name: "PAID ON", uid: "transaction_date", sortable: false, type: "datetime"},
         {name: "STATUS", uid: "status", sortable: false, type: "status"},
         {name: "CHANGE STATUS", uid: "statusButtons", sortable: false, type: "statusButtons"},
-        {name: "ACTIONS", uid: "menu", sortable: false, type: "menu"},
+        // action buttons
 
-        // {name: "PATH", uid: "path", sortable: true, type: "text"},
-        // {name: "CREATED ON", uid: "date_created", sortable: false, type: "datetime"},
-        // {name: "STATUS", uid: "status", sortable: false, type: "status"},
-        // {name: "CHANGE STATUS", uid: "statusButtons", sortable: false, type: "statusButtons"},
-        // {name: "ACTIONS", uid: "menu", sortable: false, type: "menu"},
+
         // all usable types: text, twoText, datetime, label, status, statusButtons, buttons, menu, copy, icon, iconText, iconTwoText
     ];
 
-    // initially visible columns // TODO: Change the following columns according the to yours
+    // initially visible columns //
     const init_cols = [
-        "name",
-        "description",
-        "category",
-        "submitteddate",
-        "mainfile",
-        "price",
+        "id",
+        "plan_name",
         "status",
+        "country",
         "statusButtons",
-        "menu",
-    ];
+        "transaction_date",
+        "payment_method",
+        "email"
 
-    // ----------------------- COMPONENTS -------------------------
-    // components // TODO: Change the following components
+    ];
+// components // TODO: Change the following components
     const components = {
         status: true, // status component
         columns: true, // columns component
@@ -115,7 +99,6 @@ export default function ReviewTemplates() {
         date_range: true, // date range component
         export: true, // export component
     }
-
     // ----------------------- BUTTONS -------------------------
     // 1. action buttons (buttons)
     /***
@@ -128,31 +111,6 @@ export default function ReviewTemplates() {
     const viewButton = (id) => { // view button function // TODO: Change the following function
             // not used here
             // console.log("view: " + id);
-            downloadById(id).then((res) => {
-                console.log(res.mainfile)
-
-                var url = res.mainfile;
-
-                // Open the URL in a new tab
-                var newWindow = window.open(url, '_blank');
-
-                // Initiate the file download
-                var anchor = document.createElement('a');
-                anchor.href = url;
-                anchor.download = '';
-                anchor.style.display = 'none';
-                document.body.appendChild(anchor);
-                anchor.click();
-
-                // Close the tab after a short delay (e.g., 1 second)
-                setTimeout(function() {
-                    newWindow.close();
-                }, 1000); // 1 second
-
-            }).catch((error) => {
-                console.log(error)
-                headerMessage("error", error.response.data.error);
-            });
         }
 
     const editButton = (id) => { // edit button function // TODO: Change the following function
@@ -165,10 +123,10 @@ export default function ReviewTemplates() {
         // console.log("delete: " + id);
     }
 
-    // action buttons // TODO: Change the following buttons
+    // action buttons //
     const actionButtons = [
-        {name: "View", text: "View", icon: "", type: "primary", function: viewButton},
-        // {name: "Edit", text: "Edit", icon: "", type: "primary", function: editButton},
+        {name: "View", text: "View", icon: "", type: "default", function: viewButton},
+        {name: "Edit", text: "Edit", icon: "", type: "primary", function: editButton},
         // {name: "Delete", text: "Delete", icon: "", type: "danger", function: deleteButton},
     ];
 
@@ -189,13 +147,12 @@ export default function ReviewTemplates() {
     const editMenuButton = (id) => { // edit button function // TODO: Change the following function
         // not used here
         // console.log("edit: " + id);
-
     }
 
     const deleteMenuButton = (id) => { // delete button function // TODO: Change the following function
 
         // delete function
-        deleteTemplate(id).then(() => {
+        DeleteBillingProfileByID(id).then(() => {
             refreshData("success", "Deleted");
         }).catch((error) => {
             headerMessage("error", error.response.data.error);
@@ -205,8 +162,8 @@ export default function ReviewTemplates() {
 
     // menu buttons // TODO: Change the following buttons
     const menuButtons = [
-        // {name: "View", text: "View", function: viewMenuButton},
-        // {name: "Edit", text: "Edit", function: onOpen}, // edit function set to open model (onOpen function)
+        {name: "View", text: "View", function: viewMenuButton},
+        {name: "Edit", text: "Edit", function: onOpen}, // edit function set to open model (onOpen function)
         {name: "Delete", text: "Delete", function: deleteMenuButton},
     ];
 
@@ -225,7 +182,7 @@ export default function ReviewTemplates() {
     const updateStatusButton = (id, status) => {
 
             // update status function
-            updateTemplatesStatus(id, status).then(() => {
+            UpdateBillingProfileStatus(id, status).then(() => {
                 refreshData("success", "Updated");
             }).catch((error) => {
                 headerMessage("error", error.response.data.error);
@@ -237,25 +194,26 @@ export default function ReviewTemplates() {
     const statusOptions = [
         {
             name: "Pending", // status name
+
             uid: 0, // status id (the value in the database)
-            type: "primary", // status type (color) ["", primary, secondary, danger, warning, success]
+            type: "success", // status type (color) ["", primary, secondary, danger, warning, success]
             button: true, // if you want to show a button to change the status
             currentStatus: [1,2], // button showing status, ex: if currently status is 1, then the button will be shown | can use [1,2,...] for multiple statuses
             function: updateStatusButton, // function to change the status
 
             // icon
             icon: <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5}
-                       stroke="currentColor" className="w-4 h-4">
-                <path strokeLinecap="round" strokeLinejoin="round" d="M9 15 3 9m0 0 6-6M3 9h12a6 6 0 0 1 0 12h-3"/>
+                       stroke="green" className="w-5 h-5">
+                <path strokeLinecap="round" strokeLinejoin="round"
+                      d="m9.75 9.75 4.5 4.5m0-4.5-4.5 4.5M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z"/>
             </svg>
-
         },
         {
-            name: "Accepted", // status name
+            name: "Approved", // status name
             uid: 1, // status id (the value in the database)
-            type: "success", // status type (color) [danger, warning, success, primary]
+            type: "primary", // status type (color) [danger, warning, success, primary]
             button: true, // if you want to show a button to change the status
-            currentStatus: [0,2], // button showing status, ex: if currently status is 1, then the button will be shown | can use [1,2,...] for multiple statuses
+            currentStatus: [0, 2], // button showing status, ex: if currently status is 1, then the button will be shown | can use [1,2,...] for multiple statuses
             function: updateStatusButton, // function to change the status
 
             // icon
@@ -268,21 +226,20 @@ export default function ReviewTemplates() {
         {
             name: "Rejected", // status name
             uid: 2, // status id (the value in the database)
-            type: "danger", // status type (color) [danger, warning, success, primary]
+            type: "danger", // status type (color) ["", primary, secondary, danger, warning, success]
             button: true, // if you want to show a button to change the status
-            currentStatus: [0, 1], // button showing status, ex: if currently status is 1, then the button will be shown | can use [1,2,...] for multiple statuses
+            currentStatus: [0,1], // button showing status, ex: if currently status is 1, then the button will be shown | can use [1,2,...] for multiple statuses
             function: updateStatusButton, // function to change the status
 
             // icon
             icon: <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5}
-                       stroke="currentColor" className="w-5 h-5">
+                       stroke="red" className="w-5 h-5">
                 <path strokeLinecap="round" strokeLinejoin="round"
                       d="m9.75 9.75 4.5 4.5m0-4.5-4.5 4.5M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z"/>
             </svg>
+        },
 
-        }
 
-        // ...add more status options (if needed)
 
     ]
 
@@ -291,7 +248,7 @@ export default function ReviewTemplates() {
     const updateStatusBulk = (ids, status) => {
 
         // update status bulk function // TODO: Change the following function
-        updateTemplatesStatusBulk(ids, status).then(() => {
+        UpdateBillingProfileStatusBulk(ids, status).then(() => {
             refreshData("success", "Updated");
         }).catch((error) => {
             headerMessage("error", error.response.data.error);
@@ -302,7 +259,7 @@ export default function ReviewTemplates() {
     // handle delete bulk function -- NO NEED OF CHANGING
     const handleUpdateStatusBulk = (selectedKeys, status) => {
         if (selectedKeys === 'all') { // if all items are selected
-            updateStatusBulk(data.map(item => item.id), status);
+            UpdateBillingProfileStatus(data.map(item => item.id), status);
         } else {
             updateStatusBulk(
                 Array.from(selectedKeys).map((str) => parseInt(str, 10)),
@@ -315,7 +272,7 @@ export default function ReviewTemplates() {
     const deleteBulk = (ids) => {
 
         // delete bulk function // TODO: Change the following function
-        deleteTemplateBulk(ids).then(() => {
+        DeleteBillingProfileByID(ids).then(() => {
             refreshData("success", "Deleted");
         }).catch((error) => {
             headerMessage("error", error.response.data.error);
@@ -343,10 +300,10 @@ export default function ReviewTemplates() {
             headerMessage(type, message);
 
         // fetch data count from API // TODO: Change the following function
-        getTemplatesCount(searchColumn, searchFieldValue).then((response) => setPagesCount(response));
+        GetBillingProfileCount(searchColumn, searchFieldValue).then((response) => setPagesCount(response));
 
         // fetch data from API // TODO: Change the following function
-        getTemplates(rowsPerPage, currentPage, searchColumn, searchFieldValue)
+        GetBillingProfiles(rowsPerPage, currentPage, searchColumn, searchFieldValue)
             .then(response => setData(response === null ? [] : response.length === 0 ? [] : response))
             .catch(error => console.error(error));
 
@@ -356,10 +313,10 @@ export default function ReviewTemplates() {
     const fetchTableData = (useCallback((page, key, val) => {
 
         // fetch data count from API // TODO: Change the following function
-        getTemplatesCount(key, val).then((response) => setPagesCount(response));
+        GetBillingProfileCount(key, val).then((response) => setPagesCount(response));
 
         // fetch data from API // TODO: Change the following function
-        getTemplates(rowsPerPage, page, key, val)
+        GetBillingProfiles(rowsPerPage, page, key, val)
             .then(response => setData(response === null ? [] : response.length === 0 ? [] : response))
             .catch(error => console.error(error));
 
@@ -378,10 +335,10 @@ export default function ReviewTemplates() {
             fetchTableData(currentPage, searchColumn, searchFieldValue);
         } else {
             // get data count // TODO: Change the following function
-            getTemplatesByDatetimeCount(start, end, searchColumn, searchFieldValue).then((response) => setPagesCount(response));
+            GetBillingProfileByDatetimeCount(start, end, searchColumn, searchFieldValue).then((response) => setPagesCount(response));
 
             // get data // TODO: Change the following function
-            getTemplateByDatetime(rowsPerPage, currentPage, start, end, searchColumn, searchFieldValue).then(response => setData(response === null ? [] : response.length === 0 ? [] : response))
+            GetBillingProfileDateTime(rowsPerPage, currentPage, start, end, searchColumn, searchFieldValue).then(response => setData(response === null ? [] : response.length === 0 ? [] : response))
         }
     }
 
@@ -390,10 +347,10 @@ export default function ReviewTemplates() {
     // status change function
     const statusChange = (statusArray) => {
         // get data count // TODO: Change the following function
-        getTemplatesByStatusCount(statusArray, searchColumn, searchFieldValue).then((response) => setPagesCount(response));
+        GetBillingProfileByStatusCount(statusArray, searchColumn, searchFieldValue).then((response) => setPagesCount(response));
 
         // get data // TODO: Change the following function
-        getTemplatesByStatus(rowsPerPage, currentPage, statusArray, searchColumn, searchFieldValue).then(response => setData(response === null ? [] : response.length === 0 ? [] : response))
+        GetBillingProfileByStatus(rowsPerPage, currentPage, statusArray, searchColumn, searchFieldValue).then(response => setData(response === null ? [] : response.length === 0 ? [] : response))
     }
 
 
@@ -454,10 +411,10 @@ export default function ReviewTemplates() {
                 statusChange={statusChange}
 
                 // edit model and functions
-                // editMenuButton={editMenuButton}
-                // editItemIsOpen={isOpen}
-                // editItemOnOpenChange={onOpenChange}
-                // editForm={<EditWebpageForm refreshData={refreshData}/>}
+                editMenuButton={editMenuButton}
+                editItemIsOpen={isOpen}
+                editItemOnOpenChange={onOpenChange}
+                editForm={<EditBillingProfileForm refreshData={refreshData}/>}
 
                 // search, sorting and filtering
                 searchColumn={searchColumn}
@@ -467,7 +424,7 @@ export default function ReviewTemplates() {
                 searchFieldValue={[searchFieldValue, setSearchFieldValue]}
                 changeSorting={changeSorting}
 
-                components={components}
+                components = {components}
 
                 // bulk actions
                 handleUpdateStatusBulk={handleUpdateStatusBulk}

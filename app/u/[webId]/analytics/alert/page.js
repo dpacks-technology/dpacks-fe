@@ -15,8 +15,8 @@ import {
     DeleteAlertByID
 } from "@/services/AlertService";
 import {useDisclosure} from "@nextui-org/react";
-import {EditAlertForm} from "@/app/components/forms/webpages/EditAlertForm";
 import {message} from "antd";
+import EditAlertForm from "@/app/components/forms/webpages/EditAlertForm";
 
 // Webpages component
 export default function Webpages() {
@@ -92,8 +92,12 @@ export default function Webpages() {
         }
 
     const editButton = (id) => { // edit button function // TODO: Change the following function
-        // not used here
-        // console.log("edit: " + id);
+        // edit function
+        EditAlertPage(id).then(() => {
+            refreshData("success", "Updated");
+        }).catch((error) => {
+            headerMessage("error", error.response.data.error);
+        });
     }
 
     const deleteButton = (id) => { // delete button function // TODO: Change the following function

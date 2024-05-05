@@ -10,17 +10,17 @@ import {
     getTemplatesByDatetimeCount,
     getTemplatesByStatus,
     getTemplatesByStatusCount,
-    getTemplates,
+    //getTemplates,
     getTemplatesCount,
     updateTemplatesStatus,
     updateTemplatesStatusBulk,
-    downloadById
+    getTemplatesByDid, downloadById
 } from "@/services/MarketplaceService";
 import {useDisclosure} from "@nextui-org/react";
-//import EditWebpageForm from "@/app/components/forms/webpages/EditWebpageForm";
+import EditTemplatesDetailsForm from "@/app/components/forms/marketplace/EditTemplatesDetailsForm";
 import {message} from "antd";
 
-// Webpages component
+// ReviewTemplates function to display the table of templates submitted by the user
 export default function ReviewTemplates() {
 
     // ----------------------- DEFAULT COLUMNS -------------------------
@@ -48,21 +48,6 @@ export default function ReviewTemplates() {
     const {isOpen, onOpen, onOpenChange} = useDisclosure();
     const [searchColumn, setSearchColumn] = React.useState(sortColumn.column); // default search column
 
-    // ----------------------- COMPONENTS -------------------------
-    // components // TODO: Change the following components
-    const components = {
-        status: false, // status component
-        columns: true, // columns component
-        refresh: true, // refresh component
-        bulk_actions: true, // bulk actions component
-        all: false, // all components
-        today: false, // today component
-        yesterday: false, // yesterday component
-        search: true, // search component
-        date_range: false, // date range component
-        export: true, // export component
-    }
-
     // ----------------------- COLUMNS -------------------------
     // columns // TODO: Change the following columns according the to yours
     const columns = [
@@ -72,20 +57,12 @@ export default function ReviewTemplates() {
         {name: "CATEGORY", uid: "category", sortable: true, type: "text"},
         {name: "CREATED ON", uid: "submitteddate", sortable: false, type: "datetime"},
         {name: "MAIN FILE", uid: "mainfile", sortable: false, type: "buttons"},
-        {name: "THUMBNAIL", uid: "thmbnlfile", sortable: false, type: "buttons"},
-        {name: "DID", uid: "userid", sortable: false, type: "text"},
+        {name: "USERID", uid: "userid", sortable: false, type: "text"},
         {name: "MESSAGE", uid: "dmessage", sortable: false, type: "text"},
         {name: "PRICE", uid: "price", sortable: false, type: "text"},
         {name: "STATUS", uid: "status", sortable: false, type: "status"},
-        {name: "CHANGE STATUS", uid: "statusButtons", sortable: false, type: "statusButtons"},
         {name: "ACTIONS", uid: "menu", sortable: false, type: "menu"},
 
-        // {name: "PATH", uid: "path", sortable: true, type: "text"},
-        // {name: "CREATED ON", uid: "date_created", sortable: false, type: "datetime"},
-        // {name: "STATUS", uid: "status", sortable: false, type: "status"},
-        // {name: "CHANGE STATUS", uid: "statusButtons", sortable: false, type: "statusButtons"},
-        // {name: "ACTIONS", uid: "menu", sortable: false, type: "menu"},
-        // all usable types: text, twoText, datetime, label, status, statusButtons, buttons, menu, copy, icon, iconText, iconTwoText
     ];
 
     // initially visible columns // TODO: Change the following columns according the to yours
@@ -95,9 +72,10 @@ export default function ReviewTemplates() {
         "category",
         "submitteddate",
         "mainfile",
+        "dmessage",
+        "devpname",
         "price",
         "status",
-        "statusButtons",
         "menu",
     ];
 
@@ -106,12 +84,12 @@ export default function ReviewTemplates() {
     const components = {
         status: true, // status component
         columns: true, // columns component
-        refresh: true, // refresh component
+        refresh: false, // refresh component
         bulk_actions: true, // bulk actions component
         all: true, // all components
         today: true, // today component
         yesterday: true, // yesterday component
-        search: true, // search component
+        search: false, // search component
         date_range: true, // date range component
         export: true, // export component
     }
@@ -168,10 +146,7 @@ export default function ReviewTemplates() {
     // action buttons // TODO: Change the following buttons
     const actionButtons = [
         {name: "View", text: "View", icon: "", type: "primary", function: viewButton},
-        // {name: "Edit", text: "Edit", icon: "", type: "primary", function: editButton},
-        // {name: "Delete", text: "Delete", icon: "", type: "danger", function: deleteButton},
     ];
-
 
     // 2. menu buttons (3 dots button)
     /***
@@ -189,7 +164,6 @@ export default function ReviewTemplates() {
     const editMenuButton = (id) => { // edit button function // TODO: Change the following function
         // not used here
         // console.log("edit: " + id);
-
     }
 
     const deleteMenuButton = (id) => { // delete button function // TODO: Change the following function
@@ -205,8 +179,7 @@ export default function ReviewTemplates() {
 
     // menu buttons // TODO: Change the following buttons
     const menuButtons = [
-        // {name: "View", text: "View", function: viewMenuButton},
-        // {name: "Edit", text: "Edit", function: onOpen}, // edit function set to open model (onOpen function)
+        {name: "Edit", text: "Edit", function: onOpen}, // edit function set to open model (onOpen function)
         {name: "Delete", text: "Delete", function: deleteMenuButton},
     ];
 
@@ -239,50 +212,23 @@ export default function ReviewTemplates() {
             name: "Pending", // status name
             uid: 0, // status id (the value in the database)
             type: "primary", // status type (color) ["", primary, secondary, danger, warning, success]
-            button: true, // if you want to show a button to change the status
-            currentStatus: [1,2], // button showing status, ex: if currently status is 1, then the button will be shown | can use [1,2,...] for multiple statuses
-            function: updateStatusButton, // function to change the status
-
-            // icon
-            icon: <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5}
-                       stroke="currentColor" className="w-4 h-4">
-                <path strokeLinecap="round" strokeLinejoin="round" d="M9 15 3 9m0 0 6-6M3 9h12a6 6 0 0 1 0 12h-3"/>
-            </svg>
+            button: false, // if you want to show a button to change the status
 
         },
         {
             name: "Accepted", // status name
             uid: 1, // status id (the value in the database)
             type: "success", // status type (color) [danger, warning, success, primary]
-            button: true, // if you want to show a button to change the status
-            currentStatus: [0,2], // button showing status, ex: if currently status is 1, then the button will be shown | can use [1,2,...] for multiple statuses
-            function: updateStatusButton, // function to change the status
+            button: false, // if you want to show a button to change the status
 
-            // icon
-            icon: <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5}
-                       stroke="currentColor" className="w-5 h-5">
-                <path strokeLinecap="round" strokeLinejoin="round"
-                      d="M9 12.75 11.25 15 15 9.75M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z"/>
-            </svg>
         },
         {
             name: "Rejected", // status name
             uid: 2, // status id (the value in the database)
             type: "danger", // status type (color) [danger, warning, success, primary]
-            button: true, // if you want to show a button to change the status
-            currentStatus: [0, 1], // button showing status, ex: if currently status is 1, then the button will be shown | can use [1,2,...] for multiple statuses
-            function: updateStatusButton, // function to change the status
-
-            // icon
-            icon: <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5}
-                       stroke="currentColor" className="w-5 h-5">
-                <path strokeLinecap="round" strokeLinejoin="round"
-                      d="m9.75 9.75 4.5 4.5m0-4.5-4.5 4.5M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z"/>
-            </svg>
+            button: false, // if you want to show a button to change the status
 
         }
-
-        // ...add more status options (if needed)
 
     ]
 
@@ -346,7 +292,7 @@ export default function ReviewTemplates() {
         getTemplatesCount(searchColumn, searchFieldValue).then((response) => setPagesCount(response));
 
         // fetch data from API // TODO: Change the following function
-        getTemplates(rowsPerPage, currentPage, searchColumn, searchFieldValue)
+        getTemplatesByDid(rowsPerPage, currentPage, searchColumn, searchFieldValue)
             .then(response => setData(response === null ? [] : response.length === 0 ? [] : response))
             .catch(error => console.error(error));
 
@@ -359,7 +305,7 @@ export default function ReviewTemplates() {
         getTemplatesCount(key, val).then((response) => setPagesCount(response));
 
         // fetch data from API // TODO: Change the following function
-        getTemplates(rowsPerPage, page, key, val)
+        getTemplatesByDid(rowsPerPage, page, key, val)
             .then(response => setData(response === null ? [] : response.length === 0 ? [] : response))
             .catch(error => console.error(error));
 
@@ -435,52 +381,56 @@ export default function ReviewTemplates() {
     return (
         <>
             {contextHolder}
-            <Table
+            <div className="h-screen flex items-center justify-center">
+                <div className="w-full bg-secondaryDark p-4 rounded-lg shadow-md m-4">
+                    <Table
+                        // data and columns
+                        data={data}
+                        columns={columns}
+                        init_cols={init_cols}
 
-                // data and columns
-                data={data}
-                columns={columns}
-                init_cols={init_cols}
+                        // fetch data functions
+                        fetchTableData={fetchTableData}
 
-                // fetch data functions
-                fetchTableData={fetchTableData}
+                        // action buttons
+                        actionButtons={actionButtons}
+                        statusOptions={statusOptions}
+                        menuButtons={menuButtons}
 
-                // action buttons
-                actionButtons={actionButtons}
-                statusOptions={statusOptions}
-                menuButtons={menuButtons}
+                        // status change
+                        statusChange={statusChange}
 
-                // status change
-                statusChange={statusChange}
+                        // edit model and functions
+                        editMenuButton={editMenuButton}
+                        editItemIsOpen={isOpen}
+                        editItemOnOpenChange={onOpenChange}
+                        editForm={<EditTemplatesDetailsForm refreshData={refreshData}/>}
 
-                // edit model and functions
-                // editMenuButton={editMenuButton}
-                // editItemIsOpen={isOpen}
-                // editItemOnOpenChange={onOpenChange}
-                // editForm={<EditWebpageForm refreshData={refreshData}/>}
+                        // search, sorting and filtering
+                        searchColumn={searchColumn}
+                        sortColumn={sortColumn}
+                        dateColumn={dateColumn}
+                        onTimeRangeChange={onTimeRangeChange}
+                        searchFieldValue={[searchFieldValue, setSearchFieldValue]}
+                        changeSorting={changeSorting}
 
-                // search, sorting and filtering
-                searchColumn={searchColumn}
-                sortColumn={sortColumn}
-                dateColumn={dateColumn}
-                onTimeRangeChange={onTimeRangeChange}
-                searchFieldValue={[searchFieldValue, setSearchFieldValue]}
-                changeSorting={changeSorting}
+                        components={components}
 
-                components={components}
+                        // bulk actions
+                        handleUpdateStatusBulk={handleUpdateStatusBulk}
+                        handleDeleteBulk={handleDeleteBulk}
 
-                // bulk actions
-                handleUpdateStatusBulk={handleUpdateStatusBulk}
-                handleDeleteBulk={handleDeleteBulk}
+                        // pagination
+                        setPage={setPage}
+                        currentPage={currentPage}
+                        dataCount={pagesCount}
+                        rowsPerPage={rowsPerPage}
+                        changeRowsPerPage={changeRowsPerPage}
+                    />
+                </div>
+            </div>
 
-                // pagination
-                setPage={setPage}
-                currentPage={currentPage}
-                dataCount={pagesCount}
-                rowsPerPage={rowsPerPage}
-                changeRowsPerPage={changeRowsPerPage}
 
-            />
         </>
     )
 }
