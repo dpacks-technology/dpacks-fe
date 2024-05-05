@@ -249,7 +249,7 @@ export default function AdminDashboard() {
                 </div>
 
                 <div className="w-full h-96">
-                    <h1 className="text-xl mt-5 font-medium text-center">Site Specific Storage</h1>
+                    <h1 className="text-xl mt-5 font-medium text-center">Used & Allocated Space</h1>
 
                     <ReactECharts
                         className="p-5"
