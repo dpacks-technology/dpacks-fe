@@ -81,7 +81,7 @@ body {
 }
 
 .panel-view {
-    width: calc(100% - 367px);
+    width: calc(100% - 330px);
 }
 
 @media screen and (max-width: 768px) {
