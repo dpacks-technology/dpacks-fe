@@ -3,20 +3,7 @@
 // Importing modules
 import Table from "@/app/components/Table";
 import React, {useCallback, useEffect} from "react";
-import {
-    deletePage,
-    deleteWebpagesBulk,
-    getPagesByDatetime,
-    getPagesByDatetimeCount,
-    getPagesByStatus,
-    getPagesByStatusCount,
-    getWebPages,
-    getWebPagesCount,
-    updateWebpagesStatus,
-    updateWebpagesStatusBulk
-} from "@/services/WebpagesService";
 import {useDisclosure} from "@nextui-org/react";
-import EditWebpageForm from "@/app/components/forms/webpages/EditWebpageForm";
 import {message} from "antd";
 import {
     getSites, getSitesByDatetime,
@@ -80,7 +67,6 @@ export default function Sites() {
         {name: "LAST_UPDATED", uid: "last_updated", sortable: false, type: "datetime"},
         {name: "STATUS", uid: "status", sortable: false, type: "status"},
         {name: "CHANGE STATUS", uid: "statusButtons", sortable: false, type: "statusButtons"},
-        {name: "ACTIONS", uid: "menu", sortable: false, type: "menu"},
         // all usable types: text, twoText, datetime, label, status, statusButtons, buttons, menu, copy, icon, iconText, iconTwoText
     ];
 
@@ -147,12 +133,6 @@ export default function Sites() {
 
     const deleteMenuButton = (id) => { // delete button function // TODO: Change the following function
 
-        // delete function
-        deletePage(id).then(() => {
-            refreshData("success", "Deleted");
-        }).catch((error) => {
-            headerMessage("error", error.response.data.error);
-        });
 
     }
 
@@ -245,28 +225,7 @@ export default function Sites() {
         }
     };
 
-    // delete bulk
-    const deleteBulk = (ids) => {
 
-        // delete bulk function // TODO: Change the following function
-        deleteWebpagesBulk(ids).then(() => {
-            refreshData("success", "Deleted");
-        }).catch((error) => {
-            headerMessage("error", error.response.data.error);
-        });
-
-    }
-
-    // handle delete bulk function -- NO NEED OF CHANGING
-    const handleDeleteBulk = (selectedKeys) => {
-        if (selectedKeys === 'all') { // if all items are selected
-            deleteBulk(data.map(item => item.id));
-        } else {
-            deleteBulk(
-                Array.from(selectedKeys).map((str) => parseInt(str, 10))
-            );
-        }
-    }
 
     // ----------------------- DATA FETCHING FUNCTIONS -------------------------
     // refresh data function
@@ -391,7 +350,6 @@ export default function Sites() {
                 editMenuButton={editMenuButton}
                 editItemIsOpen={isOpen}
                 editItemOnOpenChange={onOpenChange}
-                editForm={<EditWebpageForm refreshData={refreshData}/>}
 
                 // search, sorting and filtering
                 searchColumn={searchColumn}
@@ -403,7 +361,6 @@ export default function Sites() {
 
                 // bulk actions
                 handleUpdateStatusBulk={handleUpdateStatusBulk}
-                handleDeleteBulk={handleDeleteBulk}
 
                 // pagination
                 setPage={setPage}
