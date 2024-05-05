@@ -36,7 +36,7 @@ export default function DashboardNav() {
 
     return (
         <>
-            <div className={`w-full bg-dark p-4 pr-12 pl-12 fixed z-50 ${scrolled ? " shadow-xl" : ""}`}>
+            <div className={`w-full bg-dark p-4 md:pr-12 md:pl-12 fixed z-50 ${scrolled ? " shadow-xl" : ""}`}>
                 <div className={"flex justify-between"}>
                     <Link href="/" className="flex z-50 items-center">
                         <img src={logoSrc} className="w-28" alt="Dpacks Logo"/>

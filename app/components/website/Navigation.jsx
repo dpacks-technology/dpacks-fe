@@ -31,7 +31,7 @@ export default function Navigation() {
 
     return (
         <>
-            <div className={`top-0 w-full p-4 pr-12 pl-12 fixed z-50 ${scrolled ? " bg-dark shadow-xl" : ""}`}
+            <div className={`top-0 w-full p-4 md:pr-12 md:pl-12 fixed z-50 ${scrolled ? " bg-dark shadow-xl" : ""}`}
                  style={{
                      // borderBottomRightRadius: "20px",
                      // borderBottomLeftRadius: "20px",
@@ -41,9 +41,9 @@ export default function Navigation() {
                     <a href="/" className="flex z-50 items-center">
                         <img src={logoSrc} className="w-28" alt="Dpacks Logo"/>
                     </a>
-                    <div className={"flex items-center gap-8"}>
+                    <div className={"flex items-center gap-4 md:gap-8"}>
                         <a href={"/login"} className={`${scrolled ? "text-dark" : "text-light"} text-xs`}>
-                            <span className={"inline mr-2"}>
+                            <span className={"inline mr-1 md:mr-2"}>
                                 Sign in
                             </span>
                             <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5}
@@ -53,7 +53,7 @@ export default function Navigation() {
                             </svg>
                         </a>
                         <a href={"/signup"} className={`${scrolled ? "text-dark" : "text-light"} text-xs`}>
-                            <span className={"inline mr-2"}>
+                            <span className={"inline mr-1 md:mr-2"}>
                                 Sign up
                             </span>
                             <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5}

@@ -17,10 +17,10 @@ import {
     downloadById
 } from "@/services/MarketplaceService";
 import {useDisclosure} from "@nextui-org/react";
-//import EditWebpageForm from "@/app/components/forms/webpages/EditWebpageForm";
+
 import {message} from "antd";
 
-// Webpages component
+// Templates component
 export default function ReviewTemplates() {
 
     // ----------------------- DEFAULT COLUMNS -------------------------
@@ -28,7 +28,7 @@ export default function ReviewTemplates() {
     const dateColumn = "datetime" // default date column
     const sortColumn = {column: "id", direction: "ascending"} // default sort column
 
-    // ----------------------- MESSAGE ------------------------- (NO NEED OF CHANGING)
+    // ----------------------- MESSAGE -------------------------
     // message
     const [messageApi, contextHolder] = message.useMessage();
     const headerMessage = (type, message) => {
@@ -38,7 +38,7 @@ export default function ReviewTemplates() {
         });
     }
 
-    // ----------------------- STATES ------------------------- (NO NEED OF CHANGING)
+    // ----------------------- STATES -------------------------
     // states
     const [searchFieldValue, setSearchFieldValue] = React.useState("");
     const [rowsPerPage, setRowsPerPage] = React.useState(5);
@@ -65,12 +65,6 @@ export default function ReviewTemplates() {
         {name: "CHANGE STATUS", uid: "statusButtons", sortable: false, type: "statusButtons"},
         {name: "ACTIONS", uid: "menu", sortable: false, type: "menu"},
 
-        // {name: "PATH", uid: "path", sortable: true, type: "text"},
-        // {name: "CREATED ON", uid: "date_created", sortable: false, type: "datetime"},
-        // {name: "STATUS", uid: "status", sortable: false, type: "status"},
-        // {name: "CHANGE STATUS", uid: "statusButtons", sortable: false, type: "statusButtons"},
-        // {name: "ACTIONS", uid: "menu", sortable: false, type: "menu"},
-        // all usable types: text, twoText, datetime, label, status, statusButtons, buttons, menu, copy, icon, iconText, iconTwoText
     ];
 
     // initially visible columns // TODO: Change the following columns according the to yours
@@ -138,8 +132,6 @@ export default function ReviewTemplates() {
     // action buttons // TODO: Change the following buttons
     const actionButtons = [
         {name: "View", text: "View", icon: "", type: "primary", function: viewButton},
-        // {name: "Edit", text: "Edit", icon: "", type: "primary", function: editButton},
-        // {name: "Delete", text: "Delete", icon: "", type: "danger", function: deleteButton},
     ];
 
 
@@ -159,7 +151,6 @@ export default function ReviewTemplates() {
     const editMenuButton = (id) => { // edit button function // TODO: Change the following function
         // not used here
         // console.log("edit: " + id);
-
     }
 
     const deleteMenuButton = (id) => { // delete button function // TODO: Change the following function
@@ -175,8 +166,6 @@ export default function ReviewTemplates() {
 
     // menu buttons // TODO: Change the following buttons
     const menuButtons = [
-        // {name: "View", text: "View", function: viewMenuButton},
-        // {name: "Edit", text: "Edit", function: onOpen}, // edit function set to open model (onOpen function)
         {name: "Delete", text: "Delete", function: deleteMenuButton},
     ];
 
@@ -251,8 +240,6 @@ export default function ReviewTemplates() {
             </svg>
 
         }
-
-        // ...add more status options (if needed)
 
     ]
 
@@ -422,12 +409,6 @@ export default function ReviewTemplates() {
 
                 // status change
                 statusChange={statusChange}
-
-                // edit model and functions
-                // editMenuButton={editMenuButton}
-                // editItemIsOpen={isOpen}
-                // editItemOnOpenChange={onOpenChange}
-                // editForm={<EditWebpageForm refreshData={refreshData}/>}
 
                 // search, sorting and filtering
                 searchColumn={searchColumn}

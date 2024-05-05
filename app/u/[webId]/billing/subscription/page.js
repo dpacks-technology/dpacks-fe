@@ -1,12 +1,13 @@
 "use client"
 
-import {useEffect, useState} from "react";
+import React, {useEffect, useState} from "react";
 import SubscriptionPlans from "@/app/components/SubscriptionPlans";
 import {CheckSubscriptionCount} from "@/services/BillingService";
 import {DeleteSubscriptionByID, GetSubscriptionByID} from "@/services/SubscriptionServices";
+import {useRouter} from "next/navigation";
 
 export default function Subscription({params}) {
-    // Dummy data for demonstration
+    const router = useRouter();
 
 
     //function to get subscription details
@@ -43,6 +44,7 @@ export default function Subscription({params}) {
         }
     }
 
+
     //function to unsubscribe current plan
     const UnsubscribeCurrentPlan = () => {
         DeleteSubscriptionByID(params.webId).then(() => {
@@ -71,67 +73,61 @@ export default function Subscription({params}) {
 
     return (
 
-        !subscriptionExists ? <SubscriptionPlans web_id={params.webId}/> :
-            //displaying the subscription details from GetSubscription function
-            <div style={{width: '100%', padding: '20px', border: '1px solid #ccc', borderRadius: '10px'}}>
+        <div className="relative h-screen">
+            {!subscriptionExists ? (
+                <SubscriptionPlans web_id={params.webId}/>
+            ) : (
 
+                <div className="w-full p-4 border border-gray-300 rounded-lg">
 
-                <h1 className={"text-md mb-2"}>Current Plan</h1>
-                <h2 className={"text-xl"}>{subscription.plan_name}</h2>
-                <h2 className={"text-sm mb-4"}>{subscription.features}</h2>
-                <h2 className={"mb-8"}>{subscription.monthly_price}/mo</h2>
+                    <button
+                        className="absolute top-0 right-0 px-4 py-2 bg-blue-500 text-white rounded-md"
+                        onClick={() => changeStatus('update')}
+                    >
+                        Update Plan
+                    </button>
 
-
-                {pageStatus === 'update' ?
-                    <>
-                        <button onClick={() => {
-                            changeStatus('view')
-                        }} style={{
-                            padding: '5px 10px',
-                            borderRadius: '5px',
-                            background: 'blue',
-                            border: 'none',
-                            fontSize: '14px'
-                        }}>Back
-                        </button>
-                        <SubscriptionPlans update={true} web_id={params.webId}/>
-                    </>
-                    :
-                    <>
-                        <div style={{width: '100%', marginBottom: '20px'}}>
-
-
-                            <button onClick={() => {
-
-                                changeStatus('update')
-
-                            }} style={{
-                                padding: '5px 10px',
-                                borderRadius: '5px',
-                                background: 'blue',
-                                border: 'none',
-                                fontSize: '14px'
-                            }}>Update Plan
-                            </button>
-
-                        </div>
-
-
-                        <div style={{width: '100%', display: 'flex', justifyContent: 'space-between'}}>
-
+                    <h1 className="text-2xl font-bold mb-4">Current Plan</h1>
+                    <table className="w-full mb-6">
+                        <tbody>
+                        <tr>
+                            <td className="font-medium">Plan Name:</td>
+                            <td className="text-yellow-300">{subscription.plan_name}</td>
+                        </tr>
+                        <tr>
+                            <td className="font-medium">Features:</td>
+                            <td className="text-yellow-300">{subscription.features}</td>
+                        </tr>
+                        <tr>
+                            <td className="font-medium">Amount:</td>
+                            <td className="text-yellow-300">{subscription.monthly_price}/mo</td>
+                        </tr>
+                        </tbody>
+                    </table>
+                    {pageStatus === 'update' ? (
+                        <>
                             <button
-                                style={{padding: '10px 20px', borderRadius: '5px', background: 'red', border: 'none'}}
-                                onClick={UnsubscribeCurrentPlan}>
-                                Unsubscribe Current Plan
+                                className="px-4 py-2 bg-blue-500 text-white rounded-md mb-4"
+                                onClick={() => changeStatus('view')}
+                            >
+                                Back
                             </button>
+                            <SubscriptionPlans update={true} web_id={params.webId}/>
+                        </>
+                    ) : (
+                        <button
+                            className="px-4 py-2 bg-red-500 text-white rounded-md"
+                            onClick={UnsubscribeCurrentPlan}
+                        >
+                            Unsubscribe Current Plan
+                        </button>
+                    )}
 
-                        </div>
-                    </>
 
+                </div>
+            )}
+        </div>
 
-                }
-
-            </div>
     );
 
 }
