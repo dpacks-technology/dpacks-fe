@@ -45,7 +45,7 @@ const AutoRespondsList = ({ onMessageClick, webId }) => {
     return (
         <ul>
             {autoResponds
-                .filter((autoRespond) => autoRespond.status === 0)
+                .filter((autoRespond) => autoRespond.status === 1)
                 .map((autoRespond) => (
                     <li key={autoRespond.id} onClick={() => onMessageClick(autoRespond.message)}>
                         <p style={{ color: 'black' }}>Message: {autoRespond.message}</p>
