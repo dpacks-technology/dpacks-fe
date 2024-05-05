@@ -1,9 +1,9 @@
 "use client"
-import React, {useEffect, useState} from "react";
+import React, { useEffect, useState } from "react";
 import CardTbl from "@/app/components/Analytics/CardTbl";
-import {Divider, Table} from 'antd';
+import { Divider, Table } from 'antd';
 import ReactECharts from 'echarts-for-react';
-import {useParams} from "next/navigation";
+import { useParams } from "next/navigation";
 import {
     getTraffic,
     visitorSource,
@@ -58,14 +58,20 @@ export default function Analytics() {
     const [websiteTrafficData, setWebsiteTrafficData] = useState([]);
     const [visitorSourceData, setVisitorSourceData] = useState([]);
     const [visitorDeviceData, setVisitorDeviceData] = useState([]);
-    const {webId} = useParams();
+    const { webId } = useParams();
 
     useEffect(() => {
-        fetchUserCountByCountry();
-        fetchTraffic();
-        fetchVisitorSourceData();
-        fetchVisitorDeviceData();
+        const interval = setInterval(() => {
+            fetchUserCountByCountry();
+            fetchTraffic();
+            fetchVisitorSourceData();
+            fetchVisitorDeviceData();
+        }, 10000); // Refresh every 10 seconds
+    
+        // Clear the interval when the component unmounts
+        return () => clearInterval(interval);
     }, []);
+    
 
 
     const fetchUserCountByCountry = () => {
@@ -85,12 +91,35 @@ export default function Analytics() {
     };
 
     const fetchTraffic = () => {
-        getTraffic(webId).then((data) => {
-            setWebsiteTrafficData(data.map(entry => entry.session_count));
-        }).catch((error) => {
-            console.error("Error fetching website traffic data:", error);
-        });
+        getTraffic(webId)
+            .then((data) => {
+                // Initialize arrays to hold session counts for each day of the week
+                const sessionCountsByDay = [0, 0, 0, 0, 0, 0, 0]; // Initialize all days with 0 session count
+    
+                // Populate session counts for the corresponding days
+                data.forEach(entry => {
+                    // Adjust the index based on the day of the week (0 for Monday, 6 for Sunday)
+                    const index = entry.day_of_week === 0 ? 6 : entry.day_of_week - 1;
+                    sessionCountsByDay[index] = entry.session_count;
+                });
+    
+                // Update the state with the formatted data
+                setWebsiteTrafficData(sessionCountsByDay);
+            })
+            .catch((error) => {
+                console.error("Error fetching website traffic data:", error);
+            });
     };
+    
+    
+
+
+    // Function to convert day number to day name
+    const getDayOfWeek = (dayNumber) => {
+        const days = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
+        return days[dayNumber];
+    };
+
 
     const fetchVisitorSourceData = () => {
         visitorSource(webId).then((data) => {
@@ -129,21 +158,20 @@ export default function Analytics() {
 
                     <ReactECharts
                         option={{
-                            // Existing option configuration
-
                             xAxis: {
                                 type: 'category',
-                                data: ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun']
+                                data: ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat','Sun'] // All seven days of the week
                             },
-                            yAxis: { // Add yAxis configuration here
-                                type: 'value' // This sets the type of yAxis to numeric value
+                            yAxis: {
+                                type: 'value'
                             },
                             series: [{
-                                data: websiteTrafficData,
+                                data: websiteTrafficData, // Use the session counts for each day
                                 type: 'bar'
                             }]
                         }}
                     />
+
 
 
                 </div>
@@ -169,7 +197,7 @@ export default function Analytics() {
                 {/*visitor country table*/}
                 <div className="w-full h-96 border-1 overflow-scroll">
                     <h1 className="text-2xl mt-5 font-bold text-center pb-6">User by Country</h1>
-                    <Table dataSource={userCountByCountry} columns={columns}/>;
+                    <Table dataSource={userCountByCountry} columns={columns} />;
 
 
                 </div>
