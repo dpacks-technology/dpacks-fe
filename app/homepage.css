@@ -129,7 +129,7 @@
 html,
 body {
     max-width: 100vw;
-    overflow-x: hidden;
+    /*overflow-x: hidden;*/
 }
 
 body {
@@ -854,10 +854,10 @@ a {
 
 /* section 2 */
 .section-2 {
-    background-color: #0d1116;
+    background-color: #18181b;
     color: #fff;
     width: 100vw;
-    padding: 20px 160px;
+    /*padding: 20px 160px;*/
     border-top-right-radius: 300px;
     border-top-left-radius: 300px;
     z-index: 1;
@@ -865,17 +865,18 @@ a {
 
 /* section 4 */
 .section-4 {
-    background-color: #0d1116;
+    background-color: #18181b;
     color: #fff;
     width: 100vw;
-    padding-right: 160px;
-    padding-left: 160px;
+    margin-top: -2px;
+    /*padding-right: 160px;*/
+    /*padding-left: 160px;*/
     z-index: 1;
 }
 
 /* section 3 */
 .section-3 {
-    background-color: #0d1116;
+    background-color: #18181b;
     color: #fff;
     width: 100vw;
     margin: 0;
@@ -899,9 +900,9 @@ a {
     padding: 20px 40px;
     margin: 20px 30px;
     width: calc(100% - 30px);
-    background-color: #161b22;
+    /*background-color: #161b22;*/
     border: 1px solid #30363d;
-    border-radius: 10px;
+    border-radius: 30px;
 }
 
 .backend-flow {
