@@ -85,26 +85,6 @@ export const getSitesByDatetimeCount = async (start, end, key, val) => {
     }
 }
 
-export const deletePage = async (id) => {
-    try {
-        const response = await AdminSitesService.delete(`/api/web/webpages/${id}`);
-        return response.data;
-    } catch (error) {
-        throw error;
-    }
-}
-
-export const deleteWebpagesBulk = async (ids) => {
-    let idsString = ids.join(',');
-
-    try {
-        const response = await AdminSitesService.delete(`/api/web/webpages/bulk/${idsString}`);
-        return response.data;
-    } catch (error) {
-        throw error;
-    }
-}
-
 export const updateSitesStatusBulk = async (ids, status) => {
     let idsString = ids.join(',');
 

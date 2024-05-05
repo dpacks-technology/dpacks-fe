@@ -19,6 +19,29 @@ const ChatWithAdmin = () => {
     const [validEmail, setValidEmail] = useState(false); // State to track email validity
     const { webId } = useParams();
     const socket = useSocket(Keys.MESSAGE_SERVICE_API_URL);
+    const [windowWidth, setWindowWidth] = useState(0);
+
+    useEffect(() => {
+        const handleResize = () => {
+            setWindowWidth(window.innerWidth);
+        };
+
+        window.addEventListener('resize', handleResize);
+
+        return () => {
+            window.removeEventListener('resize', handleResize);
+        };
+    }, []);
+    useEffect(() => {
+        setWindowWidth(window.innerWidth);
+
+        // Add an event listener for window resize
+        const handleResize = () => setWindowWidth(window.innerWidth);
+        window.addEventListener('resize', handleResize);
+
+        // Cleanup function to remove the event listener on component unmount
+        return () => window.removeEventListener('resize', handleResize);
+    }, []);
 
 
 
@@ -71,7 +94,7 @@ const ChatWithAdmin = () => {
     // State to track email error message
     const [emailError, setEmailError] = useState('');
 
-   // Remove visitorId from localStorage on tab close
+    // Remove visitorId from localStorage on tab close
     useEffect(() => {
         const handleTabClose = () => {
             localStorage.removeItem('visitorId');
@@ -114,15 +137,37 @@ const ChatWithAdmin = () => {
     };
 
 
+
     // Define headerText based on whether an email is entered
     const headerText = enteredEmail ? 'Chat' : 'Enter Your Email';
 
 
     // Sort messages based on their timestamps and map through them
     return (
-        <div className="chat-window" style={{ position: 'fixed', top: 0, left: 0, width: '100vw', height: '100vh', backgroundColor: '#fff', border: 'none', borderRadius: 0, boxShadow: 'none', zIndex: 100 }}>
-            <div className="chat-header" style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', padding: '10px', backgroundColor: '#004a77', borderBottom: '1px solid #ddd', borderRadius: '4px 4px 0 0' }}>
-                <h2 style={{ margin: '0', fontSize: '16px', fontWeight: 'bold', color: 'white' }}>{headerText}</h2>
+        <div className="chat-window" style={{
+            position: 'fixed',
+            top: 0,
+            left: 0,
+            width: '100vw',
+            height: '100vh',
+            backgroundColor: '#fff',
+            border: 'none',
+            borderRadius: 0,
+            boxShadow: 'none',
+            zIndex: 100 }}>
+            <div className="chat-header" style={{
+                display: 'flex',
+                justifyContent: 'space-between',
+                alignItems: 'center',
+                padding: '10px',
+                backgroundColor: '#004a77',
+                borderBottom: '1px solid #ddd',
+                borderRadius: '4px 4px 0 0' }}>
+                <h2 style={{
+                    margin: '0',
+                    fontSize: '16px',
+                    fontWeight: 'bold',
+                    color: 'white' }}>{headerText}</h2>
             </div>
             {enteredEmail ? (
                 <div style={{
@@ -153,28 +198,71 @@ const ChatWithAdmin = () => {
                     position: 'fixed',
                     top: '50%',
                     left: '50%',
-                    transform: 'translate(-50%, -50%)', textAlign: 'center', display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
+                    transform: 'translate(-50%, -50%)',
+                    textAlign: 'center',
+                    display: 'flex',
+                    flexDirection: 'column',
+                    alignItems: 'center' }}>
                     <input value={visitorEmail} onChange={handleVisitorEmailChange} placeholder="Enter your email..." style={{ fontSize: '14px', padding: '10px 20px', borderRadius: '4px', border: '1px solid #ddd', marginBottom: '10px', width: '200px' }} />
-                    <button style={{ backgroundColor: '#004a77', border: '1px solid #ddd', padding: '10px 20px', fontSize: '14px', borderRadius: '4px', cursor: 'pointer', transition: 'background-color 0.3s ease', width: '200px' }} onClick={handleVisitorEmailSubmit}>Submit</button>
-                    {emailError && <div style={{ color: 'red', marginTop: '5px' }}>{emailError}</div>}
+                    <button style={{
+                        backgroundColor: '#004a77',
+                        border: '1px solid #ddd',
+                        padding: '10px 20px',
+                        fontSize: '14px',
+                        borderRadius: '4px',
+                        cursor: 'pointer',
+                        transition: 'background-color 0.3s ease',
+                        width: '200px' }} onClick={handleVisitorEmailSubmit}>Submit</button>
+                    {emailError && <div style={{
+                        color: 'red',
+                        marginTop: '5px' }}>{emailError}</div>}
                 </div>
             )}
-            <div style={{ height: '650px', overflowY: 'scroll' }}>
-                <div>
-                    {messages.sort((a, b) => new Date(a.time) - new Date(b.time)).map((msg, index) => (
-                        <div key={index} style={{ display: 'flex', flexDirection: msg.sender === 'visitor' ? 'row-reverse' : 'row', alignItems: 'center', justifyContent: 'pace-between', marginTop: '10px' }}>
-                            <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
-                                <div style={{ backgroundColor: msg.sender === 'visitor' ? '#0c3073' : '#7b8186', color: 'white', padding: '5px 10px', borderRadius: '10px', marginRight: msg.sender === 'visitor' ? '10px' : 0, marginLeft: msg.sender === 'admin' ? '10px' : 0, alignSelf: 'flex-start' }}>
-                                    {msg.message}
-                                </div>
-                                <div style={{ fontSize: '12px', color: '#666', alignSelf: 'flex-start', marginTop: '5px' }}>
-                                    {new Date(msg.time).toLocaleString()}
+            {enteredEmail && (
+                <div
+                    style={{
+                        overflowY: 'scroll',
+                        width: '100%',
+                        height: 'calc(100vh - 100px)',
+                        padding: '10px',
+                        WebkitOverflowScrolling: 'touch', // Add this line for smooth scrolling on mobile
+                    }}
+                >
+                    <div>
+                        {messages.sort((a, b) => new Date(a.time) - new Date(b.time)).map((msg, index) => (
+                            <div key={index} style={{
+                                display: 'flex',
+                                flexDirection: msg.sender === 'visitor' ? 'row-reverse' : 'row',
+                                alignItems: 'center',
+                                justifyContent: 'pace-between',
+                                marginTop: '10px'
+                            }}>
+                                <div style={{display: 'flex', flexDirection: 'column', alignItems: 'center'}}>
+                                    <div style={{
+                                        backgroundColor: msg.sender === 'visitor' ? '#0c3073' : '#7b8186',
+                                        color: 'white',
+                                        padding: '5px 10px',
+                                        borderRadius: '10px',
+                                        marginRight: msg.sender === 'visitor' ? '10px' : 0,
+                                        marginLeft: msg.sender === 'admin' ? '10px' : 0,
+                                        alignSelf: 'flex-start'
+                                    }}>
+                                        {msg.message}
+                                    </div>
+                                    <div style={{
+                                        fontSize: '12px',
+                                        color: '#666',
+                                        alignSelf: 'flex-start',
+                                        marginTop: '5px'
+                                    }}>
+                                        {new Date(msg.time).toLocaleString()}
+                                    </div>
                                 </div>
                             </div>
-                        </div>
-                    ))}
+                        ))}
+                    </div>
                 </div>
-            </div>
+            )}
         </div>
     );
 };

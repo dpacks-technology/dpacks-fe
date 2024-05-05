@@ -48,13 +48,26 @@ export default function Users() {
     const {isOpen, onOpen, onOpenChange} = useDisclosure();
     const [searchColumn, setSearchColumn] = React.useState(sortColumn.column); // default search column
 
+    // components // TODO: Change the following components
+    const components = {
+        status: true, // status component
+        columns: true, // columns component
+        refresh: true, // refresh component
+        bulk_actions: true, // bulk actions component
+        all: true, // all components
+        today: true, // today component
+        yesterday: true, // yesterday component
+        search: true, // search component
+        date_range: true, // date range component
+        export: true, // export component
+    }
     // ----------------------- COLUMNS -------------------------
     // columns
     const columns = [
         {name: "ID", uid: "id", sortable: true, type: "text"},
         {name: "FIRST NAME", uid: "first_name", sortable: true, type: "text"},
         {name: "LAST NAME", uid: "last_name", sortable: true, type: "text"},
-        {name: "EMAIL", uid: "email", sortable: false, type: "text"},
+        {name: "EMAIL", uid: "email", sortable: true, type: "text"},
         {name: "PHONE", uid: "phone", sortable: false, type: "text"},
         {name: "STATUS", uid: "status", sortable: false, type: "status"},
         {name: "CHANGE STATUS", uid: "statusButtons", sortable: false, type: "statusButtons"},
@@ -354,6 +367,9 @@ export default function Users() {
                 dataCount={pagesCount}
                 rowsPerPage={rowsPerPage}
                 changeRowsPerPage={changeRowsPerPage}
+
+                // components
+                components={components}
 
             />
         </>
