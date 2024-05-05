@@ -202,7 +202,7 @@ export default function Dashboard() {
                                                 onClick={() => {
                                                     // copy script
                                                     handleInstallationCopyScript(site.id).then(() => {
-                                                        Message("success", "Script copied, Paste inside `head` tags at your webpages");
+                                                        Message("success", "Script copied, Paste at your webpage footer");
                                                     });
                                                 }}>
                                                 Copy Script
