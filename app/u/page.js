@@ -81,7 +81,7 @@ export default function Dashboard() {
                     <AddWebProjectForm/> : <EditWebProjectForm webId={webId}/>
             } title={webId === "" ? "Add Web Project" : "Edit Web Page"} isOpen={isOpen} onOpenChange={onOpenChange}/>
 
-            <div className={"p-12 pt-24 pb-10 md:pr-48 md:pl-48 md:pt-36 md:pb-20"}>
+            <div className={"pr-48 pl-48 pt-36 pb-20"}>
 
                 <h1 className={"text-2xl"}>
                     DPacks Platform
@@ -91,7 +91,7 @@ export default function Dashboard() {
                 </p>
 
                 {/* product tabs */}
-                <div className={"grid grid-cols-1 md:grid-cols-3 gap-4 rounded-3xl pt-12 pb-12"}>
+                <div className={"grid grid-cols-3 gap-4 rounded-3xl pt-12 pb-12"}>
                     <Link href={`/pros/dashbord`}>
                         <div className={"dashboard-tab-1 p-4 rounded-3xl grid justify-center h-24 con-mid"}>
                             <div className="grid grid-cols-2 w-full">
@@ -143,9 +143,9 @@ export default function Dashboard() {
                 </div>
 
                 {/* web projects */}
-                <div className={"mt-8 md:mt-12"}>
+                <div className={"mt-12"}>
                     <h1 className={"mb-6"}>Web Projects</h1>
-                    <div className={"grid grid-cols-1 md:grid-cols-3 gap-4 pb-6"}>
+                    <div className={"grid grid-cols-3 gap-4 pb-6"}>
 
                         {/*<Link href={"/u/add"}>*/}
                         <div
