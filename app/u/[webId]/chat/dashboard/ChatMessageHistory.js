@@ -83,7 +83,7 @@ const ChatMessageHistory = ({content, visitorId }) => {
                     position: 'sticky',
                     top: '0',
                     zIndex: 1,
-                    backgroundColor: '#004a77',
+                    backgroundColor: '#0f100f',
                     padding: '10px',
                     display: 'flex',
                     justifyContent: 'space-between',
@@ -153,7 +153,7 @@ const ChatMessageHistory = ({content, visitorId }) => {
                     display: 'flex',
                     justifyContent: 'space-between',
                     alignItems: 'center',
-                    backgroundColor: '#004a77',
+                    backgroundColor: '#0f100f',
                     borderTop: '1px solid #ddd',
                     boxShadow: '0 2px 4px rgba(0, 0, 0, 0.1)',
                 }}
@@ -165,7 +165,7 @@ const ChatMessageHistory = ({content, visitorId }) => {
                     style={{
                         flexGrow: 1,
                         padding: '10px',
-                        backgroundColor: '#004a77',
+                        backgroundColor: '#0f100f',
                         borderRadius: '4px',
                         border: '1px solid #ddd',
                         marginRight: '10px',
