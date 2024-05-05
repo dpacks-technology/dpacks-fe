@@ -142,13 +142,13 @@ const AddTemplateForm = ({...props}) => {
 
                     </FormItem>
                     <FormItem>
-                        <p style={{fontSize: '12px'}}>Upload Template File (.zip only)</p>
+                        <p style={{fontSize: '12px'}}>Upload Template File (.zip formatm )</p>
                         <Dropzone
                             setTemplateName={handleSetTemplateName}
                             uploadPercentageData={handleUploadPercentage} name={"template"} id={"template"}/>
                     </FormItem>
                     <FormItem>
-                        <p style={{fontSize: '12px'}}>Upload Template Thumbnail (.png only)</p>
+                        <p style={{fontSize: '12px'}}>Upload Template Thumbnail</p>
                         <DropzoneImage
                             SetTemplateThumbName={handleSetTemplateThumbName}
                             uploadPercentageData={handleUploadPercentage} name={"thumbnail"} id={"thumbnail"}/>

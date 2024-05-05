@@ -79,6 +79,21 @@ export default function ReviewTemplates() {
         "menu",
     ];
 
+    // ----------------------- COMPONENTS -------------------------
+    // components // TODO: Change the following components
+    const components = {
+        status: true, // status component
+        columns: true, // columns component
+        refresh: false, // refresh component
+        bulk_actions: true, // bulk actions component
+        all: true, // all components
+        today: true, // today component
+        yesterday: true, // yesterday component
+        search: false, // search component
+        date_range: true, // date range component
+        export: true, // export component
+    }
+
     // ----------------------- BUTTONS -------------------------
     // 1. action buttons (buttons)
     /***
@@ -398,6 +413,8 @@ export default function ReviewTemplates() {
                         onTimeRangeChange={onTimeRangeChange}
                         searchFieldValue={[searchFieldValue, setSearchFieldValue]}
                         changeSorting={changeSorting}
+
+                        components={components}
 
                         // bulk actions
                         handleUpdateStatusBulk={handleUpdateStatusBulk}
