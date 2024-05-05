@@ -18,7 +18,7 @@ const Key = {
     AI_STORAGE_BUCKET_URL: 'https://web.dpacks.net/api/v1/data-packets/fetch-ai',
 
     // connector url
-    CONNECTOR_URL: 'https://cdn.jsdelivr.net/gh/dpacks-technology/dpacks-connector-js/0.2.16-alpha.js'
+    CONNECTOR_URL: 'https://cdn.jsdelivr.net/gh/dpacks-technology/dpacks-connector-js/0.2.17-alpha.js'
 }
 
 module.exports = Key
