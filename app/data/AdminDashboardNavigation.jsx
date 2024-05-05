@@ -2,6 +2,33 @@ import React from "react";
 
 export const AdminDashboardNavigation =
     [
+        // overview
+        {
+            name: "Dashboard",
+            icon: <svg xmlns="http://www.w3.org/2000/svg"
+                       fill="none" viewBox="0 0 24 24" strokeWidth={1.1}
+                       stroke="currentColor" className="w-full h-5">
+                <path strokeLinecap="round" strokeLinejoin="round"
+                      d="M3.75 3v11.25A2.25 2.25 0 0 0 6 16.5h2.25M3.75 3h-1.5m1.5 0h16.5m0 0h1.5m-1.5 0v11.25A2.25 2.25 0 0 1 18 16.5h-2.25m-7.5 0h7.5m-7.5 0-1 3m8.5-3 1 3m0 0 .5 1.5m-.5-1.5h-9.5m0 0-.5 1.5M9 11.25v1.5M12 9v3.75m3-6v6"/>
+            </svg>
+            ,
+            url: "../dashboard/overview",
+            children: [
+
+                // users -> manage admin
+                {
+                    name: "Overview",
+                    icon: <svg xmlns="http://www.w3.org/2000/svg"
+                               fill="none" viewBox="0 0 24 24" strokeWidth={1.1}
+                               stroke="currentColor" className="w-5 h-5">
+                        <path strokeLinecap="round" strokeLinejoin="round"
+                              d="m11.25 11.25.041-.02a.75.75 0 0 1 1.063.852l-.708 2.836a.75.75 0 0 0 1.063.853l.041-.021M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0Zm-9-3.75h.008v.008H12V8.25Z"/>
+                    </svg>
+                    ,
+                    url: "../dashboard/overview",
+                }
+            ]
+        },
         //users
         {
             name: "Users",
@@ -109,7 +136,7 @@ export const AdminDashboardNavigation =
                     name: "Endpoints",
                     icon: <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
                                strokeWidth={1.1} stroke="currentColor" className="w-5 h-5">
-                    <path strokeLinecap="round" strokeLinejoin="round"
+                        <path strokeLinecap="round" strokeLinejoin="round"
                               d="M2.25 18 9 11.25l4.306 4.306a11.95 11.95 0 0 1 5.814-5.518l2.74-1.22m0 0-5.94-2.281m5.94 2.28-2.28 5.941"/>
                     </svg>
                     ,
