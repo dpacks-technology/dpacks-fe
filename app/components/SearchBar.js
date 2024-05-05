@@ -1,6 +1,6 @@
 export default function SearchBar() {
     return (
-        <form className="w-1/2 max-w-full "
+        <form className="w-1/2 max-w-full hidden md:block"
             style={{ height: "40px" }}
         >
             {/*<label htmlFor="default-search" className="mb-2 text-sm font-medium text-gray-900 sr-only dark:text-white">*/}

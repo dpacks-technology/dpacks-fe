@@ -384,7 +384,7 @@ export default function Table({data, columns, init_cols, ...props}) {
                             <div className={"w-full sm:max-w-[44%]"}>
                                 <Input
                                     isClearable
-                                    className="w-full sm:max-w-[65%] inline-block"
+                                    className="w-3/5 md:w-full sm:max-w-[65%] inline-block"
                                     placeholder={`Search by ${props.searchColumn.replace(/([a-z])([A-Z])/g, '$1 $2').replace(/\b\w/g, char => char.toLowerCase())}...`}
                                     startContent={<SearchIcon/>}
                                     variant={"faded"}
@@ -395,8 +395,8 @@ export default function Table({data, columns, init_cols, ...props}) {
                                         inputWrapper: "bg-dark border-none h-6 rounded-lg"
                                     }}
                                 />
-                                <div className={"inline-block ml-2"}>
-                                    <Button color="primary" variant={"flat"} onPress={triggerSearch} className={"h-10"}>
+                                <div className={"inline-block ml-1"}>
+                                    <Button color="primary" variant={"flat"} onPress={triggerSearch} className={"w-1/5 md:w-full h-10"}>
                                         <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
                                              strokeWidth={1.5} stroke="currentColor" className="w-5 h-5">
                                             <path strokeLinecap="round" strokeLinejoin="round"
@@ -477,53 +477,53 @@ export default function Table({data, columns, init_cols, ...props}) {
             {contextHolder} {/* notification message */}
 
             {/* Table */}
-                <NextUITable
-                    aria-label="Table"
-                    isHeaderSticky
-                    topContent={topContent}
-                    topContentPlacement="outside"
-                    bottomContent={bottomContent}
-                    bottomContentPlacement="outside"
-                    classNames={{
-                        wrapper: "max-h-[382px]",
-                        sortIcon: "hidden",
-                    }}
-                    className={"dark:dark"}
-                    selectedKeys={selectedKeys}
-                    selectionMode={props.selectionMode && props.selectionMode || "multiple"}
-                    onSelectionChange={setSelectedKeys}
-                    sortDescriptor={sortDescriptor}
-                    onSortChange={setSortDescriptor}
-                >
-                    {/* Table header */}
-                    <TableHeader columns={headerColumns}>
+            <NextUITable
+                aria-label="Table"
+                isHeaderSticky
+                topContent={topContent}
+                topContentPlacement="outside"
+                bottomContent={bottomContent}
+                bottomContentPlacement="outside"
+                classNames={{
+                    wrapper: "max-h-[382px]",
+                    sortIcon: "hidden",
+                }}
+                className={"dark:dark"}
+                selectedKeys={selectedKeys}
+                selectionMode={props.selectionMode && props.selectionMode || "multiple"}
+                onSelectionChange={setSelectedKeys}
+                sortDescriptor={sortDescriptor}
+                onSortChange={setSortDescriptor}
+            >
+                {/* Table header */}
+                <TableHeader columns={headerColumns}>
 
-                        {/* Table column */}
-                        {(column) => (
-                            <TableColumn
-                                key={column.uid}
-                                align={column.uid === "actions" ? "center" : "start"}
-                                allowsSorting={column.sortable}
-                            >
-                                {column.name}
-                            </TableColumn>
-                        )}
+                    {/* Table column */}
+                    {(column) => (
+                        <TableColumn
+                            key={column.uid}
+                            align={column.uid === "actions" ? "center" : "start"}
+                            allowsSorting={column.sortable}
+                        >
+                            {column.name}
+                        </TableColumn>
+                    )}
 
-                    </TableHeader>
+                </TableHeader>
 
-                    {/* Table body */}
-                    <TableBody emptyContent={"No data found"} items={data}>
+                {/* Table body */}
+                <TableBody emptyContent={"No data found"} items={data}>
 
-                        {/* Table row */}
-                        {(item) => (
-                            <TableRow key={item.id}>
-                                {(columnKey) => <TableCell>{renderCell(item, columnKey)}</TableCell>}
-                            </TableRow>
-                        )}
+                    {/* Table row */}
+                    {(item) => (
+                        <TableRow key={item.id}>
+                            {(columnKey) => <TableCell>{renderCell(item, columnKey)}</TableCell>}
+                        </TableRow>
+                    )}
 
-                    </TableBody>
+                </TableBody>
 
-                </NextUITable>
+            </NextUITable>
         </>
     );
 }

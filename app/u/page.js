@@ -81,7 +81,7 @@ export default function Dashboard() {
                     <AddWebProjectForm/> : <EditWebProjectForm webId={webId}/>
             } title={webId === "" ? "Add Web Project" : "Edit Web Page"} isOpen={isOpen} onOpenChange={onOpenChange}/>
 
-            <div className={"pr-48 pl-48 pt-36 pb-20"}>
+            <div className={"p-12 pt-24 pb-10 md:pr-48 md:pl-48 md:pt-36 md:pb-20"}>
 
                 <h1 className={"text-2xl"}>
                     DPacks Platform
@@ -91,7 +91,7 @@ export default function Dashboard() {
                 </p>
 
                 {/* product tabs */}
-                <div className={"grid grid-cols-3 gap-4 rounded-3xl pt-12 pb-12"}>
+                <div className={"grid grid-cols-1 md:grid-cols-3 gap-4 rounded-3xl pt-12 pb-12"}>
                     <Link href={`/pros/dashbord`}>
                         <div className={"dashboard-tab-1 p-4 rounded-3xl grid justify-center h-24 con-mid"}>
                             <div className="grid grid-cols-2 w-full">
@@ -124,7 +124,7 @@ export default function Dashboard() {
                             </div>
                         </div>
                     </Link>
-                    <Link href={`/u/marketplace/listings`}>
+                    <Link href={`/u`}>
                         <div className={"dashboard-tab-3 p-4 rounded-3xl grid justify-center h-24 con-mid"}>
                             <div className="grid grid-cols-2 w-full">
                                 <div className={"con-mid w-1/2"}>
@@ -143,9 +143,9 @@ export default function Dashboard() {
                 </div>
 
                 {/* web projects */}
-                <div className={"mt-12"}>
+                <div className={"mt-8 md:mt-12"}>
                     <h1 className={"mb-6"}>Web Projects</h1>
-                    <div className={"grid grid-cols-3 gap-4 pb-6"}>
+                    <div className={"grid grid-cols-1 md:grid-cols-3 gap-4 pb-6"}>
 
                         {/*<Link href={"/u/add"}>*/}
                         <div
@@ -202,7 +202,7 @@ export default function Dashboard() {
                                                 onClick={() => {
                                                     // copy script
                                                     handleInstallationCopyScript(site.id).then(() => {
-                                                        Message("success", "Script copied, Paste at your webpage footer");
+                                                        Message("success", "Script copied, Paste inside `head` tags at your webpages");
                                                     });
                                                 }}>
                                                 Copy Script
@@ -218,7 +218,7 @@ export default function Dashboard() {
                                                     <svg xmlns="http://www.w3.org/2000/svg" fill="none"
                                                          viewBox="0 0 24 24"
                                                          strokeWidth={1.2} stroke="currentColor" className="w-5 h-5">
-                                                            <path strokeLinecap="round" strokeLinejoin="round" d="M13.19 8.688a4.5 4.5 0 0 1 1.242 7.244l-4.5 4.5a4.5 4.5 0 0 1-6.364-6.364l1.757-1.757m13.35-.622 1.757-1.757a4.5 4.5 0 0 0-6.364-6.364l-4.5 4.5a4.5 4.5 0 0 0 1.242 7.244" />
+                                                        <path strokeLinecap="round" strokeLinejoin="round" d="M13.19 8.688a4.5 4.5 0 0 1 1.242 7.244l-4.5 4.5a4.5 4.5 0 0 1-6.364-6.364l1.757-1.757m13.35-.622 1.757-1.757a4.5 4.5 0 0 0-6.364-6.364l-4.5 4.5a4.5 4.5 0 0 0 1.242 7.244" />
                                                     </svg>
                                                 }
                                                 onClick={() => {
