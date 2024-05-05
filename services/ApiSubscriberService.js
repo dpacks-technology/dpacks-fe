@@ -109,10 +109,47 @@ export const regenerateApiKeyBulk = async (ids) => {
 }
 
 
-
+//api subscribing page services
 export const AddApiSubscriber = async (data) => {
     try {
         const response = await apiManagement.post(`/api/api_subscribers/subscriber`, data);
+        return response.data;
+    } catch (error) {
+        throw error;
+    }
+}
+
+export const getApiKey = async (data) => {
+    //http://localhost:4001/api/keypairs/${data} if you are running the api locally
+    try {
+        const response = await apiManagement.get(`/api/keypairs/${data}`);
+        return response.data;
+    } catch (error) {
+        throw error;
+    }
+}
+
+export const subscribeApiKey = async (data) => {
+    try {
+        const response = await apiManagement.post(`/api/keypairs/${data}`);
+        return response.data;
+    } catch (error) {
+        throw error;
+    }
+}
+
+export const updateApiKey = async (data) => {
+    try {
+        const response = await apiManagement.put(`/api/keypairs/${data}`);
+        return response.data;
+    } catch (error) {
+        throw error;
+    }
+}
+
+export const deleteApiKey = async (data) => {
+    try {
+        const response = await apiManagement.delete(`/api/keypairs/${data}`);
         return response.data;
     } catch (error) {
         throw error;

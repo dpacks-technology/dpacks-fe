@@ -1,11 +1,16 @@
 "use client"
 
 import {useEffect, useState} from 'react';
-import axios from 'axios';
 import React from "react";
 import Input from "@/app/components/Input";
 import {Button, Card} from "@nextui-org/react";
 import { jwtDecode } from "jwt-decode"
+import {
+    deleteApiKey,
+    getApiKey,
+    subscribeApiKey,
+    updateApiKey
+} from "@/services/ApiSubscriberService";
 
 
 
@@ -21,63 +26,44 @@ export default function apiSubscribe() {
     console.log(decoded);
     console.log(uid);
 
-    const fetchData = async () => {
-        try {
-            const response = await axios.get(`http://localhost:4001/api/keypairs/${uid}`);
-            setClientId(response.data.client_id);
-            setApiKey(response.data.key);
-        } catch (error) {
-            console.error('Failed to fetch subscription:', error);
-        }
+    const fetchData = () => {
+        getApiKey(uid).then((data) => {
+            setClientId(data.client_id);
+            setApiKey(data.key);
+        }).catch((error) => {
+            console.error("Error: ", error);
+        });
     };
 
-    const subscribe = async () => {
-        try {
-            const response = await axios.post(`http://localhost:4001/api/keypairs/${uid}`);
-            if(response.status === 200){
-                setClientId(response.data.client_id);
-                setApiKey(response.data.key);
-            }else{
-                console.error('Failed to subscribe:', response);
-            }
-        } catch (error) {
-            console.error('Failed to subscribe:', error);
-        }
-
+    const subscribe = () => {
+        subscribeApiKey(uid).then((data) => {
+            setClientId(data.client_id);
+            setApiKey(data.key);
+        }).catch((error) => {
+            console.error("Error: ", error);
+        });
     };
 
-    const regenerate = async () => {
-        try {
-            const response = await axios.put(`http://localhost:4001/api/keypairs/${uid}`);
-            if(response.status === 200){
-                setClientId(response.data.client_id);
-                setApiKey(response.data.key);
-            }else{
-                console.error('Failed to Regenerate:', response);
-            }
-        } catch (error) {
-            console.error('Failed to Regenerate:', error);
-        }
-
+    const regenerate = () => {
+        updateApiKey(uid).then((data) => {
+            setClientId(data.client_id);
+            setApiKey(data.key);
+        }).catch((error) => {
+            console.error("Error: ", error);
+        });
     };
 
-    const deleteSubscription = async () => {
-        //check if user is sure
-        if(!confirm("Are you sure you want to delete this subscription?")) return;
-
-        try {
-            const response = await axios.delete(`http://localhost:4001/api/keypairs/${uid}`);
-            if(response.status === 200){
+    const deleteSubscription = () => {
+        deleteApiKey(uid).then((data) => {
+            if(data){
                 setClientId("");
                 setApiKey("");
-            }else{
-                console.error('Failed to Regenerate:', response);
             }
-        } catch (error) {
-            console.error('Failed to Regenerate:', error);
-        }
-
+        }).catch((error) => {
+            console.error("Error: ", error);
+        });
     };
+
 
     // eslint-disable-next-line react-hooks/rules-of-hooks
     useEffect(() => {
