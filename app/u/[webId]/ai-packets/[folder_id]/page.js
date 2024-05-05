@@ -17,7 +17,7 @@ import {getAIPackets, getAIPacketsCount} from "@/services/AIDataPacketsService";
 // Webpages component
 export default function PinnedPackets({params}) {
 
-    const storage_bucket_url = Keys.STORAGE_BUCKET_URL;
+    const storage_bucket_url = Keys.AI_STORAGE_BUCKET_URL;
 
     // ----------------------- DEFAULT COLUMNS -------------------------
     // default columns // TODO: Change the following functions
