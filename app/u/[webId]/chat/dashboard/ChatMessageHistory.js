@@ -22,7 +22,7 @@ const ChatMessageHistory = ({content, visitorId }) => {
         setMessage(event.target.value)
     }
 
-    //fetch autoRespontList messages for given visitorId
+    //fetch  messages for given visitorId
     useEffect(() => {
         const timer = setTimeout(() => {
         const fetchMessages = async () => {
