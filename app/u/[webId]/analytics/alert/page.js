@@ -66,6 +66,20 @@ export default function Webpages() {
         // all usable types: text, twoText, datetime, label, status, statusButtons, buttons, menu, copy, icon, iconText, iconTwoText
     ];
 
+        // components // TODO: Change the following components
+        const components = {
+            status: true, // status component
+            columns: true, // columns component
+            refresh: true, // refresh component
+            bulk_actions: true, // bulk actions component
+            all: false, // all components
+            today: false, // today component
+            yesterday: false, // yesterday component
+            search: true, // search component
+            date_range: false, // date range component
+            export: true, // export component
+        }
+
     // initially visible columns // TODO: Change the following columns according the to yours
     const init_cols = [
         "alert_threshold",
@@ -410,6 +424,9 @@ export default function Webpages() {
                 dataCount={pagesCount}
                 rowsPerPage={rowsPerPage}
                 changeRowsPerPage={changeRowsPerPage}
+
+                // components
+                components={components}
 
             />
         </>
