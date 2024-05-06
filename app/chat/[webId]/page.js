@@ -19,7 +19,7 @@ const ChatWithAdmin = () => {
     const [validEmail, setValidEmail] = useState(false); // State to track email validity
     const { webId } = useParams();
     const socket = useSocket(Keys.MESSAGE_SERVICE_API_URL);
-    const [showChat, setShowChat] = useState(true);
+
 
 
     const validateEmail = (email) => {
@@ -122,7 +122,7 @@ const ChatWithAdmin = () => {
     // Sort messages based on their timestamps and map through them
     return (
         <div>
-        {showChat && (
+
         <div className="chat-window" style={{
             position: 'fixed',
             top: 0,
@@ -149,12 +149,7 @@ const ChatWithAdmin = () => {
                     fontWeight: 'bold',
                     color: 'white'
                 }}>{headerText}</h2>
-                <div onClick={() => setShowChat(false)} style={{
-                    cursor: 'pointer',
-                    color: 'white'
-                }}>
-                    <FontAwesomeIcon icon={faTimes} size="1x"/>
-                </div>
+
             </div>
             {enteredEmail ? (
                 <div style={{
@@ -251,7 +246,7 @@ const ChatWithAdmin = () => {
                 </div>
             )}
         </div>
-    )}
+
  </div>
  );
 };
