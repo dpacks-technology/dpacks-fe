@@ -51,7 +51,7 @@ export default function ReviewTemplates() {
     // ----------------------- COMPONENTS -------------------------
     // components // TODO: Change the following components
     const components = {
-        status: false, // status component
+        status: true, // status component
         columns: true, // columns component
         refresh: true, // refresh component
         bulk_actions: true, // bulk actions component
