@@ -19,32 +19,7 @@ const ChatWithAdmin = () => {
     const [validEmail, setValidEmail] = useState(false); // State to track email validity
     const { webId } = useParams();
     const socket = useSocket(Keys.MESSAGE_SERVICE_API_URL);
-    const [windowWidth, setWindowWidth] = useState(0);
     const [showChat, setShowChat] = useState(true);
-
-
-    useEffect(() => {
-        const handleResize = () => {
-            setWindowWidth(window.innerWidth);
-        };
-
-        window.addEventListener('resize', handleResize);
-
-        return () => {
-            window.removeEventListener('resize', handleResize);
-        };
-    }, []);
-    useEffect(() => {
-        setWindowWidth(window.innerWidth);
-
-        // Add an event listener for window resize
-        const handleResize = () => setWindowWidth(window.innerWidth);
-        window.addEventListener('resize', handleResize);
-
-        // Cleanup function to remove the event listener on component unmount
-        return () => window.removeEventListener('resize', handleResize);
-    }, []);
-
 
 
     const validateEmail = (email) => {
@@ -256,7 +231,7 @@ const ChatWithAdmin = () => {
                                         padding: '5px 10px',
                                         borderRadius: '10px',
                                         marginRight: msg.sender === 'visitor' ? '10px' : 0,
-                                        marginLeft: msg.sender === 'admin' ? '10px' : 0,
+                                        marginLeft: msg.sender === 'websiteOwner' ? '10px' : 0,
                                         alignSelf: 'flex-start'
                                     }}>
                                         {msg.message}

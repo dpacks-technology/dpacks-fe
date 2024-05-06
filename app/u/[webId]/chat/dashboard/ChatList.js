@@ -107,7 +107,6 @@ const ChatList = ({ chats, onChatClick, webId }) => {
                         padding: '0px 20px',
                         borderRadius: '4px',
                         border: '1px solid #ddd',
-
                         outline: 'none',
                     }}
                 />
