@@ -9,14 +9,13 @@ import { Rate } from 'antd';
 import {AddRating} from "@/services/MarketplaceService";
 import Input from "@/app/components/Input";
 
-const AddRatingsForm = ({...props}) => {
+const AddRatingsForm = ({id, templateId, ...props}) => {
 
     // state
     const [saving, setSaving] = React.useState(false);
     const [error, setError] = React.useState({});
     const [rating, setRating] = React.useState("");
-    const [id, setTemplateId] = React.useState("");
-
+    //const [id, setTemplateId] = React.useState("");
 
 
     // backend validation error message
@@ -38,7 +37,9 @@ const AddRatingsForm = ({...props}) => {
 
         try {
             // data // TODO: add/change fields
-            const data = {rating: parseInt(rating),  id: parseInt(props.id)};
+            const data = {rating: parseInt(rating),  id: parseInt(templateId)};
+
+            console.log(id);
 
 
             // validate
@@ -46,13 +47,17 @@ const AddRatingsForm = ({...props}) => {
 
             // add webpage // TODO: change the function
             await AddRating(data).then((response) => {
-                props.notificationMessage("success", "Record added"); // refresh data with success message
-                props.onClose(); // close modal
+                console.log(response)
+                //props.notificationMessage("success", "Record added"); // refresh data with success message
+                //props.onClose(); // close modal
             }).then((error) => {
-                Message("error", error.response.data.error) // backend validation error
+                //Message("error", error.response.data.error) // backend validation error
             });
 
         } catch (validationError) {
+
+            console.log(validationError);
+
             // set error
             let errorsObject = {}
             validationError.errors && validationError.errors.map(obj => errorsObject[Object.keys(obj)[0]] = Object.values(obj)[0]);
