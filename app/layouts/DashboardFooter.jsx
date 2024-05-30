@@ -32,7 +32,7 @@ export default function DashboardFooter() {
             </div>
             <div className={"grid text-center md:text-left grid-cols-1 md:grid-cols-2 gap-2 md:gap-0"}>
                 <p style={{fontSize: "10px"}} className={"dark:text-dark"}>
-                    <Badge status="success" className={"pr-2"}/>All Systems Operational
+                    <Badge status="warning" className={"pr-2"}/>All Systems Paused
                 </p>
                 <p style={{fontSize: "14px"}} className={"dark:text-darkSecondary md:text-right"}>
                     <Link href={"https://github.com/dpacks-technology"}>
