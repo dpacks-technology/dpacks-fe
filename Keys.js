@@ -10,7 +10,8 @@ const Key = {
     MESSAGE_SERVICE_API_URL: 'http://localhost:4006',
 
     // auth service
-    AUTH_SERVICE_API_URL: 'https://auth.dpacks.net',
+    AUTH_SERVICE_API_URL: 'http://localhost:4010',
+    // AUTH_SERVICE_API_URL: 'https://auth.dpacks.net',
 
     // data packets service
     DATA_PACKETS_SERVICE_API_URL: 'http://localhost:4000',
