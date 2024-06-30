@@ -1,17 +1,20 @@
 const Key = {
 
     // user services
-    USER_SERVICE_API_URL: 'https://user.dpacks.net',
-    ADMIN_SERVICE_API_URL: 'https://user.dpacks.net',
+    USER_SERVICE_API_URL: 'http://localhost:4001',
+    ADMIN_SERVICE_API_URL: 'http://localhost:4001',
+    // USER_SERVICE_API_URL: 'https://user.dpacks.net',
+    // ADMIN_SERVICE_API_URL: 'https://user.dpacks.net',
 
     // message service
     MESSAGE_SERVICE_API_URL: 'http://localhost:4006',
 
     // auth service
-    AUTH_SERVICE_API_URL: 'https://auth.dpacks.net',
+    AUTH_SERVICE_API_URL: 'http://localhost:4010',
+    // AUTH_SERVICE_API_URL: 'https://auth.dpacks.net',
 
     // data packets service
-    DATA_PACKETS_SERVICE_API_URL: 'https://web.dpacks.net',
+    DATA_PACKETS_SERVICE_API_URL: 'http://localhost:4000',
 
     // storage bucket
     STORAGE_BUCKET_URL: 'https://web.dpacks.net/api/v1/data-packets/fetch',
