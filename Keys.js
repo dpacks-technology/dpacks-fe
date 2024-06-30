@@ -17,8 +17,8 @@ const Key = {
     DATA_PACKETS_SERVICE_API_URL: 'http://localhost:4000',
 
     // storage bucket
-    STORAGE_BUCKET_URL: 'https://web.dpacks.net/api/v1/data-packets/fetch',
-    AI_STORAGE_BUCKET_URL: 'https://web.dpacks.net/api/v1/data-packets/fetch-ai',
+    STORAGE_BUCKET_URL: 'http://localhost:4000/api/v1/data-packets/fetch',
+    AI_STORAGE_BUCKET_URL: 'http://localhost:4000/api/v1/data-packets/fetch-ai',
 
     // connector url
     CONNECTOR_URL: 'https://cdn.jsdelivr.net/gh/dpacks-technology/dpacks-connector-js/0.2.22-alpha.js'
